@@ -1,0 +1,26 @@
+{
+  "movie": "ARKA02B",
+  "title": "MISJA 2 · EWAKUACJA",
+  "place": "MAR SARA · 2499",
+  "link": "ARKA // ŁĄCZE TAKTYCZNE",
+  "speakers": [
+    { "key": "raynor",   "name": "JIM RAYNOR",  "tint": "#E0A040" },
+    { "key": "duke",     "name": "POR. DUKE",   "tint": "#D84A40", "intercept": true },
+    { "key": "stavros",  "name": "PŁK STAVROS", "tint": "#4FA3E0" },
+    { "key": "einstein", "name": "EINSTEIN",    "tint": "#7FE0C8" }
+  ],
+  "lines": [
+    { "speaker": "raynor",   "text": "Zergi weszły do Command Center w Mar Sara City. Ludzie wciąż siedzą w schronach dookoła, a Konfederacja spisała ich na straty." },
+    { "speaker": "duke",     "text": "Marszałku Raynor, zakaz zbliżania się do obiektu. A tych żołnierzy z muzeum proszę aresztować." },
+    { "speaker": "raynor",   "text": "Duke jak zwykle pomocny. Jadę przodem. Moi chłopcy zostają z wami." },
+    { "speaker": "stavros",  "text": "Komandorze, do miasta prowadzi bród na południu. Oczyść drogę, wyciągnij Raynora i doprowadź kolonistów na lądowisko." },
+    { "speaker": "einstein", "text": "A potem brońcie ARKI. Rdzeń wytrzyma jeden krótki skok, ale potrzebuje piętnastu minut i prądu z czterech elektrowni." }
+  ],
+  "objectives": [
+    { "text": "Oczyść drogę do Mar Sara City" },
+    { "text": "Wyciągnij Raynora z zainfekowanego Command Center" },
+    { "text": "Doprowadź kolonistów z 2 z 3 schronów na lądowisko" },
+    { "text": "Obroń wrak ARKI i 4 elektrownie przez 15 minut ładowania" },
+    { "text": "Einstein, Tanya, Raynor i wrak ARKI muszą przetrwać", "warn": true }
+  ]
+}

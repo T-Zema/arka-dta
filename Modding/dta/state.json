@@ -1,0 +1,381 @@
+{
+    "dtaVersion":  "16.2.2",
+    "captured":  "2026-10-27 18:20",
+    "files":  [
+                  {
+                      "path":  "game.exe",
+                      "kind":  "patched",
+                      "base":  "441801152051110917621178718669220192204",
+                      "ours":  "6462581544915162169291901241835132163",
+                      "pinned":  false,
+                      "reproducible":  true
+                  },
+                  {
+                      "path":  "INI/Art.ini",
+                      "kind":  "modified",
+                      "base":  "792073321530421595153819925211044212188",
+                      "ours":  "103161760241137982462610473311420217380",
+                      "binary":  false
+                  },
+                  {
+                      "path":  "INI/BattleE.ini",
+                      "kind":  "new",
+                      "ours":  "1111711495491144154207190131174633115882238"
+                  },
+                  {
+                      "path":  "INI/Game Options/StarCraft.ini",
+                      "kind":  "new",
+                      "ours":  "174130193412113615914672245182316111463134"
+                  },
+                  {
+                      "path":  "INI/Game Options/Super Mod.ini",
+                      "kind":  "new",
+                      "ours":  "591461007697281619710023119121072710945"
+                  },
+                  {
+                      "path":  "INI/Map Code/Terran Faction.ini",
+                      "kind":  "new",
+                      "ours":  "87558192221131561462091342520019189141"
+                  },
+                  {
+                      "path":  "INI/MPMaps.ini",
+                      "kind":  "modified",
+                      "base":  "54131461661572218862153651248215200582",
+                      "ours":  "16334179233931236146146157681762066189",
+                      "binary":  false
+                  },
+                  {
+                      "path":  "INI/Rules.ini",
+                      "kind":  "modified",
+                      "base":  "207109987615516411816155127211200128221169180",
+                      "ours":  "297261156310278156110173058166207137148",
+                      "binary":  false
+                  },
+                  {
+                      "path":  "INI/Sound.ini",
+                      "kind":  "modified",
+                      "base":  "4517732187211676212124213233167239119201107",
+                      "ours":  "189234119425019622322118741229160141108127185",
+                      "binary":  false
+                  },
+                  {
+                      "path":  "Maps/Custom/arka00_gibraltar.map",
+                      "kind":  "new",
+                      "ours":  "177412061224108453418625425220932824757"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka00_gibraltar.png",
+                      "kind":  "new",
+                      "ours":  "848124314915624345154310522510416916228246"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka01_marsara.map",
+                      "kind":  "new",
+                      "ours":  "24140189752580159601158137236253910382"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka01_marsara.png",
+                      "kind":  "new",
+                      "ours":  "1557012012561145953522179210342047338154"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka02_marsara.map",
+                      "kind":  "new",
+                      "ours":  "716810919167209240735101801651886523372"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka02_marsara.png",
+                      "kind":  "new",
+                      "ours":  "16126908421525311022565252496248242170"
+                  },
+                  {
+                      "path":  "Maps/Custom/sc_fighting_spirit.map",
+                      "kind":  "new",
+                      "ours":  "82214212212244198141122196201374528338372"
+                  },
+                  {
+                      "path":  "Maps/Custom/sc_fighting_spirit.png",
+                      "kind":  "new",
+                      "ours":  "56151088519417617022724677192250238143149241"
+                  },
+                  {
+                      "path":  "Maps/Custom/sc_lost_temple.map",
+                      "kind":  "new",
+                      "ours":  "134127215217882381741347810117274120235216198"
+                  },
+                  {
+                      "path":  "Maps/Custom/sc_lost_temple.png",
+                      "kind":  "new",
+                      "ours":  "234250343516445732260103322123710456248"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka00.map",
+                      "kind":  "new",
+                      "ours":  "562451243207112192181192001171961992397165"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka00.png",
+                      "kind":  "new",
+                      "ours":  "2027711173118139518221867232408715879219"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka01.map",
+                      "kind":  "new",
+                      "ours":  "239132741988111695170138411861763733135"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka01.png",
+                      "kind":  "new",
+                      "ours":  "144208227237101180461541140208101468810108"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka02.map",
+                      "kind":  "new",
+                      "ours":  "97226104681971721092197254207802542209142"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka02.png",
+                      "kind":  "new",
+                      "ours":  "2321491931445018483183115751516012862188230"
+                  },
+                  {
+                      "path":  "Maps/Missions/FRSTBITE.MAP",
+                      "kind":  "modified",
+                      "base":  "67191861409167961431511868713625119823145",
+                      "ours":  "476384991951162022773152630792552",
+                      "binary":  false
+                  },
+                  {
+                      "path":  "MIX/ECACHE78.MIX",
+                      "kind":  "new",
+                      "ours":  "1267818919618339311520822411671659612829"
+                  },
+                  {
+                      "path":  "MIX/ECACHE79.MIX",
+                      "kind":  "new",
+                      "ours":  "227561721471602109610821718815510946191181131"
+                  },
+                  {
+                      "path":  "MIX/ECACHE80.MIX",
+                      "kind":  "new",
+                      "ours":  "211188114192123125421520422002413321596238"
+                  },
+                  {
+                      "path":  "MIX/ECACHE81.MIX",
+                      "kind":  "new",
+                      "ours":  "20517515782146516714223620436126250195130247"
+                  },
+                  {
+                      "path":  "MIX/ECACHE82.MIX",
+                      "kind":  "new",
+                      "ours":  "153114375213199479631102243423511735217"
+                  },
+                  {
+                      "path":  "MIX/ECACHE83.MIX",
+                      "kind":  "new",
+                      "ours":  "2268323523318225240137357060371211123186"
+                  },
+                  {
+                      "path":  "MIX/ECACHE84.MIX",
+                      "kind":  "new",
+                      "ours":  "17122720536194461421689182249191788768236"
+                  },
+                  {
+                      "path":  "MIX/ECACHE85.MIX",
+                      "kind":  "new",
+                      "ours":  "2072027331752211841002983156122875018474"
+                  },
+                  {
+                      "path":  "MIX/ECACHE86.MIX",
+                      "kind":  "new",
+                      "ours":  "9821078209995523618314614019623025582152125"
+                  },
+                  {
+                      "path":  "MIX/ECACHE87.MIX",
+                      "kind":  "new",
+                      "ours":  "38212489247196170209341751142001716915979"
+                  },
+                  {
+                      "path":  "MIX/ECACHE88.MIX",
+                      "kind":  "new",
+                      "ours":  "5742541201164744490209222158141170165145"
+                  },
+                  {
+                      "path":  "MIX/ECACHE89.MIX",
+                      "kind":  "new",
+                      "ours":  "471296513856200821621182322178788134213"
+                  },
+                  {
+                      "path":  "MIX/ECACHE90.MIX",
+                      "kind":  "new",
+                      "ours":  "11921510478208176195100181692292032533320757"
+                  },
+                  {
+                      "path":  "MIX/ECACHE96.MIX",
+                      "kind":  "new",
+                      "ours":  "96281521068414716918811724618751235912368"
+                  },
+                  {
+                      "path":  "MIX/ECACHE97.MIX",
+                      "kind":  "new",
+                      "ours":  "1772531713612825124310822352501383424253139"
+                  },
+                  {
+                      "path":  "MIX/ECACHE98.MIX",
+                      "kind":  "new",
+                      "ours":  "511241881196014141120226187231551385860243"
+                  },
+                  {
+                      "path":  "MIX/ECACHE99.MIX",
+                      "kind":  "new",
+                      "ours":  "658139127682471791438166224222181240116205"
+                  },
+                  {
+                      "path":  "MIX/SideC07.mix",
+                      "kind":  "new",
+                      "ours":  "150207157197185247146472214859083436165"
+                  },
+                  {
+                      "path":  "MIX/SideC08.mix",
+                      "kind":  "new",
+                      "ours":  "42188207114188902142341431331122368413818193"
+                  },
+                  {
+                      "path":  "MIX/SideC09.mix",
+                      "kind":  "new",
+                      "ours":  "1305112373371806248611074612993713110"
+                  },
+                  {
+                      "path":  "MIX/sidenc07.mix",
+                      "kind":  "new",
+                      "ours":  "2367513516023124637249196131100197215114139179"
+                  },
+                  {
+                      "path":  "MIX/sidenc08.mix",
+                      "kind":  "new",
+                      "ours":  "13515292576981285553112351312191004216"
+                  },
+                  {
+                      "path":  "MIX/sidenc09.mix",
+                      "kind":  "new",
+                      "ours":  "166459313111122620135107169691603715208194"
+                  },
+                  {
+                      "path":  "MIX/Speech07.mix",
+                      "kind":  "new",
+                      "ours":  "42199176176175147153216910460781493813105"
+                  },
+                  {
+                      "path":  "MIX/Speech08.mix",
+                      "kind":  "new",
+                      "ours":  "252486791801441381311931422091761226920179"
+                  },
+                  {
+                      "path":  "MIX/Speech09.mix",
+                      "kind":  "new",
+                      "ours":  "954674163238208137144171216742521415110202"
+                  },
+                  {
+                      "path":  "MOVIES/ARKA02B.MP4",
+                      "kind":  "new",
+                      "ours":  "17412538914513911831921793720151227548"
+                  },
+                  {
+                      "path":  "Resources/GameOptions.ini",
+                      "kind":  "modified",
+                      "base":  "8821114123158951854615779758512217418258",
+                      "ours":  "823794882115439149198125102051533925014",
+                      "binary":  false
+                  },
+                  {
+                      "path":  "Resources/l480s61.pcx",
+                      "kind":  "new",
+                      "ours":  "169206156014320834282912368218815046206"
+                  },
+                  {
+                      "path":  "Resources/l480s62.pcx",
+                      "kind":  "new",
+                      "ours":  "169206156014320834282912368218815046206"
+                  },
+                  {
+                      "path":  "Resources/l480s71.pcx",
+                      "kind":  "new",
+                      "ours":  "81949221312816349251195372291151719262248"
+                  },
+                  {
+                      "path":  "Resources/l480s72.pcx",
+                      "kind":  "new",
+                      "ours":  "96112244251184924014419245192025221714422"
+                  },
+                  {
+                      "path":  "Resources/l480s81.pcx",
+                      "kind":  "new",
+                      "ours":  "14017155320015512223846237210219105807822"
+                  },
+                  {
+                      "path":  "Resources/l480s82.pcx",
+                      "kind":  "new",
+                      "ours":  "20016216116451133167246185815237974617149"
+                  },
+                  {
+                      "path":  "Resources/l600s61.pcx",
+                      "kind":  "new",
+                      "ours":  "63162154215172209143100255139371372348131226"
+                  },
+                  {
+                      "path":  "Resources/l600s62.pcx",
+                      "kind":  "new",
+                      "ours":  "63162154215172209143100255139371372348131226"
+                  },
+                  {
+                      "path":  "Resources/l600s71.pcx",
+                      "kind":  "new",
+                      "ours":  "184158208754416378214960862124916318237"
+                  },
+                  {
+                      "path":  "Resources/l600s72.pcx",
+                      "kind":  "new",
+                      "ours":  "19117184128709321727451081821472114013191"
+                  },
+                  {
+                      "path":  "Resources/l600s81.pcx",
+                      "kind":  "new",
+                      "ours":  "10421410317812204820652152260692141037"
+                  },
+                  {
+                      "path":  "Resources/l600s82.pcx",
+                      "kind":  "new",
+                      "ours":  "15075159242872432371381419178151521626276"
+                  },
+                  {
+                      "path":  "Resources/protossicon.png",
+                      "kind":  "new",
+                      "ours":  "100146128502272389023117692175160156115048"
+                  },
+                  {
+                      "path":  "Resources/SkirmishLobby.ini",
+                      "kind":  "modified",
+                      "base":  "5312281142101192129116129215176232210226118179",
+                      "ours":  "104371321621698715121633174104241104162188253",
+                      "binary":  false
+                  },
+                  {
+                      "path":  "Resources/terranicon.png",
+                      "kind":  "new",
+                      "ours":  "166676615114320120215550319044189370236"
+                  },
+                  {
+                      "path":  "Resources/zergicon.png",
+                      "kind":  "new",
+                      "ours":  "118118244819517414514441712271861561026254"
+                  },
+                  {
+                      "path":  "Vinifera.dll",
+                      "kind":  "patched",
+                      "base":  "52101200218241136791088012618216740212171235",
+                      "ours":  "16665178941932041192509851911301117925186",
+                      "pinned":  false,
+                      "reproducible":  true
+                  }
+              ]
+}

@@ -1,0 +1,16 @@
+﻿{
+    "scName":  "| iCCup | Fighting Spirit 1.3",
+    "name":  "Fighting Spirit (StarCraft)",
+    "source":  "C:\\Program Files (x86)\\StarCraft\\Maps\\ladder\\Season 6\\(4)Fighting Spirit.scx",
+    "out":  "C:\\Users\\zemat\\AppData\\Local\\Temp\\scmap\\fighting_spirit\\sc_fighting_spirit.map",
+    "tileset":  "jungle",
+    "size":  "128x128",
+    "dtaSize":  "68x137",
+    "starts":  4,
+    "startsConnected":  true,
+    "gemsReachable":  396,
+    "gemsTotal":  396,
+    "leaks":  65,
+    "sealed":  13,
+    "chainFailures":  0
+}

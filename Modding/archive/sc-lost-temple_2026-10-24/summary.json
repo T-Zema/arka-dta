@@ -1,0 +1,16 @@
+﻿{
+    "scName":  "The Lost Temple",
+    "name":  "The Lost Temple (StarCraft)",
+    "source":  "C:\\Program Files (x86)\\StarCraft\\Maps\\ladder\\(4)Lost Temple.scm",
+    "out":  "C:\\Users\\zemat\\AppData\\Local\\Temp\\scmap\\lost_temple\\sc_lost_temple.map",
+    "tileset":  "jungle",
+    "size":  "128x128",
+    "dtaSize":  "68x137",
+    "starts":  4,
+    "startsConnected":  true,
+    "gemsReachable":  323,
+    "gemsTotal":  385,
+    "leaks":  40,
+    "sealed":  9,
+    "chainFailures":  0
+}

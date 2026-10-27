@@ -1,0 +1,27 @@
+{
+    "_doc": "Config of tools/dta-capture.ps1 / dta-restore.ps1 / dta-precheck.ps1. Wiki: workflow/repo-and-updates. ignore = regexes (case-insensitive) on paths relative to the game folder with forward slashes: files the game, the client or the updater write, never our mods. patched = binaries rebuilt by patch scripts from the pristine DTA file instead of being stored in git.",
+    "mirror": "https://dta.cnc-comm.com/updates/",
+    "maxFileMB": 90,
+    "ignore": [
+        "^Modding/",
+        "^(\\.git|\\.gitignore|\\.gitattributes|README\\.md|CLAUDE\\.md)$",
+        "^\\.git/",
+        "^Client/",
+        "^Debug/",
+        "^Saved Games/",
+        "^Screenshots/",
+        "^Updater/",
+        "\\.bak$",
+        "\\.log$",
+        "\\.dta-new$",
+        "^(Settings\\.ini|spawn\\.ini|spawnmap\\.ini|KEYBOARD\\.INI|HALLFAME\\.DAT|stats\\.dmp|mpstats\\.txt|language\\.dll)$",
+        "^version(_u|_cc)?$",
+        "^MIX/ECACHE9[1-5]\\.MIX$",
+        "^MIX/Expand99\\.mix$",
+        "^Map Editor/FinalSun/FinalSun\\.ini$"
+    ],
+    "patched": {
+        "game.exe": { "script": "patch-game.ps1", "args": [ "-FlyDebug" ], "copyParam": "Exe" },
+        "Vinifera.dll": { "script": "patch-vinifera.ps1", "args": [], "copyParam": "Dll" }
+    }
+}

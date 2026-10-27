@@ -1,0 +1,12 @@
+# Byte-exact checkout: dta-restore.ps1 compares files by MD5 with the DTA manifest and the captured state, so git must
+# never convert line endings (DTA INI files are CRLF, the wiki is LF).
+* -text
+*.mix binary
+*.MIX binary
+*.mp4 binary
+*.MP4 binary
+*.pcx binary
+*.png binary
+*.shp binary
+*.aud binary
+*.zip binary

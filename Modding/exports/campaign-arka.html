@@ -1,0 +1,698 @@
+<title>ARKA: Błąd znaku</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Uklad: odprawa sztabowa. Pasek skokow w czasie u gory, spis tresci z boku, tekst kampanii w jednej kolumnie. */
+:root {
+  --bg: #edf1ee;
+  --surface: #fbfcfb;
+  --fg: #17201c;
+  --muted: #56645d;
+  --line: #cbd5cf;
+  --accent: #2b8a3c;      /* zielen Tyberium */
+  --accent-2: #2b5a8c;    /* blekit Aliantow */
+  --quote-bg: #e2ebe5;
+  --code-bg: #e4e9e6;
+  --f-display: "Saira Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1311; --surface: #141c19; --fg: #e2eae5; --muted: #93a49b; --line: #26322d;
+    --accent: #66d276; --accent-2: #80b1e6; --quote-bg: #13221a; --code-bg: #1b2521;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1311; --surface: #141c19; --fg: #e2eae5; --muted: #93a49b; --line: #26322d;
+  --accent: #66d276; --accent-2: #80b1e6; --quote-bg: #13221a; --code-bg: #1b2521;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font: 400 1.0625rem/1.65 var(--f-body); margin: 0; }
+a { color: var(--accent-2); }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+.band { background: var(--surface); border-bottom: 1px solid var(--line); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.hero { padding-block: 2.5rem 2rem; display: grid; gap: 1.25rem; }
+.eyebrow { font: 600 0.8rem/1.2 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+h1 { font: 700 clamp(2.4rem, 6vw, 4rem)/1 var(--f-display); letter-spacing: 0.01em; margin: 0; text-wrap: balance; }
+h1 .sign { color: var(--accent); }
+.lead { max-width: 65ch; margin: 0; font-size: 1.15rem; }
+
+.jumps { list-style: none; margin: 0.5rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.jumps li { padding: 0.85rem 1rem; border-left: 1px solid var(--line); display: grid; gap: 0.15rem; min-width: 0; }
+.jumps li:first-child { border-left: 0; }
+.jumps li.ghost { background: repeating-linear-gradient(135deg, transparent 0 8px, var(--quote-bg) 8px 9px); }
+.jumps .yr { font: 700 1.9rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.jumps .place { font-size: 0.95rem; }
+.jumps .delta { font: 600 0.78rem/1.3 var(--f-mono); color: var(--muted); }
+.jumps .delta b { color: var(--accent); font-weight: 600; }
+@media (max-width: 720px) {
+  .jumps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .jumps li:nth-child(3) { border-left: 0; }
+  .jumps li:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+
+.layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 3rem; padding-block: 2rem 4rem; align-items: start; }
+.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 1rem); max-height: calc(100vh - 2rem); overflow: auto; font-size: 0.9rem; }
+.toc summary { font: 600 0.8rem/1.2 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); cursor: pointer; padding-block: 0.25rem; }
+.toc ol { list-style: none; margin: 0.5rem 0 0; padding: 0; display: grid; gap: 0.15rem; }
+.toc a { color: var(--fg); text-decoration: none; display: block; padding: 0.2rem 0 0.2rem 0.6rem; border-left: 2px solid transparent; line-height: 1.35; }
+.toc a:hover { border-left-color: var(--accent); }
+.toc .lvl3 a { padding-left: 1.4rem; color: var(--muted); font-size: 0.85rem; }
+@media (max-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .toc { position: static; max-height: none; border: 1px solid var(--line); border-radius: 4px; padding: 0.5rem 0.75rem; background: var(--surface); }
+}
+
+article { max-width: 72ch; min-width: 0; }
+article h2 { font: 700 1.9rem/1.15 var(--f-display); text-transform: uppercase; letter-spacing: 0.02em; margin: 3rem 0 0.75rem; padding-top: 0.75rem; border-top: 2px solid var(--fg); text-wrap: balance; scroll-margin-top: 1rem; }
+article h3 { font: 600 1.35rem/1.2 var(--f-display); letter-spacing: 0.02em; margin: 2rem 0 0.5rem; color: var(--accent-2); text-wrap: balance; scroll-margin-top: 1rem; }
+article > p:first-child { margin-top: 0; }
+article p, article ul, article ol { margin: 0 0 0.9rem; }
+article ul, article ol { padding-left: 1.4rem; }
+article li { margin-bottom: 0.35rem; }
+article li > ul, article li > ol, article li > blockquote { margin-top: 0.4rem; }
+article strong { font-weight: 600; }
+article code { font: 400 0.85em/1 var(--f-mono); background: var(--code-bg); padding: 0.12em 0.35em; border-radius: 3px; overflow-wrap: anywhere; }
+article .sources { font-size: 0.85rem; color: var(--muted); border-left: 2px solid var(--line); padding-left: 0.75rem; }
+
+/* Kwestie postaci jako komunikaty radiowe */
+article blockquote { margin: 0 0 1rem; padding: 0.6rem 1rem; background: var(--quote-bg); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; }
+article blockquote p { margin: 0 0 0.4rem; line-height: 1.75; }
+article blockquote p:last-child { margin-bottom: 0; }
+article blockquote strong { font: 600 0.8rem/1 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+
+.table-wrap { overflow-x: auto; margin: 0 0 1.25rem; border: 1px solid var(--line); border-radius: 4px; }
+article table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+article th, article td { text-align: left; vertical-align: top; padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--line); }
+article th { font: 600 0.78rem/1.2 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--surface); }
+article tr:last-child td { border-bottom: 0; }
+article td:first-child { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 4.5rem; }
+
+.wl { font: 400 0.82em/1 var(--f-mono); color: var(--accent-2); border-bottom: 1px dotted currentColor; }
+</style>
+
+<header class="band">
+  <div class="wrap hero">
+    <p class="eyebrow">Kampania mashup · Red Alert × StarCraft × Tiberian Dawn</p>
+    <h1>ARKA: Błąd znaku<span class="sign"> ±</span></h1>
+    <p class="lead">Scenariusz kampanii mashup RA1 × StarCraft (preludium, 11 misji, 2 misje bonusowe): przegrani Alianci uciekają Giga-Chronosferą, Einstein myli znak, a anomalia rzuca ich na Mar Sarę w 2499 roku. Na razie tylko fabuła. Rozpisane są wszystkie misje.</p>
+    <ol class="jumps" aria-label="Skoki ARKI w czasie">
+      <li><span class="yr">1953</span><span class="place">Gibraltar</span><span class="delta">start ARKI · cel: 1946</span></li>
+      <li><span class="yr">2499</span><span class="place">Mar Sara</span><span class="delta">miało być −7 · wyszło <b>+546</b></span></li>
+      <li class="ghost"><span class="yr">1995</span><span class="place">nad Tybrem</span><span class="delta">tylko przystanek · „…znowu <b>plus</b>”</span></li>
+      <li><span class="yr">2047</span><span class="place">Sarajewo</span><span class="delta"><b>+52</b> · tym razem celowo</span></li>
+    </ol>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <nav class="toc" aria-label="Spis treści">
+    <details open>
+      <summary>Spis treści</summary>
+      <ol>
+<li class="lvl2"><a href="#tlo-alternatywna-historia">Tło (alternatywna historia)</a></li>
+<li class="lvl2"><a href="#jak-arka-skacze-czas-i-przestrzen">Jak ARKA skacze (czas i przestrzeń)</a></li>
+<li class="lvl2"><a href="#przeglad-misji">Przegląd misji</a></li>
+<li class="lvl2"><a href="#preludium-ostatnia-brama-gibraltar-1953">Preludium: „Ostatnia brama” (Gibraltar, 1953)</a></li>
+<li class="lvl2"><a href="#misja-1-obcy-piasek-mar-sara-2499">Misja 1: „Obcy piasek” (Mar Sara, 2499)</a></li>
+<li class="lvl2"><a href="#misja-2-ewakuacja-mar-sara-2499">Misja 2: „Ewakuacja” (Mar Sara, 2499)</a></li>
+<li class="lvl2"><a href="#misja-3-sygnal-z-nieba-antiga-prime-2499">Misja 3: „Sygnał z nieba” (Antiga Prime, 2499)</a></li>
+<li class="lvl2"><a href="#misja-4-zielony-krysztal-antiga-prime-2499">Misja 4: „Zielony kryształ” (Antiga Prime, 2499)</a></li>
+<li class="lvl2"><a href="#misja-5-upadek-tarsonis-tarsonis-2500">Misja 5: „Upadek Tarsonis” (Tarsonis, 2500)</a></li>
+<li class="lvl2"><a href="#misja-6-ogien-z-nieba-antiga-prime-2500">Misja 6: „Ogień z nieba” (Antiga Prime, 2500)</a></li>
+<li class="lvl2"><a href="#misja-7-zdrada-antiga-prime-2500">Misja 7: „Zdrada” (Antiga Prime, 2500)</a></li>
+<li class="lvl2"><a href="#misja-8-krysztal-khaydarin-aiur-2500">Misja 8: „Kryształ Khaydarin” (Aiur, 2500)</a></li>
+<li class="lvl2"><a href="#misja-9-zielony-roj-char-2500">Misja 9: „Zielony rój” (Char, 2500)</a></li>
+<li class="lvl2"><a href="#misja-10-serce-roju-char-2500">Misja 10: „Serce roju” (Char, 2500)</a></li>
+<li class="lvl2"><a href="#misja-11-strzalka-czasu-aiur-2500">Misja 11: „Strzałka czasu” (Aiur, 2500)</a></li>
+<li class="lvl2"><a href="#epilog-przystanek-1995">Epilog: przystanek 1995</a></li>
+<li class="lvl2"><a href="#krysztal-x-co-wie-einstein-i-kiedy">Kryształ X: co wie Einstein i kiedy</a></li>
+<li class="lvl2"><a href="#watki-postaci-dopowiedzenia-do-scenariusza-nie-osobne-misje">Wątki postaci (dopowiedzenia do scenariusza, nie osobne misje)</a></li>
+<li class="lvl3"><a href="#raynor-czemu-leci-z-aliantami">Raynor: czemu leci z Aliantami</a></li>
+<li class="lvl3"><a href="#raynor-simp-czyli-psioniczny-haczyk-kerrigan">Raynor „simp”, czyli psioniczny haczyk Kerrigan</a></li>
+<li class="lvl3"><a href="#kerrigan-i-kane-dwa-drapiezniki-zero-milosci">Kerrigan i Kane: dwa drapieżniki, zero miłości</a></li>
+<li class="lvl2"><a href="#kim-jest-kane-i-jakie-ma-slabosci">Kim jest Kane i jakie ma słabości</a></li>
+<li class="lvl2"><a href="#misja-bonusowa-12-dar-dla-proroka-sarajewo-2047">Misja bonusowa 12: „Dar dla Proroka” (Sarajewo, 2047)</a></li>
+<li class="lvl2"><a href="#misja-bonusowa-13-plus-piecdziesiat-dwa-sarajewo-2047">Misja bonusowa 13: „Plus pięćdziesiąt dwa” (Sarajewo, 2047)</a></li>
+<li class="lvl2"><a href="#uwagi-techniczne-niezweryfikowane-w-grze">Uwagi techniczne (niezweryfikowane w grze)</a></li>
+      </ol>
+    </details>
+  </nav>
+  <article>
+<p class="sources">Źródła: rozmowa z użytkownikiem 2026-10-26 (pomysł), <code>INI/Rules.ini</code> (<code>[TANYA]</code>, Scientist ok. linii 4694, Chronosphere ok. linii 15859), <span class="wl" title="strona wiki">mods/terran-faction</span>, <span class="wl" title="strona wiki">mods/zerg-faction</span>, <span class="wl" title="strona wiki">mods/protoss-faction</span>, <span class="wl" title="strona wiki">mods/zerg-heroes</span>.</p>
+<h2 id="tlo-alternatywna-historia">Tło (alternatywna historia)</h2>
+<ul>
+<li><strong>1946–1953.</strong> Alianci przegrywają drugą wielką wojnę. Stalin nie żyje (otruty przez Nadię), ale ZSRR się nie rozpada: za tronem stoi Bractwo Nod i człowiek, z którego wywiad Aliantów ma jedno zdjęcie: <strong>Kane</strong>. Sowiecko-nodyjski walec przejeżdża Europę.</li>
+<li>Londyn padł. Gen. <strong>Gunter von Esling</strong> trzyma ostatni przyczółek: <strong>Twierdzę Gibraltar</strong>.</li>
+<li>Pod skałą prof. <strong>Albert Einstein</strong> buduje <strong>Projekt ARKA</strong>: Giga-Chronosferę, która ma przenieść nie czołg, a całą bazę z ludźmi. Cel: cofnąć się do 1946, przed sowiecką ofensywą, i tym razem przygotować świat. Einstein czuje się winny: to on wymazał Hitlera i otworzył Stalinowi drogę. „Raz popsułem historię. Teraz ją naprawię.”</li>
+<li>Na pokładzie: Einstein, <strong>Tanya Adams</strong>, płk <strong>Nikos Stavros</strong> (dowodzi Arką), Komandor (gracz), ok. 40 tys. żołnierzy i cywilów.</li>
+</ul>
+<h2 id="jak-arka-skacze-czas-i-przestrzen">Jak ARKA skacze (czas i przestrzeń)</h2>
+<ul>
+<li><strong>Rodowód:</strong> w intro RA1 z 1946 Einstein używa maszyny czasu. Chronosfera Aliantów to jej młodsza siostra z wyciętymi skokami w czasie (przyjęte w kampanii). ARKA łączy oba tryby.</li>
+<li><strong>Skok w czasie to zawsze także skok w przestrzeni.</strong> Ziemia krąży wokół Słońca (ok. 30 km/s), a Słońce leci przez galaktykę (ok. 230 km/s). Kto skoczy w czasie „w miejscu”, wyląduje w próżni. ARKA zawsze liczy dwa wektory: kiedy i gdzie.<blockquote><p><strong>Einstein:</strong> „Panno Adams, nie da się przesunąć w czasie, nie przesuwając się w przestrzeni. Ziemia nie czeka na podróżnych.”<br>
+<strong>Tanya:</strong> „Czyli to taksówka, która jeździ też po kalendarzu.”</p>
+</blockquote>
+</li>
+<li><strong>Dwa kryształy, dwa kierunki:</strong> Kryształ X (destylat Tyberium) sam pcha w przyszłość, a Khaydarin ciągnie w przeszłość. Jeden kryształ to wystrzał w jedną stronę, oba naraz to ster. Błąd jest jednak nadal Einsteina: on pomylił znak, czyli kierunek, a kryształ podkręcił odległość. Odwrócenie znaku tak, że przeważa jedna strona, zrywa równowagę i przepala rdzeń (finał misji 13).</li>
+<li><strong>Dryf:</strong> skoki w przestrzeni bez Khaydarinu (misje 2 i 7) dryfują w przód o kilka dni, bo Kryształ X pcha nawet wtedy, gdy czas ma stać.</li>
+<li><strong>Zabezpieczenie:</strong> gdy wektor miejsca jest zepsuty, ARKA łapie się najbliższej studni grawitacyjnej z gruntem. Stąd Mar Sara, a nie kosmos. Kotwica awaryjna słabo hamuje, dlatego w misji 1 ARKA spada z nieba.</li>
+</ul>
+<div class="table-wrap"><table>
+<thead><tr><th>Skok</th><th>Czas</th><th>Miejsce</th></tr></thead>
+<tbody>
+<tr><td>Gibraltar 1953 → Mar Sara 2499</td><td>Einstein myli znak (kierunek: plus), a Kryształ X, który sam pcha w przód, podkręca odległość z 7 do 546 lat</td><td>kryształ rozdziera granicę wszechświata, kotwica awaryjna łapie Mar Sarę</td></tr>
+<tr><td>2499 → 1995 (przystanek)</td><td>pierwszy skok wstecz, możliwy dopiero z Khaydarinem. Kryształ X ciągnie do chwili własnego upadku, więc ARKA staje w 1995, a nie w 1946</td><td>i do miejsca upadku: krater nad Tybrem</td></tr>
+<tr><td>1995 → Sarajewo 2047</td><td>Einstein celowo wpisuje +52. Rok wskazał mu Khaydarin, który „słucha” Tyberium wzdłuż linii czasu: najgłośniej śpiewa w 2047</td><td>celowanie Khaydarinem w największe skupisko Tyberium na Ziemi, czyli skarbiec Kane'a w Świątyni Prime. „Nie wiem, gdzie on będzie. Ale wiem, co on kocha.”</td></tr>
+</tbody></table></div>
+<h2 id="przeglad-misji">Przegląd misji</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Tytuł</th><th>Skrót</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Ostatnia brama</td><td>Gibraltar 1953. Obrona startu ARKI, sabotaż Nod.</td></tr>
+<tr><td>1</td><td>Obcy piasek</td><td>Mar Sara 2499. Rozbitkowie, Raynor, pierwsze gniazdo Zergów.</td></tr>
+<tr><td>2</td><td>Ewakuacja</td><td>Mar Sara. Tanya wyciąga Raynora z zainfekowanego Command Center, Mengsk ewakuuje kolonistów, ARKA skacze w przestrzeni na Antigę Prime.</td></tr>
+<tr><td>3</td><td>Sygnał z nieba</td><td>Antiga Prime. Powstanie z Synami Korhalu, poznajemy Kerrigan, Tanya odkrywa psi-nadajnik. Wybór: zniszczyć go albo zostawić.</td></tr>
+<tr><td>4</td><td>Zielony kryształ</td><td>Antiga Prime. Einstein bada Kryształ X i nie wie, co to jest. Zergi ciągną do próbki. Ratunek Norad II, Duke przechodzi do Mengska.</td></tr>
+<tr><td>5</td><td>Upadek Tarsonis</td><td>2500. Mengsk odpala nadajniki na stolicy. Ewakuacja cywilów, Kerrigan porzucona.</td></tr>
+<tr><td>6</td><td>Ogień z nieba</td><td>Antiga Prime. Protossi (Tassadar, Fenix) atakują ARKĘ. Obrona, potem rozejm.</td></tr>
+<tr><td>7</td><td>Zdrada</td><td>Mengsk ogłasza Dominium i żąda ARKI. Kradzież Hyperiona, powstają Raynor's Raiders, ostatni skok ARKI na Aiur.</td></tr>
+<tr><td>8</td><td>Kryształ Khaydarin</td><td>Aiur. Wyprawa z Fenixem do Sanktuarium, Fenix pada i wraca jako Dragoon. Einstein dzieli kryształ: połowa do rdzenia, połowa na później (Rezonator, oczyszczenie Raynora).</td></tr>
+<tr><td>9</td><td>Zielony rój</td><td>Char. Zergi zmienione Kryształem X, laboratorium agenta Nod, który hodował kryształ, nagranie Kane'a, zielona poczwarka.</td></tr>
+<tr><td>10</td><td>Serce roju</td><td>Char. Zeratul zabija tyberyjskiego Cerebrata, Królowa Ostrzy, strzał Tanyi.</td></tr>
+<tr><td>11</td><td>Strzałka czasu</td><td>Aiur. 30 minut ładowania ARKI przeciw Dominium, zielonym Zergom i agentowi Nod. Duke wpada w pole chrono, poczwarka Kerrigan na kadłubie. Skok.</td></tr>
+<tr><td>12 (bonus)</td><td>Dar dla Proroka</td><td>Sarajewo 2047. Przegrana na pokaz: placówka „Omega” pada, a akolita Nod zanosi Rezonator Khaydarin Kane'owi jako łup.</td></tr>
+<tr><td>13 (bonus)</td><td>Plus pięćdziesiąt dwa</td><td>Kane przenosi kryształ tunelami (30 minut na zawalenie 5 wejść). Duke zrównuje Świątynię. Dwa zakończenia: Kane ginie, a ARKA odwraca znak i spala się, cofając Tyberium wokół Sarajewa, albo Kane ucieka.</td></tr>
+</tbody></table></div>
+<h2 id="preludium-ostatnia-brama-gibraltar-1953">Preludium: „Ostatnia brama” (Gibraltar, 1953)</h2>
+<p><strong>Briefing (von Esling):</strong> „Komandorze, ARKA potrzebuje 25 minut ładowania. Sowieci idą od strony Hiszpanii, Nod od morza. Gdy rdzeń osiągnie pełną moc, wszyscy w polu Chronosfery znikną stąd. Ja zostaję. Ktoś musi zamknąć drzwi.”</p>
+<p><strong>Mapa:</strong> zbudowana (teren, waypointy, bez triggerów), zob. <span class="wl" title="strona wiki">missions/arka-00-gibraltar</span>: <code>Maps/Custom/arka00_gibraltar.map</code>, skrypt <code>tools/build-arka-gibraltar.ps1</code>, tabela waypointów i pułapki dla autora triggerów.</p>
+<p><strong>Rozgrywka:</strong> obrona na czas (licznik 25:00), Alianci kontra Sowieci + Nod.</p>
+<ol>
+<li><strong>Utrzymaj ARKĘ</strong> (ogromny budynek Chronosfery w środku bazy): zniszczenie = porażka.</li>
+<li><strong>Chroń 4 elektrownie</strong> zasilające rdzeń: każda utracona spowalnia licznik.</li>
+<li><em>(opcjonalne)</em> <strong>Odbij Tanyę</strong> zrzuconą za liniami wroga. Wraca z dokumentem Nod: <em>Kane wie o ARCE i chce, żeby wystartowała.</em> Jest w nim też zdjęcie Kane'a. Bez pomocy gracza Tanya przebija się sama, ranna i bez dokumentu. Wtedy o udziale Nod Einstein dowiaduje się dopiero z kryształu (misja 1).</li>
+<li>Ostatnie 3 minuty: niewidzialny agent Nod (Chameleon Spy) przenika do rdzenia. Gracz może go zabić, ale skrypt i tak pokazuje, że <strong>zielony kryształ już leży w rdzeniu</strong>.</li>
+</ol>
+<p><strong>Fale:</strong> Sowieci (Heavy/Mammoth Tank, V2, MiG-i, desant ze spadochronów), Nod (Stealth Tank, hovercrafty z morza, lasery Obeliska na wybrzeżu Hiszpanii).</p>
+<p><strong>Finał (przerywnik):</strong></p>
+<blockquote><p><strong>Einstein</strong> (przy konsoli): „Wektor czasowy: minus siedem lat… Stavros, proszę odczytać mój zapis.”<br>
+<strong>Stavros:</strong> „Plus siedem, profesorze.”<br>
+<strong>Einstein:</strong> „…Plus? Nie, nie, to niemożliwe, siedem lat do przodu to byłby tylko wstyd, ale…”<br>
+Wskaźnik mocy rdzenia skacze o 4000%. Kryształ w rdzeniu jarzy się na zielono.<br>
+<strong>Konsola:</strong> <code>ROK DOCELOWY: 2499 &#183; WSP&#211;ŁRZĘDNE: BRAK DOPASOWANIA &#183; WSZECHŚWIAT: ???</code><br>
+<strong>von Esling</strong> (przez radio, ostatnia transmisja): „Komandorze… gdziekolwiek trafisz, nie przegraj tej wojny drugi raz.”<br>
+Biały błysk. Gibraltar zostaje pusty.</p>
+</blockquote>
+<h2 id="misja-1-obcy-piasek-mar-sara-2499">Misja 1: „Obcy piasek” (Mar Sara, 2499)</h2>
+<p><strong>Mapa i misja:</strong> zbudowane (teren z mapy kampanii SC T2 „Backwater Station”, pustynia DTA, 46 triggerów), zob. <span class="wl" title="strona wiki">missions/arka-01-marsara</span>: <code>Maps/Missions/arka01.map</code>, skrypty <code>tools/build-arka01-marsara.ps1</code> i <code>tools/build-arka01-mission.ps1</code>. Różnica względem planu: śmierć Raynora też jest porażką (potrzebny w misji 2). <strong>(niezweryfikowane w grze)</strong></p>
+<p><strong>Przerywnik:</strong> ARKA wyskakuje z rozdarcia nad pustynią w kolorze rdzy, na niebie są dwa księżyce. Pole Chronosfery się rozpada, baza zostaje rozsiana po kilku kilometrach i rdzeń spada w kraterze. Radio łapie obcy kanał:</p>
+<blockquote><p>„…tu Konfederacja Terrańska… Chau Sara przestała istnieć… spalona przez nieznanych obcych… wszyscy koloniści Mar Sary pozostają w gotowości…”<br>
+<strong>Tanya:</strong> „Konfederacja? Czyja to konfederacja?”<br>
+<strong>Einstein:</strong> „Myślę, panno Adams, że to pytanie brzmi raczej: <em>czyj to wszechświat?</em>”</p>
+</blockquote>
+<p><strong>Start:</strong> Tanya, Einstein (VIP), ok. 8 piechurów, 3 lekkie czołgi, Ranger, uszkodzony MCV wbity w piasek kawałek dalej. Wrak ARKI stoi w kraterze (budynek z mocno obniżonym HP, nie da się go naprawić).</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Zbierz rozbitków.</strong> Po mapie są rozrzucone grupy Aliantów (osobny dom, który przechodzi do gracza, gdy do niego dojdzie). Pierwszą grupę atakują Zerglingi, to pierwszy kontakt.<blockquote><p><strong>Tanya:</strong> „Co to, do cholery, jest? Psy?!”<br>
+<strong>Einstein:</strong> „To nie są psy, Tanya. To nie jest nawet nasza biologia.”</p>
+</blockquote>
+</li>
+<li><strong>Odzyskaj i rozstaw MCV.</strong> Pole złóż obok jest „krystaliczne, w składzie bardzo podobne do rudy”. Einstein jest zachwycony, ekonomiści mniej.</li>
+<li><strong>Pomóż kolonii Mar Sary.</strong> Osada terrańska na zachodzie jest pod atakiem Zergów. Broni jej marszałek <strong>Jim Raynor</strong> (Vulture) z garstką Marines. Jeśli się ich uratuje, Raynor i jego oddział <strong>przechodzą pod dowództwo gracza</strong> na resztę misji.<blockquote><p><strong>Raynor:</strong> „Nie wiem, kim jesteście ani skąd macie czołgi z muzeum, ale strzelacie w dobrą stronę. Na razie mi to wystarczy.”</p>
+</blockquote>
+</li>
+<li><strong>Zniszcz gniazdo Zergów</strong> na północnym wschodzie (Hatchery + Creep Colonies + Spawning Pool). Do tego czasu co kilka minut idą fale: Zerglingi, potem Hydraliski, pod koniec Mutalisk albo dwa.</li>
+</ol>
+<p><strong>Porażka:</strong> śmierć Einsteina albo zniszczenie wraku ARKI (rdzeń jest potrzebny do powrotu).</p>
+<p><strong>Ograniczenia techu:</strong> tylko wczesny tech Aliantów (koszary, rafineria, fabryka, radar), bez Chronosfery, bez GAP i bez lotnictwa. Część budynków leży jako rozrzucone wraki do przejęcia inżynierem.</p>
+<p><strong>Sekret:</strong> inżynier wprowadzony do wraku ARKI odkrywa „pęknięty zielony kryształ w rdzeniu”.</p>
+<blockquote><p><strong>Einstein:</strong> „To nie był tylko mój błąd. Ktoś nam pomógł się pomylić.”</p>
+</blockquote>
+<p><strong>Zakończenie:</strong></p>
+<blockquote><p><strong>Radio, por. Edmund Duke:</strong> „Niezidentyfikowana jednostka wojskowa, przebywacie na terytorium Konfederacji. Złożyć broń i oczekiwać na eskortę.”<br>
+<strong>Raynor</strong> (prywatnie): „Na waszym miejscu nie składałbym niczego. Duke ma w zwyczaju strzelać przed pytaniami.”</p>
+</blockquote>
+<p>Na brzegu mapy na sekundę widać zamaskowany Obserwator Protossów, a potem znika. To zapowiedź misji 6.</p>
+<h2 id="misja-2-ewakuacja-mar-sara-2499">Misja 2: „Ewakuacja” (Mar Sara, 2499)</h2>
+<p><strong>Mapa i misja:</strong> zbudowane (teren z mapy kampanii SC T3 „Desperate Alliance”, pustynia DTA, 77 triggerów), zob. <span class="wl" title="strona wiki">missions/arka-02-ewakuacja</span>: <code>Maps/Missions/arka02.map</code>, skrypty <code>tools/build-arka02-marsara.ps1</code> i <code>tools/build-arka02-mission.ps1</code>. Różnice względem planu: 4 elektrownie rdzenia stoją od startu i trzeba ich bronić (silnik nie policzy zbudowanych), Raynor jedzie przodem i znika w CC, a epilog na Antidze jest tekstem po skoku. <strong>(niezweryfikowane w grze)</strong></p>
+<p><strong>Przerywnik:</strong> kilka dni po misji 1. Raynor przychodzi do bazy Aliantów z mapą kolonii.</p>
+<blockquote><p><strong>Raynor:</strong> „Zergi weszły do Command Center w Mar Sara City. Ludzie wciąż siedzą w schronach dookoła. Konfederacja spisała ich na straty.”<br>
+<strong>Duke</strong> (radio): „Marszałku Raynor, zakaz zbliżania się do obiektu. A tych żołnierzy z muzeum proszę aresztować przy pierwszej okazji.”<br>
+<strong>Tanya:</strong> „Kowboju, oni zawsze są tacy mili?”<br>
+<strong>Raynor:</strong> „To i tak lepszy dzień Duke'a.”</p>
+</blockquote>
+<p><strong>Start:</strong> baza Aliantów z misji 1 (rozstawiony MCV, koszary, rafineria), Raynor (Vulture) z Marines, Tanya i Einstein przy wraku ARKI.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Droga do miasta.</strong> Oczyścić drogę do Mar Sara City z Zerglingów i Infested Terran.</li>
+<li><strong>Zainfekowane Command Center.</strong> Raynor jedzie sam „tylko się rozejrzeć” i zostaje odcięty w środku. Command Center przejęte przez Zergi jest wrogim budynkiem. Tanya musi dotrzeć do niego z C4 i wysadzić je, zanim spadnie licznik zdrowia Raynora.<blockquote><p><strong>Tanya:</strong> „Wyłaź, kowboju, zaraz będzie głośno.”<br>
+<strong>Raynor</strong> (wyskakuje z ruin): „Mogłaś zapukać!”<br>
+<strong>Raynor</strong> (odwraca się i patrzy z otwartymi ustami na kulę ognia nad Command Center): „…Cholera. Świetne macie te fajerwerki z muzeum.”<br>
+<strong>Tanya:</strong> „Rocznik pięćdziesiąty trzeci, kowboju. Robione ręcznie.”</p>
+</blockquote>
+</li>
+<li><strong>Schrony.</strong> Doprowadzić cywilów z 3 schronów do lądowiska. Lądują tam transporty Synów Korhalu i pierwszy raz pojawia się Arcturus Mengsk.<blockquote><p><strong>Mengsk</strong> (ekran): „Arcturus Mengsk, Synowie Korhalu. Konfederacja zostawiła tych ludzi na śmierć. Ja ich zabiorę. Was też, jeśli zechcecie. Podobno macie maszynę, która przenosi czołgi przez pustkę.”<br>
+<strong>Einstein</strong> (cicho, do Stavrosa): „Ten człowiek uśmiecha się jak bankier do kogoś, kto tonie.”</p>
+</blockquote>
+</li>
+<li><strong>Zasilić skok.</strong> ARKA nie poleci przez kosmos jak statek, ale może zrobić jeden krótki skok w przestrzeni, bez czasu, jak zwykła Chronosfera. Trzeba postawić 4 elektrownie przy wraku i bronić ich przez 15 minut ładowania. Fale Zergów rosną, a pod koniec przyjeżdża oddział Konfederacji, żeby aresztować Raynora. Trzeba go odeprzeć.</li>
+<li><strong>Skok.</strong> W ostatniej minucie na radarze pojawia się flota Protossów na orbicie. Wszystko, co stoi w polu ARKI, skacze na Antigę Prime. Współrzędne podał Mengsk.</li>
+</ol>
+<p><strong>Porażka:</strong> śmierć Raynora, Tanyi lub Einsteina, zniszczenie wraku ARKI, uratowanie cywilów z mniej niż 2 schronów.</p>
+<p><strong>Ograniczenia techu:</strong> Alianci do średnich czołgów, bez lotnictwa. Raynor i jego Marines są pod kontrolą gracza.</p>
+<p><strong>Zakończenie:</strong> ARKA staje na Antidze Prime, a Mengsk już tam czeka.</p>
+<blockquote><p><strong>Mengsk:</strong> „Spóźniliście się trzy dni, profesorze.”<br>
+<strong>Einstein:</strong> „…Dla nas to była sekunda.” <em>(dryf, zob. Jak ARKA skacze)</em></p>
+</blockquote>
+<p>Mengsk pokazuje nagrania z orbity Mar Sary. Protossi palą planetę.</p>
+<blockquote><p><strong>Raynor:</strong> „To był mój dom.”<br>
+<strong>Einstein:</strong> „Przykro mi, marszałku. Wiem, jak to jest patrzeć, jak płonie świat, który się znało.”</p>
+</blockquote>
+<h2 id="misja-3-sygnal-z-nieba-antiga-prime-2499">Misja 3: „Sygnał z nieba” (Antiga Prime, 2499)</h2>
+<p><strong>Przerywnik:</strong> Antiga Prime buntuje się przeciw Konfederacji. ARKA stoi na równinie za miastem i rdzeń znów się trzyma. Mengsk prosi o pomoc w powstaniu i przedstawia swoją najlepszą agentkę.</p>
+<blockquote><p><strong>Mengsk:</strong> „Porucznik Sarah Kerrigan poprowadzi zwiad. Proszę jej słuchać jak mnie.”<br>
+<strong>Kerrigan</strong> (do Tanyi, z uśmiechem): „Myślisz bardzo głośno, panno Adams. Głównie o tym, kogo gdzie zastrzelić.”<br>
+<strong>Tanya:</strong> „Wyjdź z mojej głowy, zanim ja wejdę do twojej. Kulą.”<br>
+Raynor nie spuszcza Kerrigan z oczu. Kerrigan to widzi.</p>
+</blockquote>
+<p><strong>Start:</strong> mała baza Aliantów przy ARCE. Synowie Korhalu jako sojusznik (komputer). Kerrigan (Ghost, bohaterka) pod kontrolą gracza.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Zwiad.</strong> Kerrigan w maskowaniu wyłącza 2 wieże obserwacyjne Konfederacji. Jeśli ją wykryją, garnizon zostaje zaalarmowany i fale są większe.</li>
+<li><strong>Więzienie.</strong> Uwolnić buntowników z więzienia Konfederacji. Dołączają do gracza jako piechota.</li>
+<li><strong>Pudło Kerrigan.</strong> W połowie misji Zergi zaczynają atakować bazę Konfederacji, a przy okazji też twoją. Tanya trafia na urządzenie, które ekipa Kerrigan postawiła przy bazie wroga. To psi-nadajnik.<blockquote><p><strong>Tanya</strong> (radio): „Profesorze, Kerrigan postawiła przy bazie Konfederacji jakieś pudło. Zergi lecą do niego jak muchy do miodu.”<br>
+<strong>Einstein:</strong> „Przynęta. Ten człowiek używa potworów jak artylerii.”<br>
+<strong>Kerrigan</strong> (psionicznie, tylko do Raynora): „Nie patrz tak na mnie, Jim. Ja tylko wykonuję rozkazy.”</p>
+</blockquote>
+</li>
+<li><strong>Garnizon.</strong> Zniszczyć Command Center garnizonu Konfederacji.</li>
+</ol>
+<p><strong>Wybór (cel opcjonalny):</strong> zniszczyć psi-nadajnik albo go zostawić.</p>
+<ul>
+<li><strong>Zniszczony:</strong> Zergi przestają napływać, ale Mengsk jest wściekły. Misja 4 startuje z mniejszą kasą.</li>
+<li><strong>Zostawiony:</strong> misja jest trudniejsza, ale Mengsk ufa Aliantom. W misji 4 przysyła oddział Synów Korhalu.</li>
+</ul>
+<p><strong>Porażka:</strong> śmierć Einsteina, Tanyi, Raynora lub Kerrigan (jest potrzebna w misji 5), zniszczenie ARKI.</p>
+<p><strong>Ograniczenia techu:</strong> od tej misji Alianci mają lotnictwo (śmigłowce).</p>
+<p><strong>Zakończenie:</strong> Antiga wolna, Mengsk wygłasza przemówienie do kolonii. Tej nocy Raynor i Kerrigan rozmawiają przy ognisku. Tanya patrzy z daleka.</p>
+<blockquote><p><strong>Kerrigan:</strong> „Jim, nie wpuszczaj mnie za głęboko do swojej głowy. Tam jest bałagan.”<br>
+<strong>Raynor:</strong> „Wejdź. Posprzątasz.”</p>
+</blockquote>
+<p>To początek psionicznego haczyka (zob. Wątki postaci).</p>
+<h2 id="misja-4-zielony-krysztal-antiga-prime-2499">Misja 4: „Zielony kryształ” (Antiga Prime, 2499)</h2>
+<p><strong>Przerywnik:</strong> Einstein urządza laboratorium w namiocie obok ARKI i bada odłamek z rdzenia. Analiza i nazwy „Kryształ X” oraz „zielony szajs” są w sekcji o Krysztale X. W środku rozmowy włącza się alarm: Zergi ze wszystkich stron idą w stronę laboratorium.</p>
+<blockquote><p><strong>Einstein:</strong> „One nie idą na nas. Idą na próbkę. One ją <em>czują</em>.”<br>
+<strong>Mengsk</strong> (ekran): „Mam dla was jeszcze jedno zadanie. Okręt flagowy Konfederacji, Norad II, rozbił się dwadzieścia kilometrów od was. Na pokładzie jest generał Duke. Uratujcie go.”<br>
+<strong>Raynor:</strong> „Duke? Ten, który chciał nas aresztować?”<br>
+<strong>Mengsk:</strong> „Ten, który zna wszystkie kody Konfederacji.”</p>
+</blockquote>
+<p><strong>Start:</strong> baza Aliantów z laboratorium (budynek, w środku Einstein). Kasa i posiłki zależą od wyboru z misji 3.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Laboratorium.</strong> Bronić go przez 20 minut, aż Einstein skończy analizę. Zergi celują właśnie w laboratorium.</li>
+<li><strong>Norad II.</strong> Rozbity krążownik na północy (budynek neutralny) jest otoczony przez Zergi. Trzeba wysłać tam oddział, oczyścić teren i trzymać pozycję przez 3 minuty, aż załoga się ewakuuje.<blockquote><p><strong>Duke:</strong> „No proszę. Muzealnicy.” <em>(pauza)</em> „…Dziękuję. Nie przyzwyczajajcie się.”</p>
+</blockquote>
+</li>
+<li><strong>Ostatnia fala.</strong> Na koniec na laboratorium lecą Mutaliski i Guardiany. Trzeba je przetrwać.</li>
+</ol>
+<p><strong>Sekret:</strong> inżynier wprowadzony do gniazda Zergów na wschodzie znajduje Zerga, któremu z pancerza wyrasta zielony kryształ.</p>
+<blockquote><p><strong>Einstein:</strong> „To nie mogła być ta próbka. Ona nie opuszczała laboratorium. Ktoś je <em>karmi</em>.”</p>
+</blockquote>
+<p>To zapowiedź misji 9.</p>
+<p><strong>Porażka:</strong> zniszczenie laboratorium, śmierć Einsteina, zniszczenie Norad II przed ewakuacją.</p>
+<p><strong>Zakończenie:</strong> Duke przechodzi na stronę Mengska. Mengsk prosi o kawałek kryształu „do badań”.</p>
+<blockquote><p><strong>Einstein</strong> (do Tanyi, gdy ekran gaśnie): „Dam mu kawałek szkła. Zielonego.”<br>
+<strong>Tanya:</strong> „Profesorze, zaczyna mi się pan podobać.”</p>
+</blockquote>
+<h2 id="misja-5-upadek-tarsonis-tarsonis-2500">Misja 5: „Upadek Tarsonis” (Tarsonis, 2500)</h2>
+<p><strong>Przerywnik:</strong> Synowie Korhalu ruszają na stolicę Konfederacji. Mengsk mówi Aliantom, że to atak na system obrony planety. Prawdę Einstein odkrywa dopiero na mostku.</p>
+<blockquote><p><strong>Einstein:</strong> „Pan postawił te pudła w mieście. Tam są miliony ludzi.”<br>
+<strong>Mengsk:</strong> „Historia wybacza zwycięzcom, profesorze.”<br>
+<strong>Einstein:</strong> „Nie, panie Mengsk. Historia ich tylko zapisuje.”</p>
+</blockquote>
+<p><strong>Start:</strong> Alianci lądują na obrzeżach New Gettysburga. Synowie Korhalu są sojusznikiem. Raynor ma własne transportowce na lądowisku.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Cywile.</strong> Psi-nadajniki już działają i Zergi zalewają miasto. Z 4 dzielnic trzeba doprowadzić na lądowisko co najmniej 30 cywilów.</li>
+<li><em>(opcjonalnie)</em> <strong>Nadajniki.</strong> Tanya może wysadzić psi-nadajniki z C4. Każdy zniszczony zmniejsza fale. Mengsk to widzi i to zapamięta (misja 7).</li>
+<li><p><strong>Kerrigan.</strong> Jej oddział został przy lądowisku Protossów, a Mengsk każe wszystkim się wycofać.</p>
+<blockquote><p><strong>Kerrigan</strong> (radio): „Jim? Chłopaki, mamy tu mały problem…”<br>
+<strong>Mengsk</strong> (radio): „Wszystkie jednostki: odwrót. Tarsonis jest stracone.”</p>
+</blockquote>
+<p>Cel: dotrzeć do pozycji Kerrigan. <strong>Nie da się zdążyć i to jest celowe.</strong> Gracz ma poczuć bezsilność. Gdy oddział dociera na miejsce, zostaje tam tylko jej karabin, a śluzowaty ślad prowadzi w głąb roju.</p>
+<blockquote><p><strong>Raynor:</strong> „Sarah! SARAH!”<br>
+<strong>Tanya</strong> (cicho): „Przykro mi, kowboju.”<br>
+<strong>Raynor</strong> (do ekranu): „Zostawiłeś ją. Ty sukinsynu, zostawiłeś ją.”</p>
+</blockquote>
+</li>
+<li><strong>Ewakuacja.</strong> Bohaterowie i cywile muszą odlecieć ostatnim transportem.</li>
+</ol>
+<p><strong>Porażka:</strong> mniej niż 30 uratowanych cywilów, śmierć bohaterów.</p>
+<p><strong>Ograniczenia techu:</strong> pełny tech Aliantów bez supermocy.</p>
+<p><strong>Zakończenie:</strong> Tarsonis płonie. Nad miastem pojawia się flota Protossów i jeden okręt skręca w stronę Antigi Prime, prosto na ARKĘ. Tej nocy Raynor pierwszy raz słyszy we śnie jej głos: „Jim… przyjdź po mnie.”</p>
+<h2 id="misja-6-ogien-z-nieba-antiga-prime-2500">Misja 6: „Ogień z nieba” (Antiga Prime, 2500)</h2>
+<p><strong>Przerywnik:</strong> nad ARKĄ wisi flota Protossów, a na ekranie pojawia się Tassadar.</p>
+<blockquote><p><strong>Tassadar:</strong> „Wasza maszyna rani czas. Rani wszystko, czego dotknie. Musi zostać oczyszczona.”<br>
+<strong>Mengsk</strong> (radio): „To wasz problem, profesorze. Dominium… to znaczy Synowie Korhalu nie wojują z Protossami.”<br>
+<strong>Tanya:</strong> „Dominium?”</p>
+</blockquote>
+<p><strong>Start:</strong> baza Aliantów wokół ARKI. Raynor i jego Marines, Siege Tanki i Vulture'y są jeszcze formalnie pod Mengskiem, ale walczą z graczem.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Desant.</strong> Przetrwać 15 minut fal: Zealoty i Dragoony, które prowadzi <strong>Fenix</strong> (bohater wroga, nie da się go zabić: przy niskim HP się wycofuje).</li>
+<li><strong>Pylony.</strong> Protossi przywołują posiłki przez Pylony w wysuniętej strefie. Zniszczenie 3 Pylonów zatrzymuje dosyłanie wojsk.</li>
+<li><strong>Rozmowa.</strong> Po upadku Pylonów Einstein wychodzi na środek mapy na spotkanie z Tassadarem (neutralny High Templar). Trzeba go tam bezpiecznie doprowadzić.<blockquote><p><strong>Einstein:</strong> „Ma pan rację, ta maszyna jest chora. Ale to nie ona jest chorobą.” <em>(pokazuje Kryształ X)</em><br>
+<strong>Tassadar</strong> (długie milczenie): „To nie należy do tego świata. Ani do waszego. Kto to stworzył?”<br>
+<strong>Einstein:</strong> „Nie wiem. Wiem tylko, kto mi to podłożył.”<br>
+<strong>Tassadar:</strong> „Wstrzymajcie ogień.”</p>
+</blockquote>
+</li>
+<li><strong>Rozejm.</strong> Fenix i Raynor, którzy przez całą misję strzelali do siebie, stają naprzeciw siebie.<blockquote><p><strong>Fenix:</strong> „Walczysz jak zelota, Terraninie.”<br>
+<strong>Raynor:</strong> „A ty jak ktoś, kto nigdy nie słyszał o przerwie na kawę.”</p>
+</blockquote>
+</li>
+</ol>
+<p><strong>Sekret:</strong> Tassadar przyznaje, że Obserwator z misji 1 był jego: „Patrzymy na was od Mar Sary.”</p>
+<p><strong>Porażka:</strong> zniszczenie ARKI, śmierć Einsteina w drodze na spotkanie.</p>
+<p><strong>Ograniczenia techu:</strong> pełny tech Aliantów.</p>
+<p><strong>Zakończenie:</strong> Tassadar mówi, że rdzeń może uleczyć tylko kryształ Khaydarin, a ten leży na Aiur, świecie Protossów. Chwilę później wszystkie ekrany Antigi pokazują orędzie Mengska.</p>
+<h2 id="misja-7-zdrada-antiga-prime-2500">Misja 7: „Zdrada” (Antiga Prime, 2500)</h2>
+<p><strong>Przerywnik:</strong> Mengsk koronuje się na cesarza <strong>Dominium Terran</strong>. Pierwszy rozkaz cesarza dotyczy ARKI.</p>
+<blockquote><p><strong>Mengsk:</strong> „Maszyna, która przenosi armie w mgnieniu oka. Z nią Dominium nie będzie miało granic. Oddajcie ją dobrowolnie, profesorze.”<br>
+<strong>Einstein:</strong> „Raz już zbudowałem coś, co miało uratować świat. Potem patrzyłem, jak niszczy pół Europy. Nie, panie Mengsk.”<br>
+<strong>Raynor:</strong> „Mam dość tego cyrku. Moi ludzie idą z wami.”<br>
+<strong>Duke</strong> (radio, teraz generał Dominium): „Nic osobistego, muzealnicy. Rozkazy.”</p>
+</blockquote>
+<p><strong>Start:</strong> baza Aliantów wokół ARKI, okrążona przez Dominium. Oddział Raynora stoi w środku bazy Dominium, przy porcie kosmicznym.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Hyperion.</strong> Raynor i Marines przebijają się do portu, gdzie stoi okręt flagowy Mengska. Tanya wysadza 3 zaczepy dokujące. Gdy Hyperion startuje, staje się <strong>Battlecruiserem-bohaterem</strong> gracza (z Yamato).<blockquote><p><strong>Raynor:</strong> „Zawsze chciałem mieć własny krążownik.”</p>
+</blockquote>
+</li>
+<li><strong>Raynor's Raiders.</strong> Od tej chwili gracz może budować jednostki Terran: dostaje Command Center Raynora. To zostaje do końca kampanii.</li>
+<li><strong>Ostatni skok.</strong> Einstein ładuje skok w przestrzeni przez 20 minut. Siege Tanki Duke'a ostrzeliwują obwód, a Dominium atakuje z trzech stron. Jeśli w misji 5 zniszczono nadajniki, ataki są mocniejsze, bo Mengsk się mści.<blockquote><p><strong>Einstein:</strong> „Tassadar przysłał współrzędne Aiur. Rdzeń wytrzyma jeden skok. Chyba.”</p>
+</blockquote>
+</li>
+</ol>
+<p><strong>Porażka:</strong> zniszczenie ARKI lub Hyperiona, śmierć bohaterów.</p>
+<p><strong>Ograniczenia techu:</strong> Alianci (pełny tech) i od połowy misji Terranie.</p>
+<p><strong>Zakończenie:</strong> ARKA i Hyperion znikają. Pancerz rdzenia pęka.</p>
+<blockquote><p><strong>Einstein:</strong> „Panowie, panie, mamy może tydzień, zanim Kryształ X rozsadzi tę maszynę od środka.”</p>
+</blockquote>
+<h2 id="misja-8-krysztal-khaydarin-aiur-2500">Misja 8: „Kryształ Khaydarin” (Aiur, 2500)</h2>
+<p><strong>Przerywnik:</strong> ARKA ląduje na Aiur sześć dni później, niż liczył Einstein (dryf). Hyperion skakał własnym napędem i był na miejscu od razu.</p>
+<blockquote><p><strong>Raynor:</strong> „Gdzieście byli? Czekam tu prawie tydzień.”<br>
+<strong>Einstein:</strong> „Według mojego zegarka wylecieliśmy przed minutą.”</p>
+</blockquote>
+<p>Świat Protossów płonie: Zergi są wszędzie. Tassadara nie ma, bo poleciał na Char. Dowodzi Fenix.</p>
+<blockquote><p><strong>Fenix:</strong> „Sanktuarium Khaydarinu leży w strefie, którą Rój zajął trzy dni temu. Gdybyście przybyli wcześniej… Nieważne. Pójdę z wami. To mój obowiązek.”</p>
+</blockquote>
+<p><strong>Start:</strong> ARKA przy placówce Protossów. Alianci, Raiders i Protossi jako sojusznik (komputer). Fenix (Zealot, bohater) pod kontrolą gracza.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Przebić się do Sanktuarium.</strong> Teren pokryty creepem, gniazda Zergów i Sunken Colonies po drodze.</li>
+<li><strong>Kryształ.</strong> Inżynier wchodzi do Sanktuarium. Kryształ wyjeżdża powolnym transporterem (jednostka eskortowana) w stronę ARKI.</li>
+<li><strong>Odwrót.</strong> Zergi kontratakują Ultraliskami i Guardianami. Fenix osłania odwrót sam i pada (skrypt).<blockquote><p><strong>Fenix:</strong> „Idźcie! Ja jestem tylko mieczem. Wy niesiecie przyszłość.”<br>
+<strong>Raynor:</strong> „Fenix!”</p>
+</blockquote>
+</li>
+<li><strong>Dostarczyć kryształ do ARKI.</strong></li>
+</ol>
+<p><strong>Porażka:</strong> zniszczenie transportera z kryształem, zniszczenie ARKI, śmierć Einsteina, Tanyi lub Raynora.</p>
+<p><strong>Zakończenie:</strong> Einstein dzieli kryształ.</p>
+<blockquote><p><strong>Einstein:</strong> „Połowa do rdzenia. Drugą połowę zachowam. Mam przeczucie, że się jeszcze przyda.”<br>
+<strong>Einstein</strong> (po włożeniu kryształu, patrzy na wskazania): „Zielony pcha w przód, ten ciągnie wstecz. Panowie, ta maszyna ma wreszcie wsteczny bieg.”</p>
+</blockquote>
+<p>Do bazy wkracza Dragoon. W środku jest Fenix, jak w kanonie SC.</p>
+<blockquote><p><strong>Fenix:</strong> „Dla Protossa śmierć to tylko zmiana pancerza.”<br>
+<strong>Raynor:</strong> „Wyglądasz… solidniej.”<br>
+<strong>Fenix</strong> (ciszej, tylko do Raynora): „Twój umysł nosi czyjeś znamię. Porozmawiamy o tym, gdy wrócisz z Char.”</p>
+</blockquote>
+<h2 id="misja-9-zielony-roj-char-2500">Misja 9: „Zielony rój” (Char, 2500)</h2>
+<p><strong>Przerywnik:</strong> Raynor co noc słyszy głos Kerrigan i wie, że dobiega z Char. Zwiadowcy Protossów meldują, że Zergi na Char świecą na zielono. ARKA zostaje na Aiur. Na Char lecą Hyperion, Raiders i oddział Aliantów.</p>
+<blockquote><p><strong>Tanya:</strong> „Kowboju, lecisz tam po nią, prawda?”<br>
+<strong>Raynor:</strong> „Lecę tam, bo ktoś karmi te bydlęta zielonym szajsem. I po nią.”</p>
+</blockquote>
+<p><strong>Start:</strong> lądowisko na wulkanicznym Char. Mały oddział i Hyperion. Bazę Terran i Aliantów trzeba dopiero postawić.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Przyczółek.</strong> Postawić bazę na Char.</li>
+<li><strong>Zielone Zergi.</strong> Zergi zmienione kryształem są silniejsze i regenerują się na polach Kryształu X. Pola rosną na mapie i trzeba je zbierać albo wypalać, zanim się rozleją. Do zniszczenia są 3 zielone „hodowle”.</li>
+<li><strong>Laboratorium agenta.</strong> W jaskiniach stoi ukryty budynek w stylu Nod, obcy na tej planecie. Tanya i inżynier wchodzą do środka. Agent ucieka zamaskowany do transportu (skrypt), ale zostaje po nim nagranie.<blockquote><p><strong>Kane</strong> (nagranie): „…Bracia, gdziekolwiek rzuci was czas, siejcie. Pokój przez siłę.”<br>
+<strong>Einstein</strong> (przez radio): „Nie wiem, co to jest. Wiem tylko, kto to włożył do mojej maszyny.”<br>
+<strong>Tanya:</strong> „I że ten ktoś ma tu fanklub.”</p>
+</blockquote>
+</li>
+</ol>
+<p><strong>Sekret:</strong> w głębi mapy wisi zielona poczwarka, nietykalna.</p>
+<blockquote><p><strong>Raynor:</strong> „To ona. Czuję ją.”</p>
+</blockquote>
+<p><strong>Porażka:</strong> śmierć bohaterów, zniszczenie Hyperiona.</p>
+<p><strong>Zakończenie:</strong> z cienia wychodzi Protoss w czarnej szacie, <strong>Zeratul</strong>.</p>
+<blockquote><p><strong>Zeratul:</strong> „Cerebrata, którego karmicie zielenią, nie zabije wasza broń. Tylko nasza.”</p>
+</blockquote>
+<h2 id="misja-10-serce-roju-char-2500">Misja 10: „Serce roju” (Char, 2500)</h2>
+<p><strong>Przerywnik:</strong> poczwarka pęka i wychodzi z niej <strong>Królowa Ostrzy</strong>. Jej skrzydła świecą na zielono.</p>
+<blockquote><p><strong>Kerrigan:</strong> „Jim. Widzisz, co mi zrobili? A teraz zobacz, co ja zrobię.”</p>
+</blockquote>
+<p><strong>Start:</strong> baza z misji 9. Zeratul (Dark Templar, bohater) i kilku Dark Templarów pod kontrolą gracza.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Pierścień.</strong> Zniszczyć 3 Hatchery, które bronią Cerebrata.</li>
+<li><strong>Cerebrat.</strong> Doprowadzić Zeratula do tyberyjskiego Cerebrata. Każda inna broń tylko go rani, a on odradza się, dopóki nie dotknie go Zeratul.</li>
+<li><p><strong>Królowa Ostrzy.</strong> Kerrigan atakuje osobiście. Przy niskim HP Kerrigan uruchamia się scena: Raynor staje naprzeciw niej i nie potrafi strzelić.</p>
+<blockquote><p><strong>Kerrigan:</strong> „No dalej, Jim. Strzelaj. Nie potrafisz, prawda?”<br>
+<strong>Raynor:</strong> „…Sarah.”<br>
+<em>(strzał)</em><br>
+<strong>Tanya:</strong> „Ja potrafię.”</p>
+</blockquote>
+<p>Ciało Kerrigan zostaje zniszczone. Nikt nie widzi, co dzieje się dalej z jej szczątkami.</p>
+</li>
+</ol>
+<p><strong>Porażka:</strong> śmierć Zeratula przed zabiciem Cerebrata, śmierć bohaterów.</p>
+<p><strong>Zakończenie:</strong> Raynor siedzi na rampie Hyperiona.</p>
+<blockquote><p><strong>Raynor:</strong> „Zrobiłaś to, na co ja nie miałem odwagi. Jestem ci winien więcej niż piwo.”</p>
+</blockquote>
+<p>Po powrocie na Aiur Fenix wypala z jego umysłu ślad Kerrigan (zob. Wątki postaci).</p>
+<h2 id="misja-11-strzalka-czasu-aiur-2500">Misja 11: „Strzałka czasu” (Aiur, 2500)</h2>
+<p><strong>Przerywnik:</strong> rdzeń stoi na Khaydarinie. Einstein liczy drogę do domu.</p>
+<blockquote><p><strong>Einstein:</strong> „Minus pięćset pięćdziesiąt cztery lata. Stavros, proszę odczytać.”<br>
+<strong>Stavros:</strong> „Minus, profesorze. Sprawdziłem trzy razy.”<br>
+<strong>Tanya:</strong> „Sprawdź czwarty.”</p>
+</blockquote>
+<p>Ale ARKĘ chcą wszyscy: Dominium przysłało za nimi flotę Duke'a, a bezpańskie zielone Zergi ciągną do Kryształu X. Gdzieś na Aiur jest też agent Nod.</p>
+<p><strong>Start:</strong> ARKA w środku, baza Aliantów, baza Raiders, Protossi jako sojusznik. Fenix w Dragoonie jako bohater.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Ładowanie.</strong> 30 minut, lustro preludium. Chronić 4 źródła mocy: 2 elektrownie Aliantów i 2 Pylony.</li>
+<li><strong>Fale.</strong> Na zmianę atakują Dominium (Siege Tanki, Battlecruisery, Duke) i zielone Zergi.</li>
+<li><strong>Agent Nod.</strong> W 20. minucie alarm: zamaskowany sabotażysta znowu idzie do rdzenia. <strong>Tym razem da się go zatrzymać.</strong> Trzeba mieć wykrywanie (Observer, Missile Turret) i zabić go, zanim dojdzie.<blockquote><p><strong>Tanya</strong> (nad ciałem agenta): „Nie tym razem.”</p>
+</blockquote>
+</li>
+<li><strong>Pożegnania.</strong> Fenix zostaje bronić Aiur. Raynor wsiada.<blockquote><p><strong>Fenix:</strong> „Idź, przyjacielu. Ten świat jest mój. Twój czeka po drugiej stronie.”<br>
+<strong>Raynor:</strong> „Ten sektor zabrał mi wszystko. Wolę przeszłość, w której ktoś jeszcze na mnie liczy.”</p>
+</blockquote>
+</li>
+<li><strong>Ostatnie 2 minuty.</strong> Siege Tank Duke'a przebija się w pole ARKI (skrypt). Duke skacze z nimi i ląduje pod kluczem w ładowni.</li>
+</ol>
+<p><strong>Porażka:</strong> zniszczenie ARKI, śmierć Einsteina, Tanyi lub Raynora, agent Nod dociera do rdzenia.</p>
+<p><strong>Zakończenie:</strong> biały błysk. Tylko gracz widzi, że na kadłubie ARKI wisi zielona poczwarka, która skoczyła razem z nimi (zob. Wątki postaci).</p>
+<blockquote><p><strong>Einstein:</strong> „Minus. Na pewno minus.”</p>
+</blockquote>
+<p>Konsola pokazuje 1946. Potem mruga i pokazuje inny rok.</p>
+<h2 id="epilog-przystanek-1995">Epilog: przystanek 1995</h2>
+<p>Symboliczny przerywnik z dialogiem, bez misji. W drodze do 1946 ARKA tylko „zahacza” o <strong>1995 rok</strong>. Odłamek w rdzeniu działa jak kotwica i na kilka minut zatrzymuje ją nad Włochami, nad rzeką Tyber, gdzie właśnie spadł zielony meteoryt. Nikt nie wysiada. To pokaz zza szyby: krater, zielona poświata i włoskie radio.</p>
+<blockquote><p><strong>Radio</strong> (po włosku, Stavros tłumaczy): „…naukowcy nazwali nieznany minerał od rzeki, przy której spadł: <strong>Tyberium</strong>…”<br>
+<strong>Einstein:</strong> „Tyberium. Więc tak się nazywasz.” <em>(patrzy na Kryształ X z rdzenia)</em> „Ten sam skład. Tylko ten tutaj jest dziki, a nasz ktoś oczyścił.”<br>
+<strong>Tanya:</strong> „Profesorze, Nod wsadził nam to do maszyny w 1953. A to spada z nieba dopiero teraz.”<br>
+<strong>Einstein:</strong> „Właśnie, panno Adams. Ktoś wiedział o tym kamieniu czterdzieści dwa lata przed tym, zanim spadł.”<br>
+Pokładowy ekran łapie włoski dziennik telewizyjny: przemówienie przywódcy Bractwa Nod.<br>
+<strong>Tanya:</strong> „Profesorze… to ten sam człowiek co na zdjęciu z 1953. Ani jednej zmarszczki więcej.”<br>
+<strong>Einstein</strong> (patrzy na zapis skoku): „…znowu plus.”</p>
+</blockquote>
+<p>Z tego przystanku wychodzą bonusowe misje 12–13. Einstein rozumie, że ucieczka do 1946 nic nie da, dopóki Kane istnieje.</p>
+<p>Uzasadnienie kanonu: start kampanii (przegrana aliantów, za Sowietami stoi Kane) to <strong>sowieckie zakończenie RA1</strong>, które Westwood pomyślał jako prequel Tiberian Dawn. Zakończenie aliantów prowadzi do linii RA2/RA3. Rok 1995 to przyjęta w kanonie data upadku meteorytu nad Tybrem. Odłamek Tyberium w rdzeniu działa jak kotwica: ciągnie ARKĘ do chwili, w której Tyberium pierwszy raz dotknęło Ziemi.</p>
+<h2 id="krysztal-x-co-wie-einstein-i-kiedy">Kryształ X: co wie Einstein i kiedy</h2>
+<p><strong>Zasada:</strong> gracz wie, że to Tyberium, a bohaterowie nie. Do przystanku 1995 <strong>nikt w dialogach nie mówi „Tyberium”</strong>. Opisy dla autora mogą tak pisać. W 1953 nikt na Ziemi tego minerału nie zna, bo spadnie dopiero w 1995. Einstein jest naukowcem, nie prorokiem, więc może tylko zmierzyć, co ma w ręku.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Kiedy</th><th>Co wiedzą bohaterowie</th></tr></thead>
+<tbody>
+<tr><td>Preludium (1953)</td><td>Szpieg Nod wkłada do rdzenia „zielony kryształ”. Nikt nie wie, co to jest. Z dokumentu Tanyi wiadomo tylko, że Nod chciał startu ARKI.</td></tr>
+<tr><td>Misja 1</td><td>Pęknięty zielony kryształ we wraku. „Ktoś nam pomógł się pomylić.”</td></tr>
+<tr><td>Misja 4</td><td>Analiza Einsteina (niżej). Nazwa robocza <strong>Kryształ X</strong>, a wśród żołnierzy <strong>„zielony szajs”</strong>.</td></tr>
+<tr><td>Misja 9</td><td>Kryształ X zmienia Zergi. Agent Nod karmił nim Rój. Einstein: „Nie wiem, co to jest. Wiem tylko, kto to włożył do mojej maszyny.”</td></tr>
+<tr><td>Przystanek 1995</td><td>Włoskie radio podaje nazwę <strong>Tyberium</strong> od rzeki Tyber. Einstein łączy fakty: Nod miał kryształ 42 lata przed jego upadkiem, więc Kane nie jest zwykłym człowiekiem.</td></tr>
+<tr><td>Misje 12–13</td><td>Nazwa „Tyberium” jest już w użyciu. „Tyberium to jego krew.”</td></tr>
+</tbody></table></div>
+<p><strong>Analiza Einsteina (misja 4):</strong></p>
+<blockquote><p><strong>Einstein:</strong> „Krzemiany. Metale ciężkie: żelazo, miedź, nikiel, cynk. Do tego ślady pierwiastków, których nie ma w żadnej mojej tabeli. Sam odłamek leży na stole od tygodnia i nie urósł ani o włos. Ale pył z pęknięcia, wsypany do grudki ziemi… on <em>rośnie</em>. Wysysa metale z gruntu i odkłada je w sobie, jak gąbka.”<br>
+<strong>Stavros:</strong> „Czyli to ruda?”<br>
+<strong>Einstein:</strong> „Ruda nie wchodzi do pobliskich skał i nie truje żołnierzy, którzy ją niosą. Dla nas to trucizna. Dla tych stworzeń to pokarm.”<br>
+<strong>Stavros:</strong> „Skoro pył rośnie, czemu cały odłamek nie? Czemu nie zarósł nam rdzenia?”<br>
+<strong>Einstein:</strong> „Bo to nie jest kamień z natury. Ktoś go… wydestylował. Sprasował jego sieć tak gęsto, że nie ma w niej miejsca na wzrost. To bateria, nie nasiono. Dlatego moc rdzenia skoczyła o cztery tysiące procent.”<br>
+<strong>Tanya:</strong> „Czyli dopóki jest w jednym kawałku, śpi.”<br>
+<strong>Einstein:</strong> „Dopóki jest w jednym kawałku i nikt nie sypie go do ziemi.”<br>
+<strong>Tanya:</strong> „Czyli śpiący zielony szajs.”<br>
+<strong>Einstein:</strong> „W raporcie napiszę »Kryształ X«. Ale tak, panno Adams. Zielony szajs.”</p>
+</blockquote>
+<p><strong>Dlaczego Kryształ X nie rośnie jak zwykłe Tyberium:</strong> to <strong>destylat</strong>. Nod (Kane) sprasował kryształ do tak gęstej sieci, że w całości nie ma w nim miejsca na wzrost. Działa jak bateria pełna energii, nie jak nasiono. To wyjaśnia kilka rzeczy naraz:</p>
+<ul>
+<li><strong>Preludium:</strong> skok mocy rdzenia o 4000%. Destylat to skoncentrowana energia.</li>
+<li><strong>Misja 1:</strong> kryształ pęka przy katastrofie. Z pęknięcia sypie się pył, który już jest „żywy”.</li>
+<li><strong>Misja 4:</strong> cały odłamek śpi na stole, a pył z pęknięcia rośnie w ziemi. Zergi czują promieniowanie destylatu („śpiewa”) i idą do próbki.</li>
+<li><strong>Misja 8:</strong> Khaydarin równoważy Kryształ X. Daje kierunek wstecz i trzyma pęknięcie w ryzach.</li>
+<li><strong>Misja 9:</strong> agent wyłamał okruchy z pęknięcia i wsypał je w glebę Char. Tam obudziły się i rozrosły w pola, którymi karmił Rój.</li>
+<li><strong>Przystanek 1995:</strong> meteoryt nad Tybrem jest dziki i rośnie od razu. „Ten sam skład. Tylko ten tutaj jest dziki, a nasz ktoś oczyścił.” To kolejna wskazówka, że Kane miał tę technologię, zanim Tyberium w ogóle spadło.</li>
+</ul>
+<p>Skład jest naszą wersją w duchu Tiberian Dawn: Tyberium wysysa minerały i metale z gruntu, rośnie i truje. TD nie podaje oficjalnego wzoru chemicznego. Sprawdziłem w sieci 2026-10-26 i znalazłem tylko fanowskie rekonstrukcje (krzem, miedź, wapń, tlen).</p>
+<h2 id="watki-postaci-dopowiedzenia-do-scenariusza-nie-osobne-misje">Wątki postaci (dopowiedzenia do scenariusza, nie osobne misje)</h2>
+<h3 id="raynor-czemu-leci-z-aliantami">Raynor: czemu leci z Aliantami</h3>
+<p>Ma trzy powody, które narastają przez kampanię:</p>
+<ol>
+<li><strong>Dług wdzięczności.</strong> W misji 10 Raynor staje naprzeciw Królowej Ostrzy i nie potrafi pociągnąć za spust, bo widzi twarz Sarah. Strzela <strong>Tanya</strong>. Raynor do końca życia nie wie, czy ją za to nienawidzić, czy dziękować. Wybiera to drugie.<blockquote><p><strong>Raynor:</strong> „Zrobiłaś to, na co ja nie miałem odwagi. Jestem ci winien więcej niż piwo.”</p>
+</blockquote>
+</li>
+<li><strong>Tanya (powolny romans).</strong> Na początku docinki. Ona nazywa go „kowbojem”, on ją „panienką z muzeum”, bo Alianci mają sprzęt z lat 50. Potem szacunek na polu bitwy: w misji 2 Tanya wyciąga go z zainfekowanego Command Center. Tanya długo nie daje się złapać na jego urok i to jest cały żart.<blockquote><p><strong>Tanya:</strong> „Masz jeszcze jej imię w oczach, kowboju. Wróć, jak je wymażesz.”</p>
+</blockquote>
+</li>
+<li><strong>Nic go nie trzyma.</strong> Mengsk go zdradził, Mar Sara spłonęła, Kerrigan „nie żyje”. W misji 11 wchodzi na pokład ARKI.<blockquote><p><strong>Raynor:</strong> „Ten sektor zabrał mi wszystko. Wolę przeszłość, w której ktoś jeszcze na mnie liczy.”</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="raynor-simp-czyli-psioniczny-haczyk-kerrigan">Raynor „simp”, czyli psioniczny haczyk Kerrigan</h3>
+<p>Uzasadnienie w lore: Kerrigan to najsilniejsza telepatka sektora. Jeszcze jako Ghost zostawiła w głowie Raynora <strong>psioniczny ślad</strong>, a jako Królowa Ostrzy ciągnie za niego jak za smycz. Raynor nie jest więc tylko zakochanym głupkiem: jego tęsknota jest w połowie podsycana z zewnątrz. Dlatego wraca do niej myślami, waha się w misji 10 i źle śpi.</p>
+<p><strong>Fenix go oczyszcza.</strong> Między misjami 10 i 11 Fenix (Protoss, Dragoon, przyjaciel Raynora z SC1) z pomocą kryształu Khaydarin z misji 8 wchodzi w umysł Raynora i wypala ten ślad.</p>
+<blockquote><p><strong>Fenix:</strong> „Twój umysł nosi jej znamię, Jamesie Raynorze. Pozwól mi je wypalić. Zaboli.”<br>
+<strong>Raynor</strong> (po wszystkim): „Pierwszy raz od miesięcy słyszę tylko własne myśli. Cholernie tu cicho.”</p>
+</blockquote>
+<p>Od tej chwili jego uczucie do Tanyi jest <strong>jego własne</strong>. Fenix zostaje w Koprulu i żegna go w misji 11.</p>
+<h3 id="kerrigan-i-kane-dwa-drapiezniki-zero-milosci">Kerrigan i Kane: dwa drapieżniki, zero miłości</h3>
+<p><strong>Jak Kerrigan trafia do 2047:</strong> „śmierć” w misji 10 zniszczyła tylko jej ciało. W misji 11 jej poczwarka, nasycona Tyberium z karmienia agenta Nod (misja 9), przyczepia się do kadłuba ARKI. W 1995 nad Tybrem odpada do krateru meteorytu. <strong>Nod ją znajduje</strong> i Kane trzyma ją w Świątyni jako „dar gwiazd”. Kerrigan budzi się ponownie przy Tyberium, a w 2047 jest sojuszniczką Nod. Jej istnienie to ostatnia niespodzianka misji 13.</p>
+<p><strong>Czemu z nim współpracuje:</strong> Kerrigan wyczuwa w Kanie coś, czego nigdy nie spotkała: istotę starszą niż ludzkość, z Tyberium zamiast krwi. Chce go <strong>zasymilować do Roju</strong>, a jego esencja dałaby jej moc na skalę Overminda. Próbuje go „uwieść”, ale to nie romans, tylko psioniczne polowanie. <strong>Na Kane'a telepatia nie działa</strong>, bo to nie jest człowiek. To ją fascynuje i doprowadza do szału.</p>
+<p><strong>Czemu Kane ją trzyma:</strong> dla niego Kerrigan to dowód, że Tyberium plus życie daje ewolucję, czyli żywy argument za jego wizją Wniebowstąpienia. Jest też broń, okaz i pionek. Każde z nich myśli, że wykorzystuje drugie. Oboje mają rację.</p>
+<blockquote><p><strong>Kerrigan:</strong> „Mogłabym cię uczynić częścią czegoś wielkiego, Kane.”<br>
+<strong>Kane:</strong> „Ja już <em>jestem</em> czymś wielkim. Ty jesteś tylko ciekawym eksperymentem.”<br>
+<strong>Kerrigan:</strong> „…Nienawidzę, kiedy nie mogę ci zajrzeć do głowy.”<br>
+<strong>Kane:</strong> „Wiem. To moja ulubiona część naszej znajomości.”</p>
+</blockquote>
+<p><strong>Jak to wychodzi w grze:</strong> w misji 12 wśród sił Nod pojawiają się pierwsze tyberyjskie Zergi (zaczepka). W misji 13 Kerrigan stoi przy Kanie w ruinach Świątyni:</p>
+<ul>
+<li>Woła do Raynora psionicznie, ale <strong>nic się nie dzieje</strong>, bo Fenix wypalił ślad.<blockquote><p><strong>Raynor:</strong> „Już nie, Sarah. Już nie.”</p>
+</blockquote>
+</li>
+<li><p><strong>Dobre zakończenie:</strong> Rezonator robi z Kane'a śmiertelnika. Kerrigan natychmiast traci zainteresowanie i znika, zostawiając go na pastwę Tanyi i Raynora.</p>
+<blockquote><p><strong>Kerrigan:</strong> „Myślałam, że jesteś bogiem. Jesteś tylko człowiekiem z dobrym PR-em.”</p>
+</blockquote>
+<p>Wolna Kerrigan w 2047 to zaczepka na ewentualny ciąg dalszy.</p>
+</li>
+<li><strong>Kanoniczne zakończenie:</strong> Kane i Kerrigan uciekają razem ostatnim tunelem. Najgorszy sojusz w historii dwóch wszechświatów pozostaje w grze.</li>
+</ul>
+<h2 id="kim-jest-kane-i-jakie-ma-slabosci">Kim jest Kane i jakie ma słabości</h2>
+<p>Z lore (sprawdzone w sieci 2026-10-26): Kane się nie starzeje (ten sam wygląd w 1953, 1995, 2030 i 2047), sugeruje się, że to biblijny Kain, a w C&amp;C4 przechodzi przez Próg, prawdopodobnie do świata Scrinów. <strong>To, że Kane jest Scrinem, to teoria fanów, nie kanon.</strong> Sam nazywał Scrinów „kultem uzależnienia udającym gatunek”. Scrini są odporni na Tyberium, ale podatni na broń anty-tyberyjską i zależni od Tyberium.</p>
+<p><strong>Motyw Kane'a w 1953:</strong> Einstein to jedyny człowiek, który umie cofać czas, czyli jedyny, który mógłby odwrócić zwycięstwo Kane'a. Zabić go pod Gibraltarem byłoby trudno, więc Kane woli, żeby Einstein sam się wystrzelił. Kryształ w rdzeniu miał wyrzucić ARKĘ „donikąd”, poza historię Ziemi. To, że kotwica awaryjna złapała Mar Sarę, było szczęściem Aliantów. Zasianie Tyberium w obcym wszechświecie to dla Kane'a premia.</p>
+<p><strong>Skąd Kane miał kryształ w 1953, przed upadkiem meteorytu:</strong> celowo bez wyjaśnienia wprost. Kane „był zawsze” i jest z tego samego porządku co Tyberium. To główna wskazówka dla gracza, że Kane nie jest człowiekiem.</p>
+<p><strong>Nasza wersja:</strong> Kane jest „z tego samego porządku” co Scrini. Tyberium to jego krew, a kryształ Khaydarin (Protossi, misja 8) jest jego przeciwwagą. Słabości, które wykorzystujemy:</p>
+<ul>
+<li><strong>Nie kobiety.</strong> Kane ludzi zużywa i porzuca. Nadię, która otruła dla niego Stalina, sam zastrzelił w zakończeniu RA1. Uwodzenie odpada.<blockquote><p><strong>Tanya:</strong> „Znam ten typ. Ostatnia kobieta, która mu pomogła, dostała kulkę w podziękowaniu.”</p>
+</blockquote>
+</li>
+<li><strong>Pycha i relikwie.</strong> Kane zbiera obce artefakty (obsesja na punkcie Tacitusa) i wierzy, że gwiazdy go wybrały. Nie odrzuci daru „z niebios”.</li>
+<li><strong>Rozłamy w Nod.</strong> W Bractwie zawsze ktoś knuje i każdy fanatyk chce być ulubieńcem Proroka. Przez takiego człowieka przejdzie przesyłka.</li>
+</ul>
+<h2 id="misja-bonusowa-12-dar-dla-proroka-sarajewo-2047">Misja bonusowa 12: „Dar dla Proroka” (Sarajewo, 2047)</h2>
+<p><strong>Dlaczego 2047:</strong> to szczyt potęgi Kane'a (trzecia wojna o Tyberium). Nod zniszczył stację GDI Philadelphia i sieć dział jonowych, a Kane rządzi ze <strong>Świątyni Prime w Sarajewie</strong>. Gdy tu padnie, nie będzie miał już skąd wrócić.</p>
+<p><strong>Przerywnik:</strong> ciąg dalszy przystanku 1995 (zob. Epilog). ARKA wciąż wisi nad kraterem przy Tybrze.</p>
+<blockquote><p><strong>Einstein:</strong> „Kane siedzi w każdej epoce tej planety jak chwast. Nie wyrwiemy go w 1995, bo tu jest jeszcze nasionem. Trzeba go uderzyć, gdy kwitnie.”<br>
+<strong>Raynor:</strong> „Czyli kiedy?”<br>
+<strong>Einstein</strong> (trzyma Khaydarin nad konsolą): „Ten kryształ słyszy jego Tyberium w każdym roku naprzód. Najgłośniej śpiewa za pięćdziesiąt dwa lata.” <em>(wpisuje)</em> „Plus pięćdziesiąt dwa. Tym razem plus. <strong>Celowo.</strong>”</p>
+</blockquote>
+<p>Po skoku Einstein wyjaśnia, że Rezonator Khaydarin musi godzinami „stroić się” do Tyberium w samym sercu Świątyni. Z zewnątrz nic nie zdziała.</p>
+<blockquote><p><strong>Einstein:</strong> „Nie wniesiemy go tam. Niech oni go wniosą.”</p>
+</blockquote>
+<p><strong>Plan:</strong> na wzgórzach pod Sarajewem powstaje placówka naukowa <strong>„Omega”</strong>: przybysze znikąd badają obcy kryształ. Placówka jest <strong>pół atrapą, pół prawdą</strong>. Większość budynków to wydmuszki, żeby wyglądała na dużą. Laboratorium jest jednak prawdziwe: Einstein zostawia w nim swoje <strong>prawdziwe badania z Koprulu</strong>, czyli jak Kryształ X zmienia Zergi (dla Kane'a bezcenne). Do tego kryształ Khaydarin opisany jako „gwiezdne źródło energii”, a nie broń. To Rezonator. Garstka ochotników zostaje do końca. O Khaydarinie jako przeciwwadze Tyberium w notatkach nie ma ani słowa. Inaczej wywiad Nod by się zorientował. Placówkę ma zdobyć <strong>Brat Malachiasz</strong>, akolita niskiej rangi, który marzy o awansie i zaniesie łup prosto do Proroka.</p>
+<p><strong>Strona gracza:</strong> mała baza Aliantów i Terran (koszary, bunkry, laboratorium „Omega” z Rezonatorem), ograniczony budżet, bez Battlecruiserów.</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Pokazówka.</strong> Rozbudować placówkę o atrapy: tanie budynki o niskim HP udające fabryki i elektrownie. Nod musi zobaczyć „ważny ośrodek”.</li>
+<li><strong>Broń się na serio.</strong> Licznik <strong>Wiarygodności</strong>: placówka musi wytrzymać co najmniej 12 minut, a Nod musi stracić odpowiednio dużo jednostek. Odwrót za wcześnie oznacza porażkę („Za łatwo. Kane wyczuje pułapkę”). Nie wolno też zniszczyć wysuniętej bazy Nod, z której idzie atak.</li>
+<li><strong>Oddaj laboratorium.</strong> Po osiągnięciu Wiarygodności Einstein ogłasza odwrót. Laboratorium nie może zostać zniszczone, musi zostać <strong>przejęte</strong> przez oddział inżynierów Malachiasza. Malachiasz to oznaczona jednostka: <strong>nie zabijaj posłańca</strong>.</li>
+<li><strong>Ewakuacja.</strong> Einstein, Tanya i ocaleli muszą dobiec do Dropshipa.</li>
+<li><strong>Cicha eskorta.</strong> Konwój Nod z „relikwią” jedzie do Sarajewa, a po drodze resztki GDI szykują na niego zasadzkę. Zamaskowany Ghost i Wraithy muszą po cichu rozbić zasadzkę, tak żeby Nod ich nie zobaczył (wykrycie = podejrzenie = porażka). Konwój musi dojechać.<blockquote><p><strong>Einstein:</strong> „Nigdy nie sądziłem, że będę ochraniał wroga razem z jego łupem.”</p>
+</blockquote>
+</li>
+<li><strong>Przerywnik:</strong> Malachiasz klęka przed Kanem i podaje mu kryształ.<blockquote><p><strong>Kane:</strong> „Gwiazdy wciąż o mnie pamiętają. Postawcie to w sercu Świątyni. A ty, bracie, od dziś stoisz bliżej mnie.”</p>
+</blockquote>
+</li>
+</ol>
+<p><em>(opcjonalnie)</em> Spadochroniarz ze szpiegiem w ostatniej chwili wykrada z bazy Nod plany Świątyni. W misji 13 ujawniają one stanowisko ogniowe dla czołgu Duke'a i jedno wejście do tuneli.</p>
+<p><strong>Porażka:</strong> zniszczenie laboratorium, śmierć Malachiasza, Einsteina lub Tanyi, odwrót przed osiągnięciem Wiarygodności, wykrycie podczas cichej eskorty, zniszczenie konwoju.</p>
+<p><strong>Wariant zapasowy (pierwsza wersja, odłożona):</strong> infiltracja bez bazy. Tanya przebrana za pielgrzymkę, Ghost i szpieg przemycają skrzynię ciężarówką przez Sarajewo, z alarmami jako licznikiem porażki.</p>
+<h2 id="misja-bonusowa-13-plus-piecdziesiat-dwa-sarajewo-2047">Misja bonusowa 13: „Plus pięćdziesiąt dwa” (Sarajewo, 2047)</h2>
+<p><strong>Przerywnik:</strong> Rezonator dostroił się, a Einstein trzyma palec na detonatorze. Z ładowni ARKI wyjeżdża gość, którego nikt nie zapraszał: <strong>Edmund Duke</strong> w swoim Siege Tanku. W misji 11 wpadł w pole chrono razem z ARKĄ i od tamtej pory siedział pod kluczem w ładowni. Teraz Raynor go wypuszcza, bo potrzebują artylerii.</p>
+<blockquote><p><strong>Duke:</strong> „Pół wieku w przyszłość i nadal ktoś potrzebuje porządnej artylerii. Proszę wskazać cel, synku.”<br>
+<strong>Raynor:</strong> „Nie przyzwyczajaj się, Duke.”</p>
+</blockquote>
+<p><strong>Strona gracza:</strong> Terranie (Raynor's Raiders) + resztki Aliantów (Tanya, Einstein) + <strong>Duke</strong>: złoty super Siege Tank, bohater z SC (Duke w Siege Tanku to bohater z kampanii Terran). Pełna technologia Terran z modu (<span class="wl" title="strona wiki">mods/starcraft-terran-buildings</span>, <span class="wl" title="strona wiki">mods/starcraft-terran-units</span>).</p>
+<p><strong>Cele:</strong></p>
+<ol>
+<li><strong>Przyczółek.</strong> ARKA wyrzuca Terran na przedmieściach Sarajewa. Budynki Terran <strong>przylatują</strong> (lift-off), a Construction Tank rozstawia Command Center. Pierwsze minuty to obrona przed kontratakiem.</li>
+<li><strong>Pierwsza linia obrony: Obeliski.</strong> Pierścień Obelisków Światła wokół miasta. Science Vessel (EMP) albo Ghost (Lockdown) wyłącza sekcję muru, a Siege Tanki rozbijają ją z dystansu.</li>
+<li><p><strong>[Aktualizacja celów po przełamaniu pierwszej linii] Tunele (cel poboczny, 30:00).</strong> Kane czuje, że z darem jest coś nie tak, i każe go przenieść.</p>
+<blockquote><p><strong>Kane:</strong> „Ten kryształ śpiewa nie swoim głosem. Zabierzcie go do Grobowca. Tunelami.”<br>
+<strong>Einstein:</strong> „Zorientował się! Jeśli kryształ opuści Świątynię, Rezonator nic nie da!”</p>
+</blockquote>
+<p>Na mapie odsłania się <strong>5 wejść do tuneli</strong> rozrzuconych wokół miasta. Każde trzeba zawalić, czyli zniszczyć budynek wejścia: Tanya z C4, ogień Duke'a z dystansu albo nuke na najdalsze. Między wejściami krąży podziemny transporter Nod z kryształem i na chwilę wynurza się przy każdym wejściu. Licznik: 30 minut.</p>
+</li>
+<li><strong>Zatrzymać rakietę.</strong> Kane wykrywa ARKĘ i odpala licznik silosu Nod (nuke na ARKĘ). Trzeba zniszczyć silos, zanim licznik dojdzie do zera. Battlecruisery z Yamato są idealne do tego zadania. Dwa liczniki naraz to zamierzony chaos.</li>
+<li><strong>Stanowisko Duke'a.</strong> Doprowadzić Duke'a na wzgórze z widokiem na Świątynię (z planów z misji 12, jeśli je zdobyto) i rozstawić go w Siege Mode.</li>
+<li><strong>Rezonator.</strong> Einstein go odpala. Tyberyjska osłona Świątyni gaśnie (do tej chwili Świątynia jest nietykalna), a Duke ją zrównuje z ziemią.<blockquote><p><strong>Duke:</strong> „Ognia!”</p>
+</blockquote>
+</li>
+<li><strong>Kane.</strong> Z ruin wychodzi Kane (jednostka-bohater z eskortą Czarnej Ręki).</li>
+</ol>
+<p><strong>Dwa zakończenia (zależą od tuneli):</strong></p>
+<ul>
+<li><strong>Tunele zawalone na czas, czyli dobre zakończenie.</strong> Kryształ został w sercu Świątyni, a Rezonator odciął Kane'a od Tyberium, więc pierwszy raz jest śmiertelny. Dobijają go <strong>Tanya i Raynor</strong> (obaj żywi = warunek).<blockquote><p><strong>Tanya:</strong> „To za Gibraltar.”<br>
+<strong>Raynor:</strong> „I za każdą planetę, na której jeszcze nie byłeś.”</p>
+</blockquote>
+</li>
+<li><p><strong>Licznik minął, czyli kanoniczne zakończenie.</strong> Kryształ wyniesiono, więc osłona gaśnie tylko częściowo. Świątynia pada, ale Kane jest nietykalny i znika w ostatnim tunelu.</p>
+<blockquote><p><strong>Kane</strong> (przez głośniki w ruinach): „Wygraliście bitwę. Ja zawsze wygrywam wojnę.”</p>
+</blockquote>
+<p>To przegrana gracza, ale zgodna z kanonem: Kane zawsze wraca.</p>
+</li>
+</ul>
+<p><strong>Porażka:</strong> zniszczenie ARKI, śmierć Tanyi, Raynora lub Einsteina, utrata Duke'a przed upadkiem Świątyni.</p>
+<p><strong>Zakończenie (dobre):</strong> Świątynia płonie, ciało Kane'a leży w gruzach. Za oknami ARKI wciąż jednak leży Czerwona Strefa. W 2047 Tyberium pokrywa pół planety i śmierć Kane'a go nie cofnie. Einstein patrzy na rdzeń: Kryształ X i Khaydarin przez całą kampanię ciągnęły w przeciwne strony.</p>
+<blockquote><p><strong>Einstein:</strong> „Przez cały ten czas ta maszyna brała moc z Tyberium. A gdyby tak odwrócić znak?”<br>
+<strong>Stavros:</strong> „Profesorze, rdzeń tego nie przeżyje.”<br>
+<strong>Einstein:</strong> „Wiem. Minus. Tym razem celowo.”</p>
+</blockquote>
+<p>Ostatni „skok” ARKI nie prowadzi przez czas. Einstein odwraca biegunowość rdzenia i ARKA wypuszcza <strong>falę Khaydarinu</strong>, która przetacza się przez Bałkany. Tyberium w Czerwonej Strefie wokół Sarajewa kruszy się w szary pył. Pierwszy raz od 1995 Tyberium się <strong>cofa</strong>. Z Ziemi nie znika, ale ludzkość ma dowód, że da się z nim wygrać, i schemat broni. Rdzeń spala się razem z Kryształem X, więc <strong>ARKA już nigdy nie skoczy</strong>. Alianci, Raynor i Duke zostają w 2047 na dobre. Nie dlatego, że utknęli, tylko dlatego, że wybrali ten świat.</p>
+<blockquote><p><strong>Einstein:</strong> „Raz popsułem historię. Potem próbowałem ją cofnąć. Dziś pierwszy raz po prostu ją naprawiam.”<br>
+<strong>Raynor</strong> (do Tanyi): „No to chyba zostajemy.”<br>
+<strong>Tanya:</strong> „Kowboju, ty zostałeś już w misji jedenastej.”</p>
+</blockquote>
+<p><strong>Zakończenie (kanoniczne):</strong> ARKA zostaje z kryształem w rdzeniu. Einstein patrzy na konsolę, a ta podpowiada nowy cel, którego nikt nie wpisywał.</p>
+<p><em>(opcjonalna scena po napisach)</em> Gdzieś w ruinach zapala się ekran z logo Nod. Słychać cichy śmiech. W kanonie Kane zawsze przeżywa. Czy zostawić tę zaczepkę, to decyzja użytkownika.</p>
+<p><strong>Technicznie (misja 12):</strong> Wiarygodność = licznik czasu + liczba zniszczonych jednostek Nod (triggery, zmienne lokalne). Przejęcie laboratorium = trigger „budynek przejęty”, a zniszczenie = porażka. Malachiasz = wyróżniona jednostka Nod, której śmierć = porażka. Wykrycie w cichej eskorcie = strefy wokół konwoju. Brat Malachiasz to postać wymyślona na potrzeby kampanii.</p>
+<p><strong>Technicznie (misja 13):</strong> Świątynia nietykalna do odpalenia Rezonatora (trigger, np. podmiana budynku albo ogromne HP). Tunele = 5 budynków-wejść odsłanianych triggerem po zniszczeniu pierwszej linii (sekcji Obelisków), licznik 30 minut, zakończenie wybierane tym, czy wszystkie wejścia padły. Podziemny transporter: TS ma jednostki podziemne i <code>[Tubes]</code>, ale czy da się je zgrać z triggerami, trzeba sprawdzić. W razie czego wystarczy jednostka-wabik, która pojawia się przy wejściach. Duke = złota kopia Siege Tanka z modu (Siege Mode przez deploy), większy zasięg i obrażenia, <code>BuildLimit=1</code>. Kane jako bohater nie istnieje w modzie. Trzeba go zrobić wzorem <span class="wl" title="strona wiki">mods/zerg-heroes</span> (<code>BuildLimit=1</code>, złota kopia, eskorta). Nuke Terran działa w grze (<span class="wl" title="strona wiki">engine/superweapons</span>, unikalne <code>Action=</code>). Lift-off działa dla 6 budynków. Nod z 2047 = Nod z DTA na najwyższym techu (Obeliski, Stealth Tanki, artyleria, silos z rakietą jako licznik triggera).</p>
+<h2 id="uwagi-techniczne-niezweryfikowane-w-grze">Uwagi techniczne (niezweryfikowane w grze)</h2>
+<ul>
+<li>Strony już w modzie: Alianci, Sowieci, Nod (DTA), Terranie (dom <code>GDI1</code>, <span class="wl" title="strona wiki">mods/terran-faction</span>), Zergi (<code>Nod1</code>, <span class="wl" title="strona wiki">mods/zerg-faction</span>, bohaterowie w <span class="wl" title="strona wiki">mods/zerg-heroes</span>), Protossi (<code>GDI2</code>, <span class="wl" title="strona wiki">mods/protoss-faction</span>). Te domy są dziś ustawione pod skirmish, więc to, jak mapa misji je zadeklaruje, trzeba sprawdzić przy pierwszej mapie (zob. <span class="wl" title="strona wiki">engine/sides-and-houses</span>).</li>
+<li>Einstein = kopia <code>Scientist</code> (Rules ok. linii 4694) z własnym <code>Name=</code>. Tanya = <code>[TANYA]</code>. ARKA = kopia Chronosfery (<code>Name=Chronosphere</code>, Rules ok. linii 15859) z wysokim HP i bez supermocy (albo z uszkodzonym stanem jako „wrak”).</li>
+<li>Raynor (Vulture-bohater) istnieje jako typ misji <code>ARKRAYN</code> w mapie misji 1 (kopia <code>SCVULT</code>, zob. <span class="wl" title="strona wiki">missions/arka-01-marsara</span>); kolejne misje mogą go skopiować. Duke <strong>jeszcze nie istnieje</strong> jako bohater misji (w skirmishu jest <code>SCHERO</code>). Wzorem może być <span class="wl" title="strona wiki">mods/zerg-heroes</span> (złota kopia, <code>BuildLimit=1</code>).</li>
+<li>Przechodzenie rozbitków i oddziału Raynora pod gracza: każda grupa to osobny dom, a wejście gracza w strefę komórek odpala <code>36 All change house</code> (zrobione w misji 1). <strong>Typy SC w misji kampanii trzeba skopiować do mapy</strong>, bo opcja STARCRAFT i kod mapy frakcji się nie ładują (zob. <span class="wl" title="strona wiki">missions/arka-01-marsara</span>).</li>
+<li><strong>Gracz budujący Terran od misji 7:</strong> jednostki i budynki SC mają <code>Owner=GDI1</code>. Dom gracza (Alianci) trzeba dopisać do <code>Owner=</code> w INI mapy misji, a Terran Command Center Raynora dać jako budynek startowy albo przejmowany. Do sprawdzenia.</li>
+<li><strong>Bohaterowie do zrobienia:</strong> Raynor (Vulture), Kerrigan jako Ghost (misje 3–5), Duke (misje 4 i 13), Fenix jako Zealot i Dragoon, Tassadar (High Templar, neutralny), Zeratul (Dark Templar), Hyperion (Battlecruiser z Yamato), agent Nod (zamaskowany szpieg), Einstein, Kane. Gotowa jest Kerrigan jako Królowa Ostrzy (<span class="wl" title="strona wiki">mods/zerg-heroes</span>), Cerebrat do misji 10 też jest w tym modzie. Tanya jest w DTA.</li>
+<li><strong>Mechaniki do sprawdzenia:</strong> wrogi bohater, którego nie da się zabić (Fenix w misji 6), budynek nietykalny dla wszystkich poza jednym bohaterem (Cerebrat w misji 10), cel, którego nie da się zdążyć wykonać (Kerrigan w misji 5), rosnące pola Kryształu X na Char (misja 9: Tyberium w TS samo rośnie, więc pole Tyberium z DTA może zagrać Kryształ X).</li>
+</ul>
+  </article>
+</div>

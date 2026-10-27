@@ -1,7 +1,8 @@
 # Mod: Overlord jako silos
 
 Overlordy Zergów podnoszą pojemność silosów gracza o 100, jak Supply Depot, Pylon i Creep Colony. Zainstalowany 2026-10-27 na
-prośbę użytkownika (wariant A z [[plans/overlord-storage]]), **(niezweryfikowane w grze)**.
+prośbę użytkownika (wariant A z [[plans/overlord-storage]]). **Test użytkownika 2026-10-27: Overlord podnosi limit kredytów**
+(działa). Przy tym teście wyszedł zły dźwięk śmierci Overlorda, poprawiony w [[mods/zerg-faction]] (dźwięki śmierci pojazdów).
 
 Źródła: [[engine/houses-economy]] (jak działają silosy), deasemblacja `game.exe` (`HouseClass::Tracking_Active_Add` `0x4C45D0`,
 `Tracking_Active_Remove` `0x4C4450`, wywołania z `TechnoClass::Unlimbo`/`Limbo`/`Captured`), `Vinifera.dll`

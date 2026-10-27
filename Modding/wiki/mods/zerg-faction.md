@@ -215,6 +215,16 @@ Oczekiwane: `Rate` 1, `Count` = ticki z tabeli, klatki ≈ `Count`, sekundy ≈ 
   i późniejszy klucz wygrywa, więc ponowne uruchomienie generatorów (`build-sczergbase.ps1`, `build-sczergresearch.ps1`,
   `build-sczerg.ps1`) tego nie cofnie. W tym bloku trzymaj kolejne ręczne zmiany balansu.
 
+## Dźwięki śmierci pojazdów (2026-10-27, zgłoszenie użytkownika; niezweryfikowane w grze)
+
+- Objaw: Overlord ginął z dźwiękiem zniszczonego budynku. Przyczyna: pojazdy ignorują `DieSound=`, a generatory Zergów dawały
+  `Explosion=FBALL1`, więc grał `Report=` kuli ognia. Dotyczyło wszystkich 43 pojazdów `SCZ*` z `DieSound=` (drony, robotnik,
+  Lurker, Overlord, Mutalisk, Scourge, Guardian, Devourer, Queen, ich wersje Upgraded, bohaterowie Kukulza, Matriarch, Yggdrasill).
+- Poprawka: `tools/build-sczergdeath.ps1` (wzór Protossów `SCPPDTHX`): animacja `ZDTH_<dźwięk>` (obraz `FBALL1`, `Report=` z
+  `DieSound`) w bloku `; >>> Zerg death sounds` na końcu `Art.ini` i `Terran Faction.ini` (`[Animations]` `ZDA01–08`,
+  `Explosion=`/`ScrapExplosion=` per pojazd). **Uruchom ponownie po każdym generatorze Zergów**, który dodaje pojazdy.
+- Budynki nie są ruszane: one same grają `DieSound=` (`SCZBDTH`).
+
 ## Bohaterowie i budynki specjalne
 
 Osobny mod [[mods/zerg-heroes]] (`build-sczergheroes.ps1`, blok „Zerg heroes”): 10 bohaterów SC i budynki z kampanii (Overmind ×2, Cerebrate,

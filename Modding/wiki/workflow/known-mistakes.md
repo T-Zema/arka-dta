@@ -27,7 +27,7 @@ Każdy nowy błąd, który kosztował rundę testu, dopisuj tutaj.
 | Interceptory nie wracają do latającego Carriera | `game.exe` odrzuca cele `In_Air()` jako cel lotu samolotu; zmiany INI (`Landable`, hover, naziemny Carrier) nic nie dały | sonda pokazała `NavCom=0`, przyczyna w kodzie; łatka. [[engine/spawners]] |
 | Gra zawiesza się po wzięciu skrzynki | „Unit” crate szuka w nieskończoność pojazdu z `CrateGoodie=yes` dla domu (Zerg/Protoss nie mieli) | każda nowa frakcja: ≥1 pojazd `CrateGoodie=yes`. [[engine/crates]] |
 | Jednostki niewidoczne w sidebarze | `TechLevel=8`, a lobby ma TL 7 | `TechLevel` ≤ 7 |
-| Brak dźwięku śmierci pojazdu | pojazdy ignorują `DieSound` | `Explosion=` animacja z `Report=` |
+| Brak dźwięku śmierci pojazdu (Protossi 2026-10-25; znowu Zergi 2026-10-27: Overlord z dźwiękiem budynku) | pojazdy ignorują `DieSound`; generatory Zergów dawały `Explosion=FBALL1` | `Explosion=` animacja z `Report=`; Zergi: `tools/build-sczergdeath.ps1` po każdym generatorze. Każdy nowy generator pojazdów: animacja śmierci od razu |
 | Regeneracja tylko do połowy HP | Vinifera self-heal ma domyślnie limit `ConditionYellow` i krok 1 HP | `SelfHealingCap`, `SelfHealingStep` per typ. [[mods/protoss-faction]] |
 | `UnitRepair` na Shield Battery nie leczy | budynek nie jest warsztatem dla takich jednostek | łańcuch skrzynki leczącej (`ActiveAnim` → `TrailerAnim` → cząsteczki z ujemnymi obrażeniami) |
 | Druga supermoc odpala pierwszą | kliknięcie mapy uruchamia PIERWSZĄ supermoc z tym samym `Action=` | każda supermoc: unikalne `Action=`. [[engine/superweapons]] |

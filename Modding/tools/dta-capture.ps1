@@ -86,7 +86,7 @@ if (Test-Path $baseDir) {
 
 # ---- 3. state.json + manifest copy
 $sorted = @($entries | Sort-Object { $_.path })
-$state = [ordered]@{ dtaVersion = $man.Version; captured = (Get-Date -Format 'yyyy-MM-dd HH:mm'); files = $sorted }
+$state = [ordered]@{ dtaVersion = $man.Version; files = $sorted }   # no timestamp: an unchanged install gives an unchanged file
 [IO.File]::WriteAllText((Join-Path $DtaDir 'state.json'), ($state | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding $false))
 Copy-Item (Join-Path $DtaRoot 'version') (Join-Path $DtaDir 'dta-version.ini') -Force
 

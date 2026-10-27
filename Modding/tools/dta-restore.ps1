@@ -30,7 +30,7 @@ $errors = 0
 function Say([string]$Path, [string]$What) { "{0,-44} {1}" -f $Path, $What }
 function Restore-FromGit([string]$Rel, [string]$Ours) {
     if ($DryRun) { return }
-    Invoke-Git checkout HEAD -- $Rel | Out-Null
+    Invoke-Git checkout -q HEAD -- $Rel | Out-Null
     $h = Get-DtaHash (Get-DtaFull $Rel)
     if ($h -ne $Ours) { $script:warn.Add("$Rel : the git HEAD version differs from the state (capture was not committed together with the files?)") }
 }
@@ -80,25 +80,30 @@ foreach ($e in $state.files) {
         $review = Join-Path $DtaCache ('conflicts\' + ($rel -replace '/', '\'))
         New-Item -ItemType Directory -Force (Split-Path $review) | Out-Null
         Export-GitBlob $rel $review
-        & git merge-file --diff3 -L ours -L "base DTA $($state.dtaVersion)" -L "DTA $($man.Version)" $review $base $theirs | Out-Null
-        $conflicts = $LASTEXITCODE
+        $conflicts = Invoke-MergeFile @('--diff3', '-L', 'ours', '-L', "base DTA $($state.dtaVersion)", '-L', "DTA $($man.Version)") $review $base $theirs
         if ($conflicts -lt 0 -or $conflicts -gt 127) { $errors++; $warn.Add("$rel : git merge-file failed ($conflicts)"); continue }
         if ($conflicts -eq 0) { Remove-Item $review }
         Say $rel ("DTA updated it: 3-way merge, {0}" -f $(if ($conflicts) { "$conflicts CONFLICT(S) resolved to ours, review $review" } else { 'clean' }))
         if ($conflicts) { $warn.Add("$rel : $conflicts conflicting hunk(s) kept our side; DTA's side is in $review") }
         if ($DryRun) { continue }
         Restore-FromGit $rel $e.ours
-        & git merge-file --ours -L ours -L base -L theirs $full $base $theirs | Out-Null
+        Invoke-MergeFile @('--ours') $full $base $theirs | Out-Null
         Set-Pristine $rel $theirs
         continue
     }
 
     if ($e.kind -eq 'patched') {
-        if ($cur -eq $e.ours) { continue }
+        if ($cur -eq $e.ours -and -not $e.pinned) { continue }
         $spec = $cfg.patched.($rel)
         if (-not $spec) { $errors++; $warn.Add("$rel : patched in the state but not in sync.json"); continue }
-        if ($cur -ne $mh -and $cur -ne $e.base) { $warn.Add("$rel : neither DTA's pristine file nor our patched one: skipped (patched by hand?)"); continue }
-        $pristine = Save-DtaPristine $full $rel
+        $stillPinned = ($cur -eq $e.ours)
+        if ($stillPinned) {
+            # PINNED (our old binary on a newer DTA): try the patches on the installed DTA version's file again (ported meanwhile?)
+            $pristine = Find-DtaPristine $rel $mh $cfg
+            if (-not $pristine) { $warn.Add("$rel : pinned, and DTA $($man.Version)'s pristine file was not found (cache, mirror)"); continue }
+        }
+        elseif ($cur -eq $mh -or $cur -eq $e.base) { $pristine = Save-DtaPristine $full $rel }
+        else { $warn.Add("$rel : neither DTA's pristine file nor our patched one: skipped (patched by hand?)"); continue }
         $tmp = Join-Path $DtaCache ('verify\' + (Split-Path $rel -Leaf)); New-Item -ItemType Directory -Force (Split-Path $tmp) | Out-Null
         Copy-Item $pristine $tmp -Force
         $r = Invoke-DtaPatchChain $spec $tmp
@@ -112,15 +117,19 @@ foreach ($e in $state.files) {
             $failed = ($r.Lines | Where-Object { $_ -match 'FAILED' }) -join '; '
             $oldPatched = Join-Path $DtaCache ('patched\' + $e.ours + '\' + ($rel -replace '/', '\'))
             $oldPristine = Join-Path $DtaCache ('pristine\' + $e.base + '\' + ($rel -replace '/', '\'))
-            if ($OnPatchFail -eq 'KeepOld' -and (Test-Path $oldPatched) -and (Test-Path $oldPristine)) {
+            if ($stillPinned -and $OnPatchFail -eq 'KeepOld') {
+                Say $rel "still PINNED: the patches refuse DTA $($man.Version)'s file"
+                $warn.Add("$rel : pinned to an older DTA file; $failed")
+            }
+            elseif ($OnPatchFail -eq 'KeepOld' -and (Test-Path $oldPatched) -and (Test-Path $oldPristine)) {
                 Say $rel 'patches refuse the new DTA file: KEEP OUR OLD BINARY'
-                $warn.Add("$rel : $failed`n      -> kept our previous patched binary (PINNED to the old DTA file). DTA's new file: $pristine. Port the patches, then run dta-restore.ps1 -OnPatchFail UseNew")
+                $warn.Add("$rel : $failed`n      -> kept our previous patched binary (PINNED to the old DTA file). DTA's new file: $pristine. Port the patches, then run dta-restore.ps1 again (or -OnPatchFail UseNew to drop them)")
                 if (-not $DryRun) { Copy-Item $oldPristine "$full.bak" -Force; Copy-Item $oldPatched $full -Force }
             } else {
-                $errors++
+                if ($OnPatchFail -eq 'KeepOld') { $errors++ }   # UseNew is a choice, KeepOld without the old binary is not
                 Say $rel 'patches refuse the new DTA file: left UNPATCHED'
                 $warn.Add("$rel : $failed`n      -> DTA's new file stays unpatched$(if ($OnPatchFail -eq 'KeepOld') { ' (no old binary in Modding\.dta-cache)' }); the mods that need these patches do not work")
-                if (-not $DryRun) { Set-Pristine $rel $pristine }
+                if (-not $DryRun) { Set-Pristine $rel $pristine; Copy-Item $pristine $full -Force }
             }
         }
         Remove-Item $tmp

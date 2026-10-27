@@ -20,9 +20,14 @@ zajęte adresy, zasady wywołań wirtualnych i szablon skryptu, który da się p
 | `patch-overlordstorage.ps1` | pojazd z `Storage=`, który nie zbiera, podnosi `House->Capacity` (Overlord jako silos); w parze z `patch-vinifera-overlord.ps1` | hooki `0x4C457B` (`Tracking_Active_Remove`, gałąź jednostki), `0x4C46D9` (`Tracking_Active_Add`); jaskinie `0x86CC80`–`0x86CCB0`, `0x86CCC0`–`0x86CCF0` (`.p_text`) | [[mods/overlord-storage]] |
 | `patch-flyertarget.ps1` | jednostki z bronią AA same celują w latające pojazdy Fly (Mutaliski, lotnicy Protossów) | 5 bajtów w miejscu pod `0x62DF2F` (`Greatest_Threat`, test RTTI w pętli warstwy TOP), bez jaskini | [[engine/fly-locomotor]] |
 
-**Po aktualizacji DTA (nowy `game.exe`): `tools/patch-game.ps1`.** Nakłada wszystkie siedem, odmawia przy działającej grze,
-jest idempotentny, `-Revert` cofa w odwrotnej kolejności. `patch-flyhover.ps1 -FromBackup` startuje od czystego `.bak`, więc
-po nim zawsze `patch-game.ps1`. Osobno: `Vinifera.dll` łata `tools/patch-vinifera-workers.ps1` ([[mods/sc-workers]]), a po niej `tools/patch-vinifera-veins.ps1` ([[mods/zerg-creep]]). Ta druga trzyma jaskinie w `.scdock+0x100` (robotnicy mają pierwsze `0x100` B), więc cofa się ją pierwszą. Trzecia, `tools/patch-vinifera-overlord.ps1` ([[mods/overlord-storage]]), dokłada własną sekcję `.scstor` za `.scdock` (`.scdock` jest pełna) i cofa się ją przed dwiema poprzednimi.
+**Po aktualizacji DTA: `tools/dta-restore.ps1`** ([[workflow/repo-and-updates]]): odbudowuje obie binarki z czystych plików
+przez dwa orkiestratory poniżej i sprawdza wynik hashem. Ręcznie: `tools/patch-game.ps1 -FlyDebug` nakłada wszystkie łatki
+`game.exe` (zainstalowany jest wariant `-Debug` łatki fly-hover; bez `-FlyDebug` czysty exe dostaje zwykły), odmawia przy
+działającej grze, jest idempotentny, `-Revert` cofa w odwrotnej kolejności, `-Exe <kopia>` łata kopię. `patch-flyhover.ps1
+-FromBackup` startuje od czystego `.bak`, więc po nim zawsze `patch-game.ps1`. `Vinifera.dll`: `tools/patch-vinifera.ps1`
+(`-Revert`, `-Dll <kopia>`) w kolejności `tools/patch-vinifera-workers.ps1` ([[mods/sc-workers]]), `tools/patch-vinifera-veins.ps1` ([[mods/zerg-creep]]), `tools/patch-vinifera-overlord.ps1` ([[mods/overlord-storage]]). Veins trzyma jaskinie w `.scdock+0x100` (robotnicy mają pierwsze `0x100` B), więc cofa się ją przed robotnikami. Overlord dokłada własną sekcję `.scstor` za `.scdock` (`.scdock` jest pełna) i cofa się ją pierwszą.
+Sprawdzone 2026-10-27: z czystych `.bak` oba orkiestratory dają bit w bit zainstalowane pliki. **Vinifera 16.2.3 (aktualizacja
+czeka) odrzuca wszystkie trzy łatki Vinifery**, łatki `game.exe` dotyczą niezmienionego exe.
 
 ## Narzędzia
 

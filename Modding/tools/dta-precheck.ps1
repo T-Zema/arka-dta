@@ -46,8 +46,7 @@ foreach ($e in $state.files) {
         $base = Join-Path $DtaDir ('base\' + ($rel -replace '/', '\'))
         $tmp = Join-Path $DtaCache ('precheck\' + ($rel -replace '/', '\')); New-Item -ItemType Directory -Force (Split-Path $tmp) | Out-Null
         Copy-Item (Get-DtaFull $rel) $tmp -Force
-        & git merge-file --diff3 -L ours -L "DTA $($cur.Version)" -L "DTA $($new.Version)" $tmp $base $theirs | Out-Null
-        $c = $LASTEXITCODE
+        $c = Invoke-MergeFile @('--diff3', '-L', 'ours', '-L', "DTA $($cur.Version)", '-L', "DTA $($new.Version)") $tmp $base $theirs
         if ($c -eq 0) { "MERGE OK   $rel : our changes merge cleanly into DTA $($new.Version)"; Remove-Item $tmp }
         else { "CONFLICT   $rel : $c conflicting hunk(s), restore keeps our side; preview with markers: $tmp"; $problems++ }
         continue

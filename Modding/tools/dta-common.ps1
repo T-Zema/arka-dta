@@ -39,15 +39,26 @@ function Test-BinaryFile([string]$Path) {
     try { $buf = New-Object byte[] 8192; $n = $fs.Read($buf, 0, $buf.Length); for ($i = 0; $i -lt $n; $i++) { if ($buf[$i] -eq 0) { return $true } }; return $false }
     finally { $fs.Close() }
 }
+# The game or the client started from THIS folder (another DTA copy, e.g. a test sandbox, does not count).
 function Test-GameRunning {
-    $p = Get-Process -Name game, DTA, clientdx, clientogl, clientxna -ErrorAction SilentlyContinue
+    $p = Get-Process -Name game, DTA, clientdx, clientogl, clientxna -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith($DtaRoot + '\', [StringComparison]::OrdinalIgnoreCase) }
     return [bool]$p
 }
 
+# git writes progress ("Updated 1 path") to stderr; under ErrorActionPreference=Stop PowerShell 5.1 would turn that into an
+# exception, so only the exit code decides.
 function Invoke-Git {
-    $out = & git -C $DtaRoot @args 2>&1
+    $ErrorActionPreference = 'Continue'
+    $out = & git -C $DtaRoot @args 2>&1 | ForEach-Object { "$_" }
     if ($LASTEXITCODE -ne 0) { throw "git $($args -join ' ') failed ($LASTEXITCODE): $out" }
     return $out
+}
+
+# git merge-file <current> <base> <other>: writes the merge into $Current, returns the number of conflicts (<0 or >127 = error).
+function Invoke-MergeFile([string[]]$Options, [string]$Current, [string]$Base, [string]$Other) {
+    $ErrorActionPreference = 'Continue'
+    & git merge-file @Options $Current $Base $Other 2>&1 | Out-Null
+    return $LASTEXITCODE
 }
 
 # The bytes of $Rel at git HEAD into $Dest (PowerShell 5.1 would re-encode redirected stdout, so read the stream directly).
@@ -95,6 +106,7 @@ function Save-DtaPatched([string]$Path, [string]$Rel) {
 # Run the patch chain of a binary (sync.json "patched") on a COPY in its own powershell process (several patch scripts use
 # Add-Type). Returns @{ Ok; Lines }: Ok = no script reported FAILED.
 function Invoke-DtaPatchChain($Spec, [string]$CopyPath) {
+    $ErrorActionPreference = 'Continue'   # an error of the child arrives as stderr: report it, do not throw
     $script = Join-Path $PSScriptRoot $Spec.script
     $argList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $script) + @($Spec.args) + @("-$($Spec.copyParam)", $CopyPath)
     $lines = & powershell.exe @argList 2>&1 | ForEach-Object { "$_" }

@@ -14,6 +14,8 @@ Każdy nowy błąd, który kosztował rundę testu, dopisuj tutaj.
 | Łatka deployu piechoty bez efektu (test 2026-10-27) | hak w `TechnoClass::Can_Deploy_Now`, a Vinifera podmienia tę funkcję w pamięci własną (`TechnoClassExt::_Can_Deploy_Now`) | przed łataniem funkcji sprawdzić `Vinifera.pdb` (zastępnik `_<Nazwa>@…Ext`, haki `_hk__0x00…`); łatać wywołującego. [[engine/game-exe-patching]] |
 | Crash: EIP w środku napisu w jaskini (D na pojazdach, 2026-10-27) | podprogram z argumentem położonym przez wejście **nad** adresem powrotu kończył się `ret 4`, czyli wracał pod adres napisu | argument nad adresem powrotu zdejmować `lea esp,[esp+4]` + `ret`; po asemblacji prześledzić stos na kartce. [[engine/game-exe-patching]] |
 | Zepsuta grafika/crash po instalacji | MIX lub exe nadpisany przy działającej grze | przed `-Install`/łatką: `Get-Process game` |
+| `game.exe` odbudowany z `.bak` ≠ zainstalowany (2026-10-27) | zainstalowany jest wariant `-Debug` łatki fly-hover, a `patch-game.ps1` na czystym exe nakłada zwykły | `patch-game.ps1 -FlyDebug` (wpisane w `Modding/dta/sync.json`); `dta-capture.ps1` sprawdza odtwarzalność przy każdym zapisie. [[workflow/repo-and-updates]] |
+| Łatki `Vinifera.dll` odmawiają po aktualizacji DTA | nowa Vinifera ma inne adresy (16.2.3: wszystkie trzy łatki) | najpierw `dta-precheck.ps1`; `dta-restore.ps1` zostawia starą załataną binarkę (pinned). [[workflow/repo-and-updates]] |
 
 ## Silnik i INI
 
@@ -74,6 +76,8 @@ Każdy nowy błąd, który kosztował rundę testu, dopisuj tutaj.
 | `ArgumentOutOfRangeException` przy `$d[10] = …` | `[ordered]@{ 10 = … }`: klucz liczbowy w indeksie = **pozycja**, nie klucz | klucze tekstowe `'10'` i `$d["$k"]` |
 | Kafel OSM nr −488 zamiast 15 897 | `F 36.14 -5.35`: ujemna liczba pozycyjnie = tekst, `"-5.35"+180` skleja napis | parametry typowane `[double]` i `(-5.35)` w nawiasie |
 | Atrakcje na x = 76 552 | `$pos = if (…) { $osm.Find(…) }`: lista z 1 wynikiem rozwija się do `{lat, lon}`, `$pos[0][1]` = `$null` | przypisanie wewnątrz gałęzi `if`, nie wynik `if` |
+| Skrypt przerywa się na „Updated 1 path from …” | `& git … 2>&1` przy `ErrorActionPreference = 'Stop'`: PS 5.1 zamienia stderr programu natywnego w wyjątek, a git pisze tam postęp | w funkcji z gitem lokalnie `$ErrorActionPreference = 'Continue'`, decyduje `$LASTEXITCODE` (`Invoke-Git` w `tools/dta-common.ps1`) |
+| Binarny plik z `git show` uszkodzony | PS 5.1 przekodowuje przekierowane stdout (`>`) | `Export-GitBlob` (czyta strumień procesu) albo `git checkout -- <plik>` |
 | `Could not create SSL/TLS secure channel` | PS 5.1 bez TLS 1.2; Overpass odrzuca handshake z tego komputera także po włączeniu | `[Net.ServicePointManager]::SecurityProtocol = Tls12`; zamiast Overpass API OSM (`/api/0.6/map`). [[workflow/mission-maps]] |
 
 ## Mapy

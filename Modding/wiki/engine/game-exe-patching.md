@@ -27,8 +27,9 @@ przez dwa orkiestratory poniżej i sprawdza wynik hashem. Ręcznie: `tools/patch
 działającej grze, jest idempotentny, `-Revert` cofa w odwrotnej kolejności, `-Exe <kopia>` łata kopię. `patch-flyhover.ps1
 -FromBackup` startuje od czystego `.bak`, więc po nim zawsze `patch-game.ps1`. `Vinifera.dll`: `tools/patch-vinifera.ps1`
 (`-Revert`, `-Dll <kopia>`) w kolejności `tools/patch-vinifera-workers.ps1` ([[mods/sc-workers]]), `tools/patch-vinifera-veins.ps1` ([[mods/zerg-creep]]), `tools/patch-vinifera-overlord.ps1` ([[mods/overlord-storage]]). Veins trzyma jaskinie w `.scdock+0x100` (robotnicy mają pierwsze `0x100` B), więc cofa się ją przed robotnikami. Overlord dokłada własną sekcję `.scstor` za `.scdock` (`.scdock` jest pełna) i cofa się ją pierwszą.
-Sprawdzone 2026-10-27: z czystych `.bak` oba orkiestratory dają bit w bit zainstalowane pliki. **Vinifera 16.2.3 (aktualizacja
-czeka) odrzuca wszystkie trzy łatki Vinifery**, łatki `game.exe` dotyczą niezmienionego exe.
+Sprawdzone 2026-10-27: z czystych `.bak` oba orkiestratory dają bit w bit zainstalowane pliki. DTA 16.2.3 nie zmieniła
+`game.exe`; łatki Vinifery znają obie wersje DLL (tabela `$builds` w każdym skrypcie, wybór po `TimeDateStamp` nagłówka PE),
+port i jego weryfikacja: [[workflow/repo-and-updates]]. Nowa wersja Vinifery = nowy wpis w `$builds` (inaczej skrypt odmawia).
 
 ## Narzędzia
 

@@ -1,3 +1,5 @@
+; Reference source (DTA 16.2.2 addresses). Since the 16.2.3 port patch-vinifera-veins.ps1 emits these bytes itself for each
+; Vinifera build (relative targets recomputed); keep both in sync.
 ; patch-vinifera-veins.ps1 caves (nasm -f bin), in Vinifera.dll section .scdock + 0x100 (VA 0x106DB100 as linked; every
 ; jump/call is relative, game addresses are only reached through Vinifera's own thunks, so a relocated DLL still works).
 ; Vinifera replaces AnimClass::AI with AnimClassExt::_AI (0x1003D788), whose tiberium-spawn loop copies the game's code, so the

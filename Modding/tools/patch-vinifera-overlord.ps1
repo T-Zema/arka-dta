@@ -1,4 +1,4 @@
-# Binary patch of Vinifera.dll (this DTA version; checked by the original bytes): harvested tiberium that fits under the house's
+# Binary patch of Vinifera.dll (DTA 16.2.2 and 16.2.3 builds, see $builds; addresses below are 16.2.2): harvested tiberium that fits under the house's
 # silo capacity but not into its storage buildings goes into one storage building anyway (over its own Storage), instead of
 # being lost. Together with the game.exe patch tools/patch-overlordstorage.ps1 (vehicles with Storage= raise House->Capacity)
 # this makes the Zerg Overlord (Storage=100) a silo. Wiki: plans/overlord-storage, engine/houses-economy.
@@ -35,8 +35,15 @@ function SecName([int]$i) { return [Text.Encoding]::ASCII.GetString($bytes, $sec
 function TextOff([int]$va) { return $va - $imageBase - 0x1000 + 0x400 }
 
 $name = '.scstor'; $secSize = 0x200
-$HookVa = 0x100C5929; $HookRet = 0x100C5931; $HookOrig = Hex 'FF 75 F4 8B CE FF 75 F0'
-$IncAmount = 0x1019585F   # Vinifera thunk -> game StorageClass::Increase_Amount (0x60ADE0)
+# per Vinifera build, told by the PE TimeDateStamp (the patches never change it); 16.2.3: same code at other addresses
+$builds = @{
+    '6AC3EA33' = @{ Name = 'DTA 16.2.2'; Hook = 0x100C5929; IncAmount = 0x1019585F }
+    '6AD94075' = @{ Name = 'DTA 16.2.3'; Hook = 0x100C6C6F; IncAmount = 0x101975FA }
+}
+$build = $builds['{0:X8}' -f [BitConverter]::ToUInt32($bytes, $pe + 8)]
+if (-not $build) { throw ("Vinifera.dll build 0x{0:X8} is unknown: not the Vinifera.dll this patch was made for (port it: add a build)" -f [BitConverter]::ToUInt32($bytes, $pe + 8)) }
+$HookVa = $build.Hook; $HookRet = $HookVa + 8; $HookOrig = Hex 'FF 75 F4 8B CE FF 75 F0'
+$IncAmount = $build.IncAmount   # Vinifera thunk (mov eax,60ADE0h / jmp eax) -> game StorageClass::Increase_Amount
 $have = $false; for ($i = 0; $i -lt $nsec; $i++) { if ((SecName $i) -eq $name) { $have = $true } }
 $last = $secTab + 40 * ($nsec - 1)
 

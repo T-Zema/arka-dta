@@ -15,7 +15,8 @@ Każdy nowy błąd, który kosztował rundę testu, dopisuj tutaj.
 | Crash: EIP w środku napisu w jaskini (D na pojazdach, 2026-10-27) | podprogram z argumentem położonym przez wejście **nad** adresem powrotu kończył się `ret 4`, czyli wracał pod adres napisu | argument nad adresem powrotu zdejmować `lea esp,[esp+4]` + `ret`; po asemblacji prześledzić stos na kartce. [[engine/game-exe-patching]] |
 | Zepsuta grafika/crash po instalacji | MIX lub exe nadpisany przy działającej grze | przed `-Install`/łatką: `Get-Process game` |
 | `game.exe` odbudowany z `.bak` ≠ zainstalowany (2026-10-27) | zainstalowany jest wariant `-Debug` łatki fly-hover, a `patch-game.ps1` na czystym exe nakłada zwykły | `patch-game.ps1 -FlyDebug` (wpisane w `Modding/dta/sync.json`); `dta-capture.ps1` sprawdza odtwarzalność przy każdym zapisie. [[workflow/repo-and-updates]] |
-| Łatki `Vinifera.dll` odmawiają po aktualizacji DTA | nowa Vinifera ma inne adresy (16.2.3: wszystkie trzy łatki) | najpierw `dta-precheck.ps1`; `dta-restore.ps1` zostawia starą załataną binarkę (pinned). [[workflow/repo-and-updates]] |
+| Łatki `Vinifera.dll` odmawiają po aktualizacji DTA | nowa Vinifera ma inne adresy (16.2.3: wszystkie trzy łatki) | najpierw `dta-precheck.ps1`; `dta-restore.ps1` zostawia starą załataną binarkę (pinned); port = nowy wpis w `$builds` po porównaniu deasemblacji. [[workflow/repo-and-updates]] |
+| Po aktualizacji DTA zniknęły Marine (`ECACHE99.MIX`) i misje ARKA (`BattleE.ini`), a `Art.ini` itd. wróciły do oryginału | aktualizacja przywraca każdy plik DTA różny od manifestu i wykonuje `[Delete]` z `preupdateexec` (stare nazwy DTA) | po każdej aktualizacji `dta-restore.ps1`; nie wierzyć liście „Local file X is different” z `client.log`. [[workflow/repo-and-updates]] |
 
 ## Silnik i INI
 

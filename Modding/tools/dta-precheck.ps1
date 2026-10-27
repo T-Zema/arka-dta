@@ -3,8 +3,9 @@
 # on copies what dta-restore.ps1 would do: 3-way merges of our modified files and the patch scripts on the new binaries.
 # Nothing in the game folder is written; downloads go to Modding\.dta-cache\pristine\ (dta-restore.ps1 reuses them).
 # Wiki: workflow/repo-and-updates.
-# Note: the client updater compares the manifests, not the files on disk: it downloads only the files that changed between
-# the two DTA versions (client.log "Local file X is different"), so our other changed DTA files survive an update.
+# Note: the client's update CHECK lists only the files that changed between the manifests (client.log "Local file X is
+# different"), but the update itself (16.2.2 -> 16.2.3, 2026-10-27) put back EVERY DTA file that differed from the manifest
+# (all our modified files and game.exe) and ran the [Delete] lists of preupdateexec/updateexec. So after every update: restore.
 # Usage: dta-precheck.ps1 [-Manifest <path to a version file>]
 param([string]$Manifest = "")
 . "$PSScriptRoot\dta-common.ps1"
@@ -32,9 +33,29 @@ foreach ($k in $new.Files.Keys) { if (-not $cur.Files.ContainsKey($k) -or $cur.F
 foreach ($k in $cur.Files.Keys) { if (-not $new.Files.ContainsKey($k)) { $changed[$k] = $true } }
 "files the update changes: $($changed.Count)"
 
+# the updater's own scripts run at EVERY update: [Delete]/[Rename] of preupdateexec/updateexec (DTA 16.2.3 deletes our
+# MIX/ECACHE99.MIX and INI/BattleE.ini, names old DTA versions used)
+$execHit = @{}
+foreach ($x in 'preupdateexec', 'updateexec') {
+    try {
+        $t = (Invoke-WebRequest -Uri ($cfg.mirror.TrimEnd('/') + '/' + $x) -UseBasicParsing -TimeoutSec 60).Content
+        if ($t -is [byte[]]) { $t = [Text.Encoding]::UTF8.GetString($t) }
+        $sec = ''
+        foreach ($l in $t -split "`r?`n") {
+            $l = $l.Trim()
+            if ($l -match '^\[(.+)\]$') { $sec = $matches[1] }
+            elseif ($l -and -not $l.StartsWith(';') -and $sec -in 'Delete', 'Rename', 'ForceDeleteFolder', 'RenameFolder') { $execHit[(ConvertTo-DtaKey ($l -split '=')[0]).TrimEnd('\')] = "$x [$sec]" }
+        }
+    } catch { "WARN could not read ${x}: $($_.Exception.Message)" }
+}
+
 $problems = 0; $ours = @{}
 foreach ($e in $state.files) {
     $rel = $e.path; $k = ConvertTo-DtaKey $rel; $ours[$k] = $true
+    $hit = $execHit.Keys | Where-Object { $k -eq $_ -or $k.StartsWith($_ + '\') } | Select-Object -First 1
+    if ($hit) { "DELETED    $rel : $($execHit[$hit]) removes it at every update (restore brings it back)" }
+    # the update also re-downloads every DTA file that differs from the manifest (seen 2026-10-27), changed or not
+    if (-not $changed[$k] -and $e.kind -ne 'new') { "OVERWRITE  $rel : the update puts DTA's file back (restore re-applies ours)" }
     if (-not $changed[$k]) { continue }
     $n = $new.Files[$k]
     if ($e.kind -eq 'new') { "COLLISION  $rel : DTA $($new.Version) adds a file with the name of ours (restore keeps ours, theirs as .dta-new)"; $problems++; continue }

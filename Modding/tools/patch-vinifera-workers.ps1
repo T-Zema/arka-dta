@@ -1,4 +1,4 @@
-# Binary patch of Vinifera.dll (this DTA version; checked by the original bytes): StarCraft workers bring resources to their
+# Binary patch of Vinifera.dll (DTA 16.2.2 and 16.2.3 builds, see $builds; checked by the original bytes): StarCraft workers bring resources to their
 # main building (Command Center, Nexus, Hatchery/Lair/Hive) and play their SC gathering animation only while harvesting.
 # Source: Vinifera source (houseext.cpp HouseClassExtension::Place_Object, unitext_hooks.cpp _UnitClass_Draw_Shape_IdleRate_Patch)
 # + disassembly of this Vinifera.dll (capstone) + field offsets from Vinifera.pdb (llvm-pdbutil).
@@ -44,15 +44,23 @@ $name = '.scdock'
 $have = $false; $haveIdx = -1; for ($i = 0; $i -lt $nsec; $i++) { if ((SecName $i) -eq $name) { $have = $true; $haveIdx = $i } }
 function TextOff([int]$va) { return $va - $imageBase - 0x1000 + 0x400 }
 
-# ---- patch sites (VA as linked; original bytes must match)
-$A = 0x100BCA54; $Aret = 0x100BCA5F; $AOrig = Hex '8B 01 57 6A 02 FF 90 18 02 00 00'
-$B = 0x100BCB02; $Bret = 0x100BCB11; $BOrig = Hex 'FF 75 0C 8B 07 8B CF 6A 0C FF 90 18 02 00 00'
-$C = 0x101153D6; $Cret = 0x101153E1; $Cskip = 0x10115403; $COrig = Hex '8B 45 F8 39 B0 90 01 00 00 76 22'
+# ---- patch sites per Vinifera build (VA as linked; original bytes must match). The build is told by the PE TimeDateStamp,
+# which the patches never change. 16.2.3 (2026-10-27): the same code at other addresses (byte patterns unique, disassembly of
+# every site identical, struct offsets from Vinifera.pdb unchanged). V1 = patch-vinifera-veins.ps1's hook (for -Revert).
+$builds = @{
+    '6AC3EA33' = @{ Name = 'DTA 16.2.2'; A = 0x100BCA54; B = 0x100BCB02; C = 0x101153D6; V1 = 0x1003DDBA }
+    '6AD94075' = @{ Name = 'DTA 16.2.3'; A = 0x100BDD77; B = 0x100BDE25; C = 0x101170D7; V1 = 0x1003E36F }
+}
+$build = $builds['{0:X8}' -f [BitConverter]::ToUInt32($bytes, $pe + 8)]
+if (-not $build) { throw ("Vinifera.dll build 0x{0:X8} is unknown: not the Vinifera.dll this patch was made for (port it: add a build)" -f [BitConverter]::ToUInt32($bytes, $pe + 8)) }
+$A = $build.A; $Aret = $A + 11; $AOrig = Hex '8B 01 57 6A 02 FF 90 18 02 00 00'
+$B = $build.B; $Bret = $B + 15; $BOrig = Hex 'FF 75 0C 8B 07 8B CF 6A 0C FF 90 18 02 00 00'
+$C = $build.C; $Cret = $C + 11; $Cskip = $C + 0x2D; $COrig = Hex '8B 45 F8 39 B0 90 01 00 00 76 22'
 
 if ($Revert) {
     if (-not $have) { "not patched"; return }
     # patch-vinifera-veins.ps1 keeps its caves in .scdock + 0x100 and jumps there from AnimClassExt::_AI
-    if ($bytes[(TextOff 0x1003DDBA)] -eq 0xE9) { throw "patch-vinifera-veins.ps1 uses this section: run it with -Revert first" }
+    if ($bytes[(TextOff $build.V1)] -eq 0xE9) { throw "patch-vinifera-veins.ps1 uses this section: run it with -Revert first" }
     # patch-vinifera-overlord.ps1 appends its own section ".scstor" after this one
     if ((SecName ($nsec - 1)) -eq '.scstor') { throw "patch-vinifera-overlord.ps1 added a section after $name : run it with -Revert first" }
     # undone byte for byte (independent of the backup): drop the last section, restore the header fields and the 3 sites

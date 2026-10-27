@@ -35,9 +35,14 @@ Repo = folder gry. `.gitignore` ignoruje **wszystko** (`/*`) poza `Modding/`, `C
 
 ## Jak aktualizator klienta traktuje nasze pliki
 
-- Porównuje **manifesty** (lokalny `version` z serwerowym), nie pliki na dysku. Pobiera tylko pliki, które zmieniły się między
-  wersjami (`client.log`: „Local file X is different” dokładnie dla 10 plików różnicy 16.2.2 → 16.2.3). Pozostałe nasze zmiany
-  w plikach DTA (np. `Art.ini`) przeżywają aktualizację; `game.exe` też, dopóki DTA go nie zmieni.
+- **Sprawdzenie** aktualizacji porównuje manifesty (lokalny `version` z serwerowym) i w `client.log` wypisuje tylko pliki
+  różnicy wersji („Local file X is different”, 10 plików dla 16.2.2 → 16.2.3). **Sama aktualizacja robi więcej** (zobaczone
+  2026-10-27): przywróciła *każdy* plik DTA różny od manifestu, czyli wszystkie nasze `modified` (także niezmienione między
+  wersjami `Art.ini`, `Sound.ini`…) i `game.exe`. Po każdej aktualizacji trzeba więc uruchomić restore.
+- Przy każdej aktualizacji klient wykonuje też skrypty serwera `preupdateexec` i `updateexec` (sekcje `[Delete]`, `[Rename]`,
+  `[ForceDeleteFolder]`…). `preupdateexec` usuwa **`MIX/ECache99.mix`** i **`INI/BattleE.ini`** (stare nazwy DTA), czyli nasz
+  MIX Marine'a ([[mods/starcraft-marine]]) i rejestrację misji ARKA. Restore przywraca je z gita, a precheck je wypisuje
+  (`DELETED`). Na dłuższą metę lepiej przenieść Marine'a na inny wolny numer MIX.
 - Gdy klient znajdzie aktualizację, zapisuje nowy manifest jako `version_u` (jeszcze przed instalacją).
 - Hash w manifeście: 16 bajtów MD5 zapisanych dziesiętnie jeden po drugim, potem `,rozmiar w KB` (`Get-DtaHash` w
   `tools/dta-common.ps1`).
@@ -57,7 +62,8 @@ Ostrzeżenia, na które trzeba zareagować:
 ## Przed aktualizacją DTA
 
 `dta-precheck.ps1`: czyta `version_u` (albo pobiera manifest z mirrora), pobiera tylko nowe wersje **naszych** plików
-i próbuje na kopiach tego, co zrobi restore: merge'y plików `modified`, łańcuchy łatek na nowych binarkach, kolizje nazw.
+i próbuje na kopiach tego, co zrobi restore: merge'y plików `modified`, łańcuchy łatek na nowych binarkach, kolizje nazw,
+nasze pliki z list `[Delete]` skryptów `preupdateexec`/`updateexec` (`DELETED`) i pliki, które aktualizacja nadpisze (`OVERWRITE`).
 Kończy werdyktem. Niczego w folderze gry nie zapisuje.
 
 ## Po aktualizacji DTA (albo naprawie plików w kliencie)
@@ -96,7 +102,24 @@ powershell -ExecutionPolicy Bypass -File Modding\tools\dta-restore.ps1
 zmienione i łata binarki. Ograniczenie: binarka **pinned** wymaga `.dta-cache` ze starego komputera (mirror ma tylko bieżącą
 wersję); bez niego zostaje niezałatana.
 
-## Stan 2026-10-27: DTA 16.2.2, dostępna 16.2.3
+## Aktualizacja 16.2.2 → 16.2.3 (2026-10-27, wykonana)
+
+Użytkownik zaktualizował DTA. Restore przywrócił 7 plików `modified` i 2 usunięte pliki `new`, scalił `Rules.ini` bez
+konfliktów, nałożył wszystkie łatki `game.exe` (razem z nową `patch-airboard.ps1`), a Viniferę najpierw przypiął do naszej
+16.2.2. Potem łatki Vinifery zostały **przeniesione na 16.2.3**:
+- Wzorce bajtów każdego miejsca są w nowej DLL jednoznaczne. Deasemblacja otoczenia jest identyczna (te same rejestry, ramka
+  stosu, pola struktur); przesunęły się tylko adresy (`Place_Object` +0x1323, `IdleRate` +0x1D01, `_Harvested` +0x1346,
+  `AnimClassExt::_AI` +0x5B5) i thunki do funkcji gry. Offsety pól z nowego `Vinifera.pdb` bez zmian.
+- Skrypty `patch-vinifera-*.ps1` mają tabelę `$builds` z adresami obu wersji, wybieraną po `TimeDateStamp` nagłówka PE
+  (`6AC3EA33` = 16.2.2, `6AD94075` = 16.2.3; łatki go nie zmieniają). Jaskinie veins generuje skrypt (wcześniej stały zrzut
+  nasm pod `0x106DB100`), więc pasują do każdego adresu sekcji `.scdock`.
+- Testy: na 16.2.2 skrypty dają bit w bit dawną załataną DLL; na 16.2.3 łatka, ponowne uruchomienie (bez zmian), `-Revert`
+  (= czysty plik); deasemblacja wszystkich haków i jaskiń w nowej DLL (powroty i thunki poprawne). Zainstalowane przez restore:
+  stan bez *pinned*, `reproducible=True`. **Test w grze: niezweryfikowane w grze.**
+- Port następnej wersji: `llvm-pdbutil dump -publics Vinifera.pdb` (adresy funkcji), wyszukanie oryginalnych wzorców z nagłówków
+  skryptów, porównanie deasemblacji starej i nowej DLL, nowy wpis w `$builds` każdego skryptu.
+
+## Stan przed aktualizacją (2026-10-27, DTA 16.2.2, dostępna 16.2.3)
 
 - Klient pobrał już `version_u` (16.2.3). Zmienia 10 plików, w tym nasze `INI/Rules.ini` i `Vinifera.dll`.
 - `Rules.ini`: nasze 154 linie (animacje SC w liście animacji) scalają się z 16.2.3 bez konfliktów.

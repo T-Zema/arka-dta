@@ -29,6 +29,11 @@ przyjmuje pasażerów w powietrzu bez łatania exe. Ustalone z deasemblacji 2026
    każe pasażerowi jechać do komórki transportu.
 4. **Wejście** (`Per_Cell_Process` pasażera): piechota w **tej samej komórce** co transport (`0x4D3A14`), pojazd w promieniu ±2 komórek
    (kod DTA `0x86BF90` → `0x6515DF`), potem `CargoClass::Attach`. Porównywane są tylko komórki (`Get_Cell`), wysokość nie.
+   **Ale piechota szuka transportu w liście okupantów swojej komórki** (`Cell_Unit`/`Cell_Aircraft`/`Cell_Building`, `0x4D3811`–`0x4D38B1`),
+   a tam są tylko obiekty warstwy GROUND (`FootClass::Mark`). Wiszący transport Fly nie jest znaleziony i piechota nigdy nie wsiada:
+   stoi pod nim i w kółko szuka drogi do własnego pola (log: `A* without HS: (74,43) to (74,43)`). Pojazdy biorą transport z `NavCom`,
+   więc ich to nie dotyczy. **Test użytkownika 2026-10-27:** do Dropshipa na ziemi wsiadali wszyscy, do wiszącego tylko pojazdy.
+   Poprawka: łatka `tools/patch-airboard.ps1` (niżej).
 5. **Rozładunek** (`UnitClass::Mission_Unload` `0x6540C0`): transport musi stać (`Is_Moving`), pasażerowie wychodzą na wolne pola
    wokół komórki transportu, na ziemi (`Get_Cell_Height`, `Closest_Free_Spot`). Lądować nie trzeba.
 
@@ -47,6 +52,15 @@ przyjmuje pasażerów w powietrzu bez łatania exe. Ustalone z deasemblacji 2026
 |---|---|
 | `SCDROP` Dropship ([[mods/starcraft-terran-units]]) | `IsVehicleTransport=yes`; jumpjet → Fly (`FlightLevel=450`, `ROT` 8 → 16), `Naval=yes` + `BuiltAt=SCSTAR` (ze Starportu, jak okręty), nowy opis |
 | `SCPSHUT`, `SCPSHUT2` Shuttle ([[mods/protoss-faction]]) | `IsVehicleTransport=yes`, `PipScale=Passengers`, nowy opis; to samo w `tools/build-scprotoss.ps1` |
+
+### Łatka `patch-airboard.ps1` (2026-10-27)
+
+Hook `0x4D38B3` (`mov ecx,[esi+278h]`, zaraz po szukaniu okupanta) → jaskinia `0x86CB40` (źródło `tools/patch-airboard.asm`). Jeśli nie
+znaleziono okupanta (`edi == 0`), piechota ma misję `ENTER` (7, vfunc `+0x154`), a `NavCom` to `UnitClass` (RTTI przez `[obj+4]`, bo
+`NavCom` bywa komórką) w tym samym polu (vfunc `+0x18C` `Get_Cell` na obu, jak oryginał w `0x4D3A14`), to okupantem zostaje `NavCom`.
+Dalej idzie zwykły kod wsiadania. Test na kopii: łatka, drugie uruchomienie („already patched”), deasemblacja, `-Revert` = hash oryginału.
+W `patch-game.ps1`. **(niezweryfikowane w grze)**. Możliwy wyjątek: piechota, która już stoi w polu pod transportem w chwili
+rozkazu, może nie dostać `Per_Cell_Process` (nie wchodzi do nowego pola); wtedy wystarczy odejść o pole.
 
 Overlord Zergów nie jest transportem (`Passengers` brak, zob. [[mods/zerg-faction]]).
 

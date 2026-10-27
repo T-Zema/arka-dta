@@ -11,6 +11,7 @@
 #   patch-zergbuild.ps1    only Zergs build on creep, Zerg buildings need creep (Is_Clear_To_Build wrapper)  mods/zerg-creep
 #   patch-overlordstorage.ps1  vehicles with Storage= (Overlord) raise the silo capacity; pairs with Vinifera.dll
 #                          patch-vinifera-overlord.ps1                                                       plans/overlord-storage
+#   patch-airboard.ps1     infantry boards a transport hovering above its cell (Fly Dropship/Shuttle)        engine/transports
 # Usage: patch-game.ps1 [-Revert] [-FlyDebug] [-Exe <copy>]. -FlyDebug installs the fly patch in its -Debug (logging) variant
 # (installed since 2026-10-25; tools/dta-restore.ps1 passes it when tools/dta-sync.json says so). Without it an installed -Debug
 # variant is kept, but a pristine game.exe gets the plain one.
@@ -18,7 +19,7 @@
 param([switch]$Revert, [switch]$FlyDebug, [string]$Exe = "")
 $ErrorActionPreference = 'Stop'
 if (-not $Exe -and (Get-Process -Name game -ErrorAction SilentlyContinue)) { throw "game.exe is running: close the game first" }
-$order = @('patch-flyhover.ps1', 'patch-buildup.ps1', 'patch-spawnreturn.ps1', 'patch-freescv.ps1', 'patch-veins.ps1', 'patch-infdeploy.ps1', 'patch-flyertarget.ps1', 'patch-zergbuild.ps1', 'patch-overlordstorage.ps1')
+$order = @('patch-flyhover.ps1', 'patch-buildup.ps1', 'patch-spawnreturn.ps1', 'patch-freescv.ps1', 'patch-veins.ps1', 'patch-infdeploy.ps1', 'patch-flyertarget.ps1', 'patch-zergbuild.ps1', 'patch-overlordstorage.ps1', 'patch-airboard.ps1')
 if ($Revert) { [array]::Reverse($order) }
 $common = @{}; if ($Revert) { $common.Revert = $true }; if ($Exe) { $common.Exe = $Exe }
 foreach ($p in $order) {

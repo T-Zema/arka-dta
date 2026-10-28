@@ -27,6 +27,7 @@ KAMPANIA "ARKA: BŁĄD ZNAKU": POZIOMY TRUDNOŚCI
 
 INNE
 
+- #2 Ewakuacja: nowe pole kryształów tuż pod zainfekowanym Command Center w Mar Sara City.
 - Zasady frakcji SC w skirmishu podzielone na pliki w INI\Map Code\SC Factions\ (w grze bez zmian).
 - Zergi: dron Creep Tumora regeneruje się wolniej (SelfHealingStep 3 -> 2), tak jak pozostałe drony.
 

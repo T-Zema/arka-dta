@@ -34,11 +34,12 @@ $mixes = New-Object MixSet "$game\MIX"
 $th    = New-Object Theater "$game\INI\Desert.ini", "des", $mixes
 $GW = 512
 $code = New-Object 'int[]' ($GW * $GW); for ($i = 0; $i -lt $code.Length; $i++) { $code[$i] = -1 }   # -1 = off map
+$lvl = New-Object 'int[]' ($GW * $GW)   # height level of each cell (the crystal field stays on the city plateau)
 foreach ($t in [IsoMap]::Decode([Pack]::Unpack($ini.Joined('IsoMapPack5'), $true))) {
     $tile = if ($t.Tile -lt 0 -or $t.Tile -ge 65535) { 0 } else { $t.Tile }
     $tmp = $th.Get($tile); $c = 0
     if ($tmp -and $t.Sub -lt $tmp.Cells.Length -and $tmp.Cells[$t.Sub]) { $c = $tmp.Cells[$t.Sub].Terrain }
-    $code[$t.Y * $GW + $t.X] = $c
+    $code[$t.Y * $GW + $t.X] = $c; $lvl[$t.Y * $GW + $t.X] = $t.Level
 }
 $block = New-Object 'bool[]' ($GW * $GW)
 $ovl = [Pack]::Unpack($ini.Joined('OverlayPack'), $false)
@@ -382,6 +383,21 @@ Squad 'Nod1' @('SCZHYL', 'SCZHYL', 'SCZHYL') 36 -2 2 'Area Guard'
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG') 32 3 -2 'Area Guard'
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL') 33 -3 -2 'Area Guard'
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG') 34 -2 2 'Area Guard'
+# crystal field below the infested CC (user 2026-10-28): "below" on screen = +x +y from the CC's far corner, the same
+# blue gems as the eastern expansion, only on free cells of the CC's own plateau level; placed after the city so that
+# nothing else moves
+$ccP = @($structs | Where-Object { ($_.Value -split ',')[1] -eq 'SCZICC' })[0].Value -split ','; $ccF = Foundation 'SCZICC'
+$ccX = [int]$ccP[3]; $ccY = [int]$ccP[4]; $ccL = $lvl[$ccY * $GW + $ccX]
+function Gem-Free($x, $y) { (Buildable $x $y) -and $ovl[$y * 512 + $x] -eq 255 -and -not $reserved[$y * $GW + $x] -and $lvl[$y * $GW + $x] -eq $ccL }
+$gc = $null
+for ($r = 0; $r -le 8 -and -not $gc; $r++) { for ($x = $ccX + $ccF[0] + 3 - $r; $x -le $ccX + $ccF[0] + 3 + $r -and -not $gc; $x++) { for ($y = $ccY + $ccF[1] + 3 - $r; $y -le $ccY + $ccF[1] + 3 + $r; $y++) { if (Gem-Free $x $y) { $gc = @($x, $y); break } } } }
+if (-not $gc) { throw "no free plateau cell for the crystal field below the infested CC ($ccX,$ccY level $ccL)" }
+$rndGem = New-Object Random 2502   # own generator: $rnd goes on below, and the other random scenery must not move
+$gems = @(); for ($x = $gc[0] - 4; $x -le $gc[0] + 4; $x++) { for ($y = $gc[1] - 4; $y -le $gc[1] + 4; $y++) {
+    if (($x - $gc[0]) * ($x - $gc[0]) + ($y - $gc[1]) * ($y - $gc[1]) -gt 10.5 -or -not (Gem-Free $x $y)) { continue }
+    $gems += , @($x, $y, (31 + $rndGem.Next(4)), (9 + $rndGem.Next(3)))
+} }
+Set-Overlays $gems; $log.Add("crystal field below the infested CC ($ccX,$ccY): $($gems.Count) gem cells round $($gc[0]),$($gc[1])")
 
 # ================================================================ Zerg packs on the road (Nod2: "road cleared" = all of them dead)
 Squad 'Nod2' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') 51 2 -2 'Area Guard'

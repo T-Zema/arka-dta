@@ -35,6 +35,8 @@ powershell -ExecutionPolicy Bypass -File Modding\tools\build-installer.ps1 -NoPa
 4. `gh release create v<wersja> Modding/dist/DTA-SCMod-Setup.exe Modding/CHANGELOG.txt --notes-file …` w `T-Zema/arka-dta`
    (repo prywatne; zasób 130 MB mieści się w limicie 2 GB na plik wydania). `gh` na tym komputerze nie jest zalogowany:
    token z menedżera poświadczeń gita (`git credential fill`) jako `GH_TOKEN` tylko na czas polecenia.
+   Tytuł wydania krótko: `--title "ARKA <wersja>"` (np. `ARKA 2026.10.28`, prośba użytkownika 2026-10-28).
+   Opis wydania i commit bez linii o Claude / AI (zob. [[workflow/repo-and-updates]], „Bez atrybucji AI”).
 
 Wydania: `v2026.10.28` (pierwsze, DTA 16.2.3).
 

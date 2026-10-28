@@ -53,6 +53,9 @@ Repo = folder gry. `.gitignore` ignoruje **wszystko** (`/*`) poza `Modding/`, `C
 ## Praca codzienna
 
 Po każdej zmianie modu: `powershell -File Modding\tools\dta-capture.ps1`, potem `git add -A`, `git commit` (i `git push`).
+**Bez atrybucji AI** (prośba użytkownika 2026-10-28): w commitach, tagach, opisach wydań i PR-ów nie dopisywać
+`Co-Authored-By: Claude …`, `🤖 Generated with Claude Code` ani podobnych linii; autorem commitów jest tylko użytkownik
+(`Zema`). Ta zasada ma pierwszeństwo przed domyślną atrybucją narzędzia.
 Nowe pliki modów wchodzą do bloku `.gitignore` same. Capture trwa około 20 s (z weryfikacją łatek; `-SkipVerify` szybciej).
 Ostrzeżenia, na które trzeba zareagować:
 - `NOT reproducible`: skrypty łatek nie dają już zainstalowanej binarki (np. ktoś łatał ręcznie albo zmienił skrypt bez

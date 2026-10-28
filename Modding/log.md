@@ -339,3 +339,5 @@ Append-only. Format: `YYYY-MM-DD | typ | opis` (typ: ingest, query, mod, lint, a
 2026-10-28 | mod | Tanya 2500 HP we wszystkich misjach ARKA ([TANYA] Strength = Rules x 2.5; arka00/01/02/04 przebudowane, ARKA 5 robi sesja 63)
 2026-10-28 | mod | ARKA 5: plucie Overlordow siejacych nie rani (ARKA5CrpWH Modifier.*=0% na kazdy pancerz, Damage=8 zostaje dla odlamka) - zabijaly wlasne dziury; creep 30 pol potwierdzony w grze; Tanya 2500; Raynor +300% HP we wszystkich misjach ARKA (ARKRAYN: misja 1 SCVULT x5.6, misje 2/4/5 x4.8), przebudowane arka01/02/04/05 z -NoBattle; plans/campaign-arka
 2026-10-28 | archive | wydanie v2026.10.28: Modding/CHANGELOG.txt, instalator przebudowany po dta-capture (322 pliki, testy w piaskownicy 5/5), tag + GitHub release z exe (workflow/installer)
+2026-10-28 | lint | zasada: bez atrybucji AI w commitach, tagach i opisach wydań (workflow/repo-and-updates); usunięta z opisu wydania v2026.10.28
+2026-10-28 | lint | historia gita przepisana (filter-branch --msg-filter): z 7 commitów usunięte Co-Authored-By Claude, tag v2026.10.28 przeniesiony na b9bef31 (opis "ARKA 2026.10.28"), force push; pliki bez zmian

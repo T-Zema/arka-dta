@@ -611,6 +611,7 @@ Trigger 'win3' 'Final 3: Obserwator' @((Ev 13 7)) @(
 Trigger 'win4' 'Final 4: wygrana' @((Ev 13 5)) @((Act 1 $H.Allies)) -Disabled
 
 Split-MultiText; Set-DialoguePacing
+Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)
 $textWarn = Test-TextTimeline
 
 # resolve symbolic trigger references and write [Triggers]/[Events]/[Actions]/[Tags]

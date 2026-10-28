@@ -633,6 +633,7 @@ Trigger 'raidRepOn' 'Najazdy powtarzane wlaczone' @((Ev 13 1500)) @((Enable 'rai
 Trigger 'hatch' 'Wylegarnia zniszczona' @((Ev 29)) (@((Text 'Plk Stavros: Wylegarnia na polnocy plonie! Najazdy na baze ustana.')) + @($raidsOff | ForEach-Object { Disable $_ })) -tag 'ARKA2G07'
 
 Split-MultiText; Set-DialoguePacing
+Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)
 $textWarn = Test-TextTimeline
 
 # resolve symbolic trigger references and write [Triggers]/[Events]/[Actions]/[Tags]

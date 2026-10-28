@@ -6,7 +6,8 @@
 #   Split-MultiText; Set-DialoguePacing   # before resolving $trig: one text per trigger, gaps from text length
 #   Test-TextTimeline                     # after: logs the text timeline, WARN where two texts overlap
 #   Add-ScAirArmor                        # after the SC types are copied: SC flyer armors, Allied AA, Dragoon vs Overlord
-# Wiki: engine/triggers-and-dialogue (Tempo dialogow), workflow/mission-maps.
+#   Add-Difficulty                        # after Set-DialoguePacing: Easy/Medium waves and money from the client's level
+# Wiki: engine/triggers-and-dialogue (Tempo dialogow, Poziom trudnosci), workflow/mission-maps.
 
 # ---------------------------------------------------------------- reading time
 # Elapsed Time counts game seconds of 15 logic frames, and the game runs faster than 15 frames/s (skirmish measured
@@ -91,6 +92,115 @@ function Test-TextTimeline {
     }
     foreach ($k in $trig.Keys) { if (@(Get-TriggerTexts $trig[$k]).Count -gt 1) { $log.Add("WARN trigger '$k' shows $(@(Get-TriggerTexts $trig[$k]).Count) texts at once"); $warn++ } }
     $warn
+}
+
+# ---------------------------------------------------------------- difficulty levels
+# The client appends the trigger DifficultyGlobal to every mission (spawnmap.ini; the same block as INI/Map Code/
+# Difficulty *.ini): Easy sets globals 10+13, Medium 11+13+14, Hard 12+14. The mission as written is Hard (user
+# 2026-10-28), also when no global is set (a test without the client). Easy: enemy reinforcements (actions 80/7) at
+# half strength and the player's money doubled (start credits and every 106 Give Credits to the player); Medium: 3/4
+# and +50%. A trigger that brings enemies or pays the player enables helpers instead: one disabled repeating trigger per
+# level, gated by its global, 1 s later (the client's trigger runs first), with that level's teams and bonus; it then
+# disables itself. House multipliers (Armor = more HP) cannot follow the level: in a campaign Vinifera's
+# HouseClassExt::_Assign_Handicap takes them only from the Rules sections [Easy]/[PlayerNormal]/[Difficult], which a map
+# cannot override, and the human on Easy would share [Easy] with the computer on Hard.
+$DiffLevels = @(
+    @{ Key = 'E'; Name = 'latwy';  Wave = 0.5;  Money = 1.0; Events = @('13,0,1', '27,0,10') },
+    @{ Key = 'M'; Name = 'sredni'; Wave = 0.75; Money = 0.5; Events = @('13,0,1', '27,0,11') },
+    @{ Key = 'H'; Name = 'trudny'; Wave = 1.0;  Money = 0.0; Events = @('13,0,1', '28,0,10', '28,0,11') })
+$rulesPass = $null
+function Test-Transport($type) {   # a transport line (NLST, Overlord) keeps its count, only the cargo shrinks
+    $v = $ini.Get($type, 'Passengers', '')
+    if (-not $v) {
+        if ($null -eq $script:rulesPass) {
+            $script:rulesPass = @{}; $sec = $null
+            foreach ($l in [IO.File]::ReadAllLines("$((Resolve-Path "$PSScriptRoot\..\..").Path)\INI\Rules.ini", [Text.Encoding]::GetEncoding(28591))) {
+                if ($l -match '^\[([^\]]+)\]') { $sec = $Matches[1] } elseif ($sec -and $l -match '^Passengers\s*=\s*(\d+)') { $script:rulesPass[$sec] = $Matches[1] }
+            }
+        }
+        $v = $script:rulesPass[$type]
+    }
+    [int]("0" + ($v -replace '\D.*$', '')) -gt 0
+}
+# Taskforce lines scaled by $f: the cargo total rounds up (at least 1) and is shared by largest remainder; $null if
+# nothing changes
+function Get-ScaledTaskForce($tf, [double]$f) {
+    $lines = @(); $i = 0
+    while ($v = $ini.Get($tf, "$i", '')) { $p = $v -split ','; $lines += , @([int]$p[0], $p[1].Trim(), (Test-Transport $p[1].Trim())); $i++ }
+    $n = 0; foreach ($l in $lines) { if (-not $l[2]) { $n += $l[0] } }
+    if (-not $n) { return $null }
+    $target = [Math]::Max(1, [int][Math]::Ceiling($n * $f))
+    if ($target -ge $n) { return $null }
+    $alloc = @{}; $rest = @(); $given = 0
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        if ($lines[$i][2]) { continue }
+        $exact = $lines[$i][0] * $target / $n; $alloc[$i] = [int][Math]::Floor($exact); $given += $alloc[$i]
+        $rest += [pscustomobject]@{ I = $i; R = $exact - $alloc[$i] }
+    }
+    foreach ($r in @($rest | Sort-Object R -Descending | Select-Object -First ($target - $given))) { $alloc[$r.I]++ }
+    @(for ($i = 0; $i -lt $lines.Count; $i++) {
+        $c = if ($lines[$i][2]) { $lines[$i][0] } else { $alloc[$i] }
+        if ($c -gt 0) { "$c,$($lines[$i][1])" }
+    })
+}
+# the team at one level: a copy with suffix E/M and the scaled taskforce (the script is shared); the same id if the
+# taskforce does not shrink (one Ultralisk stays one)
+function Get-LevelTeam($tm, $lv) {
+    $tm2 = "$tm$($lv.Key)"
+    if ($ini.Has($tm2)) { return $tm2 }
+    $tf = $ini.Get($tm, 'TaskForce', '')
+    $new = Get-ScaledTaskForce $tf $lv.Wave
+    if (-not $new) { return $tm }
+    $new = @($new)   # one line comes back as a string, and $new[0] would be its first character
+    $tf2 = "$tf$($lv.Key)"
+    $ini.Set('TaskForces', "$(@($ini.Section('TaskForces')).Count)", $tf2)
+    for ($i = 0; $i -lt $new.Count; $i++) { $ini.Set($tf2, "$i", $new[$i]) }
+    $ini.Set($tf2, 'Name', "$($ini.Get($tf, 'Name', $tf)) ($($lv.Name))"); $ini.Set($tf2, 'Group', '-1')
+    $ini.Set('TeamTypes', "$(@($ini.Section('TeamTypes')).Count)", $tm2)
+    foreach ($kv in @($ini.Section($tm))) { $ini.Set($tm2, $kv.Key, $kv.Value) }
+    $ini.Set($tm2, 'TaskForce', $tf2); $ini.Set($tm2, 'Name', "$($ini.Get($tm, 'Name', $tm)) ($($lv.Name))")
+    $script:diffTeams++
+    $tm2
+}
+function Add-Difficulty($player = 'Allies', $playerNo = 2) {
+    $friends = @($ini.Get($player, 'Allies', $player) -split ',' | ForEach-Object { $_.Trim() })
+    # teams named by any other action (Create Team of the Zerg builder, Destroy Team) keep one size everywhere
+    $fixed = @{}
+    foreach ($k in $trig.Keys) { foreach ($a in $trig[$k].Actions) { $p = $a -split ','; if ($p[1] -eq '1' -and $p[0] -notin '7', '80') { $fixed[$p[2]] = $true } } }
+    $script:diffTeams = 0; $nWave = 0; $nPay = 0; $long = 0
+    foreach ($k in @($trig.Keys)) {
+        $t = $trig[$k]; $keep = @(); $waves = @(); $pays = @(); $at = -1
+        foreach ($a in $t.Actions) {
+            $p = $a -split ','
+            if ($p[0] -in '7', '80' -and $p[1] -eq '1' -and -not $fixed[$p[2]] -and $ini.Get($p[2], 'House', '') -notin $friends) {
+                if ($at -lt 0) { $at = $keep.Count }; $waves += $a; continue
+            }
+            if ($p[0] -eq '106' -and $p[2] -eq "$playerNo") { $pays += $a }
+            $keep += $a
+        }
+        if (-not $waves.Count -and -not $pays.Count) { continue }
+        if ($at -lt 0) { $at = $keep.Count }
+        $en = @()
+        foreach ($lv in $DiffLevels) {
+            $acts = @(foreach ($a in $waves) { $p = $a -split ','; if ($lv.Wave -lt 1) { $p[2] = Get-LevelTeam $p[2] $lv }; $p -join ',' })
+            if ($lv.Money -gt 0) { $acts += @(foreach ($a in $pays) { $p = $a -split ','; $p[3] = "$([int]([int]$p[3] * $lv.Money))"; $p -join ',' }) }
+            if (-not $acts.Count) { continue }
+            $hk = "$k~d$($lv.Key)"
+            Trigger $hk "$($t.Name) ($($lv.Name))" $lv.Events (@($acts) + @(Disable $hk)) -house $player -Disabled -Repeat | Out-Null
+            $en += Enable $hk
+        }
+        $t.Actions = @(for ($i = 0; $i -le $keep.Count; $i++) { if ($i -eq $at) { $en }; if ($i -lt $keep.Count) { $keep[$i] } })
+        if ($waves.Count) { $nWave++ }; if ($pays.Count) { $nPay++ }
+        # the [Actions] line with real ids (about 10 characters): above ~500 bytes the game crashes at load (pitfall 16)
+        $len = ("$($t.Actions.Count)," + (@($t.Actions | ForEach-Object { $q = $_ -split ','; if ($q[1] -eq '2') { $q[2] = 'ARKA0T0000' }; $q -join ',' }) -join ',')).Length
+        if ($len -gt 400) { $log.Add("WARN difficulty: trigger '$k' has an action line of ~$len characters"); $long++ }
+    }
+    $cr = [int]$ini.Get($player, 'Credits', '0') * 100
+    foreach ($lv in $DiffLevels) {
+        if ($lv.Money -le 0 -or $cr -le 0) { continue }
+        Trigger "diffStart$($lv.Key)" "Trudnosc: kredyty na start ($($lv.Name))" $lv.Events @("106,0,$playerNo,$([int]($cr * $lv.Money)),0,0,0,A") -house $player | Out-Null
+    }
+    $log.Add("difficulty: $nWave triggers with enemy waves, $nPay paying the player, $script:diffTeams scaled teams (E 1/2, M 3/4); start credits $cr +100%/+50%; $long long action lines")
 }
 
 # ---------------------------------------------------------------- reveal-map crate

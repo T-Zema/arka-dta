@@ -127,7 +127,25 @@ Reguły (wdrożone w `Modding/tools/MissionKit.ps1`, dołączanym przez generato
 
 ## Poziom trudności
 
-Klient ustawia zmienne globalne (`Campaigns.ini [GlobalVariables]`): `10` Easy, `11` Medium, `12` Hard, `13` Easy lub Medium, `14` Medium lub Hard, `15` Brutal. DTA dokłada „bonusowe” fale triggerami z `27 Global is set 12` i robi kopie triggerów z flagami E/N/H. `Battle.ini` ma do tego `PlayerAlwaysOnNormalDifficulty=yes` (gracz zawsze na mnożnikach Normal, trudność zmienia tylko AI).
+**Selektor:** suwak trudności w oknie kampanii klienta (`trbDifficultySelector`, `Resources/CampaignSelector.ini`). Etykiety domyślne Easy/Medium/Hard. `DifficultyLabels=NORMAL,HARD,BRUTAL` w sekcji misji zmienia napisy, a `HasExtendedDifficulty=yes` dodaje czwarty poziom (Brutal). Klient zapisuje wybór w `spawn.ini` (`DifficultyName`, `ClientDifficulty=10`, `DifficultyModeHuman`, `DifficultyModeComputer`; komputer ma skalę odwróconą: Easy = 2). Do kopii mapy (`spawnmap.ini`) dokleja trigger `DifficultyGlobal` (`Neutral`, zdarzenie `8 Any Event`), taki sam jak bloki `INI/Map Code/Difficulty *.ini` w co-op. Ustawia on zmienne globalne (`Campaigns.ini [GlobalVariables]`):
+
+| Poziom | Globalne ustawione |
+|---|---|
+| Easy | `10`, `13` (Easy lub Medium) |
+| Medium | `11`, `13`, `14` (Medium lub Hard) |
+| Hard | `12`, `14` |
+| Brutal | `12`, `14`, `15` |
+
+Misje DTA robią **kopie triggerów** z `27 Global is set 10/11/12` (skan `Maps/Missions`: 727/726/801 zdarzeń) i bonusowe fale na `27 Global is set 12`. Flagi E/N/H w `[Triggers]` przy `PlayerAlwaysOnNormalDifficulty=yes` nie pomagają, bo gracz jest wtedy zawsze na Normal.
+
+**Mnożniki domów nie idą za poziomem w mapie.** Vinifera podmienia `HouseClass::Assign_Handicap` (`game.exe` `0x4BB460`) na `HouseClassExt::_Assign_Handicap`. W kampanii (`Session.Type == GAME_NORMAL`) dom dostaje `Armor`, `Cost`, `BuildTime`, `ROF` i `Groundspeed` **wyłącznie** z sekcji trudności, a mnożniki kraju (`[Allies] Armor=`) są pomijane. Sekcje `[Easy]`, `[Normal]`, `[PlayerNormal]` (DTA: `[General] HasPlayerNormal=yes`, człowiek na Normal) i `[Difficult]` czyta tylko `RulesClassExtension::Difficulty` w `Process` (`Rules.ini`), nie ze scenariusza. Bez `PlayerAlwaysOnNormalDifficulty` człowiek na Easy dostaje `[Easy]`, a z tej samej sekcji korzysta komputer na Hard. Więc „+10% HP tylko na Easy” mapą się nie da. Możliwe są tylko globalne zmiany `Rules.ini` (dla całego DTA) albo osobne typy jednostek.
+
+**ARKA (od 2026-10-28):** `Add-Difficulty` w `Modding/tools/MissionKit.ps1`, wołane przez każdy generator po `Set-DialoguePacing`. Misja w wersji z generatora to **Hard**. Na Easy fale wroga mają połowę jednostek, a kasa gracza jest podwojona. Medium daje 3/4 fal i +50% kasy.
+- Akcje `80`/`7` z drużyną domu spoza `Allies=` gracza przechodzą do trzech triggerów-pomocników (wyłączone, powtarzalne, `13 Elapsed 1` + warunek poziomu, na końcu same się wyłączają). Oryginał je włącza. Easy: `27 Global is set 10`. Medium: `27 … 11`. Hard: `28 Global is clear 10` + `28 … 11`, więc misja bez klienta też działa jak Hard. Sekunda opóźnienia jest po to, żeby trigger klienta zdążył ustawić globalne.
+- Drużyny Easy/Medium to kopie TeamType z sufiksem `E`/`M` (ten sam skrypt i tag) i przeskalowanym TaskForce. Suma ładunku jest zaokrąglana w górę (min. 1) i rozdzielana metodą największych reszt. Transporty (`Passengers>0`: `NLST`, Overlord) zostają. Drużyna, którą nazywa inna akcja (`4 Create Team` budowniczego Zergów), ma jeden rozmiar.
+- Kasa: trigger `diffStart` daje na starcie +100%/+50% `Credits` domu gracza (`106`). Każda akcja `106` dla gracza (skrzynki, nagrody) dostaje dopłatę w pomocniku E/M. Liczniki na kredytach innych domów (ARKA 5) zostają bez zmian. Pieniądze z wydobycia i premia drewnianej skrzynki (`SoloCrateMoney`) rosnąć nie mogą.
+- Istniejące „fale tylko na Hard” (`27 Global is set 12`) zostają, więc Medium ich nie ma.
+- **(niezweryfikowane w grze)**: działanie `Global is set` na globalnych z triggera klienta w tej samej misji (DTA tak robi), samowyłączające się pomocniki.
 
 ## Domy w misji
 

@@ -147,7 +147,7 @@ Na życzenie użytkownika (rysunek trasy na zrzucie). **(niezweryfikowane w grze
 ## Do zrobienia (następne etapy)
 
 - **Test w grze:** czy drużyny z `16,10` atakują bazę, czy `NLST` dopływają i rozładowują się na plażach 26/23/24/27, czy szpieg wchodzi (`15,10`), skrzynka, nowe tempo tekstów (`$GameSecPerReal`), elektrownie.
-- Balans fal i warianty trudności (globalne 10–15, kopie triggerów E/N/H).
+- Balans fal. Warianty trudności są od 2026-10-28 (`Add-Difficulty`, zob. [[engine/triggers-and-dialogue]] „Poziom trudności”): Hard = ta wersja, Easy = fale o połowę i kasa ×2.
 - Wysadzone/rozstawione Obeliski Nod nad zatoką (zasięg 9, zob. pułapka 4 w [[missions/arka-00-gibraltar]]) albo ostrzał skryptem.
 - Spadochroniarze sowieccy (w planie), MiG-i.
 - Agent Nod jako osobny typ (dziś zwykły `SPY` w domu Nod).

@@ -45,5 +45,8 @@ Jednostka-silos (Overlord Zergów) wymaga więc łatek: [[plans/overlord-storage
 
 ## Poziomy trudności
 
-Sekcje `[Easy]`, `[Normal]`, `[Difficult]` (w Rules i nadpisywane w mapie) mają własne `BuildTime`, `Cost`,
-`Armor`, `ROF` i mnożą się z ustawieniami domu. `spawn.ini`: `DifficultyModeHuman` / `DifficultyModeComputer`.
+Sekcje `[Easy]`, `[Normal]`, `[PlayerNormal]`, `[Difficult]` (i rozszerzenia Vinifery `[VeryEasy]`…`[UltimatelyEasy]`
+dla AI) mają własne `BuildTime`, `Cost`, `Armor`, `ROF`. Czyta je tylko `Rules.ini`, **mapa ich nie nadpisuje**, a w kampanii
+mnożniki kraju z sekcji domu (`Armor=` itd.) są ignorowane (Vinifera `HouseClassExt::_Assign_Handicap`, gałąź `GAME_NORMAL`).
+W skirmishu oba mnożniki się mnożą. `spawn.ini`: `DifficultyModeHuman` / `DifficultyModeComputer`. Szczegóły i trudność
+misji ARKA: [[engine/triggers-and-dialogue]] („Poziom trudności”).

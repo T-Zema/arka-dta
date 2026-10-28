@@ -884,6 +884,7 @@ if (Get-Command Add-ProtossTriggers -ErrorAction SilentlyContinue) { Add-Protoss
 if (Get-Command Add-ZergTriggers -ErrorAction SilentlyContinue) { Add-ZergTriggers }
 
 Split-MultiText; Set-DialoguePacing
+Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)
 $textWarn = Test-TextTimeline
 
 # every reinforcement of an Overlord drop also brings its empty escort (same waypoint)

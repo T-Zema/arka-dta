@@ -6,6 +6,42 @@ i kampania mashup "ARKA: Błąd znaku" (Red Alert x StarCraft). Do prywatnego u�
 i dźwięki StarCrafta pochodzą z legalnej kopii StarCraft: Remastered i należą do Blizzard Entertainment.
 
 
+Wersja 2026.10.28.2 - poziomy trudności kampanii ARKA (dla DTA 16.2.3)
+-----------------------------------------------------------------------
+
+INSTALACJA
+
+- Uruchom nowy DTA-SCMod-Setup.exe i kliknij AKTUALIZUJ. Poprzednia wersja nie musi być odinstalowana.
+
+KAMPANIA "ARKA: BŁĄD ZNAKU": POZIOMY TRUDNOŚCI
+
+- Suwak trudności w oknie misji działa teraz we wszystkich misjach ARKA (#0, #1, #2, #4, #5):
+    - HARD: misje jak w pierwszym wydaniu;
+    - MEDIUM: fale wroga mają 3/4 jednostek, kasa +50%;
+    - EASY: fale wroga mają połowę jednostek, kasa x2.
+- "Fale" to wszystkie oddziały wroga, które przychodzą w trakcie misji: ataki, najazdy na zbieraczy,
+  desanty Overlordów i transportowców. Transportowiec zostaje, mniej jest tylko ładunku. Wróg
+  rozstawiony na mapie od początku się nie zmienia.
+- "Kasa" to kredyty na start oraz pieniądze ze skrzynek i nagród. Wydobycie daje tyle samo.
+- Bonusowe fale, które były tylko na najwyższym poziomie, pojawiają się tylko na HARD.
+
+INNE
+
+- Zasady frakcji SC w skirmishu podzielone na pliki w INI\Map Code\SC Factions\ (w grze bez zmian).
+- Zergi: dron Creep Tumora regeneruje się wolniej (SelfHealingStep 3 -> 2), tak jak pozostałe drony.
+
+STAN TESTÓW
+
+- Poziomy trudności nie są jeszcze sprawdzone w grze. Mapy przeszły kontrole generatorów,
+  a instalator testy w piaskownicy.
+
+ZNANE OGRANICZENIA
+
+- Na EASY nie ma dodatkowego HP dla jednostek i budynków gracza. W misjach kampanii silnik bierze
+  pancerz tylko z globalnych ustawień trudności DTA (Rules.ini). Zmiana działałaby na całe DTA
+  i wzmocniłaby też komputer na HARD.
+
+
 Wersja 2026.10.28 - pierwsze wydanie (dla DTA 16.2.3)
 ------------------------------------------------------
 

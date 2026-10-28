@@ -828,6 +828,7 @@ Trigger 'end5' 'Koniec 5: Tanya' @((Ev 13 5)) @((Text 'Tanya: Profesorze, zaczyn
 Trigger 'endWin' 'Wygrana' @((Ev 13 40)) @((Act 1 $H.Allies)) -Disabled
 
 Split-MultiText; Set-DialoguePacing
+Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)
 $textWarn = Test-TextTimeline
 
 # resolve symbolic trigger references and write [Triggers]/[Events]/[Actions]/[Tags]

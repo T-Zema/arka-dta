@@ -598,6 +598,7 @@ Trigger 'fin7' 'Final 7: blysk' @((Ev 13 (Get-ReadSecs @($ini.Get('Tutorial', "$
 Trigger 'fin8' 'Final 8: wygrana' @((Ev 13 10)) @((Act 1 $H.Allies)) -Disabled | Out-Null
 
 Split-MultiText; Set-DialoguePacing
+Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)
 $textWarn = Test-TextTimeline
 
 # resolve symbolic trigger references ('intro2' -> ARKA0Txx) and write [Triggers]/[Events]/[Actions]/[Tags]

@@ -38,7 +38,8 @@ powershell -ExecutionPolicy Bypass -File Modding\tools\build-installer.ps1 -NoPa
    Tytuł wydania krótko: `--title "ARKA <wersja>"` (np. `ARKA 2026.10.28`, prośba użytkownika 2026-10-28).
    Opis wydania i commit bez linii o Claude / AI (zob. [[workflow/repo-and-updates]], „Bez atrybucji AI”).
 
-Wydania: `v2026.10.28` (pierwsze, DTA 16.2.3).
+Wydania: `v2026.10.28` (pierwsze, DTA 16.2.3), `v2026.10.28.2` (poziomy trudności ARKA, warstwy kodu frakcji; 334 pliki,
+testy piaskownicy 5/5 PASS). Drugie wydanie tego samego dnia dostaje sufiks `.2` (wersja to tekst, NAPRAW/AKTUALIZUJ widzi różnicę).
 
 ## Co robi instalator
 

@@ -5395,8 +5395,8 @@ Totable=false
 VoiceFeedback=
 SelfHealingCap=1.0
 SelfHealingStep=6
-CrateGoodie=yes
 ImmuneToVeins=yes
+CrateGoodie=yes
 
 [VehicleTypes]
 ARKA2VE001=SCZMUT
@@ -5455,8 +5455,8 @@ Sensors=yes
 SensorsSight=9
 SelfHealingCap=1.0
 SelfHealingStep=10
-Storage=100
 ImmuneToVeins=yes
+Storage=100
 
 [SCZINF]
 Name=Infested Terran
@@ -7945,6 +7945,25 @@ PlayerControl=no
 15=ARKA2F16
 16=ARKA2F17
 17=ARKA2F18
+18=ARKA2F12E
+19=ARKA2F12M
+20=ARKA2F13E
+21=ARKA2F13M
+22=ARKA2F14E
+23=ARKA2F14M
+24=ARKA2F15E
+25=ARKA2F16E
+26=ARKA2F16M
+27=ARKA2F17E
+28=ARKA2F18E
+29=ARKA2F17M
+30=ARKA2F18M
+31=ARKA2F09E
+32=ARKA2F09M
+33=ARKA2F10E
+34=ARKA2F10M
+35=ARKA2F11E
+36=ARKA2F11M
 
 [ScriptTypes]
 0=ARKA2S01
@@ -7985,6 +8004,25 @@ PlayerControl=no
 15=ARKA2M16
 16=ARKA2M17
 17=ARKA2M18
+18=ARKA2M12E
+19=ARKA2M12M
+20=ARKA2M13E
+21=ARKA2M13M
+22=ARKA2M14E
+23=ARKA2M14M
+24=ARKA2M15E
+25=ARKA2M16E
+26=ARKA2M16M
+27=ARKA2M17E
+28=ARKA2M18E
+29=ARKA2M17M
+30=ARKA2M18M
+31=ARKA2M09E
+32=ARKA2M09M
+33=ARKA2M10E
+34=ARKA2M10M
+35=ARKA2M11E
+36=ARKA2M11M
 
 [ARKA2F01]
 0=1,ARKRAYN
@@ -9028,6 +9066,731 @@ Pod=0,MTRINIT
 9263=EVA: Wrog nadciaga z polnocy.
 9264=Plk Stavros: Wylegarnia na polnocy plonie! Najazdy na baze ustana.
 
+[ARKA2F12E]
+0=4,SCZLNG
+Name=Skok: fala 1 (latwy)
+Group=-1
+
+[ARKA2M12E]
+Max=0
+Full=no
+Name=Skok: fala 1 (latwy)
+Group=-1
+House=Nod1
+Script=ARKA2S12
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=U
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F12E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F12M]
+0=6,SCZLNG
+Name=Skok: fala 1 (sredni)
+Group=-1
+
+[ARKA2M12M]
+Max=0
+Full=no
+Name=Skok: fala 1 (sredni)
+Group=-1
+House=Nod1
+Script=ARKA2S12
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=U
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F12M
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F13E]
+0=3,SCZLNG
+1=2,SCZHYL
+Name=Skok: fala 2 (latwy)
+Group=-1
+
+[ARKA2M13E]
+Max=0
+Full=no
+Name=Skok: fala 2 (latwy)
+Group=-1
+House=Nod1
+Script=ARKA2S13
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=AU
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F13E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F13M]
+0=5,SCZLNG
+1=3,SCZHYL
+Name=Skok: fala 2 (sredni)
+Group=-1
+
+[ARKA2M13M]
+Max=0
+Full=no
+Name=Skok: fala 2 (sredni)
+Group=-1
+House=Nod1
+Script=ARKA2S13
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=AU
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F13M
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F14E]
+0=3,SCZLNG
+1=2,SCZHYL
+2=1,SCZINF
+Name=Skok: fala 3 (latwy)
+Group=-1
+
+[ARKA2M14E]
+Max=0
+Full=no
+Name=Skok: fala 3 (latwy)
+Group=-1
+House=Nod1
+Script=ARKA2S14
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=AS
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F14E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F14M]
+0=4,SCZLNG
+1=3,SCZHYL
+2=2,SCZINF
+Name=Skok: fala 3 (sredni)
+Group=-1
+
+[ARKA2M14M]
+Max=0
+Full=no
+Name=Skok: fala 3 (sredni)
+Group=-1
+House=Nod1
+Script=ARKA2S14
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=AS
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F14M
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F15E]
+0=2,SCZMUT
+Name=Skok: mutaliski (latwy)
+Group=-1
+
+[ARKA2M15E]
+Max=0
+Full=no
+Name=Skok: mutaliski (latwy)
+Group=-1
+House=Nod1
+Script=ARKA2S15
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=AY
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F15E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F16E]
+0=3,SCMARINE
+1=1,SCFIRE
+2=1,SCVULT
+3=1,SCGOLI
+4=1,SCSIEGE
+Name=Konfederacja (latwy)
+Group=-1
+
+[ARKA2M16E]
+Max=0
+Full=no
+Name=Konfederacja (latwy)
+Group=-1
+House=GDI
+Script=ARKA2S16
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=BD
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F16E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F16M]
+0=5,SCMARINE
+1=1,SCFIRE
+2=2,SCVULT
+3=1,SCGOLI
+4=1,SCSIEGE
+Name=Konfederacja (sredni)
+Group=-1
+
+[ARKA2M16M]
+Max=0
+Full=no
+Name=Konfederacja (sredni)
+Group=-1
+House=GDI
+Script=ARKA2S16
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=BD
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F16M
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F17E]
+0=4,SCZLNG
+1=3,SCZHYL
+Name=Skok: fala 5 polnoc (latwy)
+Group=-1
+
+[ARKA2M17E]
+Max=0
+Full=no
+Name=Skok: fala 5 polnoc (latwy)
+Group=-1
+House=Nod1
+Script=ARKA2S17
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=U
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F17E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F18E]
+0=3,SCZLNG
+1=2,SCZINF
+Name=Skok: fala 5 wschod (latwy)
+Group=-1
+
+[ARKA2M18E]
+Max=0
+Full=no
+Name=Skok: fala 5 wschod (latwy)
+Group=-1
+House=Nod1
+Script=ARKA2S18
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=AV
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F18E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F17M]
+0=6,SCZLNG
+1=4,SCZHYL
+Name=Skok: fala 5 polnoc (sredni)
+Group=-1
+
+[ARKA2M17M]
+Max=0
+Full=no
+Name=Skok: fala 5 polnoc (sredni)
+Group=-1
+House=Nod1
+Script=ARKA2S17
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=U
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F17M
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F18M]
+0=5,SCZLNG
+1=2,SCZINF
+Name=Skok: fala 5 wschod (sredni)
+Group=-1
+
+[ARKA2M18M]
+Max=0
+Full=no
+Name=Skok: fala 5 wschod (sredni)
+Group=-1
+House=Nod1
+Script=ARKA2S18
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=AV
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F18M
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F09E]
+0=3,SCZLNG
+Name=Najazd z zachodu (latwy)
+Group=-1
+
+[ARKA2M09E]
+Max=0
+Full=no
+Name=Najazd z zachodu (latwy)
+Group=-1
+House=Nod1
+Script=ARKA2S09
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=AU
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F09E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F09M]
+0=5,SCZLNG
+Name=Najazd z zachodu (sredni)
+Group=-1
+
+[ARKA2M09M]
+Max=0
+Full=no
+Name=Najazd z zachodu (sredni)
+Group=-1
+House=Nod1
+Script=ARKA2S09
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=AU
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F09M
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F10E]
+0=2,SCZLNG
+1=1,SCZHYL
+Name=Najazd z gniazda (latwy)
+Group=-1
+
+[ARKA2M10E]
+Max=0
+Full=no
+Name=Najazd z gniazda (latwy)
+Group=-1
+House=Nod1
+Script=ARKA2S10
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=U
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F10E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F10M]
+0=3,SCZLNG
+1=2,SCZHYL
+Name=Najazd z gniazda (sredni)
+Group=-1
+
+[ARKA2M10M]
+Max=0
+Full=no
+Name=Najazd z gniazda (sredni)
+Group=-1
+House=Nod1
+Script=ARKA2S10
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=U
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F10M
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F11E]
+0=3,SCZLNG
+1=1,SCZHYL
+Name=Najazd powtarzany (latwy)
+Group=-1
+
+[ARKA2M11E]
+Max=0
+Full=no
+Name=Najazd powtarzany (latwy)
+Group=-1
+House=Nod1
+Script=ARKA2S11
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=U
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F11E
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
+[ARKA2F11M]
+0=4,SCZLNG
+1=2,SCZHYL
+Name=Najazd powtarzany (sredni)
+Group=-1
+
+[ARKA2M11M]
+Max=0
+Full=no
+Name=Najazd powtarzany (sredni)
+Group=-1
+House=Nod1
+Script=ARKA2S11
+Whiner=no
+Droppod=no
+Suicide=no
+Loadable=no
+Prebuild=no
+Priority=5
+Waypoint=U
+Annoyance=no
+IonImmune=no
+Recruiter=no
+Reinforce=no
+TaskForce=ARKA2F11M
+TechLevel=0
+Aggressive=yes
+Autocreate=no
+GuardSlower=no
+OnTransOnly=no
+AvoidThreats=no
+LooseRecruit=no
+VeteranLevel=1
+IsBaseDefense=no
+OnlyTargetHouseEnemy=no
+TransportsReturnOnUnload=no
+AreTeamMembersRecruitable=no
+
 [Triggers]
 ARKA2T01=Allies,<none>,Skrzynka: odkrycie mapy,0,1,1,1,0
 ARKA2T02=Allies,<none>,Start: Raynor,0,1,1,1,0
@@ -9112,6 +9875,38 @@ ARKA2T80=Allies,<none>,Najazd 2,0,1,1,1,0
 ARKA2T81=Allies,<none>,Najazd powtarzany,1,1,1,1,0
 ARKA2T82=Allies,<none>,Najazdy powtarzane wlaczone,0,1,1,1,0
 ARKA2T83=Allies,<none>,Wylegarnia zniszczona,0,1,1,1,0
+ARKA2T84=Allies,<none>,Skok: fala 1 (latwy),1,1,1,1,0
+ARKA2T85=Allies,<none>,Skok: fala 1 (sredni),1,1,1,1,0
+ARKA2T86=Allies,<none>,Skok: fala 1 (trudny),1,1,1,1,0
+ARKA2T87=Allies,<none>,Skok: fala 2 (latwy),1,1,1,1,0
+ARKA2T88=Allies,<none>,Skok: fala 2 (sredni),1,1,1,1,0
+ARKA2T89=Allies,<none>,Skok: fala 2 (trudny),1,1,1,1,0
+ARKA2T90=Allies,<none>,Skok: fala 3 (latwy),1,1,1,1,0
+ARKA2T91=Allies,<none>,Skok: fala 3 (sredni),1,1,1,1,0
+ARKA2T92=Allies,<none>,Skok: fala 3 (trudny),1,1,1,1,0
+ARKA2T93=Allies,<none>,Skok: mutaliski (latwy),1,1,1,1,0
+ARKA2T94=Allies,<none>,Skok: mutaliski (sredni),1,1,1,1,0
+ARKA2T95=Allies,<none>,Skok: mutaliski (trudny),1,1,1,1,0
+ARKA2T96=Allies,<none>,Skok: fala dodatkowa (trudny) (latwy),1,1,1,1,0
+ARKA2T97=Allies,<none>,Skok: fala dodatkowa (trudny) (sredni),1,1,1,1,0
+ARKA2T98=Allies,<none>,Skok: fala dodatkowa (trudny) (trudny),1,1,1,1,0
+ARKA2T99=Allies,<none>,Skok: Konfederacja (latwy),1,1,1,1,0
+ARKA2T100=Allies,<none>,Skok: Konfederacja (sredni),1,1,1,1,0
+ARKA2T101=Allies,<none>,Skok: Konfederacja (trudny),1,1,1,1,0
+ARKA2T102=Allies,<none>,Skok: fala 5 (latwy),1,1,1,1,0
+ARKA2T103=Allies,<none>,Skok: fala 5 (sredni),1,1,1,1,0
+ARKA2T104=Allies,<none>,Skok: fala 5 (trudny),1,1,1,1,0
+ARKA2T105=Allies,<none>,Najazd 1 (latwy),1,1,1,1,0
+ARKA2T106=Allies,<none>,Najazd 1 (sredni),1,1,1,1,0
+ARKA2T107=Allies,<none>,Najazd 1 (trudny),1,1,1,1,0
+ARKA2T108=Allies,<none>,Najazd 2 (latwy),1,1,1,1,0
+ARKA2T109=Allies,<none>,Najazd 2 (sredni),1,1,1,1,0
+ARKA2T110=Allies,<none>,Najazd 2 (trudny),1,1,1,1,0
+ARKA2T111=Allies,<none>,Najazd powtarzany (latwy),1,1,1,1,0
+ARKA2T112=Allies,<none>,Najazd powtarzany (sredni),1,1,1,1,0
+ARKA2T113=Allies,<none>,Najazd powtarzany (trudny),1,1,1,1,0
+ARKA2T114=Allies,<none>,Trudnosc: kredyty na start (latwy),0,1,1,1,0
+ARKA2T115=Allies,<none>,Trudnosc: kredyty na start (sredni),0,1,1,1,0
 
 [Events]
 ARKA2T01=1,1,0,2
@@ -9197,6 +9992,38 @@ ARKA2T80=1,13,0,1000
 ARKA2T81=1,13,0,450
 ARKA2T82=1,13,0,1500
 ARKA2T83=1,29,0,0
+ARKA2T84=2,13,0,1,27,0,10
+ARKA2T85=2,13,0,1,27,0,11
+ARKA2T86=3,13,0,1,28,0,10,28,0,11
+ARKA2T87=2,13,0,1,27,0,10
+ARKA2T88=2,13,0,1,27,0,11
+ARKA2T89=3,13,0,1,28,0,10,28,0,11
+ARKA2T90=2,13,0,1,27,0,10
+ARKA2T91=2,13,0,1,27,0,11
+ARKA2T92=3,13,0,1,28,0,10,28,0,11
+ARKA2T93=2,13,0,1,27,0,10
+ARKA2T94=2,13,0,1,27,0,11
+ARKA2T95=3,13,0,1,28,0,10,28,0,11
+ARKA2T96=2,13,0,1,27,0,10
+ARKA2T97=2,13,0,1,27,0,11
+ARKA2T98=3,13,0,1,28,0,10,28,0,11
+ARKA2T99=2,13,0,1,27,0,10
+ARKA2T100=2,13,0,1,27,0,11
+ARKA2T101=3,13,0,1,28,0,10,28,0,11
+ARKA2T102=2,13,0,1,27,0,10
+ARKA2T103=2,13,0,1,27,0,11
+ARKA2T104=3,13,0,1,28,0,10,28,0,11
+ARKA2T105=2,13,0,1,27,0,10
+ARKA2T106=2,13,0,1,27,0,11
+ARKA2T107=3,13,0,1,28,0,10,28,0,11
+ARKA2T108=2,13,0,1,27,0,10
+ARKA2T109=2,13,0,1,27,0,11
+ARKA2T110=3,13,0,1,28,0,10,28,0,11
+ARKA2T111=2,13,0,1,27,0,10
+ARKA2T112=2,13,0,1,27,0,11
+ARKA2T113=3,13,0,1,28,0,10,28,0,11
+ARKA2T114=2,13,0,1,27,0,10
+ARKA2T115=2,13,0,1,27,0,11
 
 [Actions]
 ARKA2T01=2,16,0,0,0,0,0,0,A,11,0,9201,0,0,0,0,A
@@ -9257,16 +10084,16 @@ ARKA2T55=3,53,2,ARKA2T56,0,0,0,0,A,54,2,ARKA2T53,0,0,0,0,A,54,2,ARKA2T54,0,0,0,0
 ARKA2T56=21,56,0,8,0,0,0,0,A,27,0,900,0,0,0,0,A,23,0,0,0,0,0,0,A,20,0,48,0,0,0,0,A,48,0,1,0,0,0,0,K,55,0,4,0,0,0,0,K,11,0,9243,0,0,0,0,A,53,2,ARKA2T57,0,0,0,0,A,53,2,ARKA2T71,0,0,0,0,A,53,2,ARKA2T59,0,0,0,0,A,53,2,ARKA2T60,0,0,0,0,A,53,2,ARKA2T61,0,0,0,0,A,53,2,ARKA2T62,0,0,0,0,A,53,2,ARKA2T64,0,0,0,0,A,53,2,ARKA2T68,0,0,0,0,A,53,2,ARKA2T69,0,0,0,0,A,53,2,ARKA2T63,0,0,0,0,A,54,2,ARKA2T79,0,0,0,0,A,54,2,ARKA2T80,0,0,0,0,A,54,2,ARKA2T81,0,0,0,0,A,54,2,ARKA2T82,0,0,0,0,A
 ARKA2T57=2,11,0,9244,0,0,0,0,A,53,2,ARKA2T58,0,0,0,0,A
 ARKA2T58=1,11,0,9245,0,0,0,0,A
-ARKA2T59=2,80,1,ARKA2M12,0,0,0,0,U,55,0,3,0,0,0,0,AO
-ARKA2T60=3,80,1,ARKA2M13,0,0,0,0,AU,55,0,3,0,0,0,0,AU,11,0,9246,0,0,0,0,A
-ARKA2T61=3,80,1,ARKA2M14,0,0,0,0,AS,55,0,3,0,0,0,0,AO,11,0,9247,0,0,0,0,A
-ARKA2T62=3,80,1,ARKA2M15,0,0,0,0,AY,55,0,3,0,0,0,0,AY,11,0,9248,0,0,0,0,A
-ARKA2T63=2,80,1,ARKA2M15,0,0,0,0,AY,80,1,ARKA2M12,0,0,0,0,AU
-ARKA2T64=4,80,1,ARKA2M16,0,0,0,0,BD,55,0,3,0,0,0,0,BD,11,0,9249,0,0,0,0,A,53,2,ARKA2T65,0,0,0,0,A
+ARKA2T59=4,53,2,ARKA2T84,0,0,0,0,A,53,2,ARKA2T85,0,0,0,0,A,53,2,ARKA2T86,0,0,0,0,A,55,0,3,0,0,0,0,AO
+ARKA2T60=5,53,2,ARKA2T87,0,0,0,0,A,53,2,ARKA2T88,0,0,0,0,A,53,2,ARKA2T89,0,0,0,0,A,55,0,3,0,0,0,0,AU,11,0,9246,0,0,0,0,A
+ARKA2T61=5,53,2,ARKA2T90,0,0,0,0,A,53,2,ARKA2T91,0,0,0,0,A,53,2,ARKA2T92,0,0,0,0,A,55,0,3,0,0,0,0,AO,11,0,9247,0,0,0,0,A
+ARKA2T62=5,53,2,ARKA2T93,0,0,0,0,A,53,2,ARKA2T94,0,0,0,0,A,53,2,ARKA2T95,0,0,0,0,A,55,0,3,0,0,0,0,AY,11,0,9248,0,0,0,0,A
+ARKA2T63=3,53,2,ARKA2T96,0,0,0,0,A,53,2,ARKA2T97,0,0,0,0,A,53,2,ARKA2T98,0,0,0,0,A
+ARKA2T64=6,53,2,ARKA2T99,0,0,0,0,A,53,2,ARKA2T100,0,0,0,0,A,53,2,ARKA2T101,0,0,0,0,A,55,0,3,0,0,0,0,BD,11,0,9249,0,0,0,0,A,53,2,ARKA2T65,0,0,0,0,A
 ARKA2T65=2,11,0,9250,0,0,0,0,A,53,2,ARKA2T66,0,0,0,0,A
 ARKA2T66=2,11,0,9251,0,0,0,0,A,53,2,ARKA2T67,0,0,0,0,A
 ARKA2T67=1,11,0,9252,0,0,0,0,A
-ARKA2T68=4,80,1,ARKA2M17,0,0,0,0,U,80,1,ARKA2M18,0,0,0,0,AV,55,0,3,0,0,0,0,AO,55,0,3,0,0,0,0,AV
+ARKA2T68=5,53,2,ARKA2T102,0,0,0,0,A,53,2,ARKA2T103,0,0,0,0,A,53,2,ARKA2T104,0,0,0,0,A,55,0,3,0,0,0,0,AO,55,0,3,0,0,0,0,AV
 ARKA2T69=4,55,0,6,0,0,0,0,AX,17,0,49,0,0,0,0,A,11,0,9253,0,0,0,0,A,53,2,ARKA2T70,0,0,0,0,A
 ARKA2T70=1,11,0,9254,0,0,0,0,A
 ARKA2T71=20,54,2,ARKA2T10,0,0,0,0,A,54,2,ARKA2T11,0,0,0,0,A,54,2,ARKA2T12,0,0,0,0,A,54,2,ARKA2T13,0,0,0,0,A,54,2,ARKA2T14,0,0,0,0,A,54,2,ARKA2T19,0,0,0,0,A,54,2,ARKA2T50,0,0,0,0,A,54,2,ARKA2T51,0,0,0,0,A,54,2,ARKA2T52,0,0,0,0,A,54,2,ARKA2T26,0,0,0,0,A,54,2,ARKA2T15,0,0,0,0,A,54,2,ARKA2T16,0,0,0,0,A,54,2,ARKA2T17,0,0,0,0,A,54,2,ARKA2T18,0,0,0,0,A,48,0,1,0,0,0,0,K,64,0,10,0,0,0,0,A,65,0,10,0,0,0,0,A,66,0,10,0,0,0,0,A,11,0,9255,0,0,0,0,A,53,2,ARKA2T72,0,0,0,0,A
@@ -9277,11 +10104,43 @@ ARKA2T75=2,11,0,9259,0,0,0,0,A,53,2,ARKA2T76,0,0,0,0,A
 ARKA2T76=2,11,0,9260,0,0,0,0,A,53,2,ARKA2T77,0,0,0,0,A
 ARKA2T77=2,11,0,9261,0,0,0,0,A,53,2,ARKA2T78,0,0,0,0,A
 ARKA2T78=1,1,0,2,0,0,0,0,A
-ARKA2T79=3,80,1,ARKA2M09,0,0,0,0,AU,55,0,3,0,0,0,0,AU,11,0,9262,0,0,0,0,A
-ARKA2T80=3,80,1,ARKA2M10,0,0,0,0,U,55,0,3,0,0,0,0,AO,11,0,9263,0,0,0,0,A
-ARKA2T81=2,80,1,ARKA2M11,0,0,0,0,U,55,0,3,0,0,0,0,AO
+ARKA2T79=5,53,2,ARKA2T105,0,0,0,0,A,53,2,ARKA2T106,0,0,0,0,A,53,2,ARKA2T107,0,0,0,0,A,55,0,3,0,0,0,0,AU,11,0,9262,0,0,0,0,A
+ARKA2T80=5,53,2,ARKA2T108,0,0,0,0,A,53,2,ARKA2T109,0,0,0,0,A,53,2,ARKA2T110,0,0,0,0,A,55,0,3,0,0,0,0,AO,11,0,9263,0,0,0,0,A
+ARKA2T81=4,53,2,ARKA2T111,0,0,0,0,A,53,2,ARKA2T112,0,0,0,0,A,53,2,ARKA2T113,0,0,0,0,A,55,0,3,0,0,0,0,AO
 ARKA2T82=1,53,2,ARKA2T81,0,0,0,0,A
 ARKA2T83=5,11,0,9264,0,0,0,0,A,54,2,ARKA2T79,0,0,0,0,A,54,2,ARKA2T80,0,0,0,0,A,54,2,ARKA2T81,0,0,0,0,A,54,2,ARKA2T82,0,0,0,0,A
+ARKA2T84=2,80,1,ARKA2M12E,0,0,0,0,U,54,2,ARKA2T84,0,0,0,0,A
+ARKA2T85=2,80,1,ARKA2M12M,0,0,0,0,U,54,2,ARKA2T85,0,0,0,0,A
+ARKA2T86=2,80,1,ARKA2M12,0,0,0,0,U,54,2,ARKA2T86,0,0,0,0,A
+ARKA2T87=2,80,1,ARKA2M13E,0,0,0,0,AU,54,2,ARKA2T87,0,0,0,0,A
+ARKA2T88=2,80,1,ARKA2M13M,0,0,0,0,AU,54,2,ARKA2T88,0,0,0,0,A
+ARKA2T89=2,80,1,ARKA2M13,0,0,0,0,AU,54,2,ARKA2T89,0,0,0,0,A
+ARKA2T90=2,80,1,ARKA2M14E,0,0,0,0,AS,54,2,ARKA2T90,0,0,0,0,A
+ARKA2T91=2,80,1,ARKA2M14M,0,0,0,0,AS,54,2,ARKA2T91,0,0,0,0,A
+ARKA2T92=2,80,1,ARKA2M14,0,0,0,0,AS,54,2,ARKA2T92,0,0,0,0,A
+ARKA2T93=2,80,1,ARKA2M15E,0,0,0,0,AY,54,2,ARKA2T93,0,0,0,0,A
+ARKA2T94=2,80,1,ARKA2M15,0,0,0,0,AY,54,2,ARKA2T94,0,0,0,0,A
+ARKA2T95=2,80,1,ARKA2M15,0,0,0,0,AY,54,2,ARKA2T95,0,0,0,0,A
+ARKA2T96=3,80,1,ARKA2M15E,0,0,0,0,AY,80,1,ARKA2M12E,0,0,0,0,AU,54,2,ARKA2T96,0,0,0,0,A
+ARKA2T97=3,80,1,ARKA2M15,0,0,0,0,AY,80,1,ARKA2M12M,0,0,0,0,AU,54,2,ARKA2T97,0,0,0,0,A
+ARKA2T98=3,80,1,ARKA2M15,0,0,0,0,AY,80,1,ARKA2M12,0,0,0,0,AU,54,2,ARKA2T98,0,0,0,0,A
+ARKA2T99=2,80,1,ARKA2M16E,0,0,0,0,BD,54,2,ARKA2T99,0,0,0,0,A
+ARKA2T100=2,80,1,ARKA2M16M,0,0,0,0,BD,54,2,ARKA2T100,0,0,0,0,A
+ARKA2T101=2,80,1,ARKA2M16,0,0,0,0,BD,54,2,ARKA2T101,0,0,0,0,A
+ARKA2T102=3,80,1,ARKA2M17E,0,0,0,0,U,80,1,ARKA2M18E,0,0,0,0,AV,54,2,ARKA2T102,0,0,0,0,A
+ARKA2T103=3,80,1,ARKA2M17M,0,0,0,0,U,80,1,ARKA2M18M,0,0,0,0,AV,54,2,ARKA2T103,0,0,0,0,A
+ARKA2T104=3,80,1,ARKA2M17,0,0,0,0,U,80,1,ARKA2M18,0,0,0,0,AV,54,2,ARKA2T104,0,0,0,0,A
+ARKA2T105=2,80,1,ARKA2M09E,0,0,0,0,AU,54,2,ARKA2T105,0,0,0,0,A
+ARKA2T106=2,80,1,ARKA2M09M,0,0,0,0,AU,54,2,ARKA2T106,0,0,0,0,A
+ARKA2T107=2,80,1,ARKA2M09,0,0,0,0,AU,54,2,ARKA2T107,0,0,0,0,A
+ARKA2T108=2,80,1,ARKA2M10E,0,0,0,0,U,54,2,ARKA2T108,0,0,0,0,A
+ARKA2T109=2,80,1,ARKA2M10M,0,0,0,0,U,54,2,ARKA2T109,0,0,0,0,A
+ARKA2T110=2,80,1,ARKA2M10,0,0,0,0,U,54,2,ARKA2T110,0,0,0,0,A
+ARKA2T111=2,80,1,ARKA2M11E,0,0,0,0,U,54,2,ARKA2T111,0,0,0,0,A
+ARKA2T112=2,80,1,ARKA2M11M,0,0,0,0,U,54,2,ARKA2T112,0,0,0,0,A
+ARKA2T113=2,80,1,ARKA2M11,0,0,0,0,U,54,2,ARKA2T113,0,0,0,0,A
+ARKA2T114=1,106,0,2,4000,0,0,0,A
+ARKA2T115=1,106,0,2,2000,0,0,0,A
 
 [Tags]
 ARKA2G31=0,Skrzynka: odkrycie mapy 1,ARKA2T01
@@ -9367,6 +10226,38 @@ ARKA2G110=0,Najazd 2 1,ARKA2T80
 ARKA2G111=2,Najazd powtarzany 1,ARKA2T81
 ARKA2G112=0,Najazdy powtarzane wlaczone 1,ARKA2T82
 ARKA2G07=0,Wylegarnia zniszczona 1,ARKA2T83
+ARKA2G114=2,Skok: fala 1 (latwy) 1,ARKA2T84
+ARKA2G115=2,Skok: fala 1 (sredni) 1,ARKA2T85
+ARKA2G116=2,Skok: fala 1 (trudny) 1,ARKA2T86
+ARKA2G117=2,Skok: fala 2 (latwy) 1,ARKA2T87
+ARKA2G118=2,Skok: fala 2 (sredni) 1,ARKA2T88
+ARKA2G119=2,Skok: fala 2 (trudny) 1,ARKA2T89
+ARKA2G120=2,Skok: fala 3 (latwy) 1,ARKA2T90
+ARKA2G121=2,Skok: fala 3 (sredni) 1,ARKA2T91
+ARKA2G122=2,Skok: fala 3 (trudny) 1,ARKA2T92
+ARKA2G123=2,Skok: mutaliski (latwy) 1,ARKA2T93
+ARKA2G124=2,Skok: mutaliski (sredni) 1,ARKA2T94
+ARKA2G125=2,Skok: mutaliski (trudny) 1,ARKA2T95
+ARKA2G126=2,Skok: fala dodatkowa (trudny) (latwy) 1,ARKA2T96
+ARKA2G127=2,Skok: fala dodatkowa (trudny) (sredni) 1,ARKA2T97
+ARKA2G128=2,Skok: fala dodatkowa (trudny) (trudny) 1,ARKA2T98
+ARKA2G129=2,Skok: Konfederacja (latwy) 1,ARKA2T99
+ARKA2G130=2,Skok: Konfederacja (sredni) 1,ARKA2T100
+ARKA2G131=2,Skok: Konfederacja (trudny) 1,ARKA2T101
+ARKA2G132=2,Skok: fala 5 (latwy) 1,ARKA2T102
+ARKA2G133=2,Skok: fala 5 (sredni) 1,ARKA2T103
+ARKA2G134=2,Skok: fala 5 (trudny) 1,ARKA2T104
+ARKA2G135=2,Najazd 1 (latwy) 1,ARKA2T105
+ARKA2G136=2,Najazd 1 (sredni) 1,ARKA2T106
+ARKA2G137=2,Najazd 1 (trudny) 1,ARKA2T107
+ARKA2G138=2,Najazd 2 (latwy) 1,ARKA2T108
+ARKA2G139=2,Najazd 2 (sredni) 1,ARKA2T109
+ARKA2G140=2,Najazd 2 (trudny) 1,ARKA2T110
+ARKA2G141=2,Najazd powtarzany (latwy) 1,ARKA2T111
+ARKA2G142=2,Najazd powtarzany (sredni) 1,ARKA2T112
+ARKA2G143=2,Najazd powtarzany (trudny) 1,ARKA2T113
+ARKA2G144=0,Trudnosc: kredyty na start (latwy) 1,ARKA2T114
+ARKA2G145=0,Trudnosc: kredyty na start (sredni) 1,ARKA2T115
 
 [VEINS]
 Insignificant=yes
@@ -9561,9 +10452,6 @@ ImmuneToVeins=yes
 ImmuneToVeins=yes
 
 [NV02]
-ImmuneToVeins=yes
-
-[NUK2B_AI]
 ImmuneToVeins=yes
 
 [BBOARD14]
@@ -10977,6 +11865,9 @@ ImmuneToVeins=yes
 ImmuneToVeins=yes
 
 [SSMISSILE]
+ImmuneToVeins=yes
+
+[NUK2B_AI]
 ImmuneToVeins=yes
 
 [VS15]

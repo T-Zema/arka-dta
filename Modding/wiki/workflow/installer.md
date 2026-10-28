@@ -34,7 +34,10 @@ powershell -ExecutionPolicy Bypass -File Modding\tools\build-installer.ps1 -NoPa
 3. Commit całego stanu, `git push`, tag `v<wersja>` na tym commicie.
 4. `gh release create v<wersja> Modding/dist/DTA-SCMod-Setup.exe Modding/CHANGELOG.txt --notes-file …` w `T-Zema/arka-dta`
    (repo prywatne; zasób 130 MB mieści się w limicie 2 GB na plik wydania). `gh` na tym komputerze nie jest zalogowany:
-   token z menedżera poświadczeń gita (`git credential fill`) jako `GH_TOKEN` tylko na czas polecenia.
+   token z menedżera poświadczeń gita (`git credential fill`) jako `GH_TOKEN` tylko na czas polecenia. **W Bashu**
+   (`printf 'protocol=https\nhost=github.com\n\n' | git credential fill`): pipe z PowerShella 5.1 daje
+   „refusing to work with credential missing protocol field” (2026-10-28).
+   Zmiana po wypchnięciu taga, a przed utworzeniem release'u: przesunąć tag (`git tag -f` + `push -f`) tylko za zgodą użytkownika.
    Tytuł wydania krótko: `--title "ARKA <wersja>"` (np. `ARKA 2026.10.28`, prośba użytkownika 2026-10-28).
    Opis wydania i commit bez linii o Claude / AI (zob. [[workflow/repo-and-updates]], „Bez atrybucji AI”).
 

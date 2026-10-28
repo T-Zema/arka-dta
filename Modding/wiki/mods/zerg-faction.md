@@ -86,13 +86,14 @@ Dźwięki (głosy, śmierć, atak) z SC, ataki odczytane z iscript: `zmuFir00`, 
 | `MIX/ECACHE86.MIX` | 136 plików (17,9 MB): 17 budynków × (SHP, Buildup, cameo), 17 SHP drona + cameo „budynek + dron”, 6 latających + cameo, 43 AUD | — |
 | `Modding/tools/build-sczergbase.ps1`, `ScZerg.cs` | budowa (`-Install` = INI, lobby, pliki strony; odmawia instalacji bez łatki `game.exe`); `BuildupCached`, `WriteShared`, cameo, przycięcie | — |
 | `Modding/tools/patch-buildup.ps1` | łatka `game.exe`: długie Buildupy ([[engine/buildup-timing]]) | `game.exe.bak` |
-| `INI/Map Code/Terran Faction.ini` | `ZergSide=Nod1`, `BaseUnit=SCMCVT,SCZDHTS,…`, `HarvesterUnit=…,SCZWORK`, `ZRG01–46` w `[VehicleTypes]`, `ZRI01–06` w `[InfantryTypes]` (sekcja z bloku Protossów), blok „Zerg faction” (strona, dom, grupy, `[BuildingTypes] ZRB01–17`, wszystkie typy i bronie) | `Terran Faction.ini.bak` |
+| `INI/Map Code/SC Factions/010 Zerg faction.ini` ([[engine/map-code-layers]]) | blok „Zerg faction”: `[Sides] ZergSide=Nod1`, `ZRG01–46` w `[VehicleTypes]`, `ZRI01–05` w `[InfantryTypes]`, strona, dom, grupy, `[BuildingTypes] ZRB01–17`, wszystkie typy i bronie | `.bak` warstwy |
+| `INI/Map Code/SC Factions/000 Terran faction.ini` | wspólne `BaseUnit=SCMCVT,SCZDHTS,…`, `HarvesterUnit=…,SCZWORK` (generator dopisuje do nich swoje typy) | `Terran Faction.ini.bak` (stan sprzed Zergów i Protossów) |
 | `INI/Art.ini`, `INI/Sound.ini` | bloki „Zerg faction” | starsze `.bak` |
 | `INI/Game Options/StarCraft.ini` | posprzątane: piechota z checkboxa znów tylko `GDI1`, budynki Zergów poza grupami `BARRACKS/RADAR/TECH` | starsza `.bak` |
 | `Resources/GameOptions.ini`, `INI/MPMaps.ini`, `MIX/SideC08/sidenc08/Speech08.mix`, `Resources/zergicon.png`, `l600s7*/l480s7*.pcx` | lobby i pliki strony (kopie Nod) | `.bak` |
 
-**Wspólny plik z Terranami i Protossami** (`MapCodeININame` przyjmuje jeden plik): kolejność `[Sides]` `TerranSide`, `ZergSide`, `ProtossSide` = strony 6, 7, 8.
-Duplikaty sekcji w jednym INI są niepewne, więc wpisy do list idą do istniejących sekcji. Po przegenerowaniu pliku przez inną sesję: `build-sczergbase.ps1 -Install`.
+**Wspólny kod mapy z Terranami i Protossami** (`MapCodeININame` przyjmuje jedną nazwę pliku, ale ten plik łączy warstwy przez `BasedOn`): kolejność `[Sides]` `TerranSide` (warstwa 000), `ZergSide` (010), `ProtossSide` (020) = strony 6, 7, 8.
+Od 2026-10-28 wpisy list Zergów (`[Sides]`, `[VehicleTypes]`, `[InfantryTypes]`) są we własnych sekcjach warstwy `010` (klient scala powtórzone sekcje, [[engine/ini-layering]]); wcześniejsza uwaga o „niepewnych duplikatach” jest nieaktualna. Po przegenerowaniu pliku przez inną sesję: `build-sczergbase.ps1 -Install`.
 
 ## Morf: czasy i dwa błędy pierwszej wersji (zgłoszenie „za szybko się morfowało”)
 
@@ -127,7 +128,7 @@ Pool 2277 w 50,3 s, Lair 2842 w 62,8 s, Spire 3402 w 77,6 s; zawsze `Rate 1` i k
 
 ## Poprawki po teście 2 (2026-10-25, prośby użytkownika; niezweryfikowane w grze)
 
-- **Sunken Colony:** obrażenia 80 → 160, zasięg 8 → 16, `Sight` 12. **2026-10-27 cofnięte** (użytkownik: „za mocne”): znów `Damage=80`, `Range=8`, `GuardRange=8` (Terran Faction.ini + build-sczergbase.ps1; kopie w mapach arka01/arka02 też poprawione).
+- **Sunken Colony:** obrażenia 80 → 160, zasięg 8 → 16, `Sight` 12. **2026-10-27 cofnięte** (użytkownik: „za mocne”): znów `Damage=80`, `Range=8`, `GuardRange=8` (kod mapy frakcji, dziś warstwa `010 Zerg faction.ini`, + build-sczergbase.ps1; kopie w mapach arka01/arka02 też poprawione).
 - **Zergling, 2026-10-27:** `GuardRange=2.75` (o 1 kratkę więcej niż domyślny zasięg pazurów 1.75; zasięg ataku bez zmian) dla `SCZLNG`, `SCZLNG2` i `SCZLING` (StarCraft.ini), a bohater Devouring One `SCZHDO` ma `GuardRange=3.28` (pazury 2.28 + 1), w blokach „SC balance (user)”, których generatory nie nadpisują **(niezweryfikowane w grze)**. Pod celem wyrasta macka SC: animacja `SCZTENT` (`bullet\Tentacle.grp`
   0–5–0, broń SC ma obraz Tentacle) z dźwiękiem uderzenia `ZLuHit00` (`SCZSUNHT`); przy strzale nadal `ZLuFir00`. Wcześniej był tylko
   dźwięk startu i niewidzialny pocisk.
@@ -211,14 +212,14 @@ Oczekiwane: `Rate` 1, `Count` = ticki z tabeli, klatki ≈ `Count`, sekundy ≈ 
 
 - Zergling o 20% wolniejszy, bo zacinał się przy chodzeniu po skosie. `Speed` jest liczbą całkowitą: `SCZLNG` 12 → 10,
   `SCZLNG2` (Upgraded) 18 → 14, a w checkboxie STARCRAFT `SCZLING` 12 → 10 ([[mods/starcraft-zerg]]).
-- Wartości są w bloku `; >>> SC balance (user)` na końcu `Terran Faction.ini` i `StarCraft.ini`. Klient scala powtórzone sekcje
+- Wartości są w bloku `; >>> SC balance (user)` w warstwie `INI/Map Code/SC Factions/900 Hand edits.ini` (na górze łańcucha) i na końcu `StarCraft.ini`. Klient scala powtórzone sekcje
   i późniejszy klucz wygrywa, więc ponowne uruchomienie generatorów (`build-sczergbase.ps1`, `build-sczergresearch.ps1`,
   `build-sczerg.ps1`) tego nie cofnie. W tym bloku trzymaj kolejne ręczne zmiany balansu.
 
 ## Wolniejsze leczenie Zergów (2026-10-28, prośba użytkownika; niezweryfikowane w grze)
 
-- „Ogólnie Zergi powinny się trochę wolniej leczyć”: wszystkie 85 typów Zergów z `SelfHealing=yes` z `Terran Faction.ini` dostały `SelfHealingStep` × 0,6 (zaokrąglone, co najmniej 1), np. Zergling 3 → 2, Hydralisk 6 → 4, Overlord 16 → 10, Ultralisk 40 → 24, Hatchery 20 → 12, drony budynków 3 → 2. Wpisy (ze starą wartością w komentarzu) są w bloku `; >>> SC balance (user)` w `Terran Faction.ini`. Zergi z checkboxa STARCRAFT (`StarCraft.ini`) się nie leczą, więc tam nic nie doszło.
-- Wyjątek: `SCZDTUM` (dron Creep Tumora) ma `SelfHealingStep` ustawiony za blokiem balansu (blok creepu), więc jego zmiana nie działa; to dron, więc pominięty.
+- „Ogólnie Zergi powinny się trochę wolniej leczyć”: wszystkie 85 typów Zergów z `SelfHealing=yes` z kodu mapy frakcji dostały `SelfHealingStep` × 0,6 (zaokrąglone, co najmniej 1), np. Zergling 3 → 2, Hydralisk 6 → 4, Overlord 16 → 10, Ultralisk 40 → 24, Hatchery 20 → 12, drony budynków 3 → 2. Wpisy (ze starą wartością w komentarzu) są w bloku `; >>> SC balance (user)` w `900 Hand edits.ini`. Zergi z checkboxa STARCRAFT (`StarCraft.ini`) się nie leczą, więc tam nic nie doszło.
+- Wyjątek: `SCZDTUM` (dron Creep Tumora) ma `SelfHealingStep` ustawiony za blokiem balansu (blok creepu), więc jego zmiana nie działa; to dron, więc pominięty. (2026-10-28: po podziale na warstwy blok balansu jest na górze łańcucha i wygrywa, więc `SCZDTUM` ma teraz `SelfHealingStep=2` zamiast 3.)
 - Misje z typami SC skopiowanymi do mapy (ARKA) dostają nowe wartości przy następnym uruchomieniu generatora misji; ARKA 5 już przebudowana.
 
 ## Dźwięki śmierci pojazdów (2026-10-27, zgłoszenie użytkownika; niezweryfikowane w grze)
@@ -227,7 +228,7 @@ Oczekiwane: `Rate` 1, `Count` = ticki z tabeli, klatki ≈ `Count`, sekundy ≈ 
   `Explosion=FBALL1`, więc grał `Report=` kuli ognia. Dotyczyło wszystkich 43 pojazdów `SCZ*` z `DieSound=` (drony, robotnik,
   Lurker, Overlord, Mutalisk, Scourge, Guardian, Devourer, Queen, ich wersje Upgraded, bohaterowie Kukulza, Matriarch, Yggdrasill).
 - Poprawka: `tools/build-sczergdeath.ps1` (wzór Protossów `SCPPDTHX`): animacja `ZDTH_<dźwięk>` (obraz `FBALL1`, `Report=` z
-  `DieSound`) w bloku `; >>> Zerg death sounds` na końcu `Art.ini` i `Terran Faction.ini` (`[Animations]` `ZDA01–08`,
+  `DieSound`) w bloku `; >>> Zerg death sounds` na końcu `Art.ini` i w warstwie `INI/Map Code/SC Factions/090 Zerg death sounds.ini` (`[Animations]` `ZDA01–08`,
   `Explosion=`/`ScrapExplosion=` per pojazd). **Uruchom ponownie po każdym generatorze Zergów**, który dodaje pojazdy.
 - Budynki nie są ruszane: one same grają `DieSound=` (`SCZBDTH`).
 
@@ -238,15 +239,15 @@ Daggoth, Mature Chrysalis) z supermocą Overminda. **Po `build-sczergbase.ps1 -I
 
 ## Badania (ulepszenia SC)
 
-Osobny mod [[mods/zerg-research]] (`build-sczergresearch.ps1`, własny blok na końcu pliku frakcji): 13 badań na budynkach Zergów
+Osobny mod [[mods/zerg-research]] (`build-sczergresearch.ps1`, własna warstwa kodu mapy `040 Zerg research.ini`): 13 badań na budynkach Zergów
 i złote „Upgraded” wersje 12 jednostek. Budynki tech (Evo, Den, Spire, Greater Spire, Nest, Cavern, Mound) dostają tam
 `Factory=BuildingType` i trafiają do `[AI] BuildConst`. **Po `build-sczergbase.ps1 -Install` uruchom też `build-sczergresearch.ps1`.**
 
 ## Skrzynki (2026-10-25, sesja Protossów)
 
 Hydralisk wziął skrzynkę i gra się zawiesiła (ostatnia linia logu: `Crate at 89,136 contains a unit`). Dom `Nod1` nie miał żadnego
-pojazdu z `CrateGoodie=yes`, więc losowanie nagrody nie miało końca. Naprawione blokiem „Crate goodies (SC factions)” na końcu
-`Terran Faction.ini` (Mutalisk, Queen, Guardian), zob. [[engine/crates]].
+pojazdu z `CrateGoodie=yes`, więc losowanie nagrody nie miało końca. Naprawione blokiem „Crate goodies (SC factions)” w warstwie
+`900 Hand edits.ini` (Mutalisk, Queen, Guardian), zob. [[engine/crates]].
 
 ## Znane ograniczenia
 
@@ -257,6 +258,9 @@ pojazdu z `CrateGoodie=yes`, więc losowanie nagrody nie miało końca. Naprawio
 
 ## Odinstalowanie
 
-`Copy-Item 'INI\Map Code\Terran Faction.ini.bak' …` (uwaga: kopia sprzed Zergów i Protossów); w `Art.ini`/`Sound.ini` usunąć bloki
+Usunąć warstwę `INI/Map Code/SC Factions/010 Zerg faction.ini` (najpierw warstwy zależnych modów Zergów: heroes, research, creep, death sounds)
+i w warstwie nad nią (`020 Protoss faction.ini`) ustawić `BasedOn=000 Terran faction.ini`; w `000 Terran faction.ini` wykreślić `,SCZDHTS`
+z `BaseUnit=` i `,SCZWORK` z `HarvesterUnit=`. Uwaga: bez `ZergSide` strona Protossów spadnie z indeksu 8 na 7.
+Stan sprzed Zergów i Protossów to `Terran Faction.ini.bak`. W `Art.ini`/`Sound.ini` usunąć bloki
 „Zerg faction” i `[SoundList] 1300–1338`; `GameOptions.ini` bez `,Zerg`; `MPMaps.ini` `4,5,6,7` → `4,5,6`; usunąć `MIX\ECACHE86.MIX`,
 `MIX\SideC08.mix`, `sidenc08.mix`, `Speech08.mix`, `Resources\zergicon.png`, `l600s7*.pcx`, `l480s7*.pcx`. Łatka `game.exe`: `patch-buildup.ps1 -Revert`.

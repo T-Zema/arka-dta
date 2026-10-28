@@ -3,7 +3,7 @@
 Da się to zrobić bez ruszania `Rules.ini` i bez psucia kampanii. Najlepiej w skirmishu **przejąć dom pomocniczy `GDI1` (indeks 6)**, nieużywany na 200 z 201 map skirmisha, i zrobić z niego frakcję. Dokument: architektura, etap 0 (PoC gotowy do instalacji), dalsze etapy, ryzyka.
 
 Źródła: [[engine/sides-and-houses]] (wszystkie fakty o indeksach, MIX-ach, kliencie i AI), [[engine/ini-layering]],
-[[engine/client-lobby-options]], [[plans/starcraft-factions]], szkic `Modding/drafts/new-faction-poc/`, rozmowa
+[[engine/client-lobby-options]], [[plans/starcraft-factions]], szkic `Modding/drafts/new-faction-poc/` (2026-10-28 usunięty, jest w historii gita, commit `c650a9b`), rozmowa
 z 2026-10-24 (użytkownik: „dodać kompletnie nową frakcję obok tych, co są”; równolegle sesja „Marines” robi jednostki SC).
 
 ## Kluczowy problem i decyzja
@@ -25,7 +25,7 @@ bo używa go 35 map skirmisha. `GDI1` ma najniższy wolny indeks, więc wyszarzo
 
 | # | Element | Gdzie | Kto |
 |---|---|---|---|
-| 1 | Dom `GDI1` → „Terran” + strona `TerranSide` (kolory UI, `Crew`, elektrownie) | `INI/Map Code/Terran Faction.ini` | ta sesja |
+| 1 | Dom `GDI1` → „Terran” + strona `TerranSide` (kolory UI, `Crew`, elektrownie) | `INI/Map Code/Terran Faction.ini` (2026-10-28: warstwa `INI/Map Code/SC Factions/000 Terran faction.ini`, [[engine/map-code-layers]]) | ta sesja |
 | 2 | Pozycja w dropdownie, ikona `terranicon.png`, ekrany ładowania `l600s6{1,2}.pcx` / `l480s6{1,2}.pcx` | `Resources/GameOptions.ini`, `Resources/` | ta sesja |
 | 3 | Blokada pozycji 4–5 (wszędzie) i 6 (tryby bez pliku frakcji, co-op, mapa `seabound_highway`) | `INI/MPMaps.ini` | ta sesja |
 | 4 | Sidebar, paleta, ekran wyniku, grafiki harv/proc + cameo wspólne | `MIX/SideC07.mix`, `MIX/sidenc07.mix` (strona 6 → plik 07) | ta sesja; writer `[Mix]::Write` z `Modding/tools/ModTools.cs` (sesja Marines), lister `Modding/tools/mixlist.ps1` |
@@ -39,7 +39,8 @@ bo używa go 35 map skirmisha. `GDI1` ma najniższy wolny indeks, więc wyszarzo
 
 Cel: sprawdzić samą „hydraulikę” na frakcji będącej klonem Aliantów, zanim dojdą grafiki SC.
 
-Szkic (wariant A′): `Modding/drafts/new-faction-poc/INI/Map Code/Terran Faction.ini`. Zawiera
+Szkic (wariant A′): `Modding/drafts/new-faction-poc/INI/Map Code/Terran Faction.ini` (2026-10-28: szkic usunięty, jest w historii gita,
+commit `c650a9b`; jego treść żyje w `INI/Map Code/SC Factions/000 Terran faction.ini`). Zawiera
 `[Sides] TerranSide=GDI1`, `[TerranSide]` (jak Allies), `[GDI1]` (`Name=Terran`, `ActsLike=6`, `Multiplay=yes`,
 `Side=TerranSide`, `Color=AlliedBlue`), `Owner=<oryginał>,GDI1` dla **113 typów** z `Allies` w `Owner=` oraz zdjęty
 `GDI1` z `TDPROC`, `TDPROC_AI`, `DEPCARR` i `GHPAD` (`TDHARV` zostaje, bo to harvester rafinerii `SCREFI`). Plik jest

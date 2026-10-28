@@ -69,7 +69,7 @@ Domy pomocnicze (`Allies1`…) mają `ActsLike=<indeks>` i własny kolor. `Neutr
   `Special` się nie nadaje: używa go 35 map skirmisha. Plan: [[plans/new-faction]].
   Zajęte (2026-10-25): `GDI1` = Terran (strona 6, [[mods/terran-faction]]), `Nod1` = Zerg (strona 7, [[mods/zerg-faction]]),
   `GDI2` = Protoss (strona 8, `SIDEC09`, [[mods/protoss-faction]]). `GDI2` miał w `Owner=` `TDHARV`, `TDPROC`, `TDPROC_AI`,
-  `DEPCARR`, `ASTRP`, `AIA10` (Rules+Enhance); plik frakcji zdejmuje go ze wszystkich oprócz `TDHARV`.
+  `DEPCARR`, `ASTRP`, `AIA10` (Rules+Enhance); kod mapy frakcji zdejmuje go ze wszystkich oprócz `TDHARV`.
   Wolne pomocnicze: `Nod2`, `Allies1`, `Allies2`, `Soviet1`, `Soviet2`.
 - **`Enhance.ini`** (plik Firestorma, `game.exe` go czyta, tryb Enhanced / `Firestorm=True` w `spawn.ini`) nakłada się
   na Rules: zmienia `Owner=` 18 typów oraz `[General] PrerequisiteTech`, `[AI] BuildTech/BuildHelipad/BuildRadar`,
@@ -91,7 +91,8 @@ Domy pomocnicze (`Allies1`…) mają `ActsLike=<indeks>` i własny kolor. `Neutr
 - Tryby gry w `MPMaps.ini`: `[Default]` (Deathmatch), `[Empowerment]`, `[Scavenger]`, `[Survivor]`, `[Tournament]`,
   `[King of the Hill]`, `[Co-Op *]`. Do tego **„Custom Map”**: tryb map z `Maps/Custom` (`GameMode=standard` w mapie,
   `[GameModeAliases] standard=Custom Map`). Domyślnie nie ma swojej sekcji, ale można ją dodać. Klucz `MapCodeININame=`
-  dokleja plik z `INI/Map Code/` (co-op: `Difficulty *.ini`). Pliki `Map Code/Empowerment.ini`, `Scavenger.ini` itd. noszą
+  dokleja plik z `INI/Map Code/` (co-op: `Difficulty *.ini`). Wartość to jedna nazwa pliku (string, lista po przecinku nie działa),
+  ale ten plik może łączyć kolejne przez `[INISystem] BasedOn=`; tak zbudowany jest kod frakcji SC ([[engine/map-code-layers]]). Pliki `Map Code/Empowerment.ini`, `Scavenger.ini` itd. noszą
   nazwy trybów, więc klient prawdopodobnie domyślnie szuka `<tryb>.ini` **(niezweryfikowane)**. Jawne `MapCodeININame` w tych
   trybach zastąpiłoby ich własny plik.
 

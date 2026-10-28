@@ -63,7 +63,7 @@ Bronie ulepszonych wersji to kopie z sufiksem `U` (`SCZFClawU`…), tworzone tyl
 ## Pliki
 
 - `Modding/tools/build-sczergresearch.ps1`: **generator**. Za każdym uruchomieniem odtwarza:
-  - blok `; >>> Zerg research` … `; <<< Zerg research` na końcu `INI/Map Code/Terran Faction.ini`: `[AI] BuildConst` (lista z pliku + laboratoria),
+  - blok `; >>> Zerg research` … `; <<< Zerg research` w warstwie `INI/Map Code/SC Factions/040 Zerg research.ini` ([[engine/map-code-layers]]): `[AI] BuildConst` (lista z pliku + laboratoria),
     `[BuildingTypes] ZUB01–13`, `[InfantryTypes] ZUI01–06`, `[VehicleTypes] ZUV01–06`, **powtórzone sekcje budynków Zergów** z dopisanym
     `Factory=BuildingType`/`Upgrades=N`/opisem (klient scala je z blokiem „Zerg faction”, [[engine/ini-layering]]), badania, jednostki, bronie;
   - ten sam blok w `INI/Art.ini` (ikony badań, sekcje art jednostek skopiowane z bazy ze złotym cameo);
@@ -73,7 +73,7 @@ Bronie ulepszonych wersji to kopie z sufiksem `U` (`SCZFClawU`…), tworzone tyl
 - Bloku „Zerg faction” (`build-sczergbase.ps1`) generator nie zmienia. **Po `build-sczergbase.ps1 -Install` trzeba uruchomić go ponownie**,
   bo kopie jednostek się zestarzeją (blok badań sam przetrwa, bo `Set-Block` sesji Zergów podmienia tylko swój blok).
 - Wpisy innych skryptów, które trafiłyby do list w tym bloku (pierwsze wystąpienie `[InfantryTypes]` itp.), są przy regeneracji zachowywane.
-- Kopie zapasowe: istniejące `.bak` plików frakcji, `Art.ini`, `StarCraft.ini`.
+- Kopie zapasowe: `.bak` warstwy (`040 Zerg research.ini.bak`), `Art.ini`, `StarCraft.ini`.
 
 ## Odstępstwa od SC (ograniczenia silnika)
 
@@ -93,5 +93,6 @@ Bronie ulepszonych wersji to kopie z sufiksem `U` (`SCZFClawU`…), tworzone tyl
 
 ## Odinstalowanie
 
-Usunąć blok `; >>> Zerg research` … `; <<< Zerg research` z `INI/Map Code/Terran Faction.ini` i `INI/Art.ini`, wykreślić
+Usunąć warstwę `INI/Map Code/SC Factions/040 Zerg research.ini` i w warstwie nad nią (`050 SC building select sounds.ini`) ustawić
+`BasedOn=030 Zerg heroes.ini`. Usunąć blok `; >>> Zerg research` … `; <<< Zerg research` z `INI/Art.ini`, wykreślić
 `SCZEVO,SCZHDN,SCZSPI,SCZGSP,SCZNES,SCZULC,SCZDFM` z `BuildConst=` w `INI/Game Options/StarCraft.ini`, usunąć `MIX/ECACHE84.MIX`.

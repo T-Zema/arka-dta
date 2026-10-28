@@ -4,7 +4,7 @@
 przechowywać kredyty jak Supply Depot/Pylon/Creep Colony (`Storage=100`) albo dawać prąd. Użytkownik woli kredyty.
 
 Źródła: [[engine/houses-economy]] (sekcja o silosach: deasemblacja `game.exe`, Vinifera `HouseClassExt::_Harvested`),
-`INI/Map Code/Terran Faction.ini` (`[SCZOVL]`, wartości `Storage`/`Power` typów `SCZ*`), [[mods/zerg-faction]].
+`INI/Map Code/Terran Faction.ini` (`[SCZOVL]`, wartości `Storage`/`Power` typów `SCZ*`; od 2026-10-28 te typy są w warstwach `INI/Map Code/SC Factions/`), [[mods/zerg-faction]].
 
 ## Wniosek
 

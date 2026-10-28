@@ -2,7 +2,7 @@
 
 Druga misja na Mar Sarze z [[plans/campaign-arka]]. Teren to mapa kampanii StarCrafta **T3 „Desperate Alliance”** (w SC: przetrwać 30 minut do ewakuacji przez Synów Korhalu) z CASC użytkownika, powiększona 1,5× i przeniesiona na pustynny teatr DTA. Na niej: baza Aliantów przy wraku ARKI, Mar Sara City z zainfekowanym Command Center, trzy schrony z kolonistami, lądowisko Synów Korhalu i 15 minut ładowania skoku. Kompletna od startu do wygranej, **(niezweryfikowane w grze)**.
 
-Źródła: CASC StarCrafta `SD/campaign/Terran/Terran03/staredit/scenario.chk` (T3, 96×96 badlands; obejrzane też T1 Wasteland), `Modding/tools/build-arka02-marsara.ps1`, `Modding/tools/build-arka02-mission.ps1`, `Modding/tools/build-arka-previews.ps1`, `Map Editor/FinalSun/FSData.ini` (`[Scripts]` 37 i 39), `Maps/Missions/cr07.map` (`Tag=` w drużynie), `INI/Map Code/Terran Faction.ini` (`[SCZICC]`, `[SCZINF]`), `INI/Rules.ini` (`[TANYA]` `C4=yes`, `[C2]`, `[C8]`), [[missions/arka-01-marsara]] (wzór).
+Źródła: CASC StarCrafta `SD/campaign/Terran/Terran03/staredit/scenario.chk` (T3, 96×96 badlands; obejrzane też T1 Wasteland), `Modding/tools/build-arka02-marsara.ps1`, `Modding/tools/build-arka02-mission.ps1`, `Modding/tools/build-arka-previews.ps1`, `Map Editor/FinalSun/FSData.ini` (`[Scripts]` 37 i 39), `Maps/Missions/cr07.map` (`Tag=` w drużynie), `INI/Map Code/SC Factions/010 Zerg faction.ini` (`[SCZICC]`, `[SCZINF]`), `INI/Rules.ini` (`[TANYA]` `C4=yes`, `[C2]`, `[C8]`), [[missions/arka-01-marsara]] (wzór).
 
 ## Pliki
 

@@ -62,7 +62,8 @@ function Read-IniFile($path) {
 $rules = (Read-IniFile "$game\INI\Rules.ini").Sec
 $art   = (Read-IniFile "$game\INI\Art.ini").Sec
 $scSec = @{}
-foreach ($f in "$game\INI\Game Options\StarCraft.ini", "$game\INI\Map Code\Terran Faction.ini") {
+. "$tools\MapCode.ps1"   # the faction map code is a chain of layers (INI/Map Code/SC Factions)
+foreach ($f in @("$game\INI\Game Options\StarCraft.ini") + @(Get-MapCodeLayers)) {
     $r = Read-IniFile $f
     foreach ($s in $r.Order) { if (-not $scSec.ContainsKey($s)) { $scSec[$s] = [ordered]@{} }; foreach ($k in $r.Sec[$s].Keys) { $scSec[$s][$k] = $r.Sec[$s][$k] } }
 }
@@ -77,7 +78,7 @@ $noFollow = @('Prerequisite', 'PrerequisiteOverride', 'BuiltAt', 'Owner', 'Requi
 # closure: the requested SC types plus every SC section their keys name
 function Get-ScClosure([string[]]$roots) {
     $inc = [ordered]@{}; $q = New-Object Collections.Generic.Queue[string]
-    foreach ($r in $roots) { if (-not $scSec.ContainsKey($r)) { throw "SC type $r is not defined in StarCraft.ini / Terran Faction.ini" }; $q.Enqueue($r) }
+    foreach ($r in $roots) { if (-not $scSec.ContainsKey($r)) { throw "SC type $r is not defined in StarCraft.ini / the faction map code" }; $q.Enqueue($r) }
     while ($q.Count) {
         $s = $q.Dequeue(); if ($inc.Contains($s)) { continue }; $inc[$s] = $true
         foreach ($k in $scSec[$s].Keys) {

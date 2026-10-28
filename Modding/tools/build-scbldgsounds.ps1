@@ -7,8 +7,9 @@
 # cloaking Arbiter, Duke) get the VoiceSelect of their mobile form, as in SC.
 #   .\build-scbldgsounds.ps1            -> MIX/ECACHE79.MIX (AUD) only
 #   .\build-scbldgsounds.ps1 -Install   -> + Sound.ini [SoundList] keys SBW01+, and a block "; >>> SC building select
-#                                          sounds" at the end of StarCraft.ini and Terran Faction.ini (the client merges
-#                                          repeated sections, the block only adds VoiceSelect=)
+#                                          sounds" at the end of StarCraft.ini and in the faction map code layer of the
+#                                          same name (INI/Map Code/SC Factions; the client merges repeated sections, the
+#                                          block only adds VoiceSelect=)
 # Re-run after any generator that rebuilds the building sections is harmless; re-running this one replaces its own entries.
 # Wiki: Modding/wiki/mods/sc-building-sounds.md
 param(
@@ -108,8 +109,8 @@ function Set-SectionEntries([string]$path, [string]$section, [string[]]$entries,
     [IO.File]::WriteAllText($path, ($lines -join "`n"), $latin)
 }
 # section -> key/value, ignoring this script's own block
-function Read-Sections([string]$path) {
-    $t = [IO.File]::ReadAllText($path, $latin); $a = $t.IndexOf($begin)
+function Read-Sections([string]$path, [string]$text) {
+    $t = if ($text) { $text } else { [IO.File]::ReadAllText($path, $latin) }; $a = $t.IndexOf($begin)
     if ($a -ge 0) { $b = $t.IndexOf("`n", $t.IndexOf($end, $a)) + 1; $t = $t.Substring(0, $a) + $t.Substring($b) }
     $d = @{}; $sec = $null
     foreach ($l in ($t -split "`r?`n")) {
@@ -119,8 +120,11 @@ function Read-Sections([string]$path) {
     return $d
 }
 
-$ini = [ordered]@{ "$game\INI\Game Options\StarCraft.ini" = $null; "$game\INI\Map Code\Terran Faction.ini" = $null }
-foreach ($p in @($ini.Keys)) { $ini[$p] = Read-Sections $p }
+# the faction side: our layer of the map code (MapCode.ps1), read together with the layers the types come from
+. "$tools\MapCode.ps1"
+$facLayer = Get-MapCodeLayer 'SC building select sounds'
+$ini = [ordered]@{ "$game\INI\Game Options\StarCraft.ini" = $null; $facLayer = $null }
+foreach ($p in @($ini.Keys)) { $ini[$p] = if ($p -eq $facLayer) { Read-Sections $p (Read-MapCodeText -Exclude $facLayer) } else { Read-Sections $p } }
 function Owner-File([string]$id) { foreach ($p in $ini.Keys) { if ($ini[$p].ContainsKey($id)) { return $p } }; return $null }
 
 $bodies = @{}; foreach ($p in $ini.Keys) { $bodies[$p] = '' }

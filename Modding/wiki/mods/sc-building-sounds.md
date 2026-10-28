@@ -2,7 +2,7 @@
 
 Budynki Terran, Zergów i Protossów odtwarzają przy zaznaczeniu swój dźwięk ze StarCrafta (np. Academy `tacwht00`), tak jak w SC. Stan: zainstalowany 2026-10-26, **niezweryfikowane w grze**.
 
-Źródła: `arr/units.dat` (pola „What Sound Start/End”, offsety 9524/9980), `arr/sfxdata.dat/.tbl` z CASC SC: Remastered; deasemblacja `game.exe` ([[engine/sounds-aud]]); `INI/Game Options/StarCraft.ini`, `INI/Map Code/Terran Faction.ini`, `INI/Sound.ini`.
+Źródła: `arr/units.dat` (pola „What Sound Start/End”, offsety 9524/9980), `arr/sfxdata.dat/.tbl` z CASC SC: Remastered; deasemblacja `game.exe` ([[engine/sounds-aud]]); `INI/Game Options/StarCraft.ini`, `INI/Map Code/SC Factions/`, `INI/Sound.ini`.
 
 ## Jak to działa
 
@@ -24,17 +24,18 @@ Budynki Terran, Zergów i Protossów odtwarzają przy zaznaczeniu swój dźwięk
 | Generator | `Modding/tools/build-scbldgsounds.ps1` (bez parametrów buduje tylko MIX, `-Install` także INI) |
 | Dźwięki | `MIX/ECACHE79.MIX`: 47 plików `SBW*.AUD` (`SBW` + rdzeń nazwy SC, np. `SBWTAC`, `SBWZHA`, `SBWPNE`, `SBWBUTTO`) |
 | Sound.ini | `[SoundList]` klucze `SBW01`–`SBW47` (na końcu sekcji) |
-| INI budynków | blok `; >>> SC building select sounds` na końcu `StarCraft.ini` (Terran) i `Terran Faction.ini` (Zerg, Protoss); tylko `VoiceSelect=` |
+| INI budynków | blok `; >>> SC building select sounds` na końcu `StarCraft.ini` (Terran) i w warstwie `INI/Map Code/SC Factions/050 SC building select sounds.ini` (Zerg, Protoss; [[engine/map-code-layers]]); tylko `VoiceSelect=` |
 
 Blok działa, bo klient scala powtórzone sekcje i późniejszy klucz wygrywa ([[engine/ini-layering]]). Generatory innych modów
-podmieniają swoje bloki w miejscu, więc ten blok zostaje na końcu. Ponowne uruchomienie generatora podmienia własne wpisy.
+podmieniają swoje bloki w miejscu, więc ten blok zostaje na końcu (w kodzie mapy: nad warstwami frakcji, bohaterów i badań Zergów). Ponowne uruchomienie generatora podmienia własne wpisy.
 
 **Numer MIX:** `game.exe` ładuje `ECACHE%02d.MIX` w pętli od 99 do 0 i pomija brakujące (`0x4E3F77`), więc 06–79 też działają.
 Wybrałem 79, żeby zostawić wolne 81.
 
 ## Odinstalowanie
 
-Usuń `MIX/ECACHE79.MIX`, bloki `SC building select sounds` z obu plików INI i linie `SBW01`–`SBW47` z `Sound.ini`
+Usuń `MIX/ECACHE79.MIX`, blok `SC building select sounds` ze `StarCraft.ini`, warstwę `INI/Map Code/SC Factions/050 SC building select sounds.ini`
+(w warstwie nad nią, `060 SC workers.ini`, ustaw `BasedOn=040 Zerg research.ini`) i linie `SBW01`–`SBW47` z `Sound.ini`
 (kopie: `.bak` obok plików, jeśli nie istniały wcześniej).
 
 ## Głośność pojedynczego dźwięku

@@ -73,7 +73,7 @@ atakuje 0–7 i z powrotem; Duran = obraz Ghosta: stoi 3, chodzi 4–11, strzela
 ## Pliki
 
 - `Modding/tools/build-sczergheroes.ps1` (bez parametru: `MIX/ECACHE82.MIX` + podglądy w `%TEMP%\sczergheroes-preview`; `-Install`: też INI).
-- Bloki `; >>> Zerg heroes` … `; <<< Zerg heroes` na końcu `INI/Map Code/Terran Faction.ini` (własne `[BuildingTypes] ZHB01–05`,
+- Bloki `; >>> Zerg heroes` … `; <<< Zerg heroes` w warstwie `INI/Map Code/SC Factions/030 Zerg heroes.ini` ([[engine/map-code-layers]]; własne `[BuildingTypes] ZHB01–05`,
   `[InfantryTypes] ZHI01–06`, `[VehicleTypes] ZHV01–09`; klient scala), `INI/Art.ini`, `INI/Sound.ini`, `INI/Rules.ini` (supermoc;
   `[SuperWeaponTypes]` dostaje pierwszy wolny numer, 11).
 - **Po `build-sczergbase.ps1 -Install` uruchom ponownie** (kopie jednostek bazowych się zestarzeją). Skrypty z `Add-Type` w osobnych procesach.
@@ -87,5 +87,6 @@ atakuje 0–7 i z powrotem; Duran = obraz Ghosta: stoi 3, chodzi 4–11, strzela
 
 ## Odinstalowanie
 
-Usunąć bloki „Zerg heroes” z czterech plików INI (w `Rules.ini` także wpis `11=SCZWrathSpecial` w `[SuperWeaponTypes]`), wpisy `17xx=SCKI*/SCDU*`
+Usunąć warstwę `INI/Map Code/SC Factions/030 Zerg heroes.ini` i w warstwie nad nią (`040 Zerg research.ini`) ustawić
+`BasedOn=020 Protoss faction.ini`. Usunąć bloki „Zerg heroes” z `Art.ini`, `Sound.ini` i `Rules.ini` (w `Rules.ini` także wpis `11=SCZWrathSpecial` w `[SuperWeaponTypes]`), wpisy `17xx=SCKI*/SCDU*`
 z `[SoundList]`, plik `MIX/ECACHE82.MIX`.

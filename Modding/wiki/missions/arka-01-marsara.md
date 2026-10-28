@@ -2,7 +2,7 @@
 
 Pierwsza misja na Mar Sarze z [[plans/campaign-arka]] (użytkownik liczy preludium jako „misję 1”, więc dla niego to **misja 2**). Teren to mapa kampanii StarCrafta **T2 „Backwater Station”** z CASC użytkownika, powiększona 2× i przeniesiona na pustynny teatr DTA. Na niej warstwa misji: wrak ARKI w kraterze, rozbitkowie, uszkodzony MCV, osada Mar Sara z Raynorem i gniazdo Zergów. Kompletna i grywalna od startu do wygranej, **(niezweryfikowane w grze)**.
 
-Źródła: CASC StarCrafta `SD/campaign/Terran/Terran02/staredit/scenario.chk` (T2 Backwater Station, 64×64 badlands; też T1 Wasteland i T3 Desperate Alliance obejrzane), `Modding/tools/build-arka01-marsara.ps1`, `Modding/tools/build-arka01-mission.ps1`, `INI/Desert.ini`, `Map Editor/Editor/Config/ConnectedTileDrawer.ini` (`DesertCliffSet`), `INI/Game Options/StarCraft.ini`, `INI/Map Code/Terran Faction.ini`, `INI/Rules.ini` (`[CHAN]`, `[C2]`, `[AMCV]`, `[SmudgeTypes]`), render CNCMaps.
+Źródła: CASC StarCrafta `SD/campaign/Terran/Terran02/staredit/scenario.chk` (T2 Backwater Station, 64×64 badlands; też T1 Wasteland i T3 Desperate Alliance obejrzane), `Modding/tools/build-arka01-marsara.ps1`, `Modding/tools/build-arka01-mission.ps1`, `INI/Desert.ini`, `Map Editor/Editor/Config/ConnectedTileDrawer.ini` (`DesertCliffSet`), `INI/Game Options/StarCraft.ini`, `INI/Map Code/SC Factions/`, `INI/Rules.ini` (`[CHAN]`, `[C2]`, `[AMCV]`, `[SmudgeTypes]`), render CNCMaps.
 
 ## Pliki
 
@@ -58,9 +58,9 @@ Współrzędne w kaflach oryginalnej mapy SC (siatka 64×64 w `sc_grid.png`); sk
 
 ## Typy StarCrafta w misji kampanii
 
-Misja z `BattleE.ini` **nie ładuje** checkboxa STARCRAFT (`INI/Game Options/StarCraft.ini`) ani kodu mapy frakcji (`INI/Map Code/Terran Faction.ini`). Bez kopii reguł Zerglingi, Marines i budynki SC po prostu by nie istniały. Skrypt misji:
+Misja z `BattleE.ini` **nie ładuje** checkboxa STARCRAFT (`INI/Game Options/StarCraft.ini`) ani kodu mapy frakcji (`INI/Map Code/SC Factions/`, [[engine/map-code-layers]]). Bez kopii reguł Zerglingi, Marines i budynki SC po prostu by nie istniały. Skrypt misji:
 
-1. Czyta oba pliki SC jak klient (powtórzone sekcje scalane, późniejszy klucz wygrywa, więc blok „SC balance (user)” też wchodzi).
+1. Czyta pliki SC jak klient (`StarCraft.ini` i warstwy kodu mapy frakcji od dołu; powtórzone sekcje scalane, późniejszy klucz wygrywa, więc blok „SC balance (user)” też wchodzi).
 2. Od listy korzeni (`SCZLNG SCZHYL SCZMUT SCZOVL SCZHAT SCZPOL SCZCRP SCZSUN SCMARINE SCVULT SCSCV SCCC SCBARR SCACAD SCBUNK SCDEPO SCPOBSV`) zbiera **domknięcie**: każdą sekcję SC, którą nazywa jakikolwiek klucz (broń, pocisk, głowica, `TransformsInto`, `UndeploysInto`…). Nie idzie po `Prerequisite*`, `BuiltAt`, `Owner`, `Image`. Wynik: 38 sekcji.
 3. Kopiuje je do mapy i rejestruje w tych samych listach (`[InfantryTypes]`, `[VehicleTypes]`, `[BuildingTypes]`…), klucze `ARKA1xx###`.
 4. `Prerequisite`/`BuiltAt` filtruje do nazw, które w misji istnieją (grupy `ZHATCHERY` itp. i nieskopiowane budynki wypadają). Nikt tych typów w misji nie buduje.
@@ -123,7 +123,7 @@ Od 2026-10-27 przy starcie (komórka 125,174) leży **skrzynka z odkryciem mapy*
 - **Raynor:** HP Vulture'a +40% (2240), wcześniej +20%.
 - **AI osady nadal nie budowało jednostek.** Prawdziwa przyczyna: pole „strona” AI triggerów było 1, a gra przyjmuje tylko 0 albo `ActsLike + 1` domu (dla `GDI1` = 7). Każdy trigger był po cichu odrzucany. Teraz strona jest liczona z `ActsLike`, a kontrola zgłasza FAIL przy złej wartości ([[engine/triggers-and-dialogue]]). Poprawka `FACTORY` → `SCFACT` z testu 2 zostaje (nie szkodzi). Drużyny ruszają po `AI triggers begin`, czyli 20 s po ocaleniu osady albo w 900 s. **Potwierdzone w grze (test 6): fabryka produkuje, drużyny idą na gniazdo.**
 
-**Creep Zergów od startu (2026-10-28, prośba użytkownika „dodaj creep klasycznie do budynków zergów”):** wcześniej misja nie miała żadnego creepu. Kampania nie ładuje bloku creepu z `Terran Faction.ini`, więc `build-arka01-mission.ps1` robi to samo co ARKA 4 ([[missions/arka-04-zielony-krysztal]], [[mods/zerg-creep]]):
+**Creep Zergów od startu (2026-10-28, prośba użytkownika „dodaj creep klasycznie do budynków zergów”):** wcześniej misja nie miała żadnego creepu. Kampania nie ładuje bloku creepu z kodu mapy frakcji (`INI/Map Code/SC Factions/`), więc `build-arka01-mission.ps1` robi to samo co ARKA 4 ([[missions/arka-04-zielony-krysztal]], [[mods/zerg-creep]]):
 - mapa dostaje `[Basic] VeinGrowthEnabled=yes`, `[General] VeinholeGrowthRate=60`, `VeinholeShrinkRate=8`, `Insignificant=yes` dla `VEINS`/`VEINHOLEDUMMY`, 4 siewniki w `[Animations]` (`ARKA1ZC01–04`) i `ImmuneToVeins=yes` dla 886 typów;
 - pod Hatchery (komórka fundamentu (1,1)) i koloniami ((0,0)) leży Veinhole Monster (nakładka 167 + 8× 178): 6 dziur pod 7 budynkami (Pool ma creep z koła Hatchery);
 - dojrzałe żyły (126, dane 48) leżą w kole o promieniu 5 wokół dziur i pod każdym budynkiem `SCZ*` z marginesem 1 pola, razem 405 pól;

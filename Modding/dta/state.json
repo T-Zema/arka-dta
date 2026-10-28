@@ -13,7 +13,7 @@
                       "path":  "INI/Art.ini",
                       "kind":  "modified",
                       "base":  "792073321530421595153819925211044212188",
-                      "ours":  "13203126119128227227206253985352381745350",
+                      "ours":  "262201622129810169195217220964184189108126",
                       "binary":  false
                   },
                   {
@@ -32,9 +32,69 @@
                       "ours":  "591461007697281619710023119121072710945"
                   },
                   {
+                      "path":  "INI/Map Code/SC Factions/000 Terran faction.ini",
+                      "kind":  "new",
+                      "ours":  "15014014987951238039254601553727140191135"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/010 Zerg faction.ini",
+                      "kind":  "new",
+                      "ours":  "5214917223821302351176632518770169167171"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/020 Protoss faction.ini",
+                      "kind":  "new",
+                      "ours":  "101382162980176149119159235104792138453"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/030 Zerg heroes.ini",
+                      "kind":  "new",
+                      "ours":  "2301512442062181711525343257513099234220243"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/040 Zerg research.ini",
+                      "kind":  "new",
+                      "ours":  "17220414314815260711801565822148252832141"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/050 SC building select sounds.ini",
+                      "kind":  "new",
+                      "ours":  "1318010039212229219132551015923313918518863"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/060 SC workers.ini",
+                      "kind":  "new",
+                      "ours":  "16229546510209225222831671695819917522022"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/070 Protoss research.ini",
+                      "kind":  "new",
+                      "ours":  "15513130631911152331295172117952308647232"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/080 Zerg creep.ini",
+                      "kind":  "new",
+                      "ours":  "76213859759285212512617418520127236136134"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/090 Zerg death sounds.ini",
+                      "kind":  "new",
+                      "ours":  "21312886224285231589316220618510124322"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/100 SC air armor.ini",
+                      "kind":  "new",
+                      "ours":  "1370225711316911914420824562143232114231116"
+                  },
+                  {
+                      "path":  "INI/Map Code/SC Factions/900 Hand edits.ini",
+                      "kind":  "new",
+                      "ours":  "19021902412422532431842101741911619516725013"
+                  },
+                  {
                       "path":  "INI/Map Code/Terran Faction.ini",
                       "kind":  "new",
-                      "ours":  "23190127624018554153255862229243732762"
+                      "ours":  "3216851242095202167236208177485826109208"
                   },
                   {
                       "path":  "INI/MPMaps.ini",

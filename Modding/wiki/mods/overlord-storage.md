@@ -12,7 +12,7 @@ prośbę użytkownika (wariant A z [[plans/overlord-storage]]). **Test użytkown
 ## Jak działa
 
 - `[SCZOVL]`, `[SCZOVL2]`, `[SCZHYG]` (Yggdrasill): `Storage=100`, w bloku `; >>> SC balance (user)` w
-  `INI/Map Code/Terran Faction.ini` (przeżywa generatory).
+  `INI/Map Code/SC Factions/900 Hand edits.ini`, górnej warstwie kodu mapy frakcji ([[engine/map-code-layers]]; przeżywa generatory).
 - **Łatka `game.exe`** `tools/patch-overlordstorage.ps1` (w `patch-game.ps1`): pojazd z `Storage > 0`, który nie jest zbieraczem
   ani „weederem”, dodaje swoje `Storage` do `House->Capacity`, gdy pojawia się na mapie lub zostaje przejęty, i odejmuje je, gdy
   znika z mapy (śmierć, wejście do transportu, przejęcie przez wroga). Robotnicy (`SCZWORK Storage=13` to ładunek) się nie liczą.
@@ -32,7 +32,7 @@ prośbę użytkownika (wariant A z [[plans/overlord-storage]]). **Test użytkown
 - Instalacja (przy zamkniętej grze): `tools/patch-game.ps1`, potem `tools/patch-vinifera-overlord.ps1`. Po aktualizacji DTA
   kolejność dla `Vinifera.dll`: `patch-vinifera-workers.ps1` → `patch-vinifera-veins.ps1` → `patch-vinifera-overlord.ps1`.
 - Odinstalowanie: `patch-vinifera-overlord.ps1 -Revert`, `patch-overlordstorage.ps1 -Revert` i usunięcie trzech sekcji z bloku
-  balansu. Cofnięcie robotników odmawia, dopóki `.scstor` istnieje (`patch-vinifera-workers.ps1` szuka teraz `.scdock` po nazwie).
+  balansu (`900 Hand edits.ini`). Cofnięcie robotników odmawia, dopóki `.scstor` istnieje (`patch-vinifera-workers.ps1` szuka teraz `.scdock` po nazwie).
 - Test na kopiach (2026-10-27): obie łatki, ponowne uruchomienie („already patched”), deasemblacja, `-Revert` → hash równy
   oryginałowi.
 

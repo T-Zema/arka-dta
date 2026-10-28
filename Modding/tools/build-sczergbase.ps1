@@ -1,7 +1,8 @@
 # Zerg FACTION for DTA: every Zerg building and unit of StarCraft: Brood War, built the StarCraft way: every building is
 # a Drone vehicle with DeploysInto=<building> and grows from the SC cocoon for its SC build time.
 #   .\build-sczergbase.ps1           -> MIX/ECACHE86.MIX (SHP, cameos, AUD) + previews in -PreviewDir
-#   .\build-sczergbase.ps1 -Install  -> also the INI side: faction (INI/Map Code/Terran Faction.ini, block "Zerg faction"),
+#   .\build-sczergbase.ps1 -Install  -> also the INI side: faction (map code layer INI/Map Code/SC Factions/* Zerg faction.ini,
+#                                       block "Zerg faction", + [General] BaseUnit/HarvesterUnit of the bottom layer),
 #                                       Art.ini / Sound.ini blocks, StarCraft.ini clean-up, lobby (Resources/GameOptions.ini,
 #                                       INI/MPMaps.ini) and side files (SideC08/sidenc08/Speech08, zergicon.png, loading screens).
 # Blocks sit between "; >>> Zerg faction" and "; <<< Zerg faction", own list entries use ZRB/ZRG/ZRI keys and [SoundList] 1300+,
@@ -321,37 +322,27 @@ function Set-SectionEntries([string]$path, [string]$section, [string[]]$entries,
     $lines.InsertRange($last + 1, [string[]]($entries | ForEach-Object { $_ + $cr }))
     [IO.File]::WriteAllText($path, ($lines -join "`n"), $latin)
 }
-# section present OUTSIDE our own block (our block is rewritten below)
-function Has-ForeignSection([string]$path, [string]$section) {
-    $t = [IO.File]::ReadAllText($path, $latin)
-    $a = $t.IndexOf($begin); if ($a -ge 0) { $z = $t.IndexOf($end, $a); $t = $t.Substring(0, $a) + $t.Substring($z) }
-    return [regex]::IsMatch($t, "(?m)^\[$([regex]::Escape($section))\]\r?$")
-}
-
 function Backup([string]$path) { if (-not (Test-Path "$path.bak")) { Copy-Item $path "$path.bak" } }
 function Nl([string]$path) { if ([IO.File]::ReadAllText($path, $latin).Contains("`r`n")) { "`r`n" } else { "`n" } }
 
-# ---- faction file (appended to skirmish maps by MPMaps.ini MapCodeININame; the client takes one file, so Zerg shares it)
-$fac = "$game\INI\Map Code\Terran Faction.ini"; Backup $fac; $nl = Nl $fac
-# [Sides] order = side index; the Protoss faction (build-scprotoss.ps1, side 8) must stay after Zerg (side 7)
-$protoss = [IO.File]::ReadAllText($fac, $latin).Contains('; >>> Protoss faction')
-$sides = @('ZergSide=Nod1	; Zerg faction: side index 7 (block at the end)')
-if ($protoss) { $sides += 'ProtossSide=GDI2	; Protoss faction: side index 8 (block at the end)' }
-Set-SectionEntries $fac 'Sides' $sides '^(ZergSide|ProtossSide)=' $nl
-$t = [IO.File]::ReadAllText($fac, $latin)
+# ---- faction map code (appended to skirmish maps by MPMaps.ini MapCodeININame): our layer "Zerg faction" of the BasedOn
+# chain (MapCode.ps1). The bottom layer "Terran faction" keeps the keys the factions share ([General] BaseUnit/HarvesterUnit).
+. "$tools\MapCode.ps1"
+$fac = Get-MapCodeLayer 'Zerg faction'; $facBase = Get-MapCodeLayer 'Terran faction'
+Backup $fac; Backup $facBase; $nl = Nl $fac
+$protoss = (Read-MapCodeText).Contains('; >>> Protoss faction')
+$t = [IO.File]::ReadAllText($facBase, $latin)
 $t = [regex]::Replace($t, '(?m)^BaseUnit=SCMCVT,(SCZDH(AT|TS),)?', 'BaseUnit=SCMCVT,SCZDHTS,')
-[IO.File]::WriteAllText($fac, $t, $latin)
-Set-SectionEntries $fac 'General' @("HarvesterUnit=TDHARV,RAHARV,SCZWORK$(if ($protoss) { ',SCPPROBE' })	; Zerg faction") '^HarvesterUnit=' $nl
-$vt = @('ZRG01=SCZWORK	; Zerg faction (block at the end)', 'ZRG02=SCZDHTS') + ($DroneFor | ForEach-Object -Begin { $n = 3 } -Process { 'ZRG{0:D2}={1}' -f $n, $_.Id; $n++ })
+[IO.File]::WriteAllText($facBase, $t, $latin)
+Set-SectionEntries $facBase 'General' @("HarvesterUnit=TDHARV,RAHARV,SCZWORK$(if ($protoss) { ',SCPPROBE' })	; Zerg faction") '^HarvesterUnit=' $nl
+# [Sides], [VehicleTypes], [InfantryTypes] entries are in our block: the layers merge in chain order, so ZergSide stays side 7
+# (after TerranSide of the bottom layer, before ProtossSide of the Protoss layer)
+$vt = @('ZRG01=SCZWORK', 'ZRG02=SCZDHTS') + ($DroneFor | ForEach-Object -Begin { $n = 3 } -Process { 'ZRG{0:D2}={1}' -f $n, $_.Id; $n++ })
 $vt += @('ZRG40=SCZINF') + ($Flyers | ForEach-Object -Begin { $n = 41 } -Process { 'ZRG{0:D2}={1}' -f $n, $_.Id; $n++ })
 $vt += @('ZRG50=SCZLRV', 'ZRG51=SCZLRV2')
-Set-SectionEntries $fac 'VehicleTypes' $vt '^ZRG\d+=' $nl
-# Zerg infantry: own copies (SC prerequisites, independent of the STARCRAFT checkbox). Duplicate sections in one INI are not
-# reliable, so if another block already has [InfantryTypes] (Protoss), the entries go into that one.
+# Zerg infantry: own copies (SC prerequisites, independent of the STARCRAFT checkbox)
 $Inf = @('SCZLNG', 'SCZHYL', 'SCZULT', 'SCZDFL', 'SCZBRD')   # the Lurker is a vehicle + burrowed building (SCZLRV/SCZLRB)
-$it = @($Inf | ForEach-Object -Begin { $n = 1 } -Process { 'ZRI{0:D2}={1}{2}' -f $n, $_, $(if ($n -eq 1) { '	; Zerg faction (block "Zerg faction")' } else { '' }); $n++ })
-$infInBlock = -not (Has-ForeignSection $fac 'InfantryTypes')
-if (-not $infInBlock) { Set-SectionEntries $fac 'InfantryTypes' $it '^ZRI\d+=' $nl }
+$it = @($Inf | ForEach-Object -Begin { $n = 1 } -Process { 'ZRI{0:D2}={1}' -f $n, $_; $n++ })
 
 $Hatcheries = 'SCZHAT,SCZHTS,SCZLAI,SCZHIV'
 $unitKeys = @"
@@ -546,6 +537,9 @@ Set-Block $fac (Add-ZergRegen @"
 ; cost = (minerals + 2 x gas) x 4. Wiki: Modding/wiki/mods/zerg-faction.md
 ; =====================================================================================================================
 
+[Sides]
+ZergSide=Nod1	; side index 7: layers merge in chain order (TerranSide 6 below, ProtossSide 8 above)
+
 [ZergSide]
 UIColor=White
 OptionsMenuTextColor=200,110,255
@@ -573,7 +567,12 @@ ZSPIREUP=SCZSPI,SCZGSP
 $(($BldgIni.Keys | ForEach-Object -Begin { $n = 1 } -Process { 'ZRB{0:D2}={1}' -f $n, $_; $n++ }) -join "`n")
 ZRB30=SCZLRB
 ZRB31=SCZLRB2
-$(if ($infInBlock) { "`n[InfantryTypes]`n" + ($it -join "`n") })
+
+[InfantryTypes]
+$($it -join "`n")
+
+[VehicleTypes]
+$($vt -join "`n")
 
 ; ---------------------------------------------------------------- buildings (created only by a Drone's deploy)
 
@@ -1062,7 +1061,7 @@ InfDeath=1
 AnimList=SCZTENT
 ProneDamage=100%
 "@) $nl
-"faction: Terran Faction.ini (block, [Sides], [General], [VehicleTypes], [InfantryTypes]$(if ($infInBlock) { ' in the block' } else { ' (existing section)' }))"
+"faction: map code layer $(Split-Path $fac -Leaf) (block with [Sides], [VehicleTypes], [InfantryTypes]) + [General] of $(Split-Path $facBase -Leaf)"
 # Vinifera keeps 199 characters of Description= (TechnoTypeClassExtension::Description[200])
 foreach ($ln in ([IO.File]::ReadAllText($fac, $latin) -split "`n")) { if ($ln -match '^Description=(.*)$' -and $ln.Contains('Zerg') -and $Matches[1].TrimEnd("`r").Length -gt 199) { Write-Warning "Description too long ($($Matches[1].TrimEnd("`r").Length)): $($ln.Substring(0, 60))" } }
 

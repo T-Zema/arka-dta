@@ -13,7 +13,8 @@
 # New SHPs under new names (SCSCVW, SCZWORKW, SCPPROBEW in MIX/ECACHE78.MIX), used through Rules Image=, so the generators of
 # the faction sessions (build-scunits/-sczergbase/-scprotoss) and their MIX files stay untouched.
 #   .\build-scworkers.ps1            -> ECACHE78.MIX + preview PNGs in -PreviewDir
-#   .\build-scworkers.ps1 -Install   -> + blocks "; >>> SC workers" in Art.ini, StarCraft.ini, Terran Faction.ini and the DLL patch
+#   .\build-scworkers.ps1 -Install   -> + blocks "; >>> SC workers" in Art.ini, StarCraft.ini, the faction map code layer
+#                                       "SC workers" (INI/Map Code/SC Factions) and the DLL patch
 # Wiki: Modding/wiki/mods/sc-workers.md
 param(
     [string]$StarCraft = "C:\Program Files (x86)\StarCraft",
@@ -166,7 +167,8 @@ FreeUnit=SCSCV
 Description=Processes Tiberium, Ore and Gems brought by SCVs.@@Comes with two SCVs when built.
 "@
 
-Set-Block "$game\INI\Map Code\Terran Faction.ini" @"
+. "$tools\MapCode.ps1"   # faction map code layer "SC workers" (INI/Map Code/SC Factions)
+Set-Block (Get-MapCodeLayer 'SC workers') @"
 ; SC workers (tools/build-scworkers.ps1, wiki mods/sc-workers): gathering animation (Image=, Art [SCZWORKW]/[SCPPROBEW]),
 ; workers drawn as themselves while unloading (UnloadingClass; default would be HORV).
 ; User 2026-10-26: Hatchery/Lair/Hive and Nexus are NOT drop-off points; Drones use the Extractor, Probes the Assimilator
@@ -179,6 +181,6 @@ UnloadingClass=SCZWORK
 Image=SCPPROBEW
 UnloadingClass=SCPPROBE
 "@
-"INI blocks written (Art.ini, StarCraft.ini, Terran Faction.ini)"
+"INI blocks written (Art.ini, StarCraft.ini, map code layer SC workers)"
 & "$tools\patch-vinifera-workers.ps1"
 & "$tools\patch-freescv.ps1"

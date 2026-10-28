@@ -79,7 +79,7 @@ Dla Zergów: `ActiveAnim` (albo `ActiveAnimTwo`, jeśli pierwsza jest zajęta) n
 
 1. **Harvestery** innych frakcji i AI mogą traktować creep jako złoże (wartość 0, marnują kursy). Vinifera łata `FootClass::Search_For_Tiberium_Weighted`, więc waga zależy od wartości; wyszukiwanie „bliskie” może nie patrzeć na wartość.
 2. **Budowanie na creepie:** nakładka Tiberium ma land `Tiberium`, a `[Tiberium] Buildable=no`, więc dron mógłby nie móc postawić budynku na creepie (odwrotnie niż w SC). Pomysł: nakładka creepu z `Land=Weeds` (`[Weeds] Buildable=yes`, DTA tak robi z torami `TRACKS13F`; klejnoty mają jawne `Land=Tiberium`, więc klucz jest per nakładka). Może przy okazji ukryć creep przed harvesterami, ale może też wyłączyć `TiberiumHeal`.
-3. **Dodanie typu z pliku mapy/opcji:** nowe `[Tiberiums]` i `[OverlayTypes]` dopisane w `Terran Faction.ini` zamiast Rules.ini; czy silnik je przyjmie, trzeba sprawdzić (dla jednostek działa, [[engine/adding-new-types]]).
+3. **Dodanie typu z pliku mapy/opcji:** nowe `[Tiberiums]` i `[OverlayTypes]` dopisane w kodzie mapy frakcji (wtedy `Terran Faction.ini`) zamiast Rules.ini; czy silnik je przyjmie, trzeba sprawdzić (dla jednostek działa, [[engine/adding-new-types]]).
 
 ## Odrzucone mechanizmy
 
@@ -89,7 +89,7 @@ Dla Zergów: `ActiveAnim` (albo `ActiveAnimTwo`, jeśli pierwsza jest zajęta) n
 
 ### Decyzje użytkownika (2026-10-26)
 
-- **Odporność na żyły dla wszystkich** (`ImmuneToVeins=yes` na wszystkich jednostkach SC; klasyczne DTA już ją mają). Creep nikomu nie szkodzi. Najlepiej osobnym blokiem na końcu `StarCraft.ini` i `Terran Faction.ini`, który przetrwa generatory.
+- **Odporność na żyły dla wszystkich** (`ImmuneToVeins=yes` na wszystkich jednostkach SC; klasyczne DTA już ją mają). Creep nikomu nie szkodzi. Najlepiej osobnym blokiem na końcu `StarCraft.ini` i `Terran Faction.ini`, który przetrwa generatory. (2026-10-28: w kodzie mapy to dziś osobna warstwa `INI/Map Code/SC Factions/080 Zerg creep.ini`, [[engine/map-code-layers]].)
 - Źródła creepu: **Creep Tumor, Hatchery, Lair, Hive, Creep Colony, Sunken Colony, Spore Colony** (jak w SC: kolonie z Creep Colony dalej szerzą creep). Inne budynki nie.
 
 ### Projekt źródeł

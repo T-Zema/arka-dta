@@ -1,6 +1,6 @@
 # Zerg HEROES and SPECIAL BUILDINGS for the Zerg faction (house Nod1), user 2026-10-25: "dokoncz pozostale konwersje".
 #   .\build-sczergheroes.ps1           -> MIX/ECACHE82.MIX (SHP, buildups, cameos, AUD) + previews in -PreviewDir
-#   .\build-sczergheroes.ps1 -Install  -> also the INI side: block "Zerg heroes" at the end of INI/Map Code/Terran Faction.ini,
+#   .\build-sczergheroes.ps1 -Install  -> also the INI side: block "Zerg heroes" in the map code layer of that name (INI/Map Code/SC Factions),
 #                                         INI/Art.ini, INI/Sound.ini ([SoundList] 1700+), INI/Rules.ini (superweapon of the Overmind)
 # Buildings (Drone + DeploysInto, SC cocoon, like build-sczergbase.ps1): Overmind (no shell, SC unit 148), Overmind with shell
 # (SC 147, superweapon "Overmind's Wrath"), Cerebrate (SC 151), Cerebrate Daggoth (SC 152, gold), Mature Chrysalis (SC 150).
@@ -278,10 +278,11 @@ function Sec-Text([string]$name, $keys) { $t = "[$name]`n"; foreach ($k in $keys
 function Regen($keys, [double]$pct) { $keys['SelfHealing'] = 'yes'; $keys['SelfHealingCap'] = '1.0'; $keys['SelfHealingStep'] = [string][Math]::Max(1, [int][Math]::Round((Num $keys['Strength']) * $pct)) }
 function Clip([string]$s) { if ($s.Length -gt 199) { return $s.Substring(0, 199) } else { return $s } }
 
-$facPath = "$game\INI\Map Code\Terran Faction.ini"; $artPath = "$game\INI\Art.ini"; $sndPath = "$game\INI\Sound.ini"; $rulPath = "$game\INI\Rules.ini"
+. "$tools\MapCode.ps1"   # our layer "Zerg heroes" of the faction map code; $facBase = the other layers as one text
+$facPath = Get-MapCodeLayer 'Zerg heroes'; $artPath = "$game\INI\Art.ini"; $sndPath = "$game\INI\Sound.ini"; $rulPath = "$game\INI\Rules.ini"
 foreach ($p in $facPath, $artPath, $sndPath, $rulPath) { if (-not (Test-Path "$p.bak")) { Copy-Item $p "$p.bak" } }
 $facOld = [IO.File]::ReadAllText($facPath, $latin); $nl = if ($facOld.Contains("`r`n")) { "`r`n" } else { "`n" }
-$facBase = Strip-Block $facOld
+$facBase = Read-MapCodeText -Exclude $facPath
 $fac = Read-Ini ($facBase -split "`r?`n")
 if (-not $fac.ContainsKey('SCZLNG')) { throw 'Zerg faction block not found: run build-sczergbase.ps1 -Install first' }
 
@@ -401,8 +402,8 @@ $txt += Sec-Text 'SCZUOProj' ([ordered]@{ Image = 'SCZUOBOL'; AA = 'no'; AG = 'y
 $txt += Sec-Text 'SCZUOWH' (WH 'SCZFPlagueWH' ([ordered]@{ CellSpread = 2; AnimList = 'SCZUOHIT' }))
 $txt += Sec-Text 'SCZHKWH' (WH 'SCZFNormalWH' ([ordered]@{ CellSpread = 1; PercentAtMax = 0.5; AffectsAllies = 'no'; AnimList = 'SCZHKPSI' }))
 $block = ($begin + $nl + ($txt.TrimEnd() -replace "`r?`n", $nl) + $nl + $end + $nl)
-[IO.File]::WriteAllText($facPath, ($facBase.TrimEnd() -replace "`r?`n", $nl) + $nl + $nl + $block, $latin)
-"faction: Terran Faction.ini block ($($Bldgs.Count) buildings, $($DroneFor.Count) drones, $($InfHeroes.Count + $FlyHeroes.Count) heroes)"
+Set-MapCodeBlock $facPath $block
+"faction: map code layer $(Split-Path $facPath -Leaf) ($($Bldgs.Count) buildings, $($DroneFor.Count) drones, $($InfHeroes.Count + $FlyHeroes.Count) heroes)"
 
 # ---- Art.ini
 $art = Read-Ini ([IO.File]::ReadAllLines($artPath, $latin))

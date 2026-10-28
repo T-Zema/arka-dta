@@ -4,7 +4,7 @@
 # The Zerg have no construction yard, so the Zerg tech buildings (Evolution Chamber, Hydralisk Den, Spire, Greater Spire,
 # Queen's Nest, Ultralisk Cavern, Defiler Mound) get Factory=BuildingType + [AI] BuildConst: any of them opens the
 # Structures tab, which only ever lists these research items (every Zerg building is TechLevel=-1, made by a Drone).
-# Writes: block "Zerg research" at the end of INI/Map Code/Terran Faction.ini and INI/Art.ini (regenerated on every run;
+# Writes: block "Zerg research" in the map code layer of that name (INI/Map Code/SC Factions) and INI/Art.ini (regenerated on every run;
 # the client merges repeated sections, later keys win, so the block can add keys to the Zerg buildings without touching
 # the "Zerg faction" block of build-sczergbase.ps1), StarCraft.ini [AI] BuildConst (+ labs), MIX/ECACHE84.MIX.
 # Run it again after build-sczergbase.ps1 -Install changes the base units (the copies would go stale).
@@ -15,7 +15,8 @@ $game  = (Resolve-Path "$tools\..\..").Path
 Add-Type -Path "$tools\Casc.cs","$tools\ModTools.cs","$tools\ScBuild.cs" -ReferencedAssemblies System.Drawing
 New-Item -ItemType Directory -Force $PreviewDir | Out-Null
 $latin1  = [Text.Encoding]::GetEncoding(28591)
-$facPath = "$game\INI\Map Code\Terran Faction.ini"
+. "$tools\MapCode.ps1"   # our layer "Zerg research" of the faction map code
+$facPath = Get-MapCodeLayer 'Zerg research'
 $optPath = "$game\INI\Game Options\StarCraft.ini"
 $artPath = "$game\INI\Art.ini"
 foreach ($p in $facPath, $optPath, $artPath) { if (-not (Test-Path "$p.bak")) { Copy-Item $p "$p.bak" } }
@@ -99,11 +100,11 @@ if ($a0 -ge 0) {
     if ($sec -and $foreign.ContainsKey($sec) -and $l -match '^\S+=' -and $l -notmatch '^ZU[BIV]\d+=') { $foreign[$sec] += $l }
   }
 }
-$facBase = Strip-Block $facOld $begin $end
+$facBase = Read-MapCodeText -Exclude $facPath   # every other layer, in merge order
 $fac = Read-Ini ($facBase -split "`r?`n")
 $artText = Strip-Block ([IO.File]::ReadAllText($artPath, $latin1)) $begin $end
 $art = Read-Ini ($artText -split "`r?`n")
-$bldgName = @{}; foreach ($p in @($parents.Keys) + $labs) { $bldgName[$p] = (Resolve-Sec $fac $p)['Name']; if (-not $bldgName[$p]) { throw "Zerg building [$p] not found in Terran Faction.ini (run build-sczergbase.ps1 -Install first)" } }
+$bldgName = @{}; foreach ($p in @($parents.Keys) + $labs) { $bldgName[$p] = (Resolve-Sec $fac $p)['Name']; if (-not $bldgName[$p]) { throw "Zerg building [$p] not found in the faction map code (run build-sczergbase.ps1 -Install first)" } }
 
 # ------------------------------------------------------------------ rules block
 $sb = New-Object Text.StringBuilder
@@ -191,7 +192,7 @@ foreach ($v in $variants) {
     $wName = $s[$slot]; $newName = "${wName}U"
     if (-not $newWeapons.Contains($newName)) {
       $w = Resolve-Sec $fac $wName
-      if ($w.Count -eq 0) { Write-Warning "weapon $wName not in Terran Faction.ini, kept as is"; continue }
+      if ($w.Count -eq 0) { Write-Warning "weapon $wName not in the faction map code, kept as is"; continue }
       if ($w.Contains('Damage') -and $v.Dmg -ne 1.0) { $w['Damage'] = Fmt-Num ([math]::Round((Num $w['Damage']) * $v.Dmg)) }
       if ($v.RofX -and $w.Contains('ROF')) { $w['ROF'] = Fmt-Num ([math]::Max(1, [math]::Round((Num $w['ROF']) * $v.RofX))) }
       if ($v.RangeX -and $w.Contains('Range')) { $w['Range'] = Fmt-Num ((Num $w['Range']) * $v.RangeX) }
@@ -212,7 +213,7 @@ foreach ($wn in $newWeapons.Keys) {
 }
 Out $end
 $block = ($sb.ToString().TrimEnd() -replace "`r?`n", $nl) + $nl
-[IO.File]::WriteAllText($facPath, ($facBase.TrimEnd() -replace "`r?`n", $nl) + $nl + $nl + $block, $latin1)
+Set-MapCodeBlock $facPath $block
 
 # ---- StarCraft.ini (STARCRAFT checkbox) repeats [AI] BuildConst after the faction file: the labs must stay in it.
 # Inserted before ",SCPNEX" so build-scprotoss.ps1's regex (which appends SCPNEX at the end if missing) keeps matching.
@@ -265,9 +266,9 @@ foreach ($v in $variants) {
 [Mix]::Write("$game\MIX\ECACHE84.MIX", $files)
 
 # ------------------------------------------------------------------ report + checks + previews
-$merged = Read-Ini ([IO.File]::ReadAllLines($facPath, $latin1))
+$merged = Read-Ini ((Read-MapCodeText) -split "`r?`n")
 foreach ($v in $variants) { foreach ($q in ($merged[$v.Id]['Prerequisite'] -split ',')) { if (-not $merged.ContainsKey($q) -and -not $merged['PrerequisiteGroups'].Contains($q)) { Write-Warning "$($v.Id): prerequisite $q undefined" } } }
-foreach ($l in ([IO.File]::ReadAllLines($facPath, $latin1))) { if ($l -match '^Description=(.*)$' -and $matches[1].Length -gt 199) { Write-Warning "Description too long: $($l.Substring(0, 60))" } }
+foreach ($l in ((Read-MapCodeText) -split "`r?`n")) { if ($l -match '^Description=(.*)$' -and $matches[1].Length -gt 199) { Write-Warning "Description too long: $($l.Substring(0, 60))" } }
 "ECACHE84.MIX: $($files.Count) files, $([Math]::Round((Get-Item "$game\MIX\ECACHE84.MIX").Length / 1KB)) KB"
 "research: " + (($research | ForEach-Object { "$($_.Id)->$($_.Parent)" }) -join ', ')
 "variants: " + (($variants | ForEach-Object { $_.Id }) -join ', ')

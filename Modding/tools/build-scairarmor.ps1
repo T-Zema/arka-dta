@@ -15,15 +15,16 @@
 #     and only the Allied type gets the copy; a weapon used only by Allied types gets the new warhead in place.
 #   - the Dragoon weapons (SCPPhase, SCPPhaseU) get SCPDragWH, a copy of SCPPhaseWH (shared with the Arbiter) with
 #     Modifier/ForceFire/Retaliate/PassiveAcquire.sc_overlord off.
-# Writes the block "; >>> SC air armor" at the end of INI/Map Code/Terran Faction.ini and INI/Game Options/StarCraft.ini
-# (each with the SC types that file defines; later keys win). ARKA missions copy the SC types into the map and get the
+# Writes the block "; >>> SC air armor" into the faction map code layer "SC air armor" (INI/Map Code/SC Factions, see
+# MapCode.ps1) and at the end of INI/Game Options/StarCraft.ini (each with the SC types its side defines; later keys win). ARKA missions copy the SC types into the map and get the
 # rest from Add-ScAirArmor (tools/MissionKit.ps1, reads this block). Re-run after any SC generator that adds flyers or
 # changes their Armor=, then rebuild the ARKA missions. Wiki: engine/air-armor.
 # Usage: build-scairarmor.ps1 [-WhatIf]
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
 $game = (Resolve-Path "$PSScriptRoot\..\..").Path
-$faction = "$game\INI\Map Code\Terran Faction.ini"; $scopt = "$game\INI\Game Options\StarCraft.ini"; $rulesPath = "$game\INI\Rules.ini"
+. "$PSScriptRoot\MapCode.ps1"
+$faction = Get-MapCodeLayer 'SC air armor'; $scopt = "$game\INI\Game Options\StarCraft.ini"; $rulesPath = "$game\INI\Rules.ini"
 $latin = [Text.Encoding]::GetEncoding(28591)
 $begin = '; >>> SC air armor'; $end = '; <<< SC air armor'
 $flyLoco = '{4A582746-9839-11d1-B709-00A024DDAFD1}', '{92612C46-F71F-11d1-AC9F-006008055BB5}'   # Fly; Jumpjet (lifted Terran buildings)
@@ -43,8 +44,8 @@ function Set-Block([string]$path, [string]$body) {
     [IO.File]::WriteAllText($path, $t, $latin)
 }
 # section -> key -> value (repeated sections merged, later key wins, as the client does), ignoring this script's own block
-function Read-Sections([string]$path) {
-    $t = [IO.File]::ReadAllText($path, $latin); $a = $t.IndexOf($begin)
+function Read-Sections([string]$path, [string]$text) {
+    $t = if ($path) { [IO.File]::ReadAllText($path, $latin) } else { $text }; $a = $t.IndexOf($begin)
     if ($a -ge 0) { $b = $t.IndexOf("`n", $t.IndexOf($end, $a)) + 1; $t = $t.Substring(0, $a) + $t.Substring($b) }
     $d = @{}; $sec = $null
     foreach ($l in ($t -split "`r?`n")) {
@@ -55,8 +56,8 @@ function Read-Sections([string]$path) {
 }
 $rules = Read-Sections $rulesPath
 $sco = Read-Sections $scopt
-$fac = Read-Sections $faction
-# effective view: Rules, then StarCraft.ini, then the faction file ($Inherits resolved inside Rules, where DTA uses it)
+$fac = Read-Sections -text (Read-MapCodeText -Exclude $faction)
+# effective view: Rules, then StarCraft.ini, then the faction map code ($Inherits resolved inside Rules, where DTA uses it)
 function Resolve([string]$sec) {
     $chain = @(); $s = $sec
     while ($s -and $rules.ContainsKey($s) -and $chain.Count -lt 6) { $chain = , $s + $chain; $s = $rules[$s]['$Inherits'] }
@@ -191,4 +192,4 @@ if (Get-Process -Name game -ErrorAction SilentlyContinue) { throw "game.exe is r
 Backup $faction; Backup $scopt
 Set-Block $faction $facBody
 Set-Block $scopt $scoBody
-"written: $($flyers.Count) flyers, $($newWH.Count) Allied warheads, $($newWeap.Count) weapon copies, Dragoon warhead (block '$begin' in Terran Faction.ini and StarCraft.ini)"
+"written: $($flyers.Count) flyers, $($newWH.Count) Allied warheads, $($newWeap.Count) weapon copies, Dragoon warhead (block '$begin' in $(Split-Path $faction -Leaf) and StarCraft.ini)"

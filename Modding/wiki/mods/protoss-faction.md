@@ -102,7 +102,8 @@ pancerza `light`, bo głowice Terran i Zergów go nie wymieniają (dostałyby 10
 |---|---|---|
 | `MIX/ECACHE85.MIX` | 213 plików (~10,6 MB): 16 budynków (`<ID>`, `<ID>MK`, `<ID>IC`), 6 piechoty + cameo, 9 pojazdów + cameo, `SCPSTORM`, 134 AUD | — |
 | `Modding/tools/build-scprotoss.ps1`, `ScProtoss.cs` | budowa (`-Install` = też INI, lobby i pliki strony). `ScProtoss.Warp` = etap przywołania, `Stack` = Archon z trzech warstw, `OnCanvas` = klatki z innego GRP | — |
-| `INI/Map Code/Terran Faction.ini` | `ProtossSide=GDI2` w `[Sides]` (po `ZergSide`), `SCPDNEX` w `BaseUnit`, `SCPPROBE` w `HarvesterUnit`, `PRV01–09`, `GDI2` zdjęty z `[TDPROC]`/`[TDPROC_AI]`/`[DEPCARR]`, blok „Protoss faction” na końcu (strona, dom, `[AI] BuildConst`, `[ASTRP]`/`[AIA10]` bez `GDI2`, `PRB01–16`, `PRI01–06`, `PRA01`, typy, bronie) | `.bak` (sprzed Zergów) |
+| `INI/Map Code/SC Factions/020 Protoss faction.ini` ([[engine/map-code-layers]]) | blok „Protoss faction”: `[Sides] ProtossSide=GDI2` (warstwa nad Zergami, więc po `ZergSide`), `PRV01–09` w `[VehicleTypes]`, strona, dom, `[AI] BuildConst`, `[ASTRP]`/`[AIA10]` bez `GDI2`, `PRB01–16`, `PRI01–06`, `PRA01`, typy, bronie | `.bak` warstwy |
+| `INI/Map Code/SC Factions/000 Terran faction.ini` | `SCPDNEX` we wspólnym `BaseUnit`, `SCPPROBE` w `HarvesterUnit`, `GDI2` zdjęty z `[TDPROC]`/`[TDPROC_AI]`/`[DEPCARR]` | `Terran Faction.ini.bak` (stan sprzed Zergów i Protossów) |
 | `INI/Art.ini` | blok „Protoss faction” (16 budynków, 2 Probe'y, 6 piechoty z sekwencjami, 7 pojazdów, `SCPSTORM`) | `.bak` |
 | `INI/Sound.ini` | `[SoundList] 1400–1533` + blok (priorytety śmierci, burzy) | `.bak` |
 | `INI/Game Options/StarCraft.ini` | `[AI] BuildConst=…,SCCC,SCPNEX` (plik doklejany po pliku frakcji powtarza tę listę) | `.bak` |
@@ -111,7 +112,7 @@ pancerza `light`, bo głowice Terran i Zergów go nie wymieniają (dostałyby 10
 | `MIX/SideC09.mix`, `sidenc09.mix`, `Speech09.mix`, `Resources/protossicon.png`, `l600s8{1,2}.pcx`, `l480s8{1,2}.pcx` | kopie plików **GDI** (sidebar, EVA, ikona, ekrany ładowania) | — |
 | `Modding/tools/build-sczergbase.ps1` | przy ponownym `-Install` zachowuje `ProtossSide` po `ZergSide` i `SCPPROBE` w `HarvesterUnit` | — |
 
-**Uwaga (badania Zergów, [[mods/zerg-research]]):** blok „Zerg research” na końcu pliku frakcji powtarza `[AI] BuildConst` (lista z tego bloku
+**Uwaga (badania Zergów, [[mods/zerg-research]]):** blok „Zerg research” (warstwa `040 Zerg research.ini`, nad Protossami) powtarza `[AI] BuildConst` (lista z tego bloku
 + laboratoria Zergów) i jako późniejszy wygrywa. Po zmianie `BuildConst` w bloku Protossów uruchom `build-sczergresearch.ps1`. W `StarCraft.ini`
 laboratoria stoją przed `SCPNEX`, więc regex z `build-scprotoss.ps1` dalej działa.
 
@@ -309,7 +310,7 @@ Skrzynka „Unit” zawieszała grę, bo dom `GDI2` nie miał żadnego pojazdu z
 ## Zealot reaguje dalej (2026-10-28, prośba użytkownika; niezweryfikowane w grze)
 
 - „Zealoty są trochę ślepe o 2 kratki”: `SCPZEAL` i `SCPZEAL2` mają `GuardRange=3.75` (zasięg ostrzy `SCPPsiBlades` 1.75 + 2; sam zasięg ataku bez zmian). Bez `GuardRange` jednostka w Guard reaguje tylko w zasięgu broni.
-- Wpis jest w bloku `; >>> SC balance (user)` w `Terran Faction.ini` (generatory go nie nadpisują); działa też w misjach ARKA z typami skopiowanymi do mapy (ARKA 5).
+- Wpis jest w bloku `; >>> SC balance (user)` w warstwie `INI/Map Code/SC Factions/900 Hand edits.ini` (generatory go nie nadpisują); działa też w misjach ARKA z typami skopiowanymi do mapy (ARKA 5).
 
 ## Znane ograniczenia
 
@@ -326,8 +327,9 @@ Skrzynka „Unit” zawieszała grę, bo dom `GDI2` nie miał żadnego pojazdu z
 ## Odinstalowanie
 
 ```powershell
-# Terran Faction.ini: usunąć blok "; >>> Protoss faction" ... "; <<< Protoss faction", linie ProtossSide=, PRV01-09,
-#   ",SCPDNEX" z BaseUnit, ",SCPPROBE" z HarvesterUnit; przywrócić GDI2 w Owner= [TDPROC], [TDPROC_AI], [DEPCARR]
+# Map Code: usunąć warstwę "SC Factions\020 Protoss faction.ini" (najpierw "070 Protoss research.ini" tą samą metodą),
+#   w warstwie nad nią ("030 Zerg heroes.ini") ustawić BasedOn=010 Zerg faction.ini;
+#   w "000 Terran faction.ini": ",SCPDNEX" z BaseUnit, ",SCPPROBE" z HarvesterUnit; przywrócić GDI2 w Owner= [TDPROC], [TDPROC_AI], [DEPCARR]
 # Art.ini, Sound.ini: bloki "Protoss faction" i [SoundList] 1400-1533; StarCraft.ini: ",SCPNEX" z BuildConst
 # GameOptions.ini: Sides= bez ",Protoss"; MPMaps.ini: "4,5,6,7,8" -> "4,5,6,7"
 Remove-Item MIX\ECACHE85.MIX, MIX\SideC09.mix, MIX\sidenc09.mix, MIX\Speech09.mix, Resources\protossicon.png, Resources\l600s81.pcx, Resources\l600s82.pcx, Resources\l480s81.pcx, Resources\l480s82.pcx

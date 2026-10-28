@@ -15,9 +15,9 @@ Skrzynka z jednostką losuje pojazd, który gracz może posiadać. Dom bez takie
 - Stan na 2026-10-25: 16 pojazdów DTA ma `CrateGoodie=yes`. GDI 13, Nod 11, Allies 12, Soviet 12, `GDI1` (Terran, klon Aliantów) 12,
   **`Nod1` (Zerg) 0, `GDI2` (Protoss) 0**. Hydralisk Zergów wziął skrzynkę i gra się zawiesiła (test użytkownika).
 
-## Poprawka (blok „Crate goodies (SC factions)” na końcu `INI/Map Code/Terran Faction.ini`)
+## Poprawka (blok „Crate goodies (SC factions)” w warstwie `INI/Map Code/SC Factions/900 Hand edits.ini`)
 
 Powtórzone sekcje (klient je scala, późniejszy klucz wygrywa, [[engine/ini-layering]]) z `CrateGoodie=yes`:
 Zerg `SCZMUT` Mutalisk, `SCZQUN` Queen, `SCZGRD` Guardian, a Protoss `SCPREAV` Reaver, `SCPSCOU` Scout, `SCPCORS` Corsair.
-Blok jest osobny, więc generatory frakcji (`build-sczergbase.ps1`, `build-scprotoss.ps1`) i badań go nie nadpisują.
+Blok jest osobny, w górnej, ręcznej warstwie kodu mapy ([[engine/map-code-layers]]), więc generatory frakcji (`build-sczergbase.ps1`, `build-scprotoss.ps1`) i badań go nie nadpisują.
 **Nowa frakcja lub dom: dopisz tu co najmniej jeden pojazd z jej `Owner=`.**

@@ -154,12 +154,13 @@ function Add-MoneyCrate([int]$x, [int]$y, [int]$credits, [string]$text, $player 
 # SC types are copied: Add-ScAirArmor
 function Add-ScAirArmor {
     $enc = [Text.Encoding]::GetEncoding(28591); $b = '; >>> SC air armor'; $e = '; <<< SC air armor'
-    $t = [IO.File]::ReadAllText("$game\INI\Map Code\Terran Faction.ini", $enc)
-    $a = $t.IndexOf($b); if ($a -lt 0) { throw "Add-ScAirArmor: no '$b' block in Terran Faction.ini (run build-scairarmor.ps1)" }
+    . "$tools\MapCode.ps1"   # the block is in the faction map code layer "SC air armor"
+    $t = [IO.File]::ReadAllText((Get-MapCodeLayer 'SC air armor'), $enc)
+    $a = $t.IndexOf($b); if ($a -lt 0) { throw "Add-ScAirArmor: no '$b' block in the map code layer 'SC air armor' (run build-scairarmor.ps1)" }
     $z = $t.IndexOf($e, $a); $body = $t.Substring($a, $z - $a)
     $scOwn = @{}   # sections the SC files define outside the block (SC types and weapons)
-    foreach ($f in "$game\INI\Game Options\StarCraft.ini", "$game\INI\Map Code\Terran Faction.ini") {
-        $s = [IO.File]::ReadAllText($f, $enc); $i = $s.IndexOf($b); if ($i -ge 0) { $s = $s.Substring(0, $i) + $s.Substring($s.IndexOf("`n", $s.IndexOf($e, $i)) + 1) }
+    foreach ($s in [IO.File]::ReadAllText("$game\INI\Game Options\StarCraft.ini", $enc), (Read-MapCodeText)) {
+        $i = $s.IndexOf($b); if ($i -ge 0) { $s = $s.Substring(0, $i) + $s.Substring($s.IndexOf("`n", $s.IndexOf($e, $i)) + 1) }
         foreach ($m in [regex]::Matches($s, '(?m)^\[([^\]]+)\]')) { $scOwn[$m.Groups[1].Value] = $true }
     }
     $sec = $null; $skip = $false; $n = 0

@@ -2,7 +2,7 @@
 # build-sczergresearch.ps1 (Zerg): research = building upgrades (PowersUpBuilding) bought in the Structures tab (the Nexus
 # is the Construction Yard) and placed on the Protoss building that does the research in SC + one "upgraded" copy of each
 # Protoss unit that requires the matching research (max 2 icons per unit; Vinifera Has_Prerequisite scans Upgrades[]).
-# Writes: block "Protoss research" at the end of INI/Map Code/Terran Faction.ini and INI/Art.ini (regenerated on every run;
+# Writes: block "Protoss research" in the map code layer of that name (INI/Map Code/SC Factions) and INI/Art.ini (regenerated on every run;
 # the client merges repeated sections, later keys win, so the block adds Upgrades=N to the Protoss buildings without touching
 # the "Protoss faction" block of build-scprotoss.ps1), MIX/ECACHE83.MIX (research icons, empty research SHPs, unit SHP copies,
 # gold cameos). Run it AFTER build-scprotoss.ps1 -Install (it copies the installed units; the copies go stale otherwise).
@@ -14,7 +14,8 @@ $game  = (Resolve-Path "$tools\..\..").Path
 Add-Type -Path "$tools\Casc.cs","$tools\ModTools.cs","$tools\ScBuild.cs" -ReferencedAssemblies System.Drawing
 New-Item -ItemType Directory -Force $PreviewDir | Out-Null
 $latin1  = [Text.Encoding]::GetEncoding(28591)
-$facPath = "$game\INI\Map Code\Terran Faction.ini"
+. "$tools\MapCode.ps1"   # our layer "Protoss research" of the faction map code
+$facPath = Get-MapCodeLayer 'Protoss research'
 $artPath = "$game\INI\Art.ini"
 foreach ($p in $facPath, $artPath) { if (-not (Test-Path "$p.bak")) { Copy-Item $p "$p.bak" } }
 
@@ -90,7 +91,7 @@ function Strip-Block([string]$text, [string]$b, [string]$e) {
 $begin = '; >>> Protoss research'; $end = '; <<< Protoss research'
 $facOld = [IO.File]::ReadAllText($facPath, $latin1)
 $nl = if ($facOld.Contains("`r`n")) { "`r`n" } else { "`n" }
-$facBase = Strip-Block $facOld $begin $end
+$facBase = Read-MapCodeText -Exclude $facPath   # every other layer, in merge order
 $fac = Read-Ini ($facBase -split "`r?`n")
 $artText = Strip-Block ([IO.File]::ReadAllText($artPath, $latin1)) $begin $end
 $art = Read-Ini ($artText -split "`r?`n")
@@ -209,7 +210,7 @@ foreach ($wn in $newWeapons.Keys) {
 }
 Out $end
 $block = ($sb.ToString().TrimEnd() -replace "`r?`n", $nl) + $nl
-[IO.File]::WriteAllText($facPath, ($facBase.TrimEnd() -replace "`r?`n", $nl) + $nl + $nl + $block, $latin1)
+Set-MapCodeBlock $facPath $block
 
 # ------------------------------------------------------------------ assets + Art block
 $casc  = New-Object Casc $StarCraft
@@ -251,9 +252,9 @@ foreach ($v in $variants) {
 [Mix]::Write("$game\MIX\ECACHE83.MIX", $files)
 
 # ------------------------------------------------------------------ report + checks + previews
-$merged = Read-Ini ([IO.File]::ReadAllLines($facPath, $latin1))
+$merged = Read-Ini ((Read-MapCodeText) -split "`r?`n")
 foreach ($v in $variants) { foreach ($q in ($merged[$v.Id]['Prerequisite'] -split ',')) { if (-not $merged.ContainsKey($q)) { Write-Warning "$($v.Id): prerequisite $q undefined" } } }
-foreach ($l in ([IO.File]::ReadAllLines($facPath, $latin1))) { if ($l -match '^Description=(.*)$' -and $matches[1].Length -gt 199) { Write-Warning "Description too long: $($l.Substring(0, 60))" } }
+foreach ($l in ((Read-MapCodeText) -split "`r?`n")) { if ($l -match '^Description=(.*)$' -and $matches[1].Length -gt 199) { Write-Warning "Description too long: $($l.Substring(0, 60))" } }
 "ECACHE83.MIX: $($files.Count) files, $([Math]::Round((Get-Item "$game\MIX\ECACHE83.MIX").Length / 1KB)) KB"
 "research: " + (($research | ForEach-Object { "$($_.Id)->$($_.Parent)" }) -join ', ')
 "variants: " + (($variants | ForEach-Object { $_.Id }) -join ', ')

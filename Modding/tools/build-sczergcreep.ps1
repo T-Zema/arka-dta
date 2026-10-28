@@ -13,7 +13,8 @@
 #   - Overlays VEINS and VEINHOLEDUMMY get Insignificant=yes: DTA's game.exe lets buildings be placed on insignificant overlays
 #     (cave 0x86C0F0 in CellClass::Is_Clear_To_Build), [Weeds] is already Buildable=yes.
 # Needs the game.exe patch tools/patch-veins.ps1 (in patch-game.ps1): no Veinhole Monster can appear during the game without it.
-# Writes: block "; >>> Zerg creep" at the end of INI/Map Code/Terran Faction.ini and INI/Art.ini, and ActiveAnim lines
+# Writes: block "; >>> Zerg creep" in the faction map code layer "Zerg creep" (INI/Map Code/SC Factions, MapCode.ps1) and
+# at the end of INI/Art.ini, and ActiveAnim lines
 # (comment "Zerg creep") inside the Zerg building art sections of the "Zerg faction" block.
 # Re-run after build-sczergbase.ps1 -Install (it rewrites those art sections) or after any generator adds unit types.
 # Wiki: Modding/wiki/mods/zerg-creep.md, engine/veins.
@@ -21,7 +22,8 @@ $ErrorActionPreference = 'Stop'
 $game = (Resolve-Path "$PSScriptRoot\..\..").Path
 $latin = [Text.Encoding]::GetEncoding(28591)
 $begin = '; >>> Zerg creep'; $end = '; <<< Zerg creep'
-$fac = "$game\INI\Map Code\Terran Faction.ini"; $art = "$game\INI\Art.ini"
+. "$PSScriptRoot\MapCode.ps1"
+$fac = Get-MapCodeLayer 'Zerg creep'; $art = "$game\INI\Art.ini"
 function Backup([string]$path) { if (-not (Test-Path "$path.bak")) { Copy-Item $path "$path.bak" } }
 function Set-Block([string]$path, [string]$body) {
     $t = [IO.File]::ReadAllText($path, $latin)
@@ -45,8 +47,8 @@ function Set-SectionEntries([string]$path, [string]$section, [string[]]$entries,
     [IO.File]::WriteAllText($path, ($lines -join "`n"), $latin)
 }
 # section -> key -> value (repeated sections merged, later key wins, like the client), without this script's own block
-function Read-Ini([string]$path, $d) {
-    $t = [IO.File]::ReadAllText($path, $latin); $a = $t.IndexOf($begin)
+function Read-Ini([string]$path, $d, [string]$text) {
+    $t = if ($path) { [IO.File]::ReadAllText($path, $latin) } else { $text }; $a = $t.IndexOf($begin)
     if ($a -ge 0) { $z = $t.IndexOf("`n", $t.IndexOf($end, $a)) + 1; $t = $t.Substring(0, $a) + $t.Substring($z) }
     $sec = $null
     foreach ($l in ($t -split "`r?`n")) {
@@ -57,7 +59,8 @@ function Read-Ini([string]$path, $d) {
 
 # ---- every unit type the skirmish rules can know, in load order (Rules.ini, then the files the client appends)
 $all = [ordered]@{}
-foreach ($p in "$game\INI\Rules.ini", "$game\INI\Enhance.ini", "$game\INI\Game Options\Super Mod.ini", "$game\INI\Game Options\StarCraft.ini", $fac) { Read-Ini $p $all }
+foreach ($p in "$game\INI\Rules.ini", "$game\INI\Enhance.ini", "$game\INI\Game Options\Super Mod.ini", "$game\INI\Game Options\StarCraft.ini") { Read-Ini $p $all }
+Read-Ini $null $all (Read-MapCodeText -Exclude $fac)
 $types = New-Object System.Collections.Generic.List[string]
 # BuildingTypes too: the vein attack (CellClass at 0x45C5C0, AnimClass at 0x4166C0) hits every techno in the cell whose type lacks
 # ImmuneToVeins, buildings included (in-game test 5, 2026-10-27: the creep destroyed buildings standing on it).
@@ -154,7 +157,7 @@ $droneIni
 foreach ($t in $needImmune) { $body += "`r`n[$t]`r`nImmuneToVeins=yes`r`n" }
 
 $artBody = @"
-; Zerg creep (Modding/tools/build-sczergcreep.ps1, 2026-10-27), rules in INI/Map Code/Terran Faction.ini block "Zerg creep".
+; Zerg creep (Modding/tools/build-sczergcreep.ps1, 2026-10-27), rules in the map code layer INI/Map Code/SC Factions/* Zerg creep.ini.
 ; Creep Tumor building: picture of the Creep Colony; it never shows, Unlimbo turns it into the overlay at once.
 [SCZTUM]
 Image=SCZCRP

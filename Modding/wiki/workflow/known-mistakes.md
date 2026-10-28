@@ -40,7 +40,7 @@ Każdy nowy błąd, który kosztował rundę testu, dopisuj tutaj.
 | Zepsute polskie znaki w Rules.ini | zapis przez UTF-8, plik jest Windows-1252 | Latin-1 bajt 1:1. [[workflow/tooling]] |
 | Trigger ma złe flagi trudności i brak tagu | przecinek w nazwie triggera/tagu przesuwa pola | nazwy bez przecinków; kontrola „8 pól” w generatorze. [[engine/triggers-and-dialogue]] |
 | Szpieg wroga „niszczy” budynek-cel | `48 Destroyed by anything` liczy infiltrację | porażka na `29` (bez infiltracji). [[engine/triggers-and-dialogue]] |
-| Jednostki SC w misji kampanii nie istnieją (złapane przed testem) | misja nie ładuje `Game Options/StarCraft.ini` ani `Map Code/Terran Faction.ini` | skopiować typy z domknięciem zależności do mapy. [[missions/arka-01-marsara]] |
+| Jednostki SC w misji kampanii nie istnieją (złapane przed testem) | misja nie ładuje `Game Options/StarCraft.ini` ani kodu mapy frakcji (`Map Code/SC Factions/`) | skopiować typy z domknięciem zależności do mapy. [[missions/arka-01-marsara]] |
 | Marines w `[Infantry]` mapy (złapane przed testem) | Marines/SCV to w modzie pojazdy SHP (stimpack = `TransformsInto`) | sekcja obiektu wg listy typu; kontrola w generatorze |
 | „Mission failed” po zabiciu ostatniego Hydraliska oblężenia (test 2026-10-27) | `36 All change house` przeniósł Raynora do gracza; zmiana domu = przejęcie = „zniszczony” na jego tagu → trigger porażki | przed zmianą domu wyłączyć trigger porażki, włączyć po kilku s. [[engine/triggers-and-dialogue]] |
 | Vulture Raynora bez grafiki (test 2026-10-27) | kopia `SCVULT` pod nazwą `ARKRAYN` bez `Image=`; sekcja grafiki szukana po nazwie obrazu, `[ARKRAYN]` w Art.ini nie ma | każda kopia typu pod nową nazwą: `Image=<oryginał>`; generator sprawdza Art.ini |

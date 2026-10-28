@@ -106,11 +106,11 @@ powodzeniu ustawia flagę i stan 1), 1 HARVESTING `0x654CE7` (zbiera; gdy przest
 | `INI/Art.ini` | blok `; >>> SC workers` (`[SCSCVW]`, `[SCZWORKW]`, `[SCPPROBEW]`) | `.bak` (stary) |
 | `INI/Game Options/StarCraft.ini` | blok `SC workers`: `[SCSCV]` `Image`/`UnloadingClass`, `[SCREFI]` `FreeUnit=SCSCV` + opis | `.bak` (stary) |
 | `game.exe` | łatka `patch-freescv.ps1` (2 SCV z Refinery) | `game.exe.bak` |
-| `INI/Map Code/Terran Faction.ini` | blok `SC workers`: `[SCZWORK]`, `[SCPPROBE]` (`Image`, `UnloadingClass`) | `.bak` (stary) |
+| `INI/Map Code/SC Factions/060 SC workers.ini` | blok `SC workers`: `[SCZWORK]`, `[SCPPROBE]` (`Image`, `UnloadingClass`) | `.bak` warstwy |
 | `Vinifera.dll` | łatka A/B/C | `Vinifera.dll.bak` |
 
-Generator: `tools/build-scworkers.ps1 [-Install]` (podglądy PNG w `-PreviewDir`). Bloki są na końcu plików, a klient scala
-powtórzone sekcje, więc wygrywają z blokami generatorów frakcji ([[engine/ini-layering]]). Gdy generator frakcji zmieni
+Generator: `tools/build-scworkers.ps1 [-Install]` (podglądy PNG w `-PreviewDir`). Bloki są na końcu plików (w kodzie mapy: własna warstwa nad warstwami
+frakcji, [[engine/map-code-layers]]), a klient scala powtórzone sekcje, więc wygrywają z blokami generatorów frakcji ([[engine/ini-layering]]). Gdy generator frakcji zmieni
 `Dock=` robotnika albo harvesterów DTA, popraw też ten blok.
 
 ## Do sprawdzenia w grze

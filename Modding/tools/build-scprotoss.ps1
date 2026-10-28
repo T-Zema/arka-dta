@@ -4,7 +4,8 @@
 # Build range the StarCraft way: only the Nexus and Pylons count as "base" for placement (BaseNormal=yes, the rest
 # BaseNormal=no) and every Protoss building may be placed far from them (Adjacent=), so new buildings go near Pylons.
 #   .\build-scprotoss.ps1           -> MIX/ECACHE85.MIX (SHP, cameos, AUD) + previews in -PreviewDir
-#   .\build-scprotoss.ps1 -Install  -> also the INI side: faction (INI/Map Code/Terran Faction.ini, block "Protoss faction"),
+#   .\build-scprotoss.ps1 -Install  -> also the INI side: faction (map code layer INI/Map Code/SC Factions/* Protoss faction.ini,
+#                                      block "Protoss faction", + [General] BaseUnit/HarvesterUnit of the bottom layer),
 #                                      Art.ini / Sound.ini blocks, StarCraft.ini [AI] BuildConst +SCPNEX, lobby
 #                                      (Resources/GameOptions.ini, INI/MPMaps.ini) and side files (SideC09/sidenc09/Speech09,
 #                                      protossicon.png, loading screens) copied from GDI.
@@ -387,18 +388,20 @@ function Remove-Owner([string]$path, [string]$section, [string]$house) {
 function Backup([string]$path) { if (-not (Test-Path "$path.bak")) { Copy-Item $path "$path.bak" } }
 function Nl([string]$path) { if ([IO.File]::ReadAllText($path, $latin).Contains("`r`n")) { "`r`n" } else { "`n" } }
 
-# ---- faction file (appended to skirmish maps by MPMaps.ini MapCodeININame; the client takes one file, so Protoss shares it)
-$fac = "$game\INI\Map Code\Terran Faction.ini"; Backup $fac; $nl = Nl $fac
-# [Sides] order = side index: TerranSide 6, ZergSide 7, ProtossSide 8 (both lines rewritten together to keep the order)
-Set-SectionEntries $fac 'Sides' @('ZergSide=Nod1	; Zerg faction: side index 7 (block at the end)', 'ProtossSide=GDI2	; Protoss faction: side index 8 (block at the end)') '^(ZergSide|ProtossSide)=' $nl
-$t = [IO.File]::ReadAllText($fac, $latin)
+# ---- faction map code (appended to skirmish maps by MPMaps.ini MapCodeININame): our layer "Protoss faction" of the BasedOn
+# chain (MapCode.ps1). The bottom layer "Terran faction" keeps the keys the factions share ([General] BaseUnit/HarvesterUnit).
+. "$tools\MapCode.ps1"
+$fac = Get-MapCodeLayer 'Protoss faction'; $facBase = Get-MapCodeLayer 'Terran faction'
+Backup $fac; Backup $facBase; $nl = Nl $fac
+$t = [IO.File]::ReadAllText($facBase, $latin)
 $t = [regex]::Replace($t, '(?m)^(BaseUnit=[^\r\n;]*?)(,SCPDNEX)?(,GMCV)', '$1,SCPDNEX$3')
 $t = [regex]::Replace($t, '(?m)^(HarvesterUnit=[^\r\n;\t ]*?)(,SCPPROBE)?(?=[\t ;]|\r?$)', '$1,SCPPROBE')
-[IO.File]::WriteAllText($fac, $t, $latin)
-$vt = @('PRV01=SCPPROBE	; Protoss faction (block at the end)', 'PRV02=SCPDNEX') + ((@($Vehicles) + @($units | Where-Object { -not $_.Inf })) | ForEach-Object -Begin { $n = 3 } -Process { 'PRV{0:D2}={1}' -f $n, $_.Id; $n++ })
-Set-SectionEntries $fac 'VehicleTypes' $vt '^PRV\d+=' $nl
+[IO.File]::WriteAllText($facBase, $t, $latin)
+# [Sides] and [VehicleTypes] entries are in our block: the layers merge in chain order, so ProtossSide stays side 8
+# (after TerranSide of the bottom layer and ZergSide of the Zerg layer)
+$vt = @('PRV01=SCPPROBE', 'PRV02=SCPDNEX') + ((@($Vehicles) + @($units | Where-Object { -not $_.Inf })) | ForEach-Object -Begin { $n = 3 } -Process { 'PRV{0:D2}={1}' -f $n, $_.Id; $n++ })
 # GDI2 owned a few helper types in Rules (missions); in skirmish they would show up for Protoss
-foreach ($s in 'TDPROC', 'TDPROC_AI', 'DEPCARR') { Remove-Owner $fac $s 'GDI2' }
+foreach ($s in 'TDPROC', 'TDPROC_AI', 'DEPCARR') { Remove-Owner $facBase $s 'GDI2' }
 
 # Gateway infantry (Zealot, Dragoon, High and Dark Templar)
 $infCommon = @"
@@ -604,6 +607,9 @@ $facText = @"
 ; cost = (minerals + 2 x gas) x 4. Wiki: Modding/wiki/mods/protoss-faction.md
 ; =====================================================================================================================
 
+[Sides]
+ProtossSide=GDI2	; side index 8: layers merge in chain order (TerranSide 6, ZergSide 7 below)
+
 [ProtossSide]
 UIColor=White
 OptionsMenuTextColor=255,210,90
@@ -655,6 +661,9 @@ PRC01=SCPINTC
 
 [InfantryTypes]
 $(($units | Where-Object { $_.Inf } | ForEach-Object -Begin { $n = 1 } -Process { 'PRI{0:D2}={1}' -f $n, $_.Id; $n++ }) -join "`n")
+
+[VehicleTypes]
+$($vt -join "`n")
 
 [Animations]
 PRA01=SCPSTORM
@@ -1497,7 +1506,7 @@ PRS01=SCPBatSys
 PRQ01=SCPBatPart
 "@
 Set-Block $fac (Add-ShieldRegen $facText) $nl
-"faction: Terran Faction.ini (block, [Sides], [General], [VehicleTypes], GDI2 off TDPROC/TDPROC_AI/DEPCARR)"
+"faction: map code layer $(Split-Path $fac -Leaf) (block with [Sides], [VehicleTypes]) + [General] and GDI2 off TDPROC/TDPROC_AI/DEPCARR in $(Split-Path $facBase -Leaf)"
 # Vinifera keeps 199 characters of Description= (TechnoTypeClassExtension::Description[200])
 $t = [IO.File]::ReadAllText($fac, $latin); $a = $t.IndexOf($begin)
 foreach ($ln in ($t.Substring($a) -split "`n")) { if ($ln -match '^Description=(.*)$' -and $Matches[1].TrimEnd("`r").Length -gt 199) { Write-Warning "Description too long ($($Matches[1].TrimEnd("`r").Length)): $($ln.Substring(0, 60))" } }

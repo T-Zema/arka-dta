@@ -2,20 +2,20 @@
 
 Grywalna frakcja „Terran” w skirmishu Deathmatch. Technicznie to przejęty dom pomocniczy `GDI1` (indeks 6) ze stroną `TerranSide`. Na etapie 0 jest klonem Aliantów. Stan: **zainstalowany 2026-10-24, (niezweryfikowane w grze)**.
 
-Źródła: [[plans/new-faction]] (wariant A′, uzasadnienie), [[engine/sides-and-houses]], szkic `Modding/drafts/new-faction-poc/`.
+Źródła: [[plans/new-faction]] (wariant A′, uzasadnienie), [[engine/sides-and-houses]], szkic etapu 0 (dawniej `Modding/drafts/new-faction-poc/`, dziś tylko w historii gita, commit `c650a9b`; jego treść żyje w `INI/Map Code/SC Factions/000 Terran faction.ini`).
 
 ## Pliki
 
 | Plik | Zmiana | Kopia |
 |---|---|---|
-| `INI/Map Code/Terran Faction.ini` | nowy: `[Sides] TerranSide=GDI1`, `[TerranSide]`, `[GDI1]` (`Name=Terran`, `ActsLike=6`, `Multiplay=yes`, `Side=TerranSide`), 113× `Owner=…,GDI1` (typy Aliantów), 4× zdjęty `GDI1` (`TDPROC`, `TDPROC_AI`, `DEPCARR`, `GHPAD`) | szkic w `drafts/` |
+| `INI/Map Code/SC Factions/000 Terran faction.ini` (do 2026-10-28 `INI/Map Code/Terran Faction.ini`, dziś to tylko punkt wejścia z `BasedOn`, [[engine/map-code-layers]]) | nowy: `[Sides] TerranSide=GDI1`, `[TerranSide]`, `[GDI1]` (`Name=Terran`, `ActsLike=6`, `Multiplay=yes`, `Side=TerranSide`), 113× `Owner=…,GDI1` (typy Aliantów), 4× zdjęty `GDI1` (`TDPROC`, `TDPROC_AI`, `DEPCARR`, `GHPAD`) | `Terran Faction.ini.bak` (stan etapu 0) |
 | `Resources/GameOptions.ini` | `Sides=GDI,Nod,Allies,Soviet,Neutral,Special,Terran` + komentarz z oryginałem | `GameOptions.ini.bak` |
 | `INI/MPMaps.ini` | `[Default]`: `MapCodeININame=Terran Faction.ini`, `DisallowedPlayerSides=4,5`. `[Tournament]`, `[Empowerment]`, `[Survivor]`, `[Scavenger]`, `[Co-Op *]`, `[King of the Hill]`, `[Maps/Default/SEABOUND_HIGHWAY]`: `DisallowedPlayerSides=4,5,6`. Razem 23 wstawione linie, każda pod komentarzem `; Terran faction`. | `MPMaps.ini.bak` |
 | `MIX/SideC07.mix`, `MIX/sidenc07.mix`, `MIX/Speech07.mix` | kopie `…03` (sidebar, ekran wyniku i EVA Aliantów) | — |
 | `Resources/terranicon.png` | kopia `alliesicon.png` | — |
 | `Resources/l600s6{1,2}.pcx`, `Resources/l480s6{1,2}.pcx` | kopie ekranów ładowania Aliantów (`…s2{1,2}`) | — |
 
-**Jednostka startowa (2026-10-24, sesja budynków Terran):** na końcu `Terran Faction.ini` blok „Terran start unit”:
+**Jednostka startowa (2026-10-24, sesja budynków Terran):** w `000 Terran faction.ini` blok „Terran start unit”:
 `[General] BaseUnit=SCMCVT,GMCV,NMCV,AMCV,SMCV`, `[VehicleTypes] TER01=SCMCVT` i zaślepka `[SCMCVT]` z `Owner=Special`.
 Pełny `SCMCVT` (Terran Construction Tank, `DeploysInto=SCCC`, `Owner=GDI1`, `TechLevel=-1`) jest w `StarCraft.ini`.
 Kolejność w `spawnmap.ini` (zaobserwowana): plik frakcji (Map Code) → `Advanced AI.ini` → `StarCraft.ini`, więc przy zaznaczonym
@@ -58,7 +58,7 @@ Jeśli w trybie innym niż Deathmatch da się wybrać Terran, znaczy to, że `Di
 
 ## Współdzielony plik: frakcja Zerg (2026-10-25)
 
-`Terran Faction.ini` niesie też frakcję Zerg (dom `Nod1`, strona 7), bo `MapCodeININame` przyjmuje jeden plik. Dopisane:
+Kod mapy frakcji niesie też frakcję Zerg (dom `Nod1`, strona 7), bo `MapCodeININame` przyjmuje jedną nazwę pliku (od 2026-10-28 ten plik łączy warstwy przez `BasedOn`, Zergi mają własną warstwę `010 Zerg faction.ini`). Dopisane:
 `ZergSide=Nod1` w `[Sides]`, `SCZDHAT` w `BaseUnit`, `HarvesterUnit=…,SCZWORK`, `ZRG01–06` w `[VehicleTypes]` i blok „Zerg faction”
 na końcu. W `MPMaps.ini` blokady `4,5,6` są teraz `4,5,6,7`, a w `GameOptions.ini` `Sides=…,Terran,Zerg`. Przy przegenerowaniu
 tego pliku trzeba potem puścić `Modding/tools/build-sczergbase.ps1 -Install`. Szczegóły: [[mods/zerg-faction]].
@@ -76,7 +76,7 @@ Podglądy w `%TEMP%\scterranside`. **(niezweryfikowane w grze)**
 - **Radar:** klatki 0–9 `radar.shp` (gasnące logo strony) pokazują teraz Marine'a z lobby SC Remastered
   (`webui/dist/lib/images/terran.webm`, VP9 770×848, kadr 2,5 s, białe tło usunięte) na przyciemnionej siatce radaru, kwantyzowanego do nowej palety.
   SC nie ma osobnego godła Terran w danych.
-- **Teksty strony** (`[TerranSide]` w `Terran Faction.ini`): `OptionsMenuTextColor`/`ScreenTextColor=0,210,230`, `ToolTipColor=LightCyan`,
+- **Teksty strony** (`[TerranSide]` w `000 Terran faction.ini`): `OptionsMenuTextColor`/`ScreenTextColor=0,210,230`, `ToolTipColor=LightCyan`,
   `HoverHighlightColor=Cyan`.
 - **EVA:** kolejność zdarzeń EVA (Vinifera `EvaNames`, bez `EVA.INI` w DTA) odpowiada tabeli `Speech[]` w `game.exe`
   (wskaźniki od pliku 0x311D14; np. 3 ConstructionComplete = `00-I018`, 8 InsufficientFunds = `00-I022`, 14 BaseUnderAttack = `00-I082`,
@@ -112,6 +112,8 @@ Copy-Item Resources\GameOptions.ini.bak Resources\GameOptions.ini -Force
 Copy-Item INI\MPMaps.ini.bak INI\MPMaps.ini -Force
 Remove-Item 'INI\Map Code\Terran Faction.ini', MIX\SideC07.mix, MIX\sidenc07.mix, MIX\Speech07.mix, Resources\terranicon.png, Resources\l600s61.pcx, Resources\l600s62.pcx, Resources\l480s61.pcx, Resources\l480s62.pcx
 ```
+
+Od 2026-10-28 `Terran Faction.ini` to punkt wejścia całego łańcucha warstw, więc jego usunięcie wyłącza też Zergów i Protossów. Warstwy zostają w `INI/Map Code/SC Factions/` (do usunięcia razem z folderem, jeśli znikają wszystkie frakcje SC).
 
 ## Dalej
 

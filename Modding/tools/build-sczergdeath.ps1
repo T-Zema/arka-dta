@@ -2,9 +2,9 @@
 # StarCraft death sound. Vehicles ignore DieSound= (wiki workflow/known-mistakes); a vehicle's death sound is the Report= of
 # its Explosion= animation. The Zerg generators gave them Explosion=FBALL1, so they died with the fireball's sound instead
 # (user test 2026-10-27: the Overlord sounded like a destroyed building). Same pattern as the Protoss (SCPPDTHX...).
-# For every vehicle in [VehicleTypes] of Terran Faction.ini whose ID starts with SCZ and that has DieSound=X, this writes
+# For every vehicle in [VehicleTypes] of the faction map code whose ID starts with SCZ and that has DieSound=X, this writes
 #   - Art.ini, block "; >>> Zerg death sounds": [ZDTH_X] Image=FBALL1 (same picture as before) with Report=X
-#   - Terran Faction.ini, block "; >>> Zerg death sounds" (end of file, so its keys win over the generated sections):
+#   - map code layer "Zerg death sounds" (INI/Map Code/SC Factions, above the Zerg layers, so its keys win over them):
 #     [Animations] ZDA<nn>=ZDTH_X and [<unit>] Explosion=ZDTH_X / ScrapExplosion=ZDTH_X
 # Buildings are left alone (they play DieSound themselves). Re-run after build-sczergbase.ps1 / build-sczergresearch.ps1 /
 # build-sczergheroes.ps1 -Install (new Zerg vehicles); re-running replaces its own blocks. Wiki: mods/zerg-faction.
@@ -12,7 +12,8 @@
 param([switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
 $game = (Resolve-Path "$PSScriptRoot\..\..").Path
-$faction = "$game\INI\Map Code\Terran Faction.ini"; $art = "$game\INI\Art.ini"; $sound = "$game\INI\Sound.ini"
+. "$PSScriptRoot\MapCode.ps1"
+$faction = Get-MapCodeLayer 'Zerg death sounds'; $art = "$game\INI\Art.ini"; $sound = "$game\INI\Sound.ini"
 $latin = [Text.Encoding]::GetEncoding(28591)
 $begin = '; >>> Zerg death sounds'; $end = '; <<< Zerg death sounds'
 
@@ -28,8 +29,8 @@ function Set-Block([string]$path, [string]$body) {
     [IO.File]::WriteAllText($path, $t, $latin)
 }
 # section -> key -> value (repeated sections merged, later key wins, as the client does), ignoring this script's own block
-function Read-Sections([string]$path) {
-    $t = [IO.File]::ReadAllText($path, $latin); $a = $t.IndexOf($begin)
+function Read-Sections([string]$path, [string]$text) {
+    $t = if ($path) { [IO.File]::ReadAllText($path, $latin) } else { $text }; $a = $t.IndexOf($begin)
     if ($a -ge 0) { $b = $t.IndexOf("`n", $t.IndexOf($end, $a)) + 1; $t = $t.Substring(0, $a) + $t.Substring($b) }
     $d = @{}; $sec = $null
     foreach ($l in ($t -split "`r?`n")) {
@@ -39,7 +40,7 @@ function Read-Sections([string]$path) {
     return $d
 }
 
-$ini = Read-Sections $faction
+$ini = Read-Sections -text (Read-MapCodeText -Exclude $faction)
 $snd = Read-Sections $sound
 $units = @($ini['VehicleTypes'].Values | Where-Object { $_ -like 'SCZ*' } | Select-Object -Unique)
 $anims = [ordered]@{}   # sound -> anim
@@ -74,4 +75,4 @@ if (Get-Process -Name game -ErrorAction SilentlyContinue) { throw "game.exe is r
 Backup $faction; Backup $art
 Set-Block $faction $fb.ToString()
 Set-Block $art $ab.ToString()
-"written: $($rows.Count) vehicles, $($anims.Count) animations (Terran Faction.ini + Art.ini, block '$begin')"
+"written: $($rows.Count) vehicles, $($anims.Count) animations ($(Split-Path $faction -Leaf) + Art.ini, block '$begin')"

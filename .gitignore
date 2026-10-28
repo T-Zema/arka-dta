@@ -26,6 +26,20 @@
 !/INI/Game Options/Super Mod.ini
 !/INI/Map Code/
 /INI/Map Code/*
+!/INI/Map Code/SC Factions/
+/INI/Map Code/SC Factions/*
+!/INI/Map Code/SC Factions/000 Terran faction.ini
+!/INI/Map Code/SC Factions/010 Zerg faction.ini
+!/INI/Map Code/SC Factions/020 Protoss faction.ini
+!/INI/Map Code/SC Factions/030 Zerg heroes.ini
+!/INI/Map Code/SC Factions/040 Zerg research.ini
+!/INI/Map Code/SC Factions/050 SC building select sounds.ini
+!/INI/Map Code/SC Factions/060 SC workers.ini
+!/INI/Map Code/SC Factions/070 Protoss research.ini
+!/INI/Map Code/SC Factions/080 Zerg creep.ini
+!/INI/Map Code/SC Factions/090 Zerg death sounds.ini
+!/INI/Map Code/SC Factions/100 SC air armor.ini
+!/INI/Map Code/SC Factions/900 Hand edits.ini
 !/INI/Map Code/Terran Faction.ini
 !/INI/MPMaps.ini
 !/INI/Rules.ini

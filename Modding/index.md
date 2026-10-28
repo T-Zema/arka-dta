@@ -1,99 +1,118 @@
 # Indeks wiki modowania DTA
 
-Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. Historia: [log](log.md).
+Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. Historia: [log](log.md). Wpisy są krótkie, szczegóły są na stronach.
 
-## Przegląd
-- [[overview]]: silnik (TS + Vinifera), strony i domy, gdzie modować, zasada „mapa/opcja zamiast Rules.ini”.
+## Zacznij tutaj
+- [[overview]]: silnik (TS + Vinifera), strony i domy, zasada „mapa/opcja zamiast Rules.ini”.
+- [[workflow/known-mistakes]]: **znane błędy** (objaw → przyczyna → reguła). Czytaj przed nowym modem.
+- [[workflow/tools-catalog]]: **co robi każdy skrypt** z `Modding/tools/`, co zapisuje, kolejność generatorów.
+- [[workflow/repo-and-updates]]: repo git w folderze gry, `dta-capture` po każdej zmianie, aktualizacje DTA.
+
+**Gdzie leżą nasze zmiany w grze:**
+
+| Co | Gdzie | Strona |
+|---|---|---|
+| Frakcje skirmisha Terran/Zerg/Protoss | `INI/Map Code/SC Factions/NNN <warstwa>.ini` (łańcuch `BasedOn` od `INI/Map Code/Terran Faction.ini`) | [[engine/map-code-layers]] |
+| Checkbox STARCRAFT (jednostki i budynki SC w każdej frakcji) | `INI/Game Options/StarCraft.ini` (bloki `; >>> X`) | [[mods/starcraft-marine]], [[mods/starcraft-terran-units]] |
+| Checkbox Super Mod | `INI/Game Options/Super Mod.ini` | [[mods/super-mod-v1]] |
+| Grafika (art) i dźwięki | bloki `; >>> X` w `INI/Art.ini`, `INI/Sound.ini` (każdy generator ma swój) | [[workflow/tools-catalog]] |
+| Grafiki i dźwięki SC | `MIX/ECACHE76–98.MIX`, `SideC/sidenc/Speech07–09.mix` | rejestr numerów: [[engine/shp-graphics]] |
+| Łatki silnika | `game.exe`, `Vinifera.dll` (odbudowywane skryptami, nie w gicie) | [[engine/game-exe-patching]] |
+| Lobby (strony, tryby) | `Resources/GameOptions.ini`, `INI/MPMaps.ini`, `Resources/SkirmishLobby.ini` | [[engine/sides-and-houses]], [[engine/client-lobby-options]] |
+| Mapy skirmisha i misje | `Maps/Custom/*.map`, `Maps/Missions/arka0N.map`, `INI/BattleE.ini`, `MOVIES/ARKA0NB.MP4` | [[plans/campaign-arka]] |
 
 ## Silnik
-- [[engine/ini-layering]]: Rules → mapa → opcje gry; co da się nadpisać; `spawnmap.ini`; `$Inherits` tylko w obrębie pliku; klient scala powtórzone sekcje (późniejszy klucz wygrywa).
-- [[engine/tech-and-prerequisites]]: TechLevel, Owner, Prerequisite (AND), grupy POWER/BARRACKS/FACTORY/RADAR/TECH, pułapki, zasięg budowania (`Adjacent`, `BaseNormal`).
-- [[engine/adding-new-types]]: nowe jednostki i budynki z mapy lub opcji gry, `Image=`, jednostki bez cameo na mapie, jumpjet.
+- [[engine/ini-layering]]: Rules → mapa → opcje gry; co da się nadpisać; klient scala powtórzone sekcje (późniejszy klucz wygrywa); `[INISystem] BasedOn=`.
+- [[engine/map-code-layers]]: **kod mapy frakcji jako łańcuch warstw** (`MapCodeININame` = jeden plik, `BasedOn` łączy warstwy), tabela warstw, `tools/MapCode.ps1`, nowa warstwa, usuwanie modu.
+- [[engine/tech-and-prerequisites]]: TechLevel, Owner, Prerequisite, grupy, zasięg budowania (`Adjacent`, `BaseNormal`).
+- [[engine/adding-new-types]]: nowe typy z mapy lub opcji gry, `Image=`, jednostki bez cameo, jumpjet.
 - [[engine/weapons-and-warheads]]: obrażenia × Modifier, `Super` = ×10, laser, tesla, railgun, atom, chemia, EMP.
-- [[engine/houses-economy]]: Credits ×100 (overflow ~21 mln), BuildTime i mnożniki domu, `[General] BuildSpeed`; **silosy od środka** (`Capacity` tylko z budynków, urobek rozkładany bal po balu do budynków, Vinifera `_Harvested`, `TiberiumStorage`, AI omija silosy), prąd też tylko z budynków.
+- [[engine/houses-economy]]: kredyty, BuildTime i mnożniki, **silosy od środka** (`Capacity` tylko z budynków, Vinifera `_Harvested`), prąd.
 - [[engine/superweapons]]: lista supermocy, `SuperWeapon=` na budynku.
-- [[engine/game-exe-patching]]: łatanie `game.exe` odtwarzalnie: zainstalowane łatki i ich jaskinie, wolne miejsce (`.p_text`), sloty vtable (`In_Air` vs `What_Am_I`, RTTI przez `[obj+4]`), szablon skryptu, `tools/patch-game.ps1` po aktualizacji DTA.
-- [[engine/spawners]]: lotniskowce (łatka `game.exe` `tools/patch-spawnreturn.ps1`, **działa w grze**, wszystkie łatki naraz `tools/patch-game.ps1`) (`Spawner=yes`, `Spawns=`, matka może być pojazdem, wypuszczany musi być voxelowym samolotem), generator niewidzialności tylko w budynkach.
-- [[engine/crates]]: skrzynka „Unit” zawiesza grę, gdy dom nie ma pojazdu z `CrateGoodie=yes` (było: Zerg i Protoss); blok „Crate goodies” w pliku frakcji.
-- [[engine/client-lobby-options]]: własny checkbox w lobby skirmisha (`$CCxx`, `CustomIniPath`), brak miejsca w panelu.
-- [[engine/debugging]]: logi w `Debug/`, liczniki typów w logu, procedura przy crashu.
-- [[engine/shp-graphics]]: MIX-y, palety (remap 16–31), układ klatek pojazdu SHP (kierunki zgodnie z zegarem, cienie w 2. połowie), cameo 64×48.
-- [[engine/sounds-aud]]: `[SoundList]` → `<NAZWA>.AUD`, format AUD (IMA ADPCM, 22 050 Hz mono, młodszy półbajt pierwszy).
-- [[engine/transform-deploy]]: piechota bez deploy; `TransformsInto` (Vinifera) zachowuje % HP; ładowanie jako cooldown; wzorzec stimpacka.
-- [[engine/starcraft-assets]]: CASC Remastered (tekstowy root), ścieżki GRP/WAV/portretów, format GRP, 17 kierunków + lustro.
-- [[engine/map-format]]: geometria mapy (Size/LocalSize, `y*1000+x`), IsoMapPack5 (LZO), OverlayPack (Format80, `y*512+x`), TMP i kody terenu, reguła LAT, klatki murów, mapy w `Maps/Custom`, renderer CNCMaps.
-- [[engine/connected-tiles]]: klify, Water Cliffs i brzegi z `ConnectedTileDrawer.ini` (WAE), potwierdzona reguła łączenia, strona „góry” klifu, automatyczne układanie.
-- [[engine/starcraft-maps]]: mapy SC (`.scm/.scx` = MPQ + `scenario.chk`), sekcje CHK, tilesety cv5/vf4/vx4ex, przejezdność; spostrzeżenia o Lost Temple.
-- [[engine/fly-locomotor]]: pojazdy z lokomotorem samolotu (wzór Hunter-Seeker), budowa przez „stocznię” Vinifery, skąd lądowanie (deasemblacja `game.exe`), łatka `tools/patch-flyhover.ps1` (wiszenie zamiast lądowania), łatka `tools/patch-flyertarget.ps1` (jednostki AA same celują w latające pojazdy), pola klas z `Vinifera.pdb`.
-- [[engine/air-armor]]: **zasada ogólna: AA Aliantów strzela do lotników SC tylko na rozkaz gracza (wtedy trafia), Dragoon nie może trafić Overlorda**; pancerze Vinifery (`[ArmorTypes]`, `PassiveAcquire/Retaliate/ForceFire.<pancerz>`, `BaseArmor` szukany przy każdym trafieniu, działa też z mapy), generator `tools/build-scairarmor.ps1`, `Add-ScAirArmor` w misjach ARKA. Nietestowane w grze.
-- [[engine/transports]]: wsiadanie do transportu w `game.exe`: `IsVehicleTransport=yes` (klucz DTA) wpuszcza pojazdy (też Marines-pojazdy SC), transport musi stać (`Is_Moving`), pojazdy wsiadają do wiszącego transportu Fly, piechota dopiero z łatką `tools/patch-airboard.ps1` (szuka transportu tylko wśród okupantów pola na ziemi); Dropship (Fly) i Shuttle.
-- [[engine/buildup-timing]]: czas Buildupu (stałe ok. 81 ticków, `game.exe` `0x4403DD`, przy >81 klatkach budowa stoi) i łatka `tools/patch-buildup.ps1` (1 klatka = 1 tick); czas produkcji (`BuildTimeMultiplier`, minimum 54 ticki).
-- [[engine/veins]]: żyły i Veinhole Monster: klucze, nakładki 126/167/178 na sztywno, gdzie rosną żyły (bez warunku wysokości), tworzenie potwora w trakcie gry (`OverlayClass::Mark`, test 3×3 i wysokość ≥ 1, łatka `0x661C89`), budynek-mur `Wall=yes` + `ToOverlay=` zamienia się w nakładkę, `TiberiumSpawnType` w animacji dodaje losowo 0–3; własność żył (zalew bez limitu, `Place_Monsters` od najnowszego), kurczenie martwego potwora (`VeinholeShrinkRate`, tylko dojrzałe żyły).
-- [[engine/zerg-ai]]: **AI Zergów buduje dronami**: silnikowe AI stawia tylko węzły bazy „po konstruktorowemu”; `Add-ZergBuilder` (`tools/MissionKit.ps1`) wzorem DTA `cr07`: `4 Create Team` → Wylegarnia wykluwa drona → `4 Move to cell` → `9 Deploy`, strażnik `80`, miejsca na creepie, budynek = komórka drona + (−1, −1); skirmish wymagałby łatki.
-- [[engine/triggers-and-dialogue]]: **jak pisać misje**: format `[Triggers]/[Events]/[Actions]/[Tags]/[CellTags]`, drużyny (TaskForce/Script/TeamType), litery waypointów, najważniejsze ID zdarzeń i akcji, czas w sekundach gry (`1500` = 25:00), łańcuchy dialogów (`Enable` + `Elapsed`), teksty `[Tutorial]` (ASCII, numery ARKA 9000+), **tempo dialogów** (sekunda gry ≈ 1/3 realnej, jeden tekst na trigger, `tools/MissionKit.ps1`: pacing, oś czasu, skrzynka z odkryciem mapy), desant z transportowcem `NLST`, trudność (globalne 10–15), rejestracja w `Battle.ini`/`BattleE.ini`; dekompilator `tools/dump-triggers.ps1`.
-- [[engine/briefing-movies]]: filmy briefingu w stylu SC: `Brief=` w `[Basic]`, Vinifera odtwarza `MOVIES\X.MP4/WMV/AVI` zamiast `X.VQA`, generator `tools/build-briefing.ps1` (JSON → portrety, zapis łączności, cele, dźwięk → H.264), pierwszy film `ARKA02B` **(niezweryfikowane w grze)**.
-- [[engine/sides-and-houses]]: `[Sides]`/`[Houses]`, klient `Side=` = indeks domu, 122 mapy z domami od 14, `SIDEC/SPEECH%02d.MIX`, AI Side=n+1, Advanced AI.
+- [[engine/game-exe-patching]]: łatanie `game.exe` odtwarzalnie, jaskinie, wolne miejsce, vtable, szablon skryptu, `patch-game.ps1`.
+- [[engine/spawners]]: lotniskowce (łatka `patch-spawnreturn.ps1`, działa w grze), generator niewidzialności tylko w budynkach.
+- [[engine/crates]]: skrzynka „Unit” zawiesza grę bez pojazdu z `CrateGoodie=yes`; poprawka w warstwie `900 Hand edits`.
+- [[engine/client-lobby-options]]: własny checkbox w lobby (`$CCxx`, `CustomIniPath`).
+- [[engine/debugging]]: logi w `Debug/`, procedura przy crashu.
+- [[engine/shp-graphics]]: MIX-y, palety, układ klatek SHP, cameo 64×48, **rejestr numerów MIX**.
+- [[engine/sounds-aud]]: `[SoundList]` → `<NAZWA>.AUD`, format AUD.
+- [[engine/transform-deploy]]: deploy, `TransformsInto` (Vinifera), wzorzec stimpacka.
+- [[engine/starcraft-assets]]: CASC Remastered, ścieżki GRP/WAV/portretów, format GRP.
+- [[engine/map-format]]: geometria mapy, IsoMapPack5, OverlayPack, TMP, LAT, mury, renderer CNCMaps.
+- [[engine/connected-tiles]]: klify i brzegi z `ConnectedTileDrawer.ini`, reguła łączenia.
+- [[engine/starcraft-maps]]: mapy SC (`.scm/.scx`, CHK, tilesety, przejezdność).
+- [[engine/fly-locomotor]]: pojazdy z lokomotorem samolotu, łatki `patch-flyhover.ps1` (wiszenie) i `patch-flyertarget.ps1` (AA celuje w lotników).
+- [[engine/air-armor]]: AA Aliantów strzela do lotników SC tylko na rozkaz, Dragoon nie trafi Overlorda; pancerze Vinifery, `build-scairarmor.ps1`. Nietestowane w grze.
+- [[engine/transports]]: wsiadanie do transportu (`IsVehicleTransport=yes`, transport musi stać), łatka `patch-airboard.ps1` dla piechoty.
+- [[engine/buildup-timing]]: czas Buildupu (ok. 81 ticków), łatka `patch-buildup.ps1`, czas produkcji (minimum 54 ticki).
+- [[engine/veins]]: żyły i Veinhole Monster: tworzenie w trakcie gry, wzrost, własność, kurczenie (`VeinholeShrinkRate`).
+- [[engine/zerg-ai]]: AI Zergów buduje dronami (`Add-ZergBuilder` w `MissionKit.ps1`), skirmish wymagałby łatki.
+- [[engine/triggers-and-dialogue]]: **jak pisać misje**: format triggerów, drużyny, ID zdarzeń i akcji, czas, dialogi i ich tempo, `[Tutorial]` (ARKA 9000+), trudność, `Battle.ini`/`BattleE.ini`, `dump-triggers.ps1`.
+- [[engine/briefing-movies]]: filmy briefingu w stylu SC (`Brief=`, `MOVIES/*.MP4`, `build-briefing.ps1`). Niezweryfikowane w grze.
+- [[engine/sides-and-houses]]: `[Sides]`/`[Houses]`, `Side=` klienta = indeks domu, pliki strony `SIDEC/SPEECH%02d.MIX`.
+
+## Mody
+
+| Strona | Stan | Co |
+|---|---|---|
+| [[mods/frostbite-cheats]] | zainstalowany | kasa, MCV, działo jonowe, 40+ jednostek w misji Frostbite |
+| [[mods/super-mod-v1]] | zainstalowany, zarchiwizowany | checkbox w skirmishu, 8 jednostek, 2× budowanie |
+| [[mods/starcraft-marine]] | zainstalowany, nietestowany | checkbox STARCRAFT, Marine ze stimpackiem (`ECACHE77`) |
+| [[mods/starcraft-terran-buildings]] | częściowo przetestowany | 18 budynków Terran, Construction Tank (`ECACHE98`) |
+| [[mods/starcraft-terran-units]] | nietestowany | 12 jednostek Terran, okręty jako pojazdy Fly (`ECACHE97`, `ECACHE90`) |
+| [[mods/starcraft-research]] | nietestowany | 11 badań Terran jako ulepszenia budynków (`ECACHE87`) |
+| [[mods/starcraft-zerg]] | nietestowany | Zergi jako piechota w każdych koszarach (`ECACHE80`) |
+| [[mods/terran-faction]] | nietestowany | piąta frakcja „Terran” (dom `GDI1`, strona 6), warstwa `000` |
+| [[mods/zerg-faction]] | morf działa, reszta nietestowana | szósta frakcja „Zerg” (dom `Nod1`, strona 7): drony morfują w budynki (`ECACHE86`) |
+| [[mods/zerg-heroes]] | nietestowany | bohaterowie i budynki kampanii Zergów, Overmind's Wrath (`ECACHE82`) |
+| [[mods/zerg-research]] | nietestowany | 13 badań Zergów (`ECACHE84`) |
+| [[mods/zerg-side]] | nietestowany | EVA i sidebar Zergów (`Speech08`, `SideC08`) |
+| [[mods/zerg-creep]] | **rośnie w grze**, poprawki nietestowane | creep z żył TS, łatki `patch-veins.ps1`, `patch-zergbuild.ps1` |
+| [[mods/overlord-storage]] | **działa w grze** | Overlord jako silos `Storage=100` (łatki `game.exe` + `Vinifera.dll`) |
+| [[mods/protoss-faction]] | częściowo przetestowany | siódma frakcja „Protoss” (dom `GDI2`, strona 8), zasięg budowania od Pylonów (`ECACHE85`, `ECACHE83`) |
+| [[mods/sc-building-sounds]] | nietestowany | dźwięki zaznaczania budynków SC (`ECACHE79`) |
+| [[mods/sc-workers]] | animacje działają | SCV/Dron/Probe z animacją wydobycia, Refinery daje 2 SCV (`ECACHE78`) |
+| [[mods/sc-infantry-stim]] | nietestowany | łatka deploy piechoty `patch-infdeploy.ps1`, Marine i Firebat jako piechota (`ECACHE81`) |
+| [[mods/sc-lost-temple]] | **działa w grze**, zarchiwizowana | mapa SC (4)Lost Temple |
+| [[mods/sc-fighting-spirit]] | zarchiwizowana, nietestowana | mapa SC (4)Fighting Spirit |
+
+## Misje (kampania ARKA)
+- [[plans/campaign-arka]]: scenariusz kampanii mashup RA1 × StarCraft „ARKA: Błąd znaku” (preludium, misje 1–11, bonusowe 12–13). HTML: `exports/campaign-arka.html`, przebudowa `tools/build-campaign-html.ps1` po każdej zmianie strony.
+- [[workflow/mission-design]]: **zasady projektu misji** (czytaj przed każdą misją): złoża na różnym ryzyku + kopalnia, skrzynki z kasą, rajdy AI na zbieracze, drogi bez ślepych końców.
+- [[workflow/mission-maps]]: mapy misji z prawdziwego terenu (Google Maps + OSM + DEM → DTA).
+- [[missions/arka-00-gibraltar]]: teren preludium (Gibraltar 1953), waypointy 10–47 jako kontrakt z warstwą misji.
+- [[missions/arka-00-triggers]]: warstwa misji preludium (`arka00.map`): ARKA, elektrownie, fale Sowietów, desanty Nod, 100 Ton Gun do przejęcia inżynierami. Testy 2026-10-27: ARKA i prąd działają.
+- [[missions/arka-01-marsara]]: ARKA 1 „Obcy piasek” (dla użytkownika „misja 2”): mapa SC T2 Backwater Station, typy SC skopiowane do mapy, creep od startu. Nietestowana.
+- [[missions/arka-02-ewakuacja]]: ARKA 2 „Ewakuacja”: mapa SC T3 Desperate Alliance, eskorta kolonistów, licznik skoku. Nietestowana.
+- [[missions/arka-04-zielony-krysztal]]: ARKA 4 „Zielony kryształ”: mapa SC T6 Norad II, TEMPERATE, misja ekonomiczna, Duke jako Marine. Nietestowana. (Misja 3 nie jest zbudowana.)
+- [[missions/arka-05-tarsonis]]: ARKA 5 „Upadek Tarsonis”: CASC `Terran10`, ewakuacja cywilów liczona na kredytach, `Civilian=no`. Nietestowana.
+- [[missions/frostbite]]: dane misji Frostbite, baza startowa.
 
 ## Katalogi
 - [[catalog/hidden-units]]: ukryte (`TechLevel=-1`) i międzyfrakcyjne jednostki, samoloty, budynki.
-- [[catalog/custom-units-from-maps]]: unikalne typy z map (Bunzilla, SS-22N, Obelisk of Brightness…) i ich źródła.
-- [[catalog/city-buildings]]: nowoczesne bloki DTA do miast (**odrzucone w ARKA 5: „nie pasuje”**, w miastach SC budynki Terran; przed użyciem zapytać): wieżowce, biurowce i bloki CITY01–07, CITY10–14, CITY16–18; czego nie brać (CA* przemysł TS, NV* wieś, V20–V37 pustynne); dom miasta wrogi Zergom; arkusz 	ools/build-bldg-sheet.ps1.
+- [[catalog/custom-units-from-maps]]: unikalne typy z map (Bunzilla, SS-22N, Obelisk of Brightness…).
+- [[catalog/city-buildings]]: nowoczesne bloki DTA do miast (w miastach SC **odrzucone**, przed użyciem zapytać), arkusz `build-bldg-sheet.ps1`.
 
-## Misje
-- [[missions/frostbite]]: dane misji, baza startowa, ograniczenia autora.
-- [[missions/arka-00-triggers]]: warstwa misji preludium ARKA (`tools/build-arka00-mission.ps1` → `Maps/Missions/arka00.map` + `INI/BattleE.ini`): domy, ARKA (`ARKACORE`), 4 elektrownie, baza Aliantów, Tanya do odbicia, 46 triggerów (licznik 25:00, fale Sowietów, 8 transportowców `NLST` Nod z artylerią, pojazdami i piechotą, Stealth Tanki, szpieg `15,10`, finał z dialogiem), skrzynka z odkryciem mapy, harvester, **skrzynki z pieniędzmi (kościół, Skała) i rajdy powtarzane na złoża (recenzja 2026-10-27)**, **100 Ton Gun przy szpitalu: `GUN100T` 2×2 (`RAPARTY` ×2, `tools/build-gun100t.ps1`, `ECACHE76`), przejęcie 4 inżynierami przez łańcuch triggerów z opóźnionym `14 Change House`, wp 60; złoto w kościele (inżynier); Neutral = sojusznik, do przejęcia = `Special`; licznik 30:00; zasadzka na złoże na Skale od wschodu (wp 61–63)**; testy 2026-10-27: ARKA i prąd działają, tempo tekstów poprawione, drużyny naziemne bez `1,N` (stały bezczynnie).
-- [[missions/arka-01-marsara]]: misja 1 ARKA „Obcy piasek” (dla użytkownika „misja 2”), **teren + triggery w jednej sesji**: mapa kampanii SC T2 Backwater Station z CASC, zoom 2×, teatr DESERT (`tools/build-arka01-marsara.ps1` → `Maps/Custom/arka01_marsara.map`), misja (`tools/build-arka01-mission.ps1` → `Maps/Missions/arka01.map` + scalony `INI/BattleE.ini`): wrak ARKI, 3 grupy rozbitków, MCV, osada z Raynorem, gniazdo Zergów, 46 triggerów, **typy SC skopiowane do mapy** (misja nie ładuje opcji SC), Marines = pojazdy; **creep Zergów od startu (2026-10-28, wzorem ARKA 4)**. Nietestowana w grze.
-- [[missions/arka-02-ewakuacja]]: misja 2 ARKA „Ewakuacja”, teren + triggery w jednej sesji: mapa kampanii SC **T3 Desperate Alliance** z CASC, zoom 1,5×, DESERT, beton na platformach i w mieście (`tools/build-arka02-marsara.ps1` → `Maps/Custom/arka02_marsara.map`, `grid.png` z siatką SC do planowania), misja (`tools/build-arka02-mission.ps1` → `Maps/Missions/arka02.map` + `BattleE.ini` + podgląd): Raynor znika w zainfekowanym CC (licznik 10:00, C4 Tanyi), 3 schrony z kolonistami eskortowanymi na lądowisko Synów Korhalu (skrypt drużyny `39` zmienna + `37` usuń), Mengsk, 15:00 skoku z 4 elektrowniami, Konfederacja, flota Protossów; `Tag=` w drużynie; creep v2 wzorem ARKA 4 (żyły pod każdym budynkiem Zergów, luźne łaty spięte z dziurą). Nietestowana w grze.
-- [[missions/arka-04-zielony-krysztal]]: misja 4 ARKA „Zielony kryształ” (Antiga Prime), teren + triggery w jednej sesji: mapa kampanii SC **T6 Norad II**, zoom 1,5×, **TEMPERATE** (`tools/build-arka04-antiga.ps1` → `Maps/Custom/arka04_antiga.map`), misja (`tools/build-arka04-mission.ps1` → `Maps/Missions/arka04.map` + `BattleE.ini` + podgląd): spokojna i ekonomiczna, laboratorium Einsteina 20 min **bez licznika**, Norad II jako leżący Battlecruiser (pojazd), **Duke-Marine** (`ARKDUKE`: HP jak `SCRAYN`, broń ×1,5) przechodzi do gracza, ubogie pole przy bazie, ekspansje, **kopalnie niebieskich kryształów** (`OREMINE2` z `TiberiumToSpawn=6`), Stickler Woods z odrastającą rudą, sekret w gnieździe NE, ostatnia fala Mutalisków i Guardianów. Nietestowana w grze.
-- [[missions/arka-05-tarsonis]]: misja 5 ARKA „Upadek Tarsonis”, teren + triggery + film w jednej sesji: mapa kampanii SC **„Operation Silent Scream”** (CASC `Terran10`, Tarsonis z psi-nadajnikami; numery folderów CASC ≠ numery misji), zoom 1,25×, TEMPERATE, **place i ulice `Paved Road LAT` od lądowiska do 4 dzielnic (0 wolnych końców)**, 3 pola rudy + kopalnia (`tools/build-arka05-tarsonis.ps1`), misja (`tools/build-arka05-mission.ps1` → `Maps/Missions/arka05.map` + `BattleE.ini` + podgląd + `MOVIES/ARKA05B.MP4`): 48 cywilów w 8 grupach (**każda grupa własnym domem**, domy 14–21), **licznik uratowanych na kredytach** (`106 Give Credits` + `12 Credits exceed`), dzielnice padają 1500–2700 s, strumień fal z każdego nadajnika (`ARKPSIE`, C4 Tanyi), Kerrigan „za późno” skryptem drużyny, odlot Synów Korhalu (`115`), 7:00 ewakuacji; **`Civilian=no` w typie cywila** (zdarzenie `9` pomija cywilów). Nietestowana w grze.
-- [[missions/arka-00-gibraltar]]: teren preludium ARKA (Gibraltar 1953), wersja 2: zrzut Google Maps + OSM + DEM, `Maps/Custom/arka00_gibraltar.map`. Skała w 2 poziomach z 6 rampami, drogi z kafli, budynki i atrakcje z OSM, strefy i trasy wroga, 38 waypointów (10–47, kontrakt z warstwą misji; 46 kościół, 47 ruda na Skale), **v3 (recenzja 2026-10-27): drogi LAT bez ślepych końców, ok. 380 komórek rudy w 3 złożach + kopalnia na Windmill Hill**, **pułapki** (plaże dla hovercraftów, `HomeCell`, zasięg Obeliska, skrypt nadpisuje mapę). v1: `archive/arka00-gibraltar-v1_2026-10-26/`.
-
-## Mody
-- [[mods/frostbite-cheats]]: zainstalowany. Kasa, MCV, działo jonowe, 40+ jednostek, jednostki z innych map.
-- [[mods/super-mod-v1]]: zainstalowany, zarchiwizowany. Checkbox w skirmishu, 8 nowych jednostek, 2× budowanie.
-- [[mods/starcraft-marine]]: zainstalowany, nietestowany. Checkbox STARCRAFT, Marine + Upgraded Marine ze stimpackiem, portrety, dźwięki SC.
-- [[mods/starcraft-research]]: badania SC jako ulepszenia budynków (11 badań na E-Bay/Academy/Armory/Machine Shop/Control Tower/Covert Ops/Physics Lab/Science Facility), ulepszone wersje 11 jednostek, generator `build-scresearch.ps1`.
-- [[mods/sc-lost-temple]]: zainstalowana, zarchiwizowana, **działa w grze** (test 2026-10-24). Mapa SC (4)Lost Temple jako mapa skirmisha (`Maps/Custom`).
-- [[mods/sc-fighting-spirit]]: zainstalowana, zarchiwizowana, nietestowana w grze. Mapa SC (4)Fighting Spirit (iCCup 1.3), kanały z mostami, mury X w centrum.
-- [[mods/starcraft-terran-buildings]]: zainstalowany, częściowo przetestowany. 18 budynków Terran z SC (CC = ConYard, 4 addony), Construction Tank, ten sam checkbox, `ECACHE98.MIX`.
-- [[mods/starcraft-terran-units]]: zainstalowany, nietestowany. 12 jednostek Terran (SCV…Battlecruiser) z trybami deploy (stim, Siege Mode, Yamato), cloak, Lockdown/EMP, leczenie, jumpjety, 128 dźwięków SC, `ECACHE97.MIX`. Okręty: tylko ze Starportu, pojazdy z lokomotorem Fly (`SCWRAF`…, `ECACHE90.MIX`, łatka `game.exe` na wiszenie); wersje z koszar usunięte.
-- [[mods/starcraft-zerg]]: zainstalowany, nietestowany. Zergling, Hydralisk, Ultralisk jako prawdziwa piechota w każdych koszarach (checkbox STARCRAFT), regeneracja, `ECACHE80.MIX`.
-- [[mods/zerg-faction]]: pełna frakcja zainstalowana, nietestowana (morf przez deploy potwierdzony). Szósta frakcja „Zerg” (dom `Nod1`, strona 7) bez ConYardu: 17 budynków (każdy = dron z `DeploysInto`, kokon z SC tyle co w SC przy 60 FPS, łatka `patch-buildup.ps1`), Hatchery/Lair/Hive jako „stocznie” larw, 6 typów piechoty, Infested Terran, 6 latających (Fly), grupy `[PrerequisiteGroups]`, `ECACHE86.MIX`, `build-sczergbase.ps1`; dźwięki śmierci pojazdów przez animacje `Explosion=` (`build-sczergdeath.ps1`, uruchamiać po generatorach Zergów).
-- [[mods/zerg-heroes]]: zainstalowany, nietestowany. Bohaterowie Zergów (Kerrigan, Duran, Torrasque, Hunter Killer, Devouring One, Unclean One, Kukulza ×2, Matriarch, Yggdrasill; złoci, `BuildLimit=1`) i budynki z kampanii (Overmind z pancerzem i bez, Cerebrate, Daggoth, Mature Chrysalis), supermoc Overmind's Wrath, `build-sczergheroes.ps1`, `ECACHE82.MIX`.
-- [[mods/zerg-side]]: EVA i sidebar Zergów (`Speech08.mix`: 9 kwestii doradcy Zergów z SC zamiast Nod, `SideC08.mix`: paleta sidebaru fioletowo-brązowa), `build-sczergside.ps1 -Install` (tylko przy zamkniętej grze). Tabela numerów EVA (vox → `00-iNNN.aud`) z `game.exe`.
-- [[mods/zerg-creep]]: zainstalowany 2026-10-27, nietestowany. Creep Zergów z żył TS: dron „Creep Tumor” (`Wall=yes` + art `ToOverlay=VEINHOLE`) staje się Veinhole Monsterem, a Hatchery/Lair/Hive i Creep/Sunken/Spore Colony stawiają potwora obok siebie niewidzialnym spreaderem. Odporność na żyły dla wszystkich 516 typów jednostek. Łatka `patch-veins.ps1`, generator `build-sczergcreep.ps1`. 2026-10-28: creep schodzi po śmierci budynku (każda dziura ma swoje koło, `VeinholeShrinkRate=5`).
-- [[mods/overlord-storage]]: zainstalowany 2026-10-27, **działa w grze** (limit rośnie). Overlord (też Upgraded i Yggdrasill) `Storage=100`: podnosi limit silosów gracza; łatka `game.exe` `patch-overlordstorage.ps1` (pojazd z `Storage=` bez `Harvester` liczy się do `Capacity`) + łatka `Vinifera.dll` `patch-vinifera-overlord.ps1` (sekcja `.scstor`: nadwyżka ponad budynki trafia do pierwszego silosu). Śmierć Overlorda nie zabiera kasy.
-- [[mods/zerg-research]]: zainstalowany, nietestowany. 13 badań Zergów z SC (Melee/Missile/Flyer Attacks & Carapace, Metabolic Boost, Adrenal Glands, Grooved Spines…) montowanych na budynkach Zergów, budynki tech jako „laboratoria” (`Factory=BuildingType` + `BuildConst`), 12 ulepszonych jednostek, `build-sczergresearch.ps1`, `ECACHE84.MIX`.
-- [[mods/protoss-faction]]: zainstalowany, częściowo przetestowany (zasięg budowania działa). Pełna frakcja „Protoss” (dom `GDI2`, strona 8, pliki strony z GDI): 16 budynków, 16 jednostek (Gateway, Robotics, Stargate, lotnicy Fly, Archony z trzech warstw), zasięg budowania tylko od Nexusa i Pylonów (`BaseNormal`/`Adjacent`), przywołanie jako Buildup, `ECACHE85.MIX`, `build-scprotoss.ps1`.
-- [[mods/sc-building-sounds]]: zainstalowany, nietestowany. Dźwięki zaznaczania budynków ze SC (Terran, Zerg, Protoss; dane z `units.dat`), też latające budynki i rozstawione jednostki, `ECACHE79.MIX`, `build-scbldgsounds.ps1`.
-- [[mods/sc-workers]]: zainstalowany 2026-10-26, animacje działają w grze. SCV/Dron/Probe z animacją wydobycia z iscriptu SC (Vinifera `IdleRate`, tylko podczas zbierania), surowce tylko do rafinerii swojej rasy (doki w CC/Nexusie/Hatchery wycofane), Refinery daje 2 SCV (łatka `game.exe` `patch-freescv.ps1`), `UnloadingClass` (bez niej rysowani jako harvester GDI), łatka `Vinifera.dll` (`tools/patch-vinifera-workers.ps1`, ConYard-rafineria nie traci radia), `ECACHE78.MIX`, `build-scworkers.ps1`.
-- [[mods/terran-faction]]: zainstalowany, nietestowany. Piąta frakcja „Terran” w skirmishu Deathmatch (dom `GDI1`, strona 6), etap 0 = klon Aliantów. Kopie `GameOptions.ini.bak`, `MPMaps.ini.bak`.
-
-- [[mods/sc-infantry-stim]]: **deploy piechoty** (łatka `game.exe` `tools/patch-infdeploy.ps1`, w `patch-game.ps1`: klawisz D zamienia typ `X` ↔ `X_D` w miejscu, koszt 1/4 HP) + testowi Marine i Firebat jako prawdziwa piechota ze stimpackiem (`SCMARI`, `SCFIRI`, `tools/build-scinfstim.ps1`, `ECACHE81.MIX`). Nietestowany w grze.
-
-## Plany
-- [[plans/campaign-arka]]: kampania mashup RA1 × StarCraft „ARKA: Błąd znaku” (11 misji + preludium): Alianci uciekają Giga-Chronosferą, błąd znaku Einsteina i sabotaż Nod (kryształ Tyberium) → Mar Sara 2499. Rozpisane wszystkie misje: preludium, 1–11 i bonusowe 12–13 (Sarajewo 2047: przegrana na pokaz, w której Nod sam zanosi Rezonator Khaydarin do Świątyni Prime, potem tunele na czas, czołg Duke'a i dwa zakończenia), słabości Kane'a, wątki postaci (Raynor i Tanya, Fenix wypala psioniczny ślad Kerrigan, sojusz Kerrigan z Kanem). Wersja HTML: `exports/campaign-arka.html`; po każdej zmianie strony przebudować przez `tools/build-campaign-html.ps1`.
-- [[plans/starcraft-factions]]: frakcje SC. Czeka na assety od użytkownika; otwarte pytania i ścieżka konwersji.
-- [[plans/zerg-faction]]: frakcja Zerg (dom `Nod1`, indeks 7), budowa przez drony z `DeploysInto` (osobny dron na każdy budynek), Hatchery = fabryka larw, Pool = koszary. Pełna wersja zainstalowana jako [[mods/zerg-faction]].
-- [[plans/zerg-creep]]: studium creepu Zergów: żyły TS (wdrożone jako [[mods/zerg-creep]]), zapas w postaci własnego typu `[Tiberiums]` siany spreaderem.
-- [[plans/overlord-storage]]: Overlord jako silos: samo INI nie wystarczy, prąd Zergom zbędny, kredyty dwiema łatkami (`Tracking_Active_*` w `game.exe` + `_Harvested` w `Vinifera.dll`), wariant A (limit) albo B (kasa w Overlordzie). Wdrożony wariant A: [[mods/overlord-storage]].
-- [[plans/new-faction]]: piąta grywalna frakcja bez ruszania Rules.ini (w skirmishu przejęty dom pomocniczy `GDI1` = „Terran”). Etap 0 zainstalowany jako [[mods/terran-faction]], czeka na test.
+## Plany (historia decyzji)
+- [[plans/starcraft-factions]]: frakcje SC, otwarte pytania i ścieżka konwersji.
+- [[plans/new-faction]]: piąta frakcja bez ruszania Rules.ini (przejęty dom `GDI1`). Wdrożone: [[mods/terran-faction]].
+- [[plans/zerg-faction]]: frakcja Zerg przez drony z `DeploysInto`. Wdrożone: [[mods/zerg-faction]].
+- [[plans/zerg-creep]]: studium creepu z żył TS. Wdrożone: [[mods/zerg-creep]].
+- [[plans/overlord-storage]]: Overlord jako silos, warianty A/B. Wdrożony wariant A: [[mods/overlord-storage]].
 
 ## Warsztat
-- [[workflow/repo-and-updates]]: **repo git w folderze gry i aktualizacje DTA**: `tools/dta-capture.ps1` po każdej zmianie modu (nowe pliki + zmienione pliki DTA na miejscu w gicie, czyste bazy w `Modding/dta/base`, `game.exe`/`Vinifera.dll` odbudowywane skryptami bit w bit), `dta-precheck.ps1` przed aktualizacją, `dta-restore.ps1` po niej (3-way merge, ponowne łatanie, stara binarka „pinned”, gdy łatki odmawiają); **aktualizacja przywraca wszystkie zmienione pliki DTA i usuwa `ECACHE99.MIX` i `BattleE.ini`** (`preupdateexec`; Marine przeniesiony na `ECACHE77`, 99 zakazany), więc po każdej restore; 16.2.3 zainstalowana 2026-10-27, łatki Vinifery przeniesione (tabela `$builds` po `TimeDateStamp`).
-- [[workflow/installer]]: **instalator i deinstalator** `Modding/dist/DTA-SCMod-Setup.exe` (`tools/build-installer.ps1`, program `tools/ScModSetup.cs`): wszystkie pliki ze `state.json` w jednym exe (130 MB), wygląd menu DTA + portrety i dźwięki SC, kopie oryginałów w `<gra>/SCMod/backup`, NAPRAW po aktualizacji DTA, deinstalator przywraca czystą DTA; tryby `/install`, `/uninstall`, `/shot`; nie instaluje w folderze roboczym; budować po `dta-capture`.
-- [[workflow/known-mistakes]]: **znane błędy** (objaw → przyczyna → reguła): łatki `game.exe`, INI i silnik, pułapki PowerShella, diagnoza. Czytaj przed nowym modem.
-- [[workflow/mission-maps]]: **mapy misji z prawdziwego terenu** (dla sesji robiących misje): zrzut Google Maps + OpenStreetMap + DEM → mapa DTA. Narzędzia `fetch-geodata.ps1`, `GeoData.cs`, `DesignToDta.cs`, wzór `build-arka-gibraltar.ps1`; przepis krok po kroku, kolejność etapów, pułapki (TLS/Overpass, plaże, cypel, pas pod klifem, drugi poziom, budynki neutralne z grafiką Temperate); **drogi jako `Paved Road LAT` jak w misjach DTA, bez ślepych końców** (`FinishRoads`, od 2026-10-27), złoża wielokątem na poziomie (`CellsIn`), kopalnia `OREMINE`.
-- [[workflow/mission-design]]: **zasady projektu misji z recenzji** (czytaj przed każdą nową lub zmienianą misją): ekonomia warta wysiłku (3+ złoża na różnym ryzyku + kopalnia), łupy (`Add-MoneyCrate`, akcja `106 Give Credits`), harras AI powtarzanymi rajdami na zbieracze (`0,3`), lista kontrolna i stan misji ARKA 0–2.
-- [[workflow/scmap-pipeline]]: **jedno polecenie** `tools/port-scmap.ps1 -Map "<nazwa>"`: mapa SC → `Maps/Custom`, kontrole PASS/WARN/FAIL, arkusz `review.png`, archiwum; co konwerter umie i czego nie.
-- [[workflow/tooling]]: parser INI w PowerShell, skany, siatka zajętości mapy, quirki tego komputera; narzędzia C# w `tools/` (CASC, MIX, SHP, GRP, AUD, PCX; mapy: MPQ, CHK, LZO, Format80, TMP, konwerter SC → DTA, mapy z projektu/zrzutu `DesignToDta`).
+- [[workflow/tools-catalog]]: katalog skryptów (biblioteki, generatory z numerami MIX i plikami INI, łatki, misje, repo, sondy).
+- [[workflow/tooling]]: parser INI w PowerShell, kodowanie INI (Latin-1), pułapki PowerShella, narzędzia C#.
+- [[workflow/repo-and-updates]]: git w folderze gry: `dta-capture.ps1` po każdej zmianie, `dta-precheck.ps1`/`dta-restore.ps1` przy aktualizacji DTA (aktualizacja przywraca zmienione pliki DTA i usuwa `ECACHE99.MIX`/`BattleE.ini`).
+- [[workflow/installer]]: instalator i deinstalator `Modding/dist/DTA-SCMod-Setup.exe` (`build-installer.ps1`, budować po `dta-capture`), UI sprawdzać tylko przez `/shot`.
+- [[workflow/scmap-pipeline]]: mapa SC → `Maps/Custom` jednym poleceniem `port-scmap.ps1`.
 
 ## Archiwa
-- `archive/super-mod-v1_2026-10-24/` (+ `.zip`): Super Mod v1 + Frostbite cheats, `modified/` i `original/`, README.
-- `archive/sc-lost-temple_2026-10-24/` (+ `.zip`): mapa The Lost Temple (StarCraft), `modified/Maps/Custom/`, migawka konwertera i pipeline'u `tools/`, `review.png`, README.
-- `archive/arka00-gibraltar-v1_2026-10-26/` (+ `.zip`): teren Gibraltaru w wersji 1 (ręczna Skała, drogi z bruku), skrypt i klasy C# z tamtej wersji, README z przywracaniem.
-- `archive/sc-fighting-spirit_2026-10-24/` (+ `.zip`): mapa Fighting Spirit (StarCraft), `modified/Maps/Custom/`, `review.png`, `summary.json`, README.
+- `archive/super-mod-v1_2026-10-24/` (+ `.zip`): Super Mod v1 + Frostbite cheats, README.
+- `archive/sc-lost-temple_2026-10-24/` (+ `.zip`): mapa The Lost Temple, migawka konwertera.
+- `archive/sc-fighting-spirit_2026-10-24/` (+ `.zip`): mapa Fighting Spirit.
+- `archive/arka00-gibraltar-v1_2026-10-26/` (+ `.zip`): teren Gibraltaru v1, README z przywracaniem.
 
 ## Surowe źródła
-- `raw/maps/gibraltar-google.png` (zrzut), `raw/maps/gibraltar-geo/` (OSM 11 części, DEM 70 kafli z15, ok. 51 MB): dane terenu Gibraltaru.
 - `raw/README.md`: mapa plików gry jako źródeł. `raw/sources/karpathy-llm-wiki.md`: wzorzec wiki.
+- `raw/maps/gibraltar-google.png`, `raw/maps/gibraltar-geo/`: dane terenu Gibraltaru (OSM, DEM).

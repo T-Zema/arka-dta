@@ -4,7 +4,7 @@ Jak `game.exe` (TS 2.03 + DTA) decyduje, czy jednostka może wsiąść do transp
 przyjmuje pasażerów w powietrzu bez łatania exe. Ustalone z deasemblacji 2026-10-27, **(niezweryfikowane w grze)**.
 
 Źródła: `game.exe` + `Game.pdb` (capstone, `vdis.py`), `Vinifera.pdb` (pola klas), `INI/Rules.ini` (`[LST]`, `[NLST]`, `[APC]`),
-`INI/Game Options/StarCraft.ini` (`[SCDROP]`), `INI/Map Code/Terran Faction.ini` (`[SCPSHUT]`, `[SCPSHUT2]`).
+`INI/Game Options/StarCraft.ini` (`[SCDROP]`), `INI/Map Code/SC Factions/` (`[SCPSHUT]`, `[SCPSHUT2]`).
 
 ## Klucze
 

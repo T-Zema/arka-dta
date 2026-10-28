@@ -22,12 +22,15 @@ Silnik czyta `Rules.ini`, a potem nadpisuje go sekcjami z mapy (i z opcji gry do
   (`Maps/Missions/*.map` albo plik opcji gry), nigdy `spawnmap.ini`.
 - Mapa może dołączać wspólne pliki: `[INISystem] BasedOn=../../INI/Map Code/AI Discounts Enhanced.ini`
   (te pliki mogą mieć własne `BasedOn`, np. `AI Discounts Classic.ini`).
+- **`[INISystem] BasedOn=<plik>` łączy pliki w łańcuch** w każdym pliku, który klient czyta przez `IniFile` (mapy, Map Code):
+  najpierw wczytuje plik bazowy, potem kładzie na niego bieżący (późniejszy klucz wygrywa); działa rekurencyjnie, ścieżka
+  jest względna wobec folderu bieżącego pliku. Tak zbudowany jest kod mapy frakcji SC, zob. [[engine/map-code-layers]].
 - `$Inherits=` (Vinifera) działa **tylko w obrębie jednego pliku INI**. Nowy typ zdefiniowany w mapie
   nie odziedziczy sekcji z Rules.ini: trzeba wypisać wszystkie klucze (zob. [[engine/adding-new-types]]).
 - **Powtórzone sekcje w plikach doklejanych przez klienta są scalane, późniejszy klucz wygrywa.** Sprawdzone 2026-10-25 na
   bibliotece klienta `Resources/Binaries/Rampastring.Tools.dll` (`IniFile`, załadowana w PowerShell przez `Assembly.Load(bytes)`):
   `[A] X=1 Y=1` + `[A] Y=2 W=3` → `[A] X=1 Y=2 W=3`. `spawnmap.ini` ma wtedy jedną sekcję (np. jedno `[BuildingTypes]`, choć
-  `Terran Faction.ini` ma trzy). Dzięki temu blok jednego generatora może dopisać klucze do sekcji z bloku innego generatora
+  warstwy kodu mapy frakcji w `INI/Map Code/SC Factions/` mają ich kilka). Dzięki temu blok jednego generatora może dopisać klucze do sekcji z bloku innego generatora
   (wzorzec w [[mods/zerg-research]]). Dotyczy plików, które przechodzą przez klienta (mapa, Map Code, Game Options), **nie** `Art.ini`/`Rules.ini`,
   które czyta sama gra.
 - Zapisy gry (`Saved Games/`) mają stan sprzed zmiany. Po każdej modyfikacji misję trzeba **zacząć od nowa**.

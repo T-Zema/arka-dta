@@ -59,6 +59,8 @@ Wzorzec 1:1 z [[mods/terran-faction]]:
 - `INI/MPMaps.ini`: w trybach bez pliku frakcji `DisallowedPlayerSides=4,5,6,7`.
 - **`MapCodeININame` przyjmuje jeden plik** (dziś `Terran Faction.ini` w `[Default]` i `[Custom Map]`). Blok Zergów trzeba więc dopisać
   do tego samego pliku (jako oznaczony blok) albo zmienić nazwę na wspólny plik frakcji SC. Czy klient przyjmie listę po przecinku: **(niezweryfikowane)**.
+  (2026-10-28: sprawdzone, nie przyjmie: `mapCodeININame` to jeden string. Ale ten plik może łączyć warstwy przez `[INISystem] BasedOn=`,
+  więc frakcje SC mają dziś osobne warstwy w `INI/Map Code/SC Factions/`, zob. [[engine/map-code-layers]].)
 - Typy Zergów: `Owner=Nod1` (budynki i drony tylko dla Zergów). Piechota z [[mods/starcraft-zerg]] dostaje `Nod1` w `Owner=`.
 
 ## Etapy

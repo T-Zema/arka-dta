@@ -83,6 +83,31 @@ Rysowanie: `Tactical::Render` woła `VeinholeMonsterClass::Draw_All` (`0x611AE1`
 
   **(niezweryfikowane w grze)**
 
+### Własność żył i kurczenie (deasemblacja 2026-10-28)
+
+- **Własność.** Globalna mapa bajtów `0x80FBF0` (1 = pole ma właściciela), flaga `0x80000` w `CellClass+0xA4` (pole zajęte w tym przebiegu) i mapa każdego potwora `+64h` (bajt na pole). `Place_Monsters` (`0x6623F0`) zeruje mapę globalną i flagi, potem idzie po potworach **od ostatniego** (najnowszego): żywy dostaje `Build_Growth_Queue` (`0x6626F0`), kurczący się `Build_Shrinking_Queue`. Na końcu każda nakładka `VEINS` bez bajtu w mapie globalnej znika od razu (`Overlay = -1`, bez `Recalc_Attributes`). Robi to też przy wczytaniu mapy.
+- **`Build_Growth_Queue`:**
+  - bierze żyły z pola 5×5, potem zalewa sąsiadów (8 kierunków, `Adjacent_Cell`), którzy mają `VEINS` i nie mają flagi `0x80000`, **bez limitu odległości** (hook `0x6629AC`);
+  - pole dojrzałe (`OverlayData` 30h–34h) idzie tylko do zalewu, niedojrzałe (po `Can_Place_Veins`) zostaje węzłem wzrostu;
+  - stykające się creepy należały więc w całości do jednego potwora.
+- **Śmierć:**
+  - `AI` w stanie 3 przy końcu animacji woła `Destroy_Monster` (`0x662DE0`);
+  - `Destroy_Monster` kładzie żyły na środku i 4 polach prostopadłych, czyści przekątne, robi `Place_Veins` na 5×5, woła `Build_Shrinking_Queue` (`0x662BA0`) i ustawia `IsToShrink` (+9Ch);
+  - `Build_Shrinking_Queue` przegląda całą mapę i bierze tylko **dojrzałe** żyły z mapy `+64h` tego potwora, z priorytetem `1000 − odległość`.
+- **Kurczenie:**
+  - `AI` co `VeinholeShrinkRate + Random(0, Rate/2)` klatek (Rules +0xC4, DTA 100) zdejmuje 1–4 pola z kolejki przez `Reduce_Veins_At` (`0x6633C0`);
+  - przy 100 to ok. 1 pole na sekundę: sonda 2026-10-28 dała 23–41 pól na 1480 klatek, a Hive miał 565 pól;
+  - martwego potwora nie widać: `Draw_It` (`0x661A30`) wychodzi przy `IsToShrink`;
+  - `Update_All` (`0x6613C0`, druga pętla = wkompilowane `Remove_Dead`) kasuje potwora z `IsToShrink` i pustą kolejką.
+- **Łatka (miejsca 11–13 `patch-veins.ps1`, `patch-veins-shrink.asm`, jaskinia `0x86C700`–`0x86C7D2`, [[mods/zerg-creep]]):**
+  - 11: potwór utworzony w grze dostaje słowo `'ZC'` w `+9Eh` (z mapy: 0). Hook `0x58B71A`, `eax` = nowy potwór z konstruktora (`ret 4`, `mov eax,esi`);
+  - 12: potwór `'ZC'`/`'ZG'` zalewa tylko pola z dx² + dy² ≤ 72, a jego dojrzałe pola stają się też węzłami wzrostu (`0x662A28`), więc po przebudowie odrasta w luki;
+  - 13: po skasowaniu martwego potwora (`0x661408`) `Place_Monsters(false)` buduje kolejki od nowa, a żyły bez właściciela znikają;
+  - w INI `VeinholeShrinkRate=5`;
+  - 14 (2026-10-28, ARKA 5): promień na misję. Miejsca 9 i 12 zamiast `add eax,edx / cmp eax,72` wołają jaskinię `0x86C7E0` (`patch-veins-radius.asm`). Dla potwora `'ZC'` limit to `[General] VeinholeMonsterStrength`², gdy klucz ma 1–100, a dla reszty 72. TS czyta klucz do Rules `+0B8h` (`0x5CC05B`), domyślnie 10000 (konstruktor `0x5C4450`), i nigdzie go nie używa (Rules.ini: „no longer used”, siła potwora jest w `[VEINTREE]`). Mapa ustawia go w swoim `[General]`. Pola scenariusza z `[VariableNames]` się nie nadały, bo Vinifera trzyma zmienne lokalne we własnym `ScenarioClassExtension` (+153084, 500 × 44 B).
+
+  Potwory z map DTA (słowo 0) zachowują się jak dotąd. **(niezweryfikowane w grze)**
+
 Pola `VeinholeMonsterClass` (`Vinifera.pdb`): `+4Ch` liczba komórek, `+50h` `VeinCellQueue`, `+54h` `VeinCellNodes`, `+68h` stan, `+6Ch` następny stan, `+70h` klatka, `+94h` `MonsterCell`, `+98h` `ShapeFrame`, `+9Ch` `IsToShrink`, `+9Dh` `IsToPuffGas`, `+A0h` licznik dojrzałych.
 
 `[Basic]` i `[General]` da się nadpisać z pliku Map Code (klient dokleja go do mapy), tak robi [[mods/zerg-creep]].

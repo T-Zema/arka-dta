@@ -16,7 +16,8 @@ Każdy nowy błąd, który kosztował rundę testu, dopisuj tutaj.
 | Zepsuta grafika/crash po instalacji | MIX lub exe nadpisany przy działającej grze | przed `-Install`/łatką: `Get-Process game` |
 | `game.exe` odbudowany z `.bak` ≠ zainstalowany (2026-10-27) | zainstalowany jest wariant `-Debug` łatki fly-hover, a `patch-game.ps1` na czystym exe nakłada zwykły | `patch-game.ps1 -FlyDebug` (wpisane w `Modding/dta/sync.json`); `dta-capture.ps1` sprawdza odtwarzalność przy każdym zapisie. [[workflow/repo-and-updates]] |
 | Łatki `Vinifera.dll` odmawiają po aktualizacji DTA | nowa Vinifera ma inne adresy (16.2.3: wszystkie trzy łatki) | najpierw `dta-precheck.ps1`; `dta-restore.ps1` zostawia starą załataną binarkę (pinned); port = nowy wpis w `$builds` po porównaniu deasemblacji. [[workflow/repo-and-updates]] |
-| Po aktualizacji DTA zniknęły Marine (`ECACHE99.MIX`) i misje ARKA (`BattleE.ini`), a `Art.ini` itd. wróciły do oryginału | aktualizacja przywraca każdy plik DTA różny od manifestu i wykonuje `[Delete]` z `preupdateexec` (stare nazwy DTA) | po każdej aktualizacji `dta-restore.ps1`; nie wierzyć liście „Local file X is different” z `client.log`. [[workflow/repo-and-updates]] |
+| Po aktualizacji DTA zniknęły Marine (`ECACHE99.MIX`) i misje ARKA (`BattleE.ini`), a `Art.ini` itd. wróciły do oryginału | aktualizacja przywraca każdy plik DTA różny od manifestu i wykonuje `[Delete]` z `preupdateexec` (stare nazwy DTA) | po każdej aktualizacji `dta-restore.ps1`; nie wierzyć liście „Local file X is different” z `client.log`; nie używać `ECACHE99` (Marine przeniesiony na 77). [[workflow/repo-and-updates]] |
+| Ikona badania inna, niż mówi generator (`SCU238IC`: w grze #325, w `ECACHE87` #238) | stara kopia pliku w MIX-ie o wyższym numerze (`ECACHE99`) przesłaniała nową; wyższy numer wygrywa | zmieniając numer MIX lub generator, sprawdzić identyfikatory wspólne z innymi MIX-ami; generator pisze MIX od zera, bez cudzych plików. [[engine/shp-graphics]] |
 
 ## Silnik i INI
 
@@ -57,12 +58,18 @@ Każdy nowy błąd, który kosztował rundę testu, dopisuj tutaj.
 | Dialogi misji za szybkie, kilka kwestii naraz | odstępy 5–8 „s” gry (gra chodzi ~3× szybciej niż 15 klatek/s), po 2 teksty w triggerze, fale i przypomnienia trafiały w dialog | `MissionKit.ps1`: jeden tekst na trigger, odstęp z długości, `Test-TextTimeline` 0 WARN. [[engine/triggers-and-dialogue]] |
 | Fale, desanty i szpieg stoją, nie atakują bazy | skrypt drużyny naziemnej z `1,N` (Attack waypoint); w DTA używają go tylko samoloty | `16,<cel>` + `11,14`, szpieg `15,<wp>`; kontrola `FAIL` w generatorze. [[engine/triggers-and-dialogue]] |
 | Brak harvestera w misji | rafineria postawiona w mapie nie daje darmowego `RAHARV` | dopisać harvester do `[Units]` |
+| Wszystkie cywilne budynki w mieście są wrogie (ARKA 0, test 2026-10-27) | dom `Neutral` w mapie miał w `Allies=` tylko siebie | `Neutral` sojusznikiem gracza w obie strony (`Allies=` obu domów). Budynki do przejęcia inżynierem dać domowi niesprzymierzonemu z graczem (`Special`), bo sojuszniczego budynku inżynier nie przejmie |
+| Generator misji: „no free 4x3 spot” po ręcznej edycji terenu w WAE (ARKA 0, 2026-10-28) | WAE zapisuje `IsoMapPack5` bez komórek z kaflem 0 (29083 → 23878 wpisów); gra uzupełnia je czystą trawą, a generator brał brakującą komórkę za „poza mapą” | komórki prostokąta mapy domyślnie jako kod 0: dla `Size` W×H ważne są te z `0 ≤ x−y+W−1 ≤ 2W−2` i `0 ≤ x+y−W−1 ≤ 2H−1` (poprawione w `build-arka00-mission.ps1`; inne narzędzia czytające `IsoMapPack5` mają to samo założenie) |
+| Budynek-działo bez lufy, widać samą podstawę (ARKA 0, `GUN100T`, test 2026-10-28) | nowa animacja wieżyczki (`TurretAnim=GUN100T_A`) była w Art.ini, ale nie na liście `[Animations]` | każda nowa `TurretAnim` (i każda animacja) musi być na liście `[Animations]` jak `1248=RAPARTY_A` w Rules; w mapie misji np. `ARKA0A1=GUN100T_A` |
+| (złapane przed testem, ARKA 0) Budynek `GUN100T` i broń `Gun100T` w jednej mapie | nazwy różnią się tylko wielkością liter, a INI gry szuka sekcji bez jej rozróżniania **(niezweryfikowane)** | broń, pocisk i głowica mają nazwy zupełnie inne niż typ (`Armstrong100T`) |
+| Działko AA Aliantów strzela do Mutalisków, ale nie rani (ARKA 4, 2026-10-27) | `FlakWH` ma `Modifier.wood=0%`, a `[light] BaseArmor=wood` (Rules `[ArmorTypes]`): cel z `Armor=light` dostaje 0 | przy nowej jednostce sprawdzić modyfikatory głowic, które mają ją trafiać, z `BaseArmor`; w mapie ARKA 4 `FlakWH Modifier.light=770%` |
 
 ## Skrypty PowerShell (ten komputer)
 
 | Objaw | Przyczyna | Reguła |
 |---|---|---|
 | W Art.ini tylko ostatni budynek | `foreach ($b in $B)`: nazwy zmiennych bez wielkości liter | lista ≠ zmienna pętli (`$Bldgs`/`$b`) |
+| Generator ARKA 4 pada: `Cannot overwrite variable HOME` | `$home` to automatyczna zmienna PowerShella tylko do odczytu (jak `$input`, `$args`) | nie nazywać zmiennych `$home`, `$input`, `$args`, `$host` |
 | Brak `.bak` łatki DLL | `param($Dll)` nadpisany przez `$dll = …` | cel w zmiennej o innej nazwie |
 | Wszystkie lotniki Protossów jeździły po ziemi | `$true -eq 'hover'` daje `True` | porównanie tekstowe `"$x" -eq 'hover'` |
 | Funkcja się nie wywołuje | alias wygrywa z funkcją (`R` = `Invoke-History`, `Ac` = `Add-Content`, `Group` = `Group-Object`) | długie nazwy pomocników; sprawdź `Get-Alias <nazwa>` |
@@ -89,6 +96,8 @@ Każdy nowy błąd, który kosztował rundę testu, dopisuj tutaj.
 | Kanał wody przecina cypel, schodkowe brzegi bez klifu | `FindBridges` wykrył tylko część wąskiego lądu jako groblę | w mapach projektowanych bez grobli; cypel ≥ 6 komórek albo usunąć. [[missions/arka-00-gibraltar]] |
 | Etykiety Google Maps jako pasy lądu na wodzie | ciemny tekst ≠ kolor wody | wyciąć wielokątami przed głosowaniem |
 | Miasto zalane równoległymi drogami | kafel drogi ma 2 komórki, a wzięto też `tertiary` | tylko `trunk/primary/secondary` w gęstej zabudowie. [[workflow/mission-maps]] |
+| „Drogi do nikąd” (recenzja ARKA 0) | kafle dróg z A* rwały się na okruchy, a główne drogi OSM kończyły się przy pominiętej mniejszej ulicy | `Paved Road LAT` jak w misjach DTA + `FinishRoads` (łącznik, plac albo przycięcie), log `free ends 0`. [[workflow/mission-maps]] |
+| Misja „mało angażująca” (recenzja ARKA 0) | brak rudy (15 komórek), fale tylko na główny cel, bogata baza startowa | złoża na ryzyku, łupy, powtarzane rajdy na zbieracze. [[workflow/mission-design]] |
 | Pół Gibraltaru z bruku | `landuse=military` (tereny MOD) brane jako przemysł | bez `military`/`construction` w bruku |
 | Grań z DEM prawie znikła | wycięcie pasa przy brzegu + odsunięcie 24 px zjadły wąski grzbiet | odsunięcie 18 px, próg 220 m |
 | Wschodnia krawędź Skały jak od linijki | wycinanie pasa ograniczone stałym `x ≥ 430` | ogranicza tylko odległość od brzegu |
@@ -103,3 +112,5 @@ Każdy nowy błąd, który kosztował rundę testu, dopisuj tutaj.
   „wiszące” wtedy w logu nie są błędem.
 - **Raport crasha:** adres z `Call Stack` + `Game.pdb` daje funkcję; śmieciowy EIP = zły slot vtable. [[engine/debugging]]
 - Rzeczy nieprzetestowane w grze oznaczaj **(niezweryfikowane w grze)**, a po teście użytkownika usuń znacznik.
+
+- **Misja nie startuje, gra znika z kodem `C0000409`, log kończy się na `Initializing SPEECH03.MIX`** → linia `[Actions]` triggera dłuższa niż ok. 512 znaków (ARKA 5: 33 akcje, 774 znaki) przepełnia bufor gry → najwyżej ok. 12 akcji na trigger, reszta w triggerze-kontynuacji. Log gry jest buforowany: ostatnie linie przed crashem nie pokazują miejsca błędu ([[engine/triggers-and-dialogue]], pułapka 16).

@@ -1,5 +1,6 @@
 # Builds the StarCraft Marine assets for DTA from the user's StarCraft: Remastered install.
-# Output: <game>\MIX\ECACHE99.MIX (SHPs + AUDs) and preview PNGs in -PreviewDir.
+# Output: <game>\MIX\ECACHE77.MIX (SHPs + AUDs) and preview PNGs in -PreviewDir.
+# (ECACHE99 until 2026-10-27: DTA's updater script preupdateexec deletes MIX/ECache99.mix at every update.)
 param(
     [string]$StarCraft = "C:\Program Files (x86)\StarCraft",
     [string]$PreviewDir = "$env:TEMP\scmarine-preview",
@@ -85,8 +86,8 @@ foreach ($k in $sounds.Keys) {
     $files["$k.AUD"] = [Aud]::Encode($pcm, $rate, $gain)
 }
 
-[Mix]::Write("$game\MIX\ECACHE99.MIX", $files)
-"ECACHE99.MIX: $($files.Count) files"
+[Mix]::Write("$game\MIX\ECACHE77.MIX", $files)
+"ECACHE77.MIX: $($files.Count) files"
 foreach ($k in $files.Keys) { "  {0,-14} {1,8} B" -f $k, $files[$k].Length }
 
 # --- previews
@@ -97,7 +98,7 @@ $n = $unitShp.Frames.Count / 2
 [Pal]::Sheet($deathShp.Frames, [int[]](0..10), 64, 64, $unitPal, 2, 11, "$PreviewDir\death.png")
 $both = New-Object 'System.Collections.Generic.List[Frame]'; $both.Add($cameo.Frames[0]); $both.Add($cameo2.Frames[0])[Pal]::Sheet($both, [int[]](0..($both.Count-1)), 64, 48, $cameoPal, 4, $both.Count, "$PreviewDir\cameo.png")
 # round-trip check: re-read the written SHP from the MIX
-$check = [Shp]::Read((New-Object Mix "$game\MIX\ECACHE99.MIX").Read('SCMARINE.SHP'))
+$check = [Shp]::Read((New-Object Mix "$game\MIX\ECACHE77.MIX").Read('SCMARINE.SHP'))
 "round-trip SCMARINE.SHP: $($check.Frames.Count) frames, $($check.Width)x$($check.Height)"
 [Pal]::Sheet($check.Frames, [int[]](0,8,16,24,40,328,329,384), 64, 64, $unitPal, 2, 8, "$PreviewDir\roundtrip.png")
 "previews -> $PreviewDir"

@@ -306,6 +306,11 @@ ponownie**, bo kopie jednostek się zestarzeją.
 Skrzynka „Unit” zawieszała grę, bo dom `GDI2` nie miał żadnego pojazdu z `CrateGoodie=yes`. Naprawione blokiem
 „Crate goodies (SC factions)” (Reaver, Scout, Corsair), zob. [[engine/crates]].
 
+## Zealot reaguje dalej (2026-10-28, prośba użytkownika; niezweryfikowane w grze)
+
+- „Zealoty są trochę ślepe o 2 kratki”: `SCPZEAL` i `SCPZEAL2` mają `GuardRange=3.75` (zasięg ostrzy `SCPPsiBlades` 1.75 + 2; sam zasięg ataku bez zmian). Bez `GuardRange` jednostka w Guard reaguje tylko w zasięgu broni.
+- Wpis jest w bloku `; >>> SC balance (user)` w `Terran Faction.ini` (generatory go nie nadpisują); działa też w misjach ARKA z typami skopiowanymi do mapy (ARKA 5).
+
 ## Znane ograniczenia
 
 - **AI nie umie grać Protossem** (nie zna Pylona jako elektrowni, `AIBuildThis=no`). Nie dawaj Protossa komputerowi.

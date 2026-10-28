@@ -96,8 +96,12 @@ $body = @"
 VeinGrowthEnabled=yes
 
 ; growth timer in frames (Rules.ini 300); every growth step adds 1-5 vein cells. User: faster creep.
+; shrink timer of a dead hole (Rules.ini 100): every 8-12 frames 1-4 cells go; at 100 the creep of a Hive took ~10 minutes
+; (user 2026-10-28: "creep nie schodzi"; then 5, then "40% slower" = 8). patch-veins.ps1 sites 11-13 give each hole only its
+; own circle.
 [General]
 VeinholeGrowthRate=60
+VeinholeShrinkRate=8
 
 ; Creep Colony stores resources like a silo (user 2026-10-27; same as the Supply Depot / Pylon silos of the SC factions)
 [SCZCRP]

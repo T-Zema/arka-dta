@@ -21,7 +21,7 @@
 | `MIX/ECACHE89.MIX`, `Modding/tools/build-scliftoff.ps1`, `StarCraft.ini` / `Art.ini` | latające budynki: `<ID>F.SHP`, `SCL01–SCL11` w `[VehicleTypes]`, `UndeploysInto=` w 11 budynkach, blok „Lifted Terran buildings” na końcu obu plików | sesja frakcji |
 
 Przebudowa: `powershell -File Modding/tools/build-scterran.ps1` (podglądy PNG w `%TEMP%\scterran-preview`).
-Skrypt nie dotyka `ECACHE99.MIX` z Marine'em, bo `build-scmarine.ps1` zapisuje ten plik od zera.
+Skrypt nie dotyka `ECACHE77.MIX` z Marine'em (dawniej `ECACHE99`), bo `build-scmarine.ps1` zapisuje ten plik od zera.
 
 ## Budynki i drzewko
 
@@ -47,7 +47,7 @@ i Upgraded Marine (`FACTORY,TECH`) da się zbudować w czysto terrańskiej bazie
 | SCEBAY | weaponpl | 4x3 | tech | 600 | 6800 |
 | SCMTUR | missile (+missilet) | 2x2 | `Primary=RedEYE2`, `Turret=yes`, `Sensors=yes` | 500 | 4000 |
 | SCACAD | academy | 3x2 | tech | 800 | 4800 |
-| SCBUNK | pillbox | 3x2 | `SCBunkerGun` (2×15, ROF 10, zasięg 6, dźwięk `SCMAFIRE` z ECACHE99) | 600 | 6000 |
+| SCBUNK | pillbox | 3x2 | `SCBunkerGun` (2×15, ROF 10, zasięg 6, dźwięk `SCMAFIRE` z ECACHE77) | 600 | 6000 |
 | SCFACT | factory | 4x3 | `Factory=UnitType`, `WeaponsFactory=yes` bez drzwi (jak `AFLD`) | 1200 (rebalans 2026-10-26, było 2000) | 10000 |
 | SCARMO | chemlab | 3x2 | tech | 1000 | 6000 |
 | SCSTAR | starport | 4x3 | od 2026-10-25 fabryka testowych okrętów Fly (`Factory=UnitType`, `WeaponsFactory`, `Naval=yes`, `ExclusiveFactory=yes`; zob. [[mods/starcraft-terran-units]]) | 1500 | 10400 |

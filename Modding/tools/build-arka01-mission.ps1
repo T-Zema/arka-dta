@@ -229,6 +229,8 @@ function Squad($house, [string[]]$types, [int]$n, $dx = 0, $dy = 0, $mission = '
 }
 
 # ================================================================ mission types
+# Tanya: 2500 HP in every ARKA mission (user 2026-10-28: first +50%, then 2500; Rules 1000)
+$ini.Set('TANYA', 'Strength', "$([int]([int]$rules['TANYA']['Strength'] * 2.5))")
 # ARKA wreck = the real Chronosphere type RAPDOX, overridden in this map: it starts NEUTRAL and capturable so that an
 # engineer can be sent INTO the wreck (secret: the cracked green crystal), no superweapon, no power, not repairable.
 # A Rules type, not a new one, because the triggers test "building exists" by type INDEX, and only Rules indices are
@@ -264,7 +266,7 @@ $ini.Set('InfantryTypes', 'ARKA1I01', 'ARKEINST'); foreach ($k in $ein.Keys) { $
 # Jim Raynor on his Vulture: the SC Vulture with 40% more HP (user, 2026-10-27; first 20%). Image= is required: the art section is
 # looked up by the image name, and without it the game looked for [ARKRAYN] in Art.ini and drew nothing
 $ray = [ordered]@{}; foreach ($k in $scSec['SCVULT'].Keys) { $ray[$k] = $scSec['SCVULT'][$k] }
-$ray['Name'] = 'Jim Raynor (Vulture)'; $ray['Image'] = 'SCVULT'; $ray['Strength'] = [string][int]([int]$ray['Strength'] * 1.4); $ray['TechLevel'] = '-1'; $ray['Owner'] = 'GDI2'
+$ray['Name'] = 'Jim Raynor (Vulture)'; $ray['Image'] = 'SCVULT'; $ray['Strength'] = [string][int]([int]$ray['Strength'] * 5.6)   # +40%, then +300% (user 2026-10-28, all ARKA: "szybko pada"); $ray['TechLevel'] = '-1'; $ray['Owner'] = 'GDI2'
 $ray['SelfHealing'] = 'yes'; $ray['SelfHealingCap'] = '1.0'; $ray['SelfHealingStep'] = '5'
 # Raynor speaks with his own SC voice (the hero Marine SCRAYN), not the Vulture pilot's (user, 2026-10-27)
 foreach ($k in 'VoiceSelect', 'VoiceMove', 'VoiceAttack', 'VoiceFeedback', 'VoiceDie') { if ($scSec['SCRAYN'].Contains($k)) { $ray[$k] = $scSec['SCRAYN'][$k] } }
@@ -481,6 +483,7 @@ function Trigger($key, $name, [string[]]$events, [string[]]$actions, $house = 'A
 }
 $wavesOff = @('w1', 'w2', 'raid', 'w3', 'w4', 'muta', 'wHard', 'wRep')
 . "$tools\MissionKit.ps1"   # reveal crate, one text per trigger, dialogue gaps from text length, timeline check
+Add-ScAirArmor             # SC flyer armors: Allied AA fires at SC flyers only on order, Dragoons cannot hit the Overlord
 Add-RevealCrate $crate[0] $crate[1]
 
 # --- opening: the radio, Tanya and Einstein, Stavros, objectives
@@ -619,6 +622,84 @@ foreach ($k in $trig.Keys) {
     $ini.Set('Actions', $t.Id, "$(@($acts).Count)," + (@($acts) -join ','))
     $ini.Set('Tags', $t.Tag, "$(if ($t.Repeat) { 2 } else { 0 }),$($t.Name) 1,$($t.Id)")
 }
+
+# ================================================================ Zerg creep (mods/zerg-creep) from the start (user 2026-10-28)
+# As ARKA 4 does. The creep spreaders are Art.ini ActiveAnims of the Zerg buildings (global), the rest of the creep
+# block lives in the faction map code, which a campaign mission does not load: the animation list entries, vein growth
+# on, buildable veins, ImmuneToVeins=yes for every type (the veins damage whatever stands on them).
+$ini.Set('Basic', 'VeinGrowthEnabled', 'yes')
+$ini.Set('General', 'VeinholeGrowthRate', '60')
+$ini.Set('General', 'VeinholeShrinkRate', '8')      # creep of a dead nest recedes in ~a minute (Rules 100: ~10 min)
+foreach ($ov in 'VEINS', 'VEINHOLEDUMMY') { $ini.Set($ov, 'Insignificant', 'yes') }
+$an = 0; foreach ($a in 'SCZCRSPL', 'SCZCRSHL', 'SCZCRSPS', 'SCZCRSHS') { $an++; $ini.Set('Animations', "ARKA1ZC0$an", $a); $ini.Set($a, 'Name', "Zerg creep $a") }
+$nImm = 0
+foreach ($ln in 'InfantryTypes', 'VehicleTypes', 'BuildingTypes', 'AircraftTypes') {
+    $names = @(); if ($rules.ContainsKey($ln)) { $names += @($rules[$ln].Values) }; $names += @($ini.Section($ln) | ForEach-Object { $_.Value })
+    foreach ($tn in ($names | Sort-Object -Unique)) { if ($tn -and $tn -notmatch '^\d') { $ini.Set($tn, 'ImmuneToVeins', 'yes'); $nImm++ } }
+}
+# A Veinhole Monster in the map under every creep building (Hatchery at foundation cell (1,1), colonies at (0,0); holes
+# 3+ cells apart, the engine's rule), overlay 167 + 8x 178 round it, and fully grown VEINS (126, data 48) on a disc of
+# radius 5 round each hole and on every cell of every Zerg building plus a 1-cell margin. At map load Place_Monsters
+# floods the veins connected to a hole and removes the others. Only clear ground without an overlay or a tree; cells of
+# non-Zerg buildings stay free. Written last, after the crates (they refuse a cell with an overlay).
+$o = [Pack]::Unpack($ini.Joined('OverlayPack'), $false); $od = [Pack]::Unpack($ini.Joined('OverlayDataPack'), $false)
+$tree = @{}; foreach ($kv in $ini.Section('Terrain')) { $tree[[int]$kv.Key] = $true }
+$foreign = @{}; $zb = @()
+foreach ($kv in $structs) {
+    $p = $kv.Value -split ','; $f = Foundation $p[1]; $bx = [int]$p[3]; $by = [int]$p[4]
+    if ($p[0] -match '^Nod[12]$' -and $p[1] -like 'SCZ*') { $zb += , @($p[1], $bx, $by, $f[0], $f[1]); continue }
+    for ($i = $bx; $i -lt $bx + $f[0]; $i++) { for ($j = $by; $j -lt $by + $f[1]; $j++) { $foreign[$j * 512 + $i] = $true } }
+}
+function Creep-Free($x, $y) { $c = $code[$y * $GW + $x]; $i = $y * 512 + $x; ($c -eq 0 -or ($c -ge 11 -and $c -le 14)) -and $o[$i] -eq 255 -and -not $tree[$y * 1000 + $x] -and -not $foreign[$i] }
+$holes = @(); $nVein = 0
+foreach ($b in $zb) {
+    if ($b[0] -notin 'SCZHAT', 'SCZHIV', 'SCZCRP', 'SCZSUN', 'SCZSPO') { continue }
+    $hx = $b[1]; $hy = $b[2]; if ($b[0] -in 'SCZHAT', 'SCZHIV') { $hx++; $hy++ }
+    if (@($holes | Where-Object { [Math]::Max([Math]::Abs($_[0] - $hx), [Math]::Abs($_[1] - $hy)) -lt 3 }).Count) { continue }
+    # the spreader's own cell first, then the other cells of the foundation (a colony by a rock ledge, ARKA 2 city gate)
+    $cand = @(, @($hx, $hy)); for ($x = $b[1]; $x -lt $b[1] + $b[3]; $x++) { for ($y = $b[2]; $y -lt $b[2] + $b[4]; $y++) { $cand += , @($x, $y) } }
+    $at = $null
+    foreach ($cc in $cand) {
+        if (@($holes | Where-Object { [Math]::Max([Math]::Abs($_[0] - $cc[0]), [Math]::Abs($_[1] - $cc[1])) -lt 3 }).Count) { continue }
+        $ok = $true; for ($dx = -1; $dx -le 1; $dx++) { for ($dy = -1; $dy -le 1; $dy++) { $c = $code[($cc[1] + $dy) * $GW + $cc[0] + $dx]; if (-not ($c -eq 0 -or ($c -ge 11 -and $c -le 14)) -or $o[($cc[1] + $dy) * 512 + $cc[0] + $dx] -ne 255) { $ok = $false } } }
+        if ($ok) { $at = $cc; break }
+    }
+    if (-not $at) { $log.Add("creep: no hole under $($b[0]) @ $hx,$hy (ground or overlay)"); continue }
+    if ($at[0] -ne $hx -or $at[1] -ne $hy) { $log.Add("creep: hole of $($b[0]) @ $hx,$hy moved to $($at[0]),$($at[1])") }
+    $hx = $at[0]; $hy = $at[1]; $holes += , @($hx, $hy)
+    for ($dx = -1; $dx -le 1; $dx++) { for ($dy = -1; $dy -le 1; $dy++) { $i = ($hy + $dy) * 512 + $hx + $dx; $o[$i] = $(if ($dx -eq 0 -and $dy -eq 0) { 167 } else { 178 }); $od[$i] = 0 } }
+}
+$veinAt = { param($x, $y) if (Creep-Free $x $y) { $i = $y * 512 + $x; $o[$i] = 126; $od[$i] = 48; $script:nVein++ } }
+foreach ($hole in $holes) { for ($dx = -5; $dx -le 5; $dx++) { for ($dy = -5; $dy -le 5; $dy++) { if ($dx * $dx + $dy * $dy -le 25) { & $veinAt ($hole[0] + $dx) ($hole[1] + $dy) } } } }   # not $h: it is $H, the house indices
+foreach ($b in $zb) { for ($x = $b[1] - 1; $x -le $b[1] + $b[3]; $x++) { for ($y = $b[2] - 1; $y -le $b[2] + $b[4]; $y++) { & $veinAt $x $y } } }
+# veins not 4-connected to a hole would go at map load (a Spire or Pool away from the discs kept bare ground): each loose
+# patch gets a line of veins to the nearest connected vein within 15 cells
+$conn = New-Object 'bool[]' $o.Length
+$fill = { param($starts) $q = New-Object Collections.Generic.Queue[int]; foreach ($s in $starts) { if (-not $conn[$s]) { $conn[$s] = $true; $q.Enqueue($s) } }
+    while ($q.Count) { $i = $q.Dequeue(); foreach ($d in -1, 1, -512, 512) { $j = $i + $d; if (-not $conn[$j] -and ($o[$j] -eq 126 -or $o[$j] -eq 178)) { $conn[$j] = $true; $q.Enqueue($j) } } } }
+& $fill @($holes | ForEach-Object { $_[1] * 512 + $_[0] })
+$nLoose = 0; $dead = New-Object 'bool[]' $o.Length
+for ($i0 = 0; $i0 -lt $o.Length; $i0++) {
+    if ($o[$i0] -ne 126 -or $conn[$i0] -or $dead[$i0]) { continue }
+    # shortest walk over veins or free ground (BFS, 15 cells round the patch cell) to a connected vein, then veins on it
+    $lx = $i0 % 512; $ly = [int][Math]::Floor($i0 / 512); $from = @{ $i0 = -1 }; $q = New-Object Collections.Generic.Queue[int]; $q.Enqueue($i0); $hit = -1
+    while ($q.Count -and $hit -lt 0) {
+        $i = $q.Dequeue(); foreach ($d in -1, 1, -512, 512) {
+            $j = $i + $d; $x = $j % 512; $y = [int][Math]::Floor($j / 512)
+            if ($from.ContainsKey($j) -or [Math]::Abs($x - $lx) -gt 15 -or [Math]::Abs($y - $ly) -gt 15) { continue }
+            if ($conn[$j]) { $from[$j] = $i; $hit = $j; break }
+            if ($o[$j] -eq 126 -or $o[$j] -eq 178 -or (Creep-Free $x $y)) { $from[$j] = $i; $q.Enqueue($j) }
+        }
+    }
+    if ($hit -ge 0) { for ($i = $from[$hit]; $i -ne $i0; $i = $from[$i]) { if ($o[$i] -ne 126 -and $o[$i] -ne 178) { & $veinAt ($i % 512) ([int][Math]::Floor($i / 512)) } }; & $fill @($i0) }
+    else {   # no way out (cut off by a cliff): the game would drop the patch at load, so it goes here already
+        $nLoose++; $q.Enqueue($i0); $dead[$i0] = $true; $n0 = 0
+        while ($q.Count) { $i = $q.Dequeue(); $o[$i] = 255; $od[$i] = 0; $n0++; foreach ($d in -1, 1, -512, 512) { $j = $i + $d; if (-not $dead[$j] -and $o[$j] -eq 126) { $dead[$j] = $true; $q.Enqueue($j) } } }
+        $log.Add("creep: loose veins at $lx,$ly ($n0 cells, no path to a hole) removed")
+    }
+}
+$ini.SetPack('OverlayPack', [Pack]::PackData($o, $false, 8192)); $ini.SetPack('OverlayDataPack', [Pack]::PackData($od, $false, 8192))
+$log.Add("creep: vein growth on, 4 spreader animations, ImmuneToVeins on $nImm types; $($holes.Count) holes under $($zb.Count) Zerg buildings, $nVein vein cells, $nLoose loose patches removed")
 
 # ================================================================ [Basic], briefing
 $basic = [ordered]@{

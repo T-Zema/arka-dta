@@ -79,6 +79,11 @@ $kind.Polygon((P 205,150, 335,150, 335,188, 205,188), $W_, 255)
 $kind.Vote($W_, $L_, 3, 0.5)
 [void]$kind.RemoveSmall($L_, $W_, 400)
 [void]$kind.RemoveSmall($W_, $L_, 300)
+# south of Catalan Bay the "EAST SIDE" label of the screenshot left a water notch and a land tongue in the sea (cells
+# about 147-156, 114-122 came out as a staircase, user 2026-10-27): the coast follows the real shoreline of the
+# screenshot instead, (525,342) -> (501,362) -> (494,372) -> (492,397)
+$kind.Polygon((P 470,340, 525,340, 501,362, 494,372, 492,398, 470,398), $L_, $W_)            # notch -> land
+$kind.Polygon((P 525,340, 565,340, 565,398, 492,398, 494,372, 501,362), $W_, $L_)            # tongue -> sea
 
 # the Rock from the DEM: level 1 above $elev1, level 2 (crest) above $elev2
 $kind.FromGrid($elev, $elev1, $H_, $L_)
@@ -103,6 +108,10 @@ $rampSeeds = [ordered]@{
     'S'  = @(425, 818, 'L1', 'Windmill Hill Road')
     'C1' = @(395, 430, 'L2', 'Middle Hill (gorna stacja kolejki)')
     'C2' = @(440, 640, 'L2', 'Spur Battery Road')
+    # the pass from the east lane (Catalan Bay) onto the Rock ore was one cell wide: the level-1 cliff (cells x 151-153,
+    # y 120-133) ended one row above the crest cliff (y 135). A ramp at the foot of that cliff, about cell 152,131,
+    # widens it to ~6 cells (user 2026-10-27; route of the Soviet ambush, mission wp 61-63)
+    'E'  = @(436, 410, 'L1', 'przesmyk od Catalan Bay (zasadzka na zloze na Skale)')
 }
 $rampAt = [ordered]@{}
 foreach ($k in $rampSeeds.Keys) {
@@ -187,7 +196,6 @@ $wae   = "$game\Map Editor\Editor\Config\ConnectedTileDrawer.ini"
 $cliffSet  = New-Object ConnectedSet $wae, "TemperateCliffSet", $th
 $wcliffSet = New-Object ConnectedSet $wae, "TemperateWaterCliffSet", $th
 $beachSet  = New-Object ConnectedSet $wae, "TemperateShoreSet", $th
-$roadSet   = New-Object ConnectedSet $wae, "TemperatePavedRoadASet", $th
 $plainWater = $th.SetByName('Water').Start
 
 $conv = New-Object DesignToDta $th, $localW, $localH, $padX, $padTop, $padBottom, $du0, $dv0, $du1, $dv1
@@ -218,30 +226,57 @@ $plotCells = New-Object 'System.Collections.Generic.HashSet[int]' (, [int[]]@($c
 $conv.RoadAvoid = $plotCells
 [void]$conv.ReserveZone(9)
 
-# ---------------------------------------------------------------- roads (OSM) as Paved Roads A tiles
-$roadWays = New-Object 'System.Collections.Generic.List[OsmWay]'
-# main roads only: a road tile is 2 cells wide, tertiary streets too filled the old town with parallel strips
-foreach ($w in $osm.Select('highway', 'trunk,primary,secondary,trunk_link,primary_link,secondary_link')) { $roadWays.Add($w) }
-$junctions = New-Object 'System.Collections.Generic.List[long]'
-$chains = $osm.Chains($roadWays, $junctions)
-foreach ($ch in $chains) { $conv.Road($roadSet, $osm.DesignNodes($ch, $geo), 2) }
-foreach ($j in $junctions) { $ll = $osm.Nodes[$j]; $d = DesignOf $ll[0] $ll[1]; $conv.PaveAt($d[0], $d[1], 7) }
-"roads: $($roadWays.Count) OSM ways -> $($chains.Count) chains, $($conv.RoadsChained) runs tiled, $($conv.RoadsPaved) runs paved ($($conv.RoadCellsPaved) cells), $($junctions.Count) junctions"
-
-# ---------------------------------------------------------------- objects
-# Northern Defences (concrete wall) with Landport and Waterport gates
+# Northern Defences (concrete wall) with Landport and Waterport gates; roads cross it only at the gates
 $wall = New-Object 'System.Collections.Generic.List[int]'
 foreach ($seg in @(@(212, 248, 238, 248), @(258, 248, 328, 248), @(354, 248, 410, 253))) {
     $wall.AddRange($conv.CellLine($seg[0], $seg[1], $seg[2], $seg[3]))
 }
+foreach ($c in $wall) { [void]$plotCells.Add($c) }   # $plotCells is $conv.RoadAvoid
+
+# ---------------------------------------------------------------- roads (OSM main roads) as Paved Road LAT
+# DTA paints roads as Paved Road LAT and every road leads somewhere (another road, the map edge, a square); the tile
+# roads of v2 broke into stubs that ended in the grass (review 2026-10-27). FinishRoads links each free end to a road
+# within 10 cells or cuts it back to its last junction (wiki workflow/mission-maps).
+$roadWays = New-Object 'System.Collections.Generic.List[OsmWay]'
+# main roads only: a road is 2 cells wide, tertiary streets too filled the old town with parallel strips
+foreach ($w in $osm.Select('highway', 'trunk,primary,secondary,trunk_link,primary_link,secondary_link')) { $roadWays.Add($w) }
+$junctions = New-Object 'System.Collections.Generic.List[long]'
+$chains = $osm.Chains($roadWays, $junctions)
+foreach ($ch in $chains) { $conv.RoadLat($osm.DesignNodes($ch, $geo)) }
+$conv.FinishRoads(10, 30)
+"roads: $($roadWays.Count) OSM ways -> $($chains.Count) chains, $($conv.RoadCells) road cells"
+
+# ---------------------------------------------------------------- objects
 $wallCells = $conv.OverlayCells($wall, 2, 0)
 
-# ore: Windmill Hill (safe, south) and the airfield between border and runway (contested)
+# ore ("gold"; review 2026-10-27: nothing to harvest, ~15 cells in v2): a big field on the Rock (level 1 north of the
+# crest, up the NW ramp from the base: rich but exposed), the contested airfield field, and in the south an Ore Mine
+# (TerrainType OREMINE, TiberiumToSpawn=3: grows ore round itself) with its field on Windmill Hill
 $ore = 0
-foreach ($f in @(@(372, 765, 11), @(445, 128, 12))) {
-    $cells = $conv.CellDisc($f[0], $f[1], $f[2])
-    foreach ($c in $cells) { $l = New-Object 'System.Collections.Generic.List[int]'; $l.Add($c); $ore += $conv.OverlayCells($l, [byte](147 + $conv.Rnd.Next(4)), [byte](3 + $conv.Rnd.Next(9))) }
+function Put-Ore($cells, [double]$p) {
+    foreach ($c in $cells) {
+        if ($conv.Rnd.NextDouble() -ge $p) { continue }
+        $l = New-Object 'System.Collections.Generic.List[int]'; $l.Add($c)
+        $script:ore += $conv.OverlayCells($l, [byte](147 + $conv.Rnd.Next(4)), [byte](5 + $conv.Rnd.Next(7)))
+    }
 }
+$oreL = New-Object Layer $U0, $V0, $DW, $DH, 0
+$oreL.Polygon((P 372,258, 472,258, 472,296, 410,300, 404,398, 366,400, 358,330), 1, 255)   # the Rock, level 1
+$oreL.Disc(445, 128, 24, 2, 255)                                                            # airfield (contested)
+$oreL.Disc(378, 768, 26, 3, 255)                                                            # Windmill Hill (south)
+Put-Ore ($conv.CellsIn($oreL, 1, 1)) 0.85
+Put-Ore ($conv.CellsIn($oreL, 2, 0)) 0.75
+# the mine: the free cell nearest to the field centre (Free: not road, ramp, plot, tree or building)
+$mineCell = -1
+$c0 = Cell 378 768; $cx = $c0 % $conv.N; $cy = [Math]::Floor($c0 / $conv.N)
+for ($r = 0; $r -le 6 -and $mineCell -lt 0; $r++) {
+    for ($y = $cy - $r; $y -le $cy + $r -and $mineCell -lt 0; $y++) { for ($x = $cx - $r; $x -le $cx + $r; $x++) {
+        if ([Math]::Max([Math]::Abs($x - $cx), [Math]::Abs($y - $cy)) -eq $r -and $conv.Free($x, $y)) { $mineCell = $y * $conv.N + $x; break }
+    } }
+}
+$mines = 0
+if ($mineCell -ge 0) { $conv.Terrain[[int]([Math]::Floor($mineCell / $conv.N) * 1000 + $mineCell % $conv.N)] = 'OREMINE'; $mines = 1 } else { 'WARN no free cell for the Ore Mine' }
+Put-Ore ($conv.CellsIn($oreL, 3, 0)) 0.7
 
 # attractions and landmarks: OSM position (by name or tag), else the given design point
 $placed = @{}
@@ -282,6 +317,8 @@ foreach ($lm in $landmarks) {
     $uv = @($lm[4], $lm[5]); $bestD = 1e9
     foreach ($q in $pos) { $d = DesignOf $q[0] $q[1]; $dd = [Math]::Pow($d[0] - $lm[4], 2) + [Math]::Pow($d[1] - $lm[5], 2); if ($dd -lt $bestD -and $dd -lt 120 * 120) { $bestD = $dd; $uv = $d } }
     $got = Place-Civ $lm[1] $lm[2] $lm[3] $uv[0] $uv[1] $lm[6] ($lm[6] * 0.6) 1
+    # the Convent's church holds the money crate of the mission layer (waypoint 46 = a free cell at its door)
+    if ($got -and $lm[0] -eq 'The convent') { $p = $conv.Buildings[$conv.Buildings.Count - 1] -split ','; $conventCell = [int]$p[4] * $conv.N + [int]$p[3] }
     $landLog += "{0,-28} {1,-8} at {2:F0},{3:F0} ({4}) {5}" -f $lm[0], $lm[1], $uv[0], $uv[1], $(if ($bestD -lt 1e9) { 'OSM' } else { 'fallback' }), $(if ($got) { 'OK' } else { 'no room' })
 }
 # port and industry (west side: Dockyard, Coaling Island, North Mole, Europort): warehouses, sheds, tanks, cranes
@@ -297,9 +334,9 @@ $trees = [string[]]@('T01','T02','T03','T05','T06','T07','T08','T09','T10','T11'
 $treeCount = $conv.PlaceTrees(2, $trees, 0.22) + $conv.PlaceTrees(3, $trees, 0.05)
 
 $conv.SmoothGround(2)
-$base = [int[]]@(0, $th.SetByName('Dirt LAT').Start, $th.SetByName('Pavement LAT').Start, $th.SetByName('Tall Grass').Start)
-$lat  = [int[]]@(0, $th.SetByName('Clear/Dirt LAT').Start, $th.SetByName('Clear/Pavement LAT').Start, $th.SetByName('Tall/Short Grass LAT').Start)
-$conv.ApplyGround(0, $base, $lat)
+$base = [int[]]@(0, $th.SetByName('Dirt LAT').Start, $th.SetByName('Pavement LAT').Start, $th.SetByName('Tall Grass').Start, $th.SetByName('Paved Road LAT & addons').Start)
+$lat  = [int[]]@(0, $th.SetByName('Clear/Dirt LAT').Start, $th.SetByName('Clear/Pavement LAT').Start, $th.SetByName('Tall/Short Grass LAT').Start, $th.SetByName('Clear/Paved Road LAT').Start)
+$conv.ApplyGroundRoads(0, $base, $lat, $th.SetByName('Pavement/Paved Road LAT').Start)
 $conv.WallFrames(2, [int[]]@(0, 2, 4, 6))
 $rawAfter = $conv.RawCoast()
 
@@ -336,6 +373,9 @@ $wp = [ordered]@{
     '43' = @('Morze: poludnie (Ciesnina)', 300, 915, 'w')
     '44' = @('Morze: zatoka przy pasie startowym', 160, 160, 'w')
     '45' = @('Morze: wschod, przy Eastern Beach', 565, 180, 'w')
+    # 46+ added 2026-10-27 (review): append only, 10-45 keep their numbers
+    '46' = @('Kosciol The Convent: skrzynka z pieniedzmi (przy drzwiach)', 0, 0, 'church')
+    '47' = @('Ruda: Skala, poziom 1 (zloze zlota na gorze)', 385, 330, 'g')
 }
 $points = [ordered]@{}
 foreach ($k in $wp.Keys) {
@@ -344,6 +384,8 @@ foreach ($k in $wp.Keys) {
         # ramp top/bottom: nearest cell of that level to the ramp centre (level 0 = low ground)
         $r = $rampAt[$matches[1]]; $points[$k] = $conv.NearestOfLevel((Cell $r[0] $r[1]), [int]$matches[2])
     }
+    elseif ($w[3] -eq 'church') { $points[$k] = if ($conventCell) { $conv.Nearest($conventCell, $false) } else { -1 } }
+    elseif ($k -eq '47') { $points[$k] = $conv.NearestOfLevel((Cell $w[1] $w[2]), 1) }
     else { $points[$k] = $conv.Nearest((Cell $w[1] $w[2]), $w[3] -eq 'w') }
 }
 # skirmish test starts: player at the ARKA plot, enemy in Spain
@@ -354,10 +396,10 @@ $conv.CheckConnectivity()
 $checks = @(
     @(18, 10, 'Hiszpania -> ARKA'), @(23, 10, 'Eastern Beach -> ARKA'), @(24, 27, 'Catalan Bay -> Europa Point (pas wschodni)'),
     @(26, 10, 'Camp Bay -> ARKA'), @(29, 28, 'rampa NW'), @(31, 30, 'rampa SW'), @(33, 32, 'rampa S'), @(10, 34, 'ARKA -> szczyt Skaly'),
-    @(10, 35, 'ARKA -> gran (poziom 2)'), @(17, 18, 'Tanya -> zbiorka sowiecka'), @(10, 38, 'ARKA -> ruda Windmill Hill'), @(10, 37, 'ARKA -> doki')
+    @(10, 35, 'ARKA -> gran (poziom 2)'), @(17, 18, 'Tanya -> zbiorka sowiecka'), @(10, 38, 'ARKA -> ruda Windmill Hill'), @(10, 37, 'ARKA -> doki'),
+    @(10, 46, 'ARKA -> kosciol (skrzynka)'), @(10, 47, 'ARKA -> ruda na Skale'), @(10, 39, 'ARKA -> ruda lotnisko')
 )
 $checkLines = foreach ($ck in $checks) { "{0,-44} {1}" -f $ck[2], $(if ($conv.Connected($points["$($ck[0])"], $points["$($ck[1])"])) { 'OK' } else { 'BRAK' }) }
-
 $conv.FlushBuildings()
 $text = $conv.WriteMap("ARKA 0: Ostatnia brama (Gibraltar 1953)", "Claude (kampania ARKA)")
 [IO.File]::WriteAllText($Out, $text, [Text.Encoding]::GetEncoding(1252))
@@ -370,7 +412,8 @@ $report = @()
 $report += $conv.Log
 $report += "raw coast cells: $rawBefore before fix, $($rawAfter.Count) left"
 $report += "ramps: " + (($rampAt.Keys | ForEach-Object { "{0} {1:F0},{2:F0}" -f $_, $rampAt[$_][0], $rampAt[$_][1] }) -join '; ')
-$report += "wall cells $wallCells, ore cells $ore, trees $treeCount; buildings from OSM cover: industry $indN, churches $churchN, big $bigN, houses $houseN"
+$report += "road ends in a square: $($conv.SquareEnds.Count); free road ends (should be 0): $($conv.OpenEnds.Count)" + $(if ($conv.OpenEnds.Count) { ' at ' + (($conv.OpenEnds | ForEach-Object { XY $_ }) -join '; ') } else { '' })
+$report += "wall cells $wallCells, ore cells $ore, ore mines $mines (OREMINE @ $(XY $mineCell)), trees $treeCount; buildings from OSM cover: industry $indN, churches $churchN, big $bigN, houses $houseN"
 $report += "placed: " + (($placed.GetEnumerator() | Sort-Object Name | ForEach-Object { "$($_.Key) $($_.Value)" }) -join ', ')
 $report += "--- landmarks"; $report += $landLog
 $report += "--- connectivity"; $report += $checkLines
@@ -418,10 +461,14 @@ if (-not $NoPreview) {
     foreach ($k in $all.Keys) {
         $c = $all[$k]; if ($c -lt 0) { continue }
         $sp = ScreenOf $c; $px = $sp[0]; $py = $sp[1]
-        $col = if ("$k" -like 'S*') { [Drawing.Brushes]::Orange } elseif ([int]"$k" -ge 40) { [Drawing.Brushes]::DeepSkyBlue } else { [Drawing.Brushes]::Yellow }
+        $col = if ("$k" -like 'S*') { [Drawing.Brushes]::Orange } elseif ([int]"$k" -ge 40 -and [int]"$k" -le 45) { [Drawing.Brushes]::DeepSkyBlue } else { [Drawing.Brushes]::Yellow }
         $g.FillEllipse([Drawing.Brushes]::Black, $px - 5, $py - 5, 10, 10); $g.FillEllipse($col, $px - 3.5, $py - 3.5, 7, 7)
         $g.DrawString("$k", $font, [Drawing.Brushes]::Black, $px + 6, $py - 8); $g.DrawString("$k", $font, $col, $px + 5, $py - 9)
     }
+    # road ends: orange square = ends in a square (pavement), red = free end (should not exist)
+    $epen = New-Object Drawing.Pen ([Drawing.Color]::Orange), 2; $fpen = New-Object Drawing.Pen ([Drawing.Color]::Red), 3
+    foreach ($c in $conv.SquareEnds) { $sp = ScreenOf $c; $g.DrawRectangle($epen, $sp[0] - 5, $sp[1] - 5, 10, 10) }
+    foreach ($c in $conv.OpenEnds) { $sp = ScreenOf $c; $g.DrawEllipse($fpen, $sp[0] - 8, $sp[1] - 8, 16, 16) }
     $g.Dispose()
     $sheet.Save("$Work\waypoints.png"); $sheet.Dispose()
     # raw coast check picture

@@ -31,7 +31,7 @@ bo używa go 35 map skirmisha. `GDI1` ma najniższy wolny indeks, więc wyszarzo
 | 4 | Sidebar, paleta, ekran wyniku, grafiki harv/proc + cameo wspólne | `MIX/SideC07.mix`, `MIX/sidenc07.mix` (strona 6 → plik 07) | ta sesja; writer `[Mix]::Write` z `Modding/tools/ModTools.cs` (sesja Marines), lister `Modding/tools/mixlist.ps1` |
 | 5 | EVA | `MIX/Speech07.mix` (`00-iNNN.aud`) | ta sesja; WAV→AUD `[Aud]::Encode` z `ModTools.cs` |
 | 6 | Drzewko technologii: ConYard, MCV, elektrownia, rafineria + zbieracz, koszary, fabryka, radar, tech, obrona, supermoc | plik frakcji (`[General] BaseUnit/HarvesterUnit`, `[AI] Build*`, własna grupa w `[PrerequisiteGroups]`) | ta sesja |
-| 7 | Jednostki SC (Marine itd.): grafika, dźwięk, Art.ini | `Art.ini`, `Sound.ini`, `Game Options/StarCraft.ini` (checkbox `chkStarCraft`), `MIX/ECACHE99.MIX` | **sesja Marines** (zob. [[mods/starcraft-marine]]). Frakcja tylko dopisuje się do `Owner=` typów `SCMARINE*` (jako `GDI1`, robi to sesja Marines w swoim pliku). Marine to technicznie `UnitType` (deploy = `TransformsInto`), więc buduje się w War Factory. |
+| 7 | Jednostki SC (Marine itd.): grafika, dźwięk, Art.ini | `Art.ini`, `Sound.ini`, `Game Options/StarCraft.ini` (checkbox `chkStarCraft`), `MIX/ECACHE77.MIX` (dawniej 99) | **sesja Marines** (zob. [[mods/starcraft-marine]]). Frakcja tylko dopisuje się do `Owner=` typów `SCMARINE*` (jako `GDI1`, robi to sesja Marines w swoim pliku). Marine to technicznie `UnitType` (deploy = `TransformsInto`), więc buduje się w War Factory. |
 | 8 | AI | Advanced AI (domyślnie włączone) powinno grać samo z list `[AI]`. Klasyczne AI wymaga własnych `[AITriggerTypes]` z polem Side = **7**. | ta sesja |
 | 9 | Muzyka, ekran wyniku, nazwy | opcjonalnie | później |
 

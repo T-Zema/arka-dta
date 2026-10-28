@@ -1,0 +1,469 @@
+28.10. 10:50:02.083    Second-Stage Updater
+28.10. 10:50:02.101    Written by Rampastring
+28.10. 10:50:02.103    http://www.moddb.com/members/rampastring
+28.10. 10:50:02.104    
+28.10. 10:50:02.106    Waiting for the main application to exit.
+28.10. 10:50:05.055    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\LocalVersion -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../LocalVersion
+28.10. 10:50:05.058    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Cyotek.Drawing.BitmapFont.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Cyotek.Drawing.BitmapFont.dll
+28.10. 10:50:05.059    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\FontStashSharp.Base.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\FontStashSharp.Base.dll
+28.10. 10:50:05.061    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\FontStashSharp.MonoGame.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\FontStashSharp.MonoGame.dll
+28.10. 10:50:05.075    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\FontStashSharp.Rasterizers.StbTrueTypeSharp.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\FontStashSharp.Rasterizers.StbTrueTypeSharp.dll
+28.10. 10:50:05.077    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\FontStashSharp.TextShapers.HarfBuzz.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\FontStashSharp.TextShapers.HarfBuzz.dll
+28.10. 10:50:05.079    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\HarfBuzzSharp.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\HarfBuzzSharp.dll
+28.10. 10:50:05.080    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\ImeSharp.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\ImeSharp.dll
+28.10. 10:50:05.081    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\MapEditorLibrary.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\MapEditorLibrary.dll
+28.10. 10:50:05.083    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\MapEditorLibrary.pdb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\MapEditorLibrary.pdb
+28.10. 10:50:05.084    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\MapEditorMCP.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\MapEditorMCP.dll
+28.10. 10:50:05.085    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\MapEditorMCP.pdb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\MapEditorMCP.pdb
+28.10. 10:50:05.087    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\marble.mix -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\marble.mix
+28.10. 10:50:05.088    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.CodeAnalysis.CSharp.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.CodeAnalysis.CSharp.dll
+28.10. 10:50:05.093    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.CodeAnalysis.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.CodeAnalysis.dll
+28.10. 10:50:05.096    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.CodeAnalysis.Scripting.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.CodeAnalysis.Scripting.dll
+28.10. 10:50:05.098    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.AI.Abstractions.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.AI.Abstractions.dll
+28.10. 10:50:05.099    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.Caching.Abstractions.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.Caching.Abstractions.dll
+28.10. 10:50:05.101    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.Configuration.Abstractions.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.Configuration.Abstractions.dll
+28.10. 10:50:05.102    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.DependencyInjection.Abstractions.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+28.10. 10:50:05.104    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.DependencyInjection.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.DependencyInjection.dll
+28.10. 10:50:05.105    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.Diagnostics.Abstractions.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.Diagnostics.Abstractions.dll
+28.10. 10:50:05.108    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.FileProviders.Abstractions.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.FileProviders.Abstractions.dll
+28.10. 10:50:05.110    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.Hosting.Abstractions.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.Hosting.Abstractions.dll
+28.10. 10:50:05.112    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.Logging.Abstractions.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.Logging.Abstractions.dll
+28.10. 10:50:05.113    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.Options.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.Options.dll
+28.10. 10:50:05.115    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Microsoft.Extensions.Primitives.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Microsoft.Extensions.Primitives.dll
+28.10. 10:50:05.117    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\ModelContextProtocol.Core.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\ModelContextProtocol.Core.dll
+28.10. 10:50:05.118    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\ModelContextProtocol.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\ModelContextProtocol.dll
+28.10. 10:50:05.120    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\MonoGame.Framework.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\MonoGame.Framework.dll
+28.10. 10:50:05.122    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Rampastring.Tools.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Rampastring.Tools.dll
+28.10. 10:50:05.125    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Rampastring.XNAUI.WindowsDX.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Rampastring.XNAUI.WindowsDX.dll
+28.10. 10:50:05.128    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpDX.Direct2D1.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpDX.Direct2D1.dll
+28.10. 10:50:05.129    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpDX.Direct3D11.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpDX.Direct3D11.dll
+28.10. 10:50:05.131    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpDX.Direct3D9.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpDX.Direct3D9.dll
+28.10. 10:50:05.132    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpDX.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpDX.dll
+28.10. 10:50:05.134    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpDX.DXGI.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpDX.DXGI.dll
+28.10. 10:50:05.136    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpDX.Mathematics.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpDX.Mathematics.dll
+28.10. 10:50:05.138    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpDX.MediaFoundation.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpDX.MediaFoundation.dll
+28.10. 10:50:05.141    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpDX.XAudio2.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpDX.XAudio2.dll
+28.10. 10:50:05.144    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpDX.XInput.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpDX.XInput.dll
+28.10. 10:50:05.145    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpGen.Runtime.COM.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpGen.Runtime.COM.dll
+28.10. 10:50:05.147    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SharpGen.Runtime.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SharpGen.Runtime.dll
+28.10. 10:50:05.148    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\SixLabors.ImageSharp.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\SixLabors.ImageSharp.dll
+28.10. 10:50:05.149    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\StbImageSharp.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\StbImageSharp.dll
+28.10. 10:50:05.150    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\StbTrueTypeSharp.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\StbTrueTypeSharp.dll
+28.10. 10:50:05.151    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\System.Diagnostics.DiagnosticSource.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\System.Diagnostics.DiagnosticSource.dll
+28.10. 10:50:05.152    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\System.IO.Pipelines.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\System.IO.Pipelines.dll
+28.10. 10:50:05.155    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\System.Net.ServerSentEvents.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\System.Net.ServerSentEvents.dll
+28.10. 10:50:05.157    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\System.Text.Encodings.Web.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\System.Text.Encodings.Web.dll
+28.10. 10:50:05.158    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\System.Text.Json.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\System.Text.Json.dll
+28.10. 10:50:05.160    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\TextCopy.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\TextCopy.dll
+28.10. 10:50:05.161    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\TsfSharp.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\TsfSharp.dll
+28.10. 10:50:05.162    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\WAECache.mix -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\WAECache.mix
+28.10. 10:50:05.164    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Westwind.Scripting.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Westwind.Scripting.dll
+28.10. 10:50:05.196    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\WorldAlteringEditor.deps.json -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\WorldAlteringEditor.deps.json
+28.10. 10:50:05.198    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\WorldAlteringEditor.dll -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\WorldAlteringEditor.dll
+28.10. 10:50:05.199    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\WorldAlteringEditor.exe -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\WorldAlteringEditor.exe
+28.10. 10:50:05.201    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\WorldAlteringEditor.pdb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\WorldAlteringEditor.pdb
+28.10. 10:50:05.202    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\WorldAlteringEditor.runtimeconfig.json -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\WorldAlteringEditor.runtimeconfig.json
+28.10. 10:50:05.204    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\SecondStageUpdater\SecondStageUpdaterBG.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../SecondStageUpdater\SecondStageUpdaterBG.png
+28.10. 10:50:05.205    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\DefaultSettings.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\DefaultSettings.ini
+28.10. 10:50:05.208    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Translations.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Translations.ini
+28.10. 10:50:05.210    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\celltag.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\celltag.png
+28.10. 10:50:05.212    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\checkBoxChecked.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\checkBoxChecked.png
+28.10. 10:50:05.213    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\checkBoxCheckedD.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\checkBoxCheckedD.png
+28.10. 10:50:05.215    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\checkBoxCheckedRed.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\checkBoxCheckedRed.png
+28.10. 10:50:05.217    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\checkBoxClear.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\checkBoxClear.png
+28.10. 10:50:05.220    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\checkBoxClearD.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\checkBoxClearD.png
+28.10. 10:50:05.222    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\checkBoxClearRed.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\checkBoxClearRed.png
+28.10. 10:50:05.224    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\comboBoxArrow.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\comboBoxArrow.png
+28.10. 10:50:05.227    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\cursor.cur -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\cursor.cur
+28.10. 10:50:05.228    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\Fonts.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\Fonts.ini
+28.10. 10:50:05.230    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\generictile.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\generictile.png
+28.10. 10:50:05.231    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\generictilewithborder.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\generictilewithborder.png
+28.10. 10:50:05.234    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\icehighlight.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\icehighlight.png
+28.10. 10:50:05.235    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\impassablehighlight.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\impassablehighlight.png
+28.10. 10:50:05.237    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\mainmenubg0.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\mainmenubg0.png
+28.10. 10:50:05.238    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\NotoSansSC-SemiBold.ttf -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\NotoSansSC-SemiBold.ttf
+28.10. 10:50:05.240    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\openedComboBoxArrow.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\openedComboBoxArrow.png
+28.10. 10:50:05.246    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\rangeindicator.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\rangeindicator.png
+28.10. 10:50:05.247    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\sbBackground.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\sbBackground.png
+28.10. 10:50:05.250    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\sbDownArrow.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\sbDownArrow.png
+28.10. 10:50:05.251    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\sbDownArrowHovered.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\sbDownArrowHovered.png
+28.10. 10:50:05.253    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\sbMiddle.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\sbMiddle.png
+28.10. 10:50:05.254    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\sbThumbBottom.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\sbThumbBottom.png
+28.10. 10:50:05.256    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\sbThumbTop.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\sbThumbTop.png
+28.10. 10:50:05.258    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\sbUpArrow.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\sbUpArrow.png
+28.10. 10:50:05.260    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\sbUpArrowHovered.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\sbUpArrowHovered.png
+28.10. 10:50:05.261    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\sortbutton.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\sortbutton.png
+28.10. 10:50:05.263    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\SpriteFont0.xnb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\SpriteFont0.xnb
+28.10. 10:50:05.267    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\SpriteFont1.xnb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\SpriteFont1.xnb
+28.10. 10:50:05.272    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\star.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\star.png
+28.10. 10:50:05.274    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\tileborder.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\tileborder.png
+28.10. 10:50:05.276    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\trackbarBackground.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\trackbarBackground.png
+28.10. 10:50:05.278    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\trackbarButton.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\trackbarButton.png
+28.10. 10:50:05.279    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\Actions.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\Actions.ini
+28.10. 10:50:05.282    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\AIMappingInstructions.md -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\AIMappingInstructions.md
+28.10. 10:50:05.284    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\ArtOverrides.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\ArtOverrides.ini
+28.10. 10:50:05.285    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\BaseMap.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\BaseMap.ini
+28.10. 10:50:05.287    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\Bridges.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\Bridges.ini
+28.10. 10:50:05.289    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\BrushSizes.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\BrushSizes.ini
+28.10. 10:50:05.296    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\ConnectedOverlays.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\ConnectedOverlays.ini
+28.10. 10:50:05.298    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\ConnectedTileDrawer.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\ConnectedTileDrawer.ini
+28.10. 10:50:05.299    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\Constants.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\Constants.ini
+28.10. 10:50:05.300    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\EditorRules.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\EditorRules.ini
+28.10. 10:50:05.302    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\EditorThemes.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\EditorThemes.ini
+28.10. 10:50:05.359    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\Events.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\Events.ini
+28.10. 10:50:05.366    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\FileManagerConfig.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\FileManagerConfig.ini
+28.10. 10:50:05.369    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\OverlayCollections.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\OverlayCollections.ini
+28.10. 10:50:05.370    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\ScriptActions.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\ScriptActions.ini
+28.10. 10:50:05.373    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\SmudgeCollections.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\SmudgeCollections.ini
+28.10. 10:50:05.375    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\Speeches.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\Speeches.ini
+28.10. 10:50:05.376    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\TeamTypeFlags.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\TeamTypeFlags.ini
+28.10. 10:50:05.378    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\TerrainGeneratorPresets.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\TerrainGeneratorPresets.ini
+28.10. 10:50:05.379    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\TerrainObjectCollections.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\TerrainObjectCollections.ini
+28.10. 10:50:05.381    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\TerrainTypeImpassability.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\TerrainTypeImpassability.ini
+28.10. 10:50:05.382    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\Theaters.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\Theaters.ini
+28.10. 10:50:05.383    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\Tiberiums.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\Tiberiums.ini
+28.10. 10:50:05.385    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Scripts\Activate Assign Mission Cursor Action.cs -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Scripts\Activate Assign Mission Cursor Action.cs
+28.10. 10:50:05.386    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Scripts\Add Map Reveal Trigger.cs -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Scripts\Add Map Reveal Trigger.cs
+28.10. 10:50:05.388    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Scripts\Count Credits On Map.cs -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Scripts\Count Credits On Map.cs
+28.10. 10:50:05.401    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Scripts\Disable All Debug Triggers.cs -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Scripts\Disable All Debug Triggers.cs
+28.10. 10:50:05.403    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Scripts\List Unused Scripting Elements.cs -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Scripts\List Unused Scripting Elements.cs
+28.10. 10:50:05.406    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Scripts\Make Civilian Vehicles Sleep.cs -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Scripts\Make Civilian Vehicles Sleep.cs
+28.10. 10:50:05.408    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Scripts\Remove All Terrain Objects.cs -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Scripts\Remove All Terrain Objects.cs
+28.10. 10:50:05.409    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Scripts\Set Map Difficulty Settings.cs -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Scripts\Set Map Difficulty Settings.cs
+28.10. 10:50:05.411    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Scripts\Smoothen Water.cs -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Scripts\Smoothen Water.cs
+28.10. 10:50:05.412    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\Shaders\AlphaImageToAlphaMap.xnb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\Shaders\AlphaImageToAlphaMap.xnb
+28.10. 10:50:05.414    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\Shaders\AlphaMapApply.xnb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\Shaders\AlphaMapApply.xnb
+28.10. 10:50:05.415    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\Shaders\BackdropBlur.xnb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\Shaders\BackdropBlur.xnb
+28.10. 10:50:05.416    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\Shaders\PalettedColorDraw.xnb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\Shaders\PalettedColorDraw.xnb
+28.10. 10:50:05.417    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\Shaders\PalettedDrawNoDepth.xnb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\Shaders\PalettedDrawNoDepth.xnb
+28.10. 10:50:05.419    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\Shaders\PalettedTerrainDraw.xnb -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\Shaders\PalettedTerrainDraw.xnb
+28.10. 10:50:05.420    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\2dmode.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\2dmode.png
+28.10. 10:50:05.423    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\deletionmode.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\deletionmode.png
+28.10. 10:50:05.425    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\drawconnectedtiles.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\drawconnectedtiles.png
+28.10. 10:50:05.427    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\flattenground.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\flattenground.png
+28.10. 10:50:05.428    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\frameworkmode.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\frameworkmode.png
+28.10. 10:50:05.430    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\generateterrain.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\generateterrain.png
+28.10. 10:50:05.431    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\lowercells.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\lowercells.png
+28.10. 10:50:05.432    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\lowerground.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\lowerground.png
+28.10. 10:50:05.433    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\lowerground_steep.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\lowerground_steep.png
+28.10. 10:50:05.435    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\placewaypoint.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\placewaypoint.png
+28.10. 10:50:05.436    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\raisecells.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\raisecells.png
+28.10. 10:50:05.437    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\raiseground.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\raiseground.png
+28.10. 10:50:05.439    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\raiseground_steep.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\raiseground_steep.png
+28.10. 10:50:05.442    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Content\ToolIcons\terraingeneratoroptions.png -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Content\ToolIcons\terraingeneratoroptions.png
+28.10. 10:50:05.443    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\EditorControlsPanel.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\EditorControlsPanel.ini
+28.10. 10:50:05.446    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\UIConstants.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\UIConstants.ini
+28.10. 10:50:05.447    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Translations\en\ObjectNames_en.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Translations\en\ObjectNames_en.ini
+28.10. 10:50:05.449    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Translations\en\Translation_en.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Translations\en\Translation_en.ini
+28.10. 10:50:05.451    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Translations\zh-Hans\Translation_zh-Hans.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Translations\zh-Hans\Translation_zh-Hans.ini
+28.10. 10:50:05.455    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\AboutWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\AboutWindow.ini
+28.10. 10:50:05.458    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\AircraftOptionsWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\AircraftOptionsWindow.ini
+28.10. 10:50:05.460    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\AITriggersWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\AITriggersWindow.ini
+28.10. 10:50:05.462    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\ApplyINICodeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\ApplyINICodeWindow.ini
+28.10. 10:50:05.464    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\AutoApplyImpassableOverlayWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\AutoApplyImpassableOverlayWindow.ini
+28.10. 10:50:05.465    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\BasicSectionConfigWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\BasicSectionConfigWindow.ini
+28.10. 10:50:05.467    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\ChangeHeightWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\ChangeHeightWindow.ini
+28.10. 10:50:05.469    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\ConfigureAlliesWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\ConfigureAlliesWindow.ini
+28.10. 10:50:05.470    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\CopiedEntryTypesWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\CopiedEntryTypesWindow.ini
+28.10. 10:50:05.472    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\CreateAllianceWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\CreateAllianceWindow.ini
+28.10. 10:50:05.473    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\CreateNewMapWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\CreateNewMapWindow.ini
+28.10. 10:50:05.475    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\CreateRandomTriggerSetWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\CreateRandomTriggerSetWindow.ini
+28.10. 10:50:05.477    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\DeleteTerrainGeneratorPresetWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\DeleteTerrainGeneratorPresetWindow.ini
+28.10. 10:50:05.479    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\DeletionModeConfigurationWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\DeletionModeConfigurationWindow.ini
+28.10. 10:50:05.481    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\EditHouseTypeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\EditHouseTypeWindow.ini
+28.10. 10:50:05.482    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\ExpandMapWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\ExpandMapWindow.ini
+28.10. 10:50:05.484    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\FindWaypointWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\FindWaypointWindow.ini
+28.10. 10:50:05.486    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\GenerateStandardHousesWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\GenerateStandardHousesWindow.ini
+28.10. 10:50:05.488    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\HistoryWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\HistoryWindow.ini
+28.10. 10:50:05.489    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\HotkeyConfigurationWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\HotkeyConfigurationWindow.ini
+28.10. 10:50:05.492    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\HousesWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\HousesWindow.ini
+28.10. 10:50:05.493    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\InfantryOptionsWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\InfantryOptionsWindow.ini
+28.10. 10:50:05.495    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\InputTerrainGeneratorPresetNameWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\InputTerrainGeneratorPresetNameWindow.ini
+28.10. 10:50:05.496    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\LightingSettingsWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\LightingSettingsWindow.ini
+28.10. 10:50:05.497    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\LocalVariablesWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\LocalVariablesWindow.ini
+28.10. 10:50:05.499    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\MapSizeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\MapSizeWindow.ini
+28.10. 10:50:05.500    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\MegamapGenerationOptionsWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\MegamapGenerationOptionsWindow.ini
+28.10. 10:50:05.501    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\NewHouseWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\NewHouseWindow.ini
+28.10. 10:50:05.503    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\PlaceWaypointWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\PlaceWaypointWindow.ini
+28.10. 10:50:05.504    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\RenderedObjectsConfigurationWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\RenderedObjectsConfigurationWindow.ini
+28.10. 10:50:05.505    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\RunScriptWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\RunScriptWindow.ini
+28.10. 10:50:05.507    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\ScriptsWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\ScriptsWindow.ini
+28.10. 10:50:05.509    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectActionWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectActionWindow.ini
+28.10. 10:50:05.511    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectAnimationWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectAnimationWindow.ini
+28.10. 10:50:05.512    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectBridgeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectBridgeWindow.ini
+28.10. 10:50:05.514    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectBuildingTargetWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectBuildingTargetWindow.ini
+28.10. 10:50:05.515    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectBuildingTypeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectBuildingTypeWindow.ini
+28.10. 10:50:05.517    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectColorsWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectColorsWindow.ini
+28.10. 10:50:05.519    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectConnectedTileWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectConnectedTileWindow.ini
+28.10. 10:50:05.521    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectEventWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectEventWindow.ini
+28.10. 10:50:05.522    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectGlobalVariableWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectGlobalVariableWindow.ini
+28.10. 10:50:05.524    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectHouseTypeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectHouseTypeWindow.ini
+28.10. 10:50:05.526    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectHouseWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectHouseWindow.ini
+28.10. 10:50:05.528    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectLocalVariableWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectLocalVariableWindow.ini
+28.10. 10:50:05.530    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectParticleSystemTypeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectParticleSystemTypeWindow.ini
+28.10. 10:50:05.531    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectScriptActionPresetOptionWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectScriptActionPresetOptionWindow.ini
+28.10. 10:50:05.533    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectScriptActionWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectScriptActionWindow.ini
+28.10. 10:50:05.534    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectScriptWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectScriptWindow.ini
+28.10. 10:50:05.536    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectSoundWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectSoundWindow.ini
+28.10. 10:50:05.537    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectSpeechWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectSpeechWindow.ini
+28.10. 10:50:05.539    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectStringWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectStringWindow.ini
+28.10. 10:50:05.540    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectSuperWeaponTypeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectSuperWeaponTypeWindow.ini
+28.10. 10:50:05.542    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectTagWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectTagWindow.ini
+28.10. 10:50:05.544    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectTaskForceWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectTaskForceWindow.ini
+28.10. 10:50:05.546    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectTeamTypeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectTeamTypeWindow.ini
+28.10. 10:50:05.548    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectTechnoTypeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectTechnoTypeWindow.ini
+28.10. 10:50:05.549    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectThemeWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectThemeWindow.ini
+28.10. 10:50:05.551    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectTileSetWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectTileSetWindow.ini
+28.10. 10:50:05.552    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectTriggerWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectTriggerWindow.ini
+28.10. 10:50:05.554    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SelectTutorialLineWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SelectTutorialLineWindow.ini
+28.10. 10:50:05.555    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\SettingsPanel.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\SettingsPanel.ini
+28.10. 10:50:05.557    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\StructureOptionsWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\StructureOptionsWindow.ini
+28.10. 10:50:05.559    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\TagsWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\TagsWindow.ini
+28.10. 10:50:05.561    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\TaskforcesWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\TaskforcesWindow.ini
+28.10. 10:50:05.563    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\TeamTypesWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\TeamTypesWindow.ini
+28.10. 10:50:05.564    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\TriggersWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\TriggersWindow.ini
+28.10. 10:50:05.566    C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Updater\Editor\Config\Default\UI\Windows\VehicleOptionsWindow.ini -> C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\SecondStageUpdater\\../Editor\Config\Default\UI\Windows\VehicleOptionsWindow.ini
+28.10. 10:50:05.567    Moving files finished. Running migrations next.
+28.10. 10:50:05.568    Performing migration Delete obsolete XNAUI DLLs
+28.10. 10:50:05.568    Deleting file Rampastring.XNAUI.dll
+28.10. 10:50:05.569    Deleting file Rampastring.XNAUI.pdb
+28.10. 10:50:05.570    Performing migration Delete obsolete editor files from main dir
+28.10. 10:50:05.571    Deleting file DTAScenarioEditor.exe
+28.10. 10:50:05.573    Deleting file DTAScenarioEditor.exe.config
+28.10. 10:50:05.575    Deleting file DTAScenarioEditor.pdb
+28.10. 10:50:05.577    Deleting file MonoGame.Framework.dll
+28.10. 10:50:05.578    Deleting file RampaCache.mix
+28.10. 10:50:05.580    Deleting file Rampastring.Tools.dll
+28.10. 10:50:05.581    Deleting file Rampastring.Updater.dll
+28.10. 10:50:05.582    Deleting file Rampastring.XNAUI.WindowsDX.dll
+28.10. 10:50:05.583    Deleting file SharpDX.Direct2D1.dll
+28.10. 10:50:05.584    Deleting file SharpDX.Direct3D9.dll
+28.10. 10:50:05.585    Deleting file SharpDX.Direct3D11.dll
+28.10. 10:50:05.586    Deleting file SharpDX.dll
+28.10. 10:50:05.587    Deleting file SharpDX.DXGI.dll
+28.10. 10:50:05.588    Deleting file SharpDX.Mathematics.dll
+28.10. 10:50:05.589    Deleting file SharpDX.MediaFoundation.dll
+28.10. 10:50:05.591    Deleting file SharpDX.XAudio2.dll
+28.10. 10:50:05.593    Deleting file SharpDX.XInput.dll
+28.10. 10:50:05.594    Deleting file SixLabors.ImageSharp.dll
+28.10. 10:50:05.595    Deleting file System.Buffers.dll
+28.10. 10:50:05.597    Deleting file System.Memory.dll
+28.10. 10:50:05.598    Deleting file System.Numerics.Vectors.dll
+28.10. 10:50:05.599    Deleting file System.Runtime.CompilerServices.Unsafe.dll
+28.10. 10:50:05.600    Deleting file System.Text.Encoding.CodePages.dll
+28.10. 10:50:05.601    Deleting file System.Threading.Tasks.Extensions.dll
+28.10. 10:50:05.602    Deleting file TextCopy.dll
+28.10. 10:50:05.603    Deleting file Config/Actions.ini
+28.10. 10:50:05.604    Directory not found, skipping file deletion
+28.10. 10:50:05.605    Deleting file Config/ArtOverrides.ini
+28.10. 10:50:05.607    Directory not found, skipping file deletion
+28.10. 10:50:05.608    Deleting file Config/BaseMap.ini
+28.10. 10:50:05.610    Directory not found, skipping file deletion
+28.10. 10:50:05.611    Deleting file Config/BrushSizes.ini
+28.10. 10:50:05.612    Directory not found, skipping file deletion
+28.10. 10:50:05.614    Deleting file Config/Constants.ini
+28.10. 10:50:05.615    Directory not found, skipping file deletion
+28.10. 10:50:05.616    Deleting file Config/EditorRules.ini
+28.10. 10:50:05.617    Directory not found, skipping file deletion
+28.10. 10:50:05.618    Deleting file Config/Events.ini
+28.10. 10:50:05.619    Directory not found, skipping file deletion
+28.10. 10:50:05.620    Deleting file Config/FileManagerConfig.ini
+28.10. 10:50:05.621    Directory not found, skipping file deletion
+28.10. 10:50:05.621    Deleting file Config/OverlayCollections.ini
+28.10. 10:50:05.623    Directory not found, skipping file deletion
+28.10. 10:50:05.625    Deleting file Config/ScriptActions.ini
+28.10. 10:50:05.626    Directory not found, skipping file deletion
+28.10. 10:50:05.627    Deleting file Config/TerrainGeneratorPresets.ini
+28.10. 10:50:05.628    Directory not found, skipping file deletion
+28.10. 10:50:05.629    Deleting file Config/TerrainTypeImpassability.ini
+28.10. 10:50:05.631    Directory not found, skipping file deletion
+28.10. 10:50:05.632    Deleting file Config/Theaters.ini
+28.10. 10:50:05.633    Directory not found, skipping file deletion
+28.10. 10:50:05.635    Deleting file Config/MapCode/Add Reveal Map Trigger.ini
+28.10. 10:50:05.636    Directory not found, skipping file deletion
+28.10. 10:50:05.637    Deleting file Config/MapCode/Enable Blue Tiberium Spreader Lighting.ini
+28.10. 10:50:05.639    Directory not found, skipping file deletion
+28.10. 10:50:05.641    Deleting file Config/MapCode/Enable Green Tiberium Spreader Lighting.ini
+28.10. 10:50:05.643    Directory not found, skipping file deletion
+28.10. 10:50:05.644    Deleting file Config/MapCode/Enable Ore Spreader Lighting.ini
+28.10. 10:50:05.646    Directory not found, skipping file deletion
+28.10. 10:50:05.647    Deleting file Config/MapCode/Enable Spreading Ore.ini
+28.10. 10:50:05.648    Directory not found, skipping file deletion
+28.10. 10:50:05.649    Deleting file Config/MapCode/Mixed Gems Only Use Blue-Green Colors.ini
+28.10. 10:50:05.650    Directory not found, skipping file deletion
+28.10. 10:50:05.651    Deleting file Config/MapCode/Replace Tiberium With Ore.ini
+28.10. 10:50:05.652    Directory not found, skipping file deletion
+28.10. 10:50:05.653    Deleting file Config/MapCode/Replace Tiberium With Snowy Ore.ini
+28.10. 10:50:05.654    Directory not found, skipping file deletion
+28.10. 10:50:05.655    Deleting file Config/MapCode/Snowy Mixed Gems.ini
+28.10. 10:50:05.657    Directory not found, skipping file deletion
+28.10. 10:50:05.659    Deleting file Config/MapCode/Snowy Ore.ini
+28.10. 10:50:05.660    Directory not found, skipping file deletion
+28.10. 10:50:05.662    Deleting file Config/MapCode/Snowy Smudges.ini
+28.10. 10:50:05.663    Directory not found, skipping file deletion
+28.10. 10:50:05.664    Deleting file Config/UI/AboutWindow.ini
+28.10. 10:50:05.666    Directory not found, skipping file deletion
+28.10. 10:50:05.671    Deleting file Config/UI/ApplyINICodeWindow.ini
+28.10. 10:50:05.673    Directory not found, skipping file deletion
+28.10. 10:50:05.674    Deleting file Config/UI/AutoApplyImpassableOverlayWindow.ini
+28.10. 10:50:05.676    Directory not found, skipping file deletion
+28.10. 10:50:05.677    Deleting file Config/UI/BasicSectionConfigWindow.ini
+28.10. 10:50:05.679    Directory not found, skipping file deletion
+28.10. 10:50:05.680    Deleting file Config/UI/CopiedEntryTypesWindow.ini
+28.10. 10:50:05.681    Directory not found, skipping file deletion
+28.10. 10:50:05.682    Deleting file Config/UI/CreateNewMapWindow.ini
+28.10. 10:50:05.683    Directory not found, skipping file deletion
+28.10. 10:50:05.684    Deleting file Config/UI/ExpandMapWindow.ini
+28.10. 10:50:05.686    Directory not found, skipping file deletion
+28.10. 10:50:05.687    Deleting file Config/UI/GenerateStandardHousesWindow.ini
+28.10. 10:50:05.688    Directory not found, skipping file deletion
+28.10. 10:50:05.690    Deleting file Config/UI/HotkeyConfigurationWindow.ini
+28.10. 10:50:05.691    Directory not found, skipping file deletion
+28.10. 10:50:05.693    Deleting file Config/UI/HousesWindow.ini
+28.10. 10:50:05.694    Directory not found, skipping file deletion
+28.10. 10:50:05.696    Deleting file Config/UI/InfantryOptionsWindow.ini
+28.10. 10:50:05.697    Directory not found, skipping file deletion
+28.10. 10:50:05.698    Deleting file Config/UI/LightingSettingsWindow.ini
+28.10. 10:50:05.699    Directory not found, skipping file deletion
+28.10. 10:50:05.701    Deleting file Config/UI/LocalVariablesWindow.ini
+28.10. 10:50:05.703    Directory not found, skipping file deletion
+28.10. 10:50:05.705    Deleting file Config/UI/MapSizeWindow.ini
+28.10. 10:50:05.706    Directory not found, skipping file deletion
+28.10. 10:50:05.710    Deleting file Config/UI/PlaceWaypointWindow.ini
+28.10. 10:50:05.712    Directory not found, skipping file deletion
+28.10. 10:50:05.714    Deleting file Config/UI/ScriptsWindow.ini
+28.10. 10:50:05.716    Directory not found, skipping file deletion
+28.10. 10:50:05.717    Deleting file Config/UI/SelectActionWindow.ini
+28.10. 10:50:05.719    Directory not found, skipping file deletion
+28.10. 10:50:05.722    Deleting file Config/UI/SelectBuildingTypeWindow.ini
+28.10. 10:50:05.724    Directory not found, skipping file deletion
+28.10. 10:50:05.728    Deleting file Config/UI/SelectEventWindow.ini
+28.10. 10:50:05.729    Directory not found, skipping file deletion
+28.10. 10:50:05.731    Deleting file Config/UI/SelectGlobalVariableWindow.ini
+28.10. 10:50:05.734    Directory not found, skipping file deletion
+28.10. 10:50:05.737    Deleting file Config/UI/SelectHouseWindow.ini
+28.10. 10:50:05.740    Directory not found, skipping file deletion
+28.10. 10:50:05.743    Deleting file Config/UI/SelectLocalVariableWindow.ini
+28.10. 10:50:05.745    Directory not found, skipping file deletion
+28.10. 10:50:05.747    Deleting file Config/UI/SelectScriptActionWindow.ini
+28.10. 10:50:05.748    Directory not found, skipping file deletion
+28.10. 10:50:05.749    Deleting file Config/UI/SelectScriptWindow.ini
+28.10. 10:50:05.751    Directory not found, skipping file deletion
+28.10. 10:50:05.752    Deleting file Config/UI/SelectTagWindow.ini
+28.10. 10:50:05.753    Directory not found, skipping file deletion
+28.10. 10:50:05.754    Deleting file Config/UI/SelectTaskForceWindow.ini
+28.10. 10:50:05.755    Directory not found, skipping file deletion
+28.10. 10:50:05.756    Deleting file Config/UI/SelectTeamTypeWindow.ini
+28.10. 10:50:05.758    Directory not found, skipping file deletion
+28.10. 10:50:05.759    Deleting file Config/UI/SelectThemeWindow.ini
+28.10. 10:50:05.761    Directory not found, skipping file deletion
+28.10. 10:50:05.762    Deleting file Config/UI/SelectTileSetWindow.ini
+28.10. 10:50:05.764    Directory not found, skipping file deletion
+28.10. 10:50:05.766    Deleting file Config/UI/SelectTriggerWindow.ini
+28.10. 10:50:05.767    Directory not found, skipping file deletion
+28.10. 10:50:05.768    Deleting file Config/UI/SelectTutorialLineWindow.ini
+28.10. 10:50:05.769    Directory not found, skipping file deletion
+28.10. 10:50:05.770    Deleting file Config/UI/StructureOptionsWindow.ini
+28.10. 10:50:05.771    Directory not found, skipping file deletion
+28.10. 10:50:05.772    Deleting file Config/UI/TaskforcesWindow.ini
+28.10. 10:50:05.773    Directory not found, skipping file deletion
+28.10. 10:50:05.775    Deleting file Config/UI/TeamTypesWindow.ini
+28.10. 10:50:05.776    Directory not found, skipping file deletion
+28.10. 10:50:05.778    Deleting file Config/UI/TriggersWindow.ini
+28.10. 10:50:05.780    Directory not found, skipping file deletion
+28.10. 10:50:05.781    Deleting file Config/UI/VehicleOptionsWindow.ini
+28.10. 10:50:05.782    Directory not found, skipping file deletion
+28.10. 10:50:05.784    Deleting file Content/checkBoxChecked.png
+28.10. 10:50:05.785    Directory not found, skipping file deletion
+28.10. 10:50:05.786    Deleting file Content/checkBoxCheckedD.png
+28.10. 10:50:05.788    Directory not found, skipping file deletion
+28.10. 10:50:05.790    Deleting file Content/checkBoxClear.png
+28.10. 10:50:05.792    Directory not found, skipping file deletion
+28.10. 10:50:05.794    Deleting file Content/checkBoxClearD.png
+28.10. 10:50:05.795    Directory not found, skipping file deletion
+28.10. 10:50:05.797    Deleting file Content/comboBoxArrow.png
+28.10. 10:50:05.799    Directory not found, skipping file deletion
+28.10. 10:50:05.801    Deleting file Content/cursor.cur
+28.10. 10:50:05.802    Directory not found, skipping file deletion
+28.10. 10:50:05.803    Deleting file Content/icehighlight.png
+28.10. 10:50:05.805    Directory not found, skipping file deletion
+28.10. 10:50:05.806    Deleting file Content/impassablehighlight.png
+28.10. 10:50:05.809    Directory not found, skipping file deletion
+28.10. 10:50:05.811    Deleting file Content/openedComboBoxArrow.png
+28.10. 10:50:05.812    Directory not found, skipping file deletion
+28.10. 10:50:05.814    Deleting file Content/sbBackground.png
+28.10. 10:50:05.815    Directory not found, skipping file deletion
+28.10. 10:50:05.816    Deleting file Content/sbDownArrow.png
+28.10. 10:50:05.818    Directory not found, skipping file deletion
+28.10. 10:50:05.819    Deleting file Content/sbMiddle.png
+28.10. 10:50:05.820    Directory not found, skipping file deletion
+28.10. 10:50:05.822    Deleting file Content/sbThumbBottom.png
+28.10. 10:50:05.823    Directory not found, skipping file deletion
+28.10. 10:50:05.826    Deleting file Content/sbThumbTop.png
+28.10. 10:50:05.827    Directory not found, skipping file deletion
+28.10. 10:50:05.829    Deleting file Content/sbUpArrow.png
+28.10. 10:50:05.831    Directory not found, skipping file deletion
+28.10. 10:50:05.832    Deleting file Content/SpriteFont0.xnb
+28.10. 10:50:05.834    Directory not found, skipping file deletion
+28.10. 10:50:05.835    Deleting file Content/SpriteFont1.xnb
+28.10. 10:50:05.836    Directory not found, skipping file deletion
+28.10. 10:50:05.837    Deleting directory if it's empty: Config/MapCode
+28.10. 10:50:05.839    IOException while deleting directory: Could not find a part of the path 'C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\Config\MapCode'.
+28.10. 10:50:05.840    Deleting directory if it's empty: Config/UI
+28.10. 10:50:05.844    IOException while deleting directory: Could not find a part of the path 'C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\Config\UI'.
+28.10. 10:50:05.846    Deleting directory if it's empty: Config
+28.10. 10:50:05.849    IOException while deleting directory: Could not find a part of the path 'C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\Config'.
+28.10. 10:50:05.850    Deleting directory if it's empty: Content
+28.10. 10:50:05.852    IOException while deleting directory: Could not find a part of the path 'C:\Users\zemat\OneDrive\Desktop\Dawn of the Tiberium Age\Map Editor\Content'.
+28.10. 10:50:05.853    Deleting file except.txt
+28.10. 10:50:05.855    Deleting file MapEditorLog.log
+28.10. 10:50:05.856    Performing migration Delete obsolete editor UI files
+28.10. 10:50:05.858    Deleting file Editor/Config/UI/AboutWindow.ini
+28.10. 10:50:05.861    Deleting file Editor/Config/UI/ApplyINICodeWindow.ini
+28.10. 10:50:05.863    Deleting file Editor/Config/UI/AutoApplyImpassableOverlayWindow.ini
+28.10. 10:50:05.864    Deleting file Editor/Config/UI/BasicSectionConfigWindow.ini
+28.10. 10:50:05.866    Deleting file Editor/Config/UI/CopiedEntryTypesWindow.ini
+28.10. 10:50:05.867    Deleting file Editor/Config/UI/CreateNewMapWindow.ini
+28.10. 10:50:05.868    Deleting file Editor/Config/UI/ExpandMapWindow.ini
+28.10. 10:50:05.870    Deleting file Editor/Config/UI/GenerateStandardHousesWindow.ini
+28.10. 10:50:05.871    Deleting file Editor/Config/UI/HotkeyConfigurationWindow.ini
+28.10. 10:50:05.872    Deleting file Editor/Config/UI/HousesWindow.ini
+28.10. 10:50:05.876    Deleting file Editor/Config/UI/InfantryOptionsWindow.ini
+28.10. 10:50:05.879    Deleting file Editor/Config/UI/LightingSettingsWindow.ini
+28.10. 10:50:05.883    Deleting file Editor/Config/UI/LocalVariablesWindow.ini
+28.10. 10:50:05.885    Deleting file Editor/Config/UI/MapSizeWindow.ini
+28.10. 10:50:05.887    Deleting file Editor/Config/UI/PlaceWaypointWindow.ini
+28.10. 10:50:05.889    Deleting file Editor/Config/UI/ScriptsWindow.ini
+28.10. 10:50:05.891    Deleting file Editor/Config/UI/SelectActionWindow.ini
+28.10. 10:50:05.894    Deleting file Editor/Config/UI/SelectBuildingTypeWindow.ini
+28.10. 10:50:05.895    Deleting file Editor/Config/UI/SelectEventWindow.ini
+28.10. 10:50:05.897    Deleting file Editor/Config/UI/SelectGlobalVariableWindow.ini
+28.10. 10:50:05.898    Deleting file Editor/Config/UI/SelectHouseWindow.ini
+28.10. 10:50:05.900    Deleting file Editor/Config/UI/SelectLocalVariableWindow.ini
+28.10. 10:50:05.901    Deleting file Editor/Config/UI/SelectScriptActionWindow.ini
+28.10. 10:50:05.902    Deleting file Editor/Config/UI/SelectScriptWindow.ini
+28.10. 10:50:05.904    Deleting file Editor/Config/UI/SelectTagWindow.ini
+28.10. 10:50:05.906    Deleting file Editor/Config/UI/SelectTaskForceWindow.ini
+28.10. 10:50:05.910    Deleting file Editor/Config/UI/SelectTeamTypeWindow.ini
+28.10. 10:50:05.912    Deleting file Editor/Config/UI/SelectThemeWindow.ini
+28.10. 10:50:05.913    Deleting file Editor/Config/UI/SelectTileSetWindow.ini
+28.10. 10:50:05.914    Deleting file Editor/Config/UI/SelectTriggerWindow.ini
+28.10. 10:50:05.915    Deleting file Editor/Config/UI/SelectTutorialLineWindow.ini
+28.10. 10:50:05.917    Deleting file Editor/Config/UI/StructureOptionsWindow.ini
+28.10. 10:50:05.918    Deleting file Editor/Config/UI/TaskforcesWindow.ini
+28.10. 10:50:05.919    Deleting file Editor/Config/UI/TeamTypesWindow.ini
+28.10. 10:50:05.921    Deleting file Editor/Config/UI/TriggersWindow.ini
+28.10. 10:50:05.923    Deleting file Editor/Config/UI/VehicleOptionsWindow.ini
+28.10. 10:50:05.925    Performing migration Delete obsolete editor script files
+28.10. 10:50:05.927    Deleting file Editor/Config/Scripts/Make Civilian Vehicles Sleep.waescript
+28.10. 10:50:05.928    Deleting file Editor/Config/Scripts/Remove All Terrain Objects.waescript
+28.10. 10:50:05.930    Performing migration Delete obsolete DTAScenarioEditor executable
+28.10. 10:50:05.931    Deleting file Editor/DTAScenarioEditor.deps.json
+28.10. 10:50:05.932    Deleting file Editor/DTAScenarioEditor.dll
+28.10. 10:50:05.934    Deleting file Editor/DTAScenarioEditor.exe
+28.10. 10:50:05.935    Deleting file Editor/DTAScenarioEditor.pdb
+28.10. 10:50:05.936    Deleting file Editor/DTAScenarioEditor.runtimeconfig.json
+28.10. 10:50:05.937    Performing migration Delete obsolete MapCode ini files
+28.10. 10:50:05.938    Deleting file Editor/Config/MapCode/Add Reveal Map Trigger.ini
+28.10. 10:50:05.940    Directory not found, skipping file deletion
+28.10. 10:50:05.942    Deleting temporary update files.

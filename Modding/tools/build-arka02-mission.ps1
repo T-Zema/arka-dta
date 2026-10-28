@@ -212,6 +212,8 @@ function Squad($house, [string[]]$types, [int]$n, $dx = 0, $dy = 0, $mission = '
 }
 
 # ================================================================ mission types
+# Tanya: 2500 HP in every ARKA mission (user 2026-10-28: first +50%, then 2500; Rules 1000)
+$ini.Set('TANYA', 'Strength', "$([int]([int]$rules['TANYA']['Strength'] * 2.5))")
 # ARKA wreck = the Chronosphere RAPDOX overridden in this map, as in mission 1; it belongs to the player since the
 # engineer took it at the end of mission 1. No superweapon, no power, not repairable, not capturable.
 $wrakType = 'RAPDOX'; $fcache[$wrakType] = @(2, 2)
@@ -236,7 +238,7 @@ foreach ($src in 'C2', 'C8') {
 }
 # Jim Raynor on his Vulture (as in mission 1: Image=SCVULT, +20% HP, self-healing, Raynor's own SC voices)
 $ray = [ordered]@{}; foreach ($k in $scSec['SCVULT'].Keys) { $ray[$k] = $scSec['SCVULT'][$k] }
-$ray['Name'] = 'Jim Raynor (Vulture)'; $ray['Image'] = 'SCVULT'; $ray['Strength'] = [string][int]([int]$ray['Strength'] * 1.2); $ray['TechLevel'] = '-1'; $ray['Owner'] = 'GDI2,Allies'
+$ray['Name'] = 'Jim Raynor (Vulture)'; $ray['Image'] = 'SCVULT'; $ray['Strength'] = [string][int]([int]$ray['Strength'] * 4.8)   # +20%, then +300% (user 2026-10-28, all ARKA: "szybko pada"); $ray['TechLevel'] = '-1'; $ray['Owner'] = 'GDI2,Allies'
 $ray['SelfHealing'] = 'yes'; $ray['SelfHealingCap'] = '1.0'; $ray['SelfHealingStep'] = '5'
 foreach ($k in 'VoiceSelect', 'VoiceMove', 'VoiceAttack', 'VoiceFeedback', 'VoiceDie') { if ($scSec['SCRAYN'].Contains($k)) { $ray[$k] = $scSec['SCRAYN'][$k] } }
 $ray.Remove('Prerequisite'); $ray.Remove('BuiltAt')
@@ -271,6 +273,24 @@ House 'Nod2'    'NodSide'      'Purple'     'Nod1,Nod2,GDI2' 0 7 'no' 'North' 3 
 House 'GDI'     'GDISide'      'DarkRed'    'GDI,GDI2' 0 0 'no' 'West' 3       # Confederate squad sent to arrest Raynor
 House 'Neutral' 'CivilianSide' 'Grey'       'Neutral' 0 4 'no'
 House 'Special' 'SpecialSide'  'Grey'       'Special' 0 5 'no'
+
+# ================================================================ overlays written by the mission (crystal expansion, Zerg creep)
+$terrCell = @{}; foreach ($kv in $ini.Section('Terrain')) { $terrCell[[int]$kv.Key] = $true }
+function Set-Overlays($cells) {   # cells: @(x, y, overlay, data); the packs are rewritten at once (MissionKit reads them later)
+    $o = [Pack]::Unpack($ini.Joined('OverlayPack'), $false); $d = [Pack]::Unpack($ini.Joined('OverlayDataPack'), $false)
+    foreach ($c in $cells) { $i = $c[1] * 512 + $c[0]; $o[$i] = [byte]$c[2]; $d[$i] = [byte]$c[3]; $script:ovl[$i] = [byte]$c[2]; $block[$c[1] * $GW + $c[0]] = $true }
+    $ini.SetPack('OverlayPack', [Pack]::PackData($o, $false, 8192)); $ini.SetPack('OverlayDataPack', [Pack]::PackData($d, $false, 8192))
+}
+# crystal expansion on the eastern plain, north of the city (user 2026-10-28, marked on the render): blue gems as the
+# converter makes them from SC mineral fields (overlay 31-34, data 9-11), on the free clear cells of a disc of radius 3.2
+$rnd = New-Object Random 2501
+$ex = Find-Spot 123 78 1 1 0 $false
+$gems = @(); for ($x = $ex[0] - 4; $x -le $ex[0] + 4; $x++) { for ($y = $ex[1] - 4; $y -le $ex[1] + 4; $y++) {
+    if (($x - $ex[0]) * ($x - $ex[0]) + ($y - $ex[1]) * ($y - $ex[1]) -gt 10.5) { continue }
+    if (-not (Buildable $x $y) -or $ovl[$y * 512 + $x] -ne 255) { continue }
+    $gems += , @($x, $y, (31 + $rnd.Next(4)), (9 + $rnd.Next(3)))
+} }
+Set-Overlays $gems; $log.Add("crystal expansion: $($gems.Count) gem cells round $($ex[0]),$($ex[1])")
 
 # ================================================================ the Allied base round the ARKA wreck (SW)
 foreach ($n in 10, 12, 13, 14, 15, 16, 17, 18, 19) { Reserve $wp[$n][0] $wp[$n][1] 2 }
@@ -324,6 +344,11 @@ Squad 'Allies' @('MEDIC', 'ENGINEER') 11 3 1
 # ================================================================ Mar Sara City (SE plateau): ruins, shelters, the infested Command Center
 foreach ($n in 30, 31, 32, 33, 34) { Reserve $wp[$n][0] $wp[$n][1] 2 }
 Place-AtWp 'Nod1' 'SCZICC' 30 1 'ARKA2G06' 256
+# wp 61: the cell right in front of (south of) the CC, where Raynor drives in and comes out again
+# (user 2026-10-27: wp 31 was too far from the CC)
+$cp = $structs[$structs.Count - 1].Value -split ','; $cf = Foundation 'SCZICC'
+$rc = Find-Spot ([int]$cp[3] + [Math]::Floor($cf[0] / 2)) ([int]$cp[4] + $cf[1]) 1 1 0 $true; Occupy $rc[0] $rc[1] 1 1
+$wp[61] = $rc; $ini.Set('Waypoints', '61', "$($rc[1] * 1000 + $rc[0])"); $log.Add("Raynor's CC door wp 61 = $($rc[0]),$($rc[1])")
 # the shelters: SC Bunkers of the colonists' own houses (their guns help against the Zerg, never against the player)
 # and an exit cell in front of each one, waypoints 56-58. Not the shelter waypoint itself: it lies under the bunker,
 # and the colonists' reinforcement there never showed up (test 2026-10-27)
@@ -349,7 +374,7 @@ foreach ($i in 0..9) {
     $ini.Set('Smudge', "$smN", ('CR{0}{1},{2},{3},0' -f (1 + $rnd.Next(6)), [char](65 + $rnd.Next(5)), $sx, $sy)); $smN++
 }
 # the city's Zerg (Nod1): Infested Terrans inside the gate, packs at the shelters
-# not at wp 31: Raynor comes out there, and an Infested Terran left standing would blow up on him
+# not at wp 61 (in front of the CC): Raynor comes out there, and an Infested Terran left standing would blow up on him
 Squad 'Nod1' @('SCZINF', 'SCZINF', 'SCZINF', 'SCZINF') 35 4 1 'Area Guard'
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') 52 0 0 'Area Guard'
 Squad 'Nod1' @('SCZHYL', 'SCZHYL', 'SCZHYL') 36 -2 2 'Area Guard'
@@ -424,10 +449,12 @@ function Team($name, $house, $spawnWp, [string[]]$members, [string[]]$script, $t
 # NOT 1,N for ground teams (they stop there for good, ARKA 0 test 2026-10-27); 1,N only for flyers.
 $toBase = '16,10', '11,14'
 $civ = @('ARKCIV1', 'ARKCIV1', 'ARKCIV1', 'ARKCIV2', 'ARKCIV2', 'ARKCIV2')
-# Raynor drives ahead into the city and "goes in" (deleted at the CC): he is the hero locked inside
-$tmRayIn  = Team 'Raynor jedzie do miasta' 'GDI2' 11 @('ARKRAYN') @('3,43', '3,31', '37,0')
-# ...and comes out when the CC blows up: a player team with the tag of "Raynor died" on its member
-$tmRayOut = Team 'Raynor wychodzi' 'Allies' 31 @('ARKRAYN') @('11,5') 'ARKA2G05'
+# Raynor drives ahead into the city and "goes in" (deleted at the CC): he is the hero locked inside.
+# He first waits in the base for 3 minutes (5,30 = guard area 30 x 6 s; user 2026-10-27: he left too soon), drives to
+# the door of the CC (wp 61) and sets local 19 "Raynor w CC" there: only then can his radio call come (rayInCC)
+$tmRayIn  = Team 'Raynor jedzie do miasta' 'GDI2' 11 @('ARKRAYN') @('5,30', '3,43', '3,31', '3,61', '39,19', '37,0')
+# ...and comes out at the same door when the CC blows up: a player team with the tag of "Raynor died" on its member
+$tmRayOut = Team 'Raynor wychodzi' 'Allies' 61 @('ARKRAYN') @('11,5') 'ARKA2G05'
 # colonists: walk to the landing zone, tell the mission they made it (local 2/3/4), board (deleted)
 $tmCiv1   = Team 'Schron 1: kolonisci' 'Allies1' 56 $civ @('3,19', '39,2', '37,0')
 $tmCiv2   = Team 'Schron 2: kolonisci' 'Allies2' 57 $civ @('3,19', '39,3', '37,0')
@@ -452,7 +479,7 @@ $tmP5b    = Team 'Skok: fala 5 wschod' 'Nod1' 47 @('SCZLNG', 'SCZLNG', 'SCZLNG',
 # ================================================================ triggers
 $vars = 'Raynor wzywa', 'Raynor wolny', 'Schron 1 uratowany', 'Schron 2 uratowany', 'Schron 3 uratowany', 'Schron 1 stracony', 'Schron 2 stracony', 'Schron 3 stracony',
     'Skok', 'Elektrownia 1', 'Elektrownia 2', 'Elektrownia 3', 'Elektrownia 4', 'Droga czysta', 'Tanya przy CC',
-    'Schrony: cel', 'Schron 1: gracz byl', 'Schron 2: gracz byl', 'Schron 3: gracz byl'
+    'Schrony: cel', 'Schron 1: gracz byl', 'Schron 2: gracz byl', 'Schron 3: gracz byl', 'Raynor w CC'
 for ($i = 0; $i -lt $vars.Count; $i++) { $ini.Set('VariableNames', "$i", "$($vars[$i]),0") }
 $trN = 0; $trig = [ordered]@{}
 function Ev([int]$id, $p = 0) { "$id,0,$p" }
@@ -468,6 +495,7 @@ function Trigger($key, $name, [string[]]$events, [string[]]$actions, $house = 'A
     $script:trig[$key] = @{ Id = $id; Name = $name; House = $house; Events = $events; Actions = $actions; Disabled = [bool]$Disabled; Repeat = [bool]$Repeat; Tag = $tag; Diff = $diff }
 }
 . "$tools\MissionKit.ps1"   # reveal crate, one text per trigger, dialogue gaps from text length, timeline check
+Add-ScAirArmor             # SC flyer armors: Allied AA fires at SC flyers only on order, Dragoons cannot hit the Overlord
 Add-RevealCrate $crate[0] $crate[1]
 
 # --- opening: Raynor's map of the colony, Duke on the radio, Raynor drives ahead
@@ -507,8 +535,10 @@ Trigger 'road' 'Droga oczyszczona' @((Ev 9 $H.Nod2)) @((Act 56 13), (Text 'Cel 1
 $call = @((Act 56 0), (Act 27 600), (Act 23), (Enable 'rayTimer'), (Act 17 30), (Act 55 4 0 30),
     (Text 'Jim Raynor (radio): Tu Raynor! Siedze w Command Center, a te bestie sa w srodku! Odcieli mnie, dlugo nie wytrzymam!'),
     (Enable 'call2'))
-Trigger 'callGate' 'Raynor wzywa (brama)' @((Ev 1 $H.Allies)) ($call + @((Disable 'callNear'), (Disable 'callT'))) -tag 'ARKA2G14'
-Trigger 'callNear' 'Raynor wzywa (przedpole)' @((Ev 1 $H.Allies)) ($call + @((Disable 'callGate'), (Disable 'callT'))) -tag 'ARKA2G15'
+# the zone calls wait for Raynor to be inside (local 19 from his team script), or he would call from the road
+Trigger 'callGate' 'Raynor wzywa (brama)' @((Ev 1 $H.Allies)) ($call + @((Disable 'callNear'), (Disable 'callT'))) -tag 'ARKA2G14' -Disabled
+Trigger 'callNear' 'Raynor wzywa (przedpole)' @((Ev 1 $H.Allies)) ($call + @((Disable 'callGate'), (Disable 'callT'))) -tag 'ARKA2G15' -Disabled
+Trigger 'rayInCC' 'Raynor w Command Center' @((Ev 36 19)) @((Enable 'callGate'), (Enable 'callNear'))
 Trigger 'callT' 'Raynor wzywa (czas)' @((Ev 13 1200), (Ev 37 0)) ($call + @((Disable 'callGate'), (Disable 'callNear')))
 Trigger 'call2' 'Raynor wzywa 2: cel' @((Ev 13 5)) @(
     (Text 'Cel 2: wysadz zainfekowane Command Center (najlepiej C4 Tanyi), zanim licznik zdrowia Raynora spadnie do zera.')) -Disabled
@@ -516,7 +546,7 @@ Trigger 'rayTimer' 'Raynor: licznik zero' @((Ev 14)) @((Text 'Jim Raynor (radio,
 Trigger 'tanyaCC' 'Tanya przy Command Center' @((Ev 1 $H.Allies), (Ev 37 1)) @((Act 56 14), (Text 'Tanya: Wylaz, kowboju, zaraz bedzie glosno.')) -tag 'ARKA2G13'
 Trigger 'ccDown' 'Command Center wysadzone' @((Ev 48)) @(
     (Act 24), (Disable 'rayTimer'), (Disable 'callGate'), (Disable 'callNear'), (Disable 'callT'), (Act 56 1), (Act 65 30),
-    (Reinf $tmRayOut 31), (Text 'Jim Raynor (wyskakuje z ruin): Moglas zapukac!'), (Enable 'ccDown2')) -house 'Nod1' -tag 'ARKA2G06'
+    (Reinf $tmRayOut 61),(Text 'Jim Raynor (wyskakuje z ruin): Moglas zapukac!'), (Enable 'ccDown2')) -house 'Nod1' -tag 'ARKA2G06'
 Trigger 'ccDown2' 'Command Center 2' @((Ev 13 5)) @((Text 'Jim Raynor (patrzy na kule ognia nad Command Center): ...Cholera. Swietne macie te fajerwerki z muzeum.'), (Enable 'ccDown3')) -Disabled
 Trigger 'ccDown3' 'Command Center 3' @((Ev 13 5)) @((Text 'Tanya: Rocznik piecdziesiaty trzeci, kowboju. Robione recznie.'), (Enable 'shelters')) -Disabled
 
@@ -615,6 +645,75 @@ foreach ($k in $trig.Keys) {
     $ini.Set('Tags', $t.Tag, "$(if ($t.Repeat) { 2 } else { 0 }),$($t.Name) 1,$($t.Id)")
 }
 
+# ================================================================ Zerg creep (mods/zerg-creep) from the start of the mission
+# As ARKA 4 does (user 2026-10-28; the first version here had only the 5x5 ring round each hole, so the Pool, Hydra Den,
+# Spire and infested CC stood on bare ground). The spreaders (Art.ini ActiveAnims) get their [Animations] entries and
+# the veins are buildable, both from the faction map code a mission does not load (vein growth and ImmuneToVeins: see
+# [Basic] below). A Veinhole Monster in the map under every creep building (Hatchery at foundation cell (1,1), colonies
+# at (0,0); holes 3+ cells apart, the engine's rule), overlay 167 + 8x 178 round it, and fully grown VEINS (126, data 48)
+# on a disc of radius 5 round each hole and on every cell of every Zerg building plus a 1-cell margin. At map load
+# Place_Monsters floods the veins connected to a hole and removes the others. Only clear ground without an overlay or a
+# tree; cells of non-Zerg buildings stay free. Written last, after the crates (they refuse a cell with an overlay).
+foreach ($ov in 'VEINS', 'VEINHOLEDUMMY') { $ini.Set($ov, 'Insignificant', 'yes') }
+$an = 0; foreach ($a in 'SCZCRSPL', 'SCZCRSHL', 'SCZCRSPS', 'SCZCRSHS') { $an++; $ini.Set('Animations', "ARKA2ZC0$an", $a); $ini.Set($a, 'Name', "Zerg creep $a") }
+$o = [Pack]::Unpack($ini.Joined('OverlayPack'), $false); $od = [Pack]::Unpack($ini.Joined('OverlayDataPack'), $false)
+$foreign = @{}; $zb = @()
+foreach ($kv in $structs) {
+    $p = $kv.Value -split ','; $f = Foundation $p[1]; $bx = [int]$p[3]; $by = [int]$p[4]
+    if ($p[0] -match '^Nod[12]$' -and $p[1] -like 'SCZ*') { $zb += , @($p[1], $bx, $by, $f[0], $f[1]); continue }
+    for ($i = $bx; $i -lt $bx + $f[0]; $i++) { for ($j = $by; $j -lt $by + $f[1]; $j++) { $foreign[$j * 512 + $i] = $true } }
+}
+function Creep-Free($x, $y) { $c = $code[$y * $GW + $x]; $i = $y * 512 + $x; ($c -eq 0 -or ($c -ge 11 -and $c -le 14)) -and $o[$i] -eq 255 -and -not $terrCell[$y * 1000 + $x] -and -not $foreign[$i] }
+$holes = @(); $nVein = 0
+foreach ($b in $zb) {
+    if ($b[0] -notin 'SCZHAT', 'SCZHIV', 'SCZCRP', 'SCZSUN', 'SCZSPO') { continue }
+    $hx = $b[1]; $hy = $b[2]; if ($b[0] -in 'SCZHAT', 'SCZHIV') { $hx++; $hy++ }
+    if (@($holes | Where-Object { [Math]::Max([Math]::Abs($_[0] - $hx), [Math]::Abs($_[1] - $hy)) -lt 3 }).Count) { continue }
+    # the spreader's own cell first, then the other cells of the foundation (a colony by a rock ledge, ARKA 2 city gate)
+    $cand = @(, @($hx, $hy)); for ($x = $b[1]; $x -lt $b[1] + $b[3]; $x++) { for ($y = $b[2]; $y -lt $b[2] + $b[4]; $y++) { $cand += , @($x, $y) } }
+    $at = $null
+    foreach ($cc in $cand) {
+        if (@($holes | Where-Object { [Math]::Max([Math]::Abs($_[0] - $cc[0]), [Math]::Abs($_[1] - $cc[1])) -lt 3 }).Count) { continue }
+        $ok = $true; for ($dx = -1; $dx -le 1; $dx++) { for ($dy = -1; $dy -le 1; $dy++) { $c = $code[($cc[1] + $dy) * $GW + $cc[0] + $dx]; if (-not ($c -eq 0 -or ($c -ge 11 -and $c -le 14)) -or $o[($cc[1] + $dy) * 512 + $cc[0] + $dx] -ne 255) { $ok = $false } } }
+        if ($ok) { $at = $cc; break }
+    }
+    if (-not $at) { $log.Add("creep: no hole under $($b[0]) @ $hx,$hy (ground or overlay)"); continue }
+    if ($at[0] -ne $hx -or $at[1] -ne $hy) { $log.Add("creep: hole of $($b[0]) @ $hx,$hy moved to $($at[0]),$($at[1])") }
+    $hx = $at[0]; $hy = $at[1]; $holes += , @($hx, $hy)
+    for ($dx = -1; $dx -le 1; $dx++) { for ($dy = -1; $dy -le 1; $dy++) { $i = ($hy + $dy) * 512 + $hx + $dx; $o[$i] = $(if ($dx -eq 0 -and $dy -eq 0) { 167 } else { 178 }); $od[$i] = 0 } }
+}
+$veinAt = { param($x, $y) if (Creep-Free $x $y) { $i = $y * 512 + $x; $o[$i] = 126; $od[$i] = 48; $script:nVein++ } }
+foreach ($hole in $holes) { for ($dx = -5; $dx -le 5; $dx++) { for ($dy = -5; $dy -le 5; $dy++) { if ($dx * $dx + $dy * $dy -le 25) { & $veinAt ($hole[0] + $dx) ($hole[1] + $dy) } } } }   # not $h: it is $H, the house indices
+foreach ($b in $zb) { for ($x = $b[1] - 1; $x -le $b[1] + $b[3]; $x++) { for ($y = $b[2] - 1; $y -le $b[2] + $b[4]; $y++) { & $veinAt $x $y } } }
+# veins not 4-connected to a hole would go at map load (a Spire or Pool away from the discs kept bare ground): each loose
+# patch gets a line of veins to the nearest connected vein within 15 cells
+$conn = New-Object 'bool[]' $o.Length
+$fill = { param($starts) $q = New-Object Collections.Generic.Queue[int]; foreach ($s in $starts) { if (-not $conn[$s]) { $conn[$s] = $true; $q.Enqueue($s) } }
+    while ($q.Count) { $i = $q.Dequeue(); foreach ($d in -1, 1, -512, 512) { $j = $i + $d; if (-not $conn[$j] -and ($o[$j] -eq 126 -or $o[$j] -eq 178)) { $conn[$j] = $true; $q.Enqueue($j) } } } }
+& $fill @($holes | ForEach-Object { $_[1] * 512 + $_[0] })
+$nLoose = 0; $dead = New-Object 'bool[]' $o.Length
+for ($i0 = 0; $i0 -lt $o.Length; $i0++) {
+    if ($o[$i0] -ne 126 -or $conn[$i0] -or $dead[$i0]) { continue }
+    # shortest walk over veins or free ground (BFS, 15 cells round the patch cell) to a connected vein, then veins on it
+    $lx = $i0 % 512; $ly = [int][Math]::Floor($i0 / 512); $from = @{ $i0 = -1 }; $q = New-Object Collections.Generic.Queue[int]; $q.Enqueue($i0); $hit = -1
+    while ($q.Count -and $hit -lt 0) {
+        $i = $q.Dequeue(); foreach ($d in -1, 1, -512, 512) {
+            $j = $i + $d; $x = $j % 512; $y = [int][Math]::Floor($j / 512)
+            if ($from.ContainsKey($j) -or [Math]::Abs($x - $lx) -gt 15 -or [Math]::Abs($y - $ly) -gt 15) { continue }
+            if ($conn[$j]) { $from[$j] = $i; $hit = $j; break }
+            if ($o[$j] -eq 126 -or $o[$j] -eq 178 -or (Creep-Free $x $y)) { $from[$j] = $i; $q.Enqueue($j) }
+        }
+    }
+    if ($hit -ge 0) { for ($i = $from[$hit]; $i -ne $i0; $i = $from[$i]) { if ($o[$i] -ne 126 -and $o[$i] -ne 178) { & $veinAt ($i % 512) ([int][Math]::Floor($i / 512)) } }; & $fill @($i0) }
+    else {   # no way out (cut off by a cliff): the game would drop the patch at load, so it goes here already
+        $nLoose++; $q.Enqueue($i0); $dead[$i0] = $true; $n0 = 0
+        while ($q.Count) { $i = $q.Dequeue(); $o[$i] = 255; $od[$i] = 0; $n0++; foreach ($d in -1, 1, -512, 512) { $j = $i + $d; if (-not $dead[$j] -and $o[$j] -eq 126) { $dead[$j] = $true; $q.Enqueue($j) } } }
+        $log.Add("creep: loose veins at $lx,$ly ($n0 cells, no path to a hole) removed")
+    }
+}
+$ini.SetPack('OverlayPack', [Pack]::PackData($o, $false, 8192)); $ini.SetPack('OverlayDataPack', [Pack]::PackData($od, $false, 8192))
+$log.Add("creep: 4 spreader animations; $($holes.Count) holes under $($zb.Count) Zerg buildings, $nVein vein cells, $nLoose loose patches removed")
+
 # ================================================================ [Basic], briefing
 $basic = [ordered]@{
     Name = 'ARKA #2: Ewakuacja'; Author = 'Zema (teren: Blizzard T3 Desperate Alliance)'; GameMode = 'Custom Map'; Player = 'Allies'
@@ -632,6 +731,19 @@ $brief = @(
 for ($i = 0; $i -lt $brief.Count; $i++) { $ini.Set('Briefing', "$($i + 1)", $brief[$i]) }
 $ini.Set('SpecialFlags', 'Visceroids', 'no')
 $ini.Set('SpecialFlags', 'TiberiumGrows', 'no')
+# Zerg creep (mods/zerg-creep): what the creep block of Terran Faction.ini gives a skirmish, which a mission does not
+# load: veins grow (357 DTA maps say no), every 60 frames, and every type is immune to the vein attack (or the creep
+# eats the player's units and buildings, test 5 of the creep mod)
+$ini.Set('Basic', 'VeinGrowthEnabled', 'yes')
+$ini.Set('General', 'VeinholeGrowthRate', '60')
+$ini.Set('General', 'VeinholeShrinkRate', '8')      # creep of a dead nest recedes in ~a minute (Rules 100: ~10 min; 5 was 40% too fast)
+$immune = 0
+foreach ($s in $scSec.Keys) {
+    if ($scSec[$s]['ImmuneToVeins'] -ne 'yes' -or -not $listOf.ContainsKey($s)) { continue }
+    if ($listOf[$s] -like 'Rules:*' -or $known.ContainsKey($s)) { $ini.Set($s, 'ImmuneToVeins', 'yes'); $immune++ }   # in the map: Rules or copied SC
+}
+foreach ($s in 'ARKRAYN', 'ARKEINST', 'ARKCIV1', 'ARKCIV2', $wrakType) { if ($ini.Has($s)) { $ini.Set($s, 'ImmuneToVeins', 'yes'); $immune++ } }
+$log.Add("creep: ImmuneToVeins=yes on $immune types")
 foreach ($s in 'Preview', 'PreviewPack') { $ini.Sections.Remove($s) | Out-Null; $ini.Order.Remove($s) | Out-Null }
 
 [IO.File]::WriteAllText($Out, $ini.Write(), $enc)

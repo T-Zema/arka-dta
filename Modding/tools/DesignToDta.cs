@@ -471,6 +471,261 @@ public class DesignToDta : ScToDta
         foreach (int c in CellDisc(u, v, r)) if (!Used[c] && K[c] != Kind.Water) Ground[c] = Pave;
     }
 
+    // ------------------------------------------------------------ roads as Paved Road LAT (the DTA way)
+    // DTA missions paint roads as Paved Road LAT (dark asphalt, soft edges; se03/se04/reclamation) and every road
+    // leads somewhere: into another road, off the map edge, or into a square / parking lot. OSM main roads alone end
+    // wherever a smaller street joined them, and road tiles that A* could not lay broke them into stubs ("roads to
+    // nowhere", review 2026-10-27). So: collect the runs (RoadLat), then FinishRoads links or trims every free end.
+    public const int RoadG = 4;   // Ground value of a paved road (LAT); pavement plazas stay Pave
+    List<List<int>> roadRuns = new List<List<int>>();
+    List<int> roadRunLevel = new List<int>();
+    public int RoadsLinked, RoadsTrimmed, RoadsDropped, RoadCells;
+
+    int LevelOf(int c) { return Plateau[c] < 0 ? 0 : PlateauLevel[Plateau[c]]; }
+
+    bool RoadOk(int c, int lvl)
+    {
+        return c >= 0 && c < K.Length && Valid[c] && Visible[c] && K[c] != Kind.Water && !Used[c] && !RoadAvoid.Contains(c)
+            && (Ramp[c] || LevelOf(c) == lvl);
+    }
+
+    // One road (design polyline): cut where it leaves the land, hits a cliff or a kept-free plot, or changes level
+    // outside a ramp; each piece of 3+ cells is a run. A path cell on a cliff, the shore or a plot moves to the nearest
+    // allowed cell within 2 (OSM lines along a narrow lane, e.g. Sir Herbert Road under the Rock, lie on the cliff
+    // cells and broke into specks); a jump left by the move is bridged by a straight piece.
+    public void RoadLat(double[] p)
+    {
+        List<int> run = new List<int>(); int lvl = -1;
+        foreach (int c0 in CellPath(p))
+        {
+            int c = c0;
+            if (c < 0 || c >= K.Length) { AddRun(run, lvl); run = new List<int>(); lvl = -1; continue; }
+            if (!RoadOk(c, LevelOf(c))) c = SnapRoad(c, run.Count > 0 ? lvl : -1);
+            if (c < 0) { AddRun(run, lvl); run = new List<int>(); lvl = -1; continue; }
+            int l = LevelOf(c);
+            if (run.Count > 0 && !Ramp[c] && l != lvl) { AddRun(run, lvl); run = new List<int>(); }
+            if (run.Count == 0 || !Ramp[c]) lvl = l;
+            if (run.Count > 0)
+            {
+                int last = run[run.Count - 1];
+                if (last == c || run.Contains(c)) continue;
+                if (Math.Max(Math.Abs(last % N - c % N), Math.Abs(last / N - c / N)) > 1)
+                {
+                    List<int> gap = StraightPath(last, c, lvl);
+                    if (gap == null) { AddRun(run, lvl); run = new List<int>(); }
+                    else { gap.RemoveAt(gap.Count - 1); foreach (int g in gap) if (!run.Contains(g)) run.Add(g); }
+                }
+            }
+            run.Add(c);
+        }
+        AddRun(run, lvl);
+    }
+
+    // nearest allowed road cell within 2 of c (on level lvl, or any level when lvl < 0), or -1
+    int SnapRoad(int c, int lvl)
+    {
+        int x = c % N, y = c / N;
+        for (int r = 1; r <= 2; r++)
+            for (int yy = y - r; yy <= y + r; yy++) for (int xx = x - r; xx <= x + r; xx++)
+            {
+                if (Math.Max(Math.Abs(xx - x), Math.Abs(yy - y)) != r || !In(xx, yy)) continue;
+                int i = Idx(xx, yy);
+                if (RoadOk(i, lvl < 0 ? LevelOf(i) : lvl)) return i;
+            }
+        return -1;
+    }
+
+    void AddRun(List<int> run, int lvl) { if (run.Count >= 3) { roadRuns.Add(run); roadRunLevel.Add(lvl); } }
+
+    // a run is 2 cells wide: each path cell plus its +x, +y and +x+y neighbours on the same level
+    HashSet<int> RunCells(int r)
+    {
+        HashSet<int> s = new HashSet<int>();
+        foreach (int c in roadRuns[r])
+        {
+            int x = c % N, y = c / N;
+            for (int k = 0; k < 4; k++) { int nx = x + (k & 1), ny = y + (k >> 1); if (In(nx, ny) && RoadOk(Idx(nx, ny), roadRunLevel[r])) s.Add(Idx(nx, ny)); }
+        }
+        return s;
+    }
+
+    bool NearEdge(int c, int r)
+    {
+        int x = c % N, y = c / N;
+        for (int yy = y - r; yy <= y + r; yy++) for (int xx = x - r; xx <= x + r; xx++) if (!In(xx, yy) || !Visible[Idx(xx, yy)]) return true;
+        return false;
+    }
+
+    // pavement cells round c on c's level (a square only counts on the same side of a cliff)
+    int PaveAround(int c, int r)
+    {
+        int x = c % N, y = c / N, n = 0, lvl = LevelOf(c);
+        for (int yy = y - r; yy <= y + r; yy++) for (int xx = x - r; xx <= x + r; xx++)
+        {
+            if (!In(xx, yy)) continue;
+            int i = Idx(xx, yy);
+            if (Ground[i] == Pave && K[i] != Kind.Water && !Used[i] && LevelOf(i) == lvl) n++;
+        }
+        return n;
+    }
+    const int SquareCells = 12;   // pavement cells within 3 that make a square a road may end in
+
+    // cells of all runs except one: cell -> run index
+    Dictionary<int, int> OtherCells(List<HashSet<int>> cells, int skip)
+    {
+        Dictionary<int, int> d = new Dictionary<int, int>();
+        for (int r = 0; r < cells.Count; r++) if (r != skip && cells[r] != null) foreach (int c in cells[r]) d[c] = r;
+        return d;
+    }
+
+    // another road within r of c on the same level (a road beyond a cliff does not count)
+    bool Touches(Dictionary<int, int> other, int c, int r, int lvl)
+    {
+        int x = c % N, y = c / N;
+        for (int yy = y - r; yy <= y + r; yy++) for (int xx = x - r; xx <= x + r; xx++)
+            if (In(xx, yy) && other.ContainsKey(Idx(xx, yy)) && (Ramp[Idx(xx, yy)] || LevelOf(Idx(xx, yy)) == lvl)) return true;
+        return false;
+    }
+
+    // an end is joined when its 2x2 piece (e, +x, +y) shares a cell side with another road cell on its level
+    // (a corner-only contact renders as a grass gap between the two LAT roads)
+    bool Joined(Dictionary<int, int> other, int e, int lvl)
+    {
+        int x = e % N, y = e / N;
+        int[] NX = { 0, 1, 0, -1 }, NY = { -1, 0, 1, 0 };
+        for (int k = 0; k < 4; k++)
+            for (int d = 0; d < 5; d++)
+            {
+                int nx = x + (k & 1) + (d < 4 ? NX[d] : 0), ny = y + (k >> 1) + (d < 4 ? NY[d] : 0);
+                if (!In(nx, ny)) continue;
+                int i = Idx(nx, ny);
+                if (other.ContainsKey(i) && (Ramp[i] || LevelOf(i) == lvl)) return true;
+            }
+        return false;
+    }
+
+    // straight cell path a -> b (8-connected steps; diagonal steps also take the side cell so the road stays joined)
+    List<int> StraightPath(int a, int b, int lvl)
+    {
+        List<int> res = new List<int>();
+        int x = a % N, y = a / N, bx = b % N, by = b / N;
+        while (x != bx || y != by)
+        {
+            int sx = Math.Sign(bx - x), sy = Math.Sign(by - y);
+            if (Math.Abs(bx - x) > Math.Abs(by - y) * 2) sy = 0; else if (Math.Abs(by - y) > Math.Abs(bx - x) * 2) sx = 0;
+            if (sx != 0 && sy != 0) { if (!In(x + sx, y)) return null; int side = Idx(x + sx, y); if (!RoadOk(side, lvl)) return null; res.Add(side); }
+            x += sx; y += sy;
+            if (!In(x, y)) return null;
+            int c = Idx(x, y); if (!RoadOk(c, lvl)) return null;
+            res.Add(c);
+        }
+        return res;
+    }
+
+    // An end is anchored when it reaches the map edge (the road goes on off the map), another road, or a square
+    // (6+ pavement cells round it: port, parking, plaza). A free end is linked to the nearest road within maxLink
+    // cells by a straight piece; failing that the run is cut back to its last junction, or dropped when it touches no
+    // other road at all. Repeated until nothing changes (a dropped run can free other ends).
+    public void FinishRoads(int maxLink, int minComponent)
+    {
+        List<HashSet<int>> cells = new List<HashSet<int>>();
+        for (int r = 0; r < roadRuns.Count; r++) cells.Add(RunCells(r));
+        for (int pass = 0; pass < 12; pass++)
+        {
+            bool changed = false;
+            for (int r = 0; r < roadRuns.Count; r++)
+            {
+                if (cells[r] == null) continue;
+                Dictionary<int, int> other = OtherCells(cells, r);
+                for (int end = 0; end < 2 && cells[r] != null; end++)
+                {
+                    List<int> path = roadRuns[r]; int lvl = roadRunLevel[r];
+                    int e = end == 0 ? path[0] : path[path.Count - 1];
+                    if (Joined(other, e, lvl) || NearEdge(e, 3)) continue;
+                    // link: nearest other road cell within maxLink, reachable by a straight piece on this level
+                    int best = -1, bd = int.MaxValue; List<int> link = null;
+                    foreach (KeyValuePair<int, int> kv in other)
+                    {
+                        int dx = kv.Key % N - e % N, dy = kv.Key / N - e / N, d = Math.Max(Math.Abs(dx), Math.Abs(dy));
+                        if (d > maxLink || d >= bd) continue;
+                        List<int> sp = StraightPath(e, kv.Key, roadRunLevel[r]);
+                        if (sp == null) continue;
+                        best = kv.Key; bd = d; link = sp;
+                    }
+                    if (link != null)
+                    {
+                        if (end == 0) { link.Reverse(); path.InsertRange(0, link); } else path.AddRange(link);
+                        cells[r] = RunCells(r); RoadsLinked++; changed = true; continue;
+                    }
+                    if (PaveAround(e, 3) >= SquareCells) continue;   // ends in a square / parking / quay
+                    // trim back to the last path cell that touches another road
+                    int k = -1;
+                    for (int j = 0; j < path.Count; j++) { int idx = end == 0 ? j : path.Count - 1 - j; if (Touches(other, path[idx], 1, lvl)) { k = idx; break; } }
+                    if (k < 0) { cells[r] = null; RoadsDropped++; changed = true; break; }
+                    if (end == 0) path.RemoveRange(0, k); else path.RemoveRange(k + 1, path.Count - k - 1);
+                    if (path.Count < 2) { cells[r] = null; RoadsDropped++; changed = true; break; }
+                    cells[r] = RunCells(r); RoadsTrimmed++; changed = true;
+                }
+            }
+            if (!changed) break;
+        }
+        HashSet<int> all = new HashSet<int>();
+        foreach (HashSet<int> s in cells) if (s != null) all.UnionWith(s);
+        // small islands of road that reach neither the edge nor a square are dropped too
+        foreach (List<int> comp in Components(delegate (int i) { return all.Contains(i); }, true))
+        {
+            if (comp.Count >= minComponent) continue;
+            bool keep = false; foreach (int c in comp) if (NearEdge(c, 3) || PaveAround(c, 3) >= SquareCells) { keep = true; break; }
+            if (!keep) foreach (int c in comp) all.Remove(c);
+        }
+        foreach (int c in all) Ground[c] = RoadG;
+        RoadCells = all.Count;
+        // review list: ends that stop in a square, and ends left free (none expected)
+        SquareEnds.Clear(); OpenEnds.Clear();
+        int kept = 0;
+        for (int r = 0; r < roadRuns.Count; r++)
+        {
+            if (cells[r] == null) continue;
+            kept++;
+            Dictionary<int, int> other = OtherCells(cells, r);
+            foreach (int e in new int[] { roadRuns[r][0], roadRuns[r][roadRuns[r].Count - 1] })
+            {
+                if (!all.Contains(e) || Joined(other, e, roadRunLevel[r]) || NearEdge(e, 3)) continue;
+                if (PaveAround(e, 3) >= SquareCells) SquareEnds.Add(e); else OpenEnds.Add(e);
+            }
+        }
+        Log.Add(string.Format("roads (LAT): {0} runs, {1} kept, {2} ends linked, {3} trimmed, {4} runs dropped, {5} cells; ends in a square {6}, free ends {7}",
+            roadRuns.Count, kept, RoadsLinked, RoadsTrimmed, RoadsDropped, RoadCells, SquareEnds.Count, OpenEnds.Count));
+    }
+    public List<int> SquareEnds = new List<int>(), OpenEnds = new List<int>();
+    // LAT with paved roads: as ApplyGround, but pavement counts a road next to it as its own ground (no grass seam),
+    // and a road cell whose differing neighbours are all pavement takes the Pavement/Paved Road LAT.
+    public void ApplyGroundRoads(int clear, int[] baseTile, int[] latStart, int roadOnPaveLat)
+    {
+        ApplyGround(clear, baseTile, latStart);
+        int[] NX = { 0, 1, 0, -1 }, NY = { -1, 0, 1, 0 };
+        for (int y = 0; y < N; y++) for (int x = 0; x < N; x++)
+        {
+            int i = Idx(x, y);
+            if (!Valid[i] || Used[i]) continue;
+            int g = Ground[i];
+            if (g != Pave && g != RoadG) continue;
+            int mask = 0; bool onlyPave = true;
+            for (int d = 0; d < 4; d++)
+            {
+                int nx = x + NX[d], ny = y + NY[d];
+                int n = In(nx, ny) ? Idx(nx, ny) : -1;
+                if (n < 0) continue;
+                bool same = !Used[n] && K[n] != Kind.Water && (Ground[n] == g || g == Pave && Ground[n] == RoadG);
+                if (same) continue;
+                mask |= 1 << d;
+                if (Used[n] || K[n] == Kind.Water || Ground[n] != Pave) onlyPave = false;
+            }
+            Tile[i] = mask == 0 ? baseTile[g] : (g == RoadG && onlyPave ? roadOnPaveLat : latStart[g]) + mask;
+            Sub[i] = 0;
+        }
+    }
+
     // ------------------------------------------------------------ coast check
     // Land cells (not under a shore/cliff piece) that touch a plain water tile: the coast has no shore piece
     // there, the edge is a raw saw-tooth of diamonds. Returns the cells.
@@ -555,9 +810,9 @@ public class DesignToDta : ScToDta
             int[] g2 = (int[])Ground.Clone();
             for (int y = 1; y < N - 1; y++) for (int x = 1; x < N - 1; x++)
             {
-                int i = Idx(x, y); if (!Valid[i]) continue;
-                int[] votes = new int[4];
-                for (int d = 0; d < 8; d++) { int nx = x + ConnectedSet.DX[d], ny = y + ConnectedSet.DY[d]; if (In(nx, ny)) votes[Ground[Idx(nx, ny)]]++; }
+                int i = Idx(x, y); if (!Valid[i] || Ground[i] == RoadG) continue;   // roads are exact, never smoothed
+                int[] votes = new int[5];
+                for (int d = 0; d < 8; d++) { int nx = x + ConnectedSet.DX[d], ny = y + ConnectedSet.DY[d]; if (In(nx, ny) && Ground[Idx(nx, ny)] != RoadG) votes[Ground[Idx(nx, ny)]]++; }
                 if (votes[Ground[i]] <= 2) { int bestG = 0; for (int g = 1; g < 4; g++) if (votes[g] > votes[bestG]) bestG = g; g2[i] = bestG; }
             }
             Ground = g2;
@@ -569,8 +824,9 @@ public class DesignToDta : ScToDta
     {
         if (!In(x, y)) return false;
         int i = Idx(x, y);
+        // LAT roads are plain ground cells: buildings, trees and ore keep off them explicitly
         return Visible[i] && !Used[i] && K[i] != Kind.Water && !Ramp[i] && !Reserved.Contains(i) && !Occupied.ContainsKey(i)
-            && Overlay[y * 512 + x] == 255 && !Terrain.ContainsKey(y * 1000 + x);
+            && (Ground == null || Ground[i] != RoadG) && Overlay[y * 512 + x] == 255 && !Terrain.ContainsKey(y * 1000 + x);
     }
 
     public void Reserve(double u, double v, int rx, int ry)
@@ -671,6 +927,20 @@ public class DesignToDta : ScToDta
             }
             if (!res.Contains(c)) res.Add(c);
             last = c;
+        }
+        return res;
+    }
+
+    // Cells whose centre has label val in a design layer, on one plateau level (-1 = any): resource fields drawn
+    // as polygons, e.g. ore on the Rock's level 1 that must not spill over the cliff to the town below.
+    public List<int> CellsIn(Layer l, byte val, int level)
+    {
+        List<int> res = new List<int>();
+        for (int i = 0; i < K.Length; i++)
+        {
+            if (!Valid[i] || !Visible[i] || K[i] == Kind.Water || level >= 0 && LevelOf(i) != level) continue;
+            double u, v; Design(i % N, i / N, out u, out v);
+            if (l.Get(u, v) == val) res.Add(i);
         }
         return res;
     }

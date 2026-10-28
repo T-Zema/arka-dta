@@ -56,7 +56,7 @@ Brak Pythona i .NET SDK, jest tylko runtime 8 i PowerShell 5.1. Dlatego kod C# 5
 - `ModTools.cs`: `Mix` (czytanie, zapis, ID), `MixSet` (szukanie po wszystkich MIX-ach), `Shp` (odczyt, zapis z kompresją 3),
   `Grp` (SC1), `Aud` (WAV → AUD IMA ADPCM), `Pal` (palety TS/WPE, najbliższy kolor, PNG, arkusze podglądu, PCX).
 - `ScBuild.cs`: konwersja GRP → SHP pojazdu (32 kierunki, lustro, cienie, remap), animacje, cameo z portretu.
-- `build-scmarine.ps1`: buduje `MIX/ECACHE99.MIX` dla marine'a. Wzorzec dla kolejnych jednostek SC.
+- `build-scmarine.ps1`: buduje `MIX/ECACHE77.MIX` dla marine'a (do 2026-10-27 `ECACHE99`). Wzorzec dla kolejnych jednostek SC.
 - Podgląd: generuj PNG (`Pal.Sheet`) i otwieraj narzędziem Read. Tak ustalono kierunki DTA (`2TNK.SHP`).
 - ffmpeg (do portretów webm) nie jest zainstalowany. Wersję przenośną pobrano do scratchpada sesji.
 

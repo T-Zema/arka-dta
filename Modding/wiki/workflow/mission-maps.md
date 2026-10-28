@@ -41,7 +41,7 @@ Dla miejsc bez prawdziwej geografii (Mar Sara, Antiga, Char…) teren bierze si�
 
 ## Kolejność etapów (ważna)
 
-`Classify` → `Cliffs` (wyższy poziom pierwszy) → `Shores` (klify wodne poza plażami) → `Beaches` → `SettleWater` → `DrownSpecks(40)` → `MarkCoastPieces` → `FillWater` → `DrownRawCoast` → rezerwacje → `Road` (drogi OSM) → mury, ruda, budynki, drzewa → `SmoothGround` → `ApplyGround` (LAT) → `WallFrames` → waypointy → kontrole → `FlushBuildings` → `WriteMap`.
+`Classify` → `Cliffs` (wyższy poziom pierwszy) → `Shores` (klify wodne poza plażami) → `Beaches` → `SettleWater` → `DrownSpecks(40)` → `MarkCoastPieces` → `FillWater` → `DrownRawCoast` → rezerwacje (+ mur do `RoadAvoid`) → `RoadLat` + `FinishRoads` (drogi OSM) → mur, ruda, budynki, drzewa → `SmoothGround` → `ApplyGroundRoads` (LAT z drogami) → `WallFrames` → waypointy → kontrole → `FlushBuildings` → `WriteMap`.
 
 ## Pułapki (z Gibraltaru)
 
@@ -59,13 +59,15 @@ Dla miejsc bez prawdziwej geografii (Mar Sara, Antiga, Char…) teren bierze si�
 - Drugi poziom płaskowyżu potrzebuje ok. 2–3 komórek pierwszego poziomu wokół (dwie linie klifów). Odsunięcie 24 px zjadło grań prawie całą, 18 px działa.
 - Rampy: punkt z grubsza przy prawdziwej drodze w górę, `NearestEdge` dosuwa go do krawędzi poziomu, a `Disc` (r 13 px ≈ 4 komórki) oznacza komórki bez klifu. Poziom bez rampy jest nieosiągalny i służy jako ozdoba.
 
-**Drogi z kafli**
-- Zestaw `TemperatePavedRoadASet` (WAE): kawałki 1×2 do 3×2, **droga ma 2 komórki szerokości**, kod terenu 11 (przejezdny, budowlany).
-- OSM tnie drogi na krótkie odcinki: `Osm.Chains` łączy je w ciągi między skrzyżowaniami. Skrzyżowań zestaw nie ma: na ich miejscu jest bruk LAT (`PaveAt`).
-- Ciąg drogi dzielony jest tam, gdzie zmienia poziom poza rampą. Odcinek, którego A* nie ułoży, staje się brukiem LAT.
-- W gęstym mieście biorę tylko `trunk/primary/secondary/tertiary` (w Hiszpanii bez `tertiary`) i `unclassified` w górach. Wszystko naraz zapchałoby mapę 2-komórkowymi drogami.
-- Drogi omijają zarezerwowane działki (`RoadAvoid`).
-
+**Drogi (Paved Road LAT, od 2026-10-27)**
+- **DTA rysuje drogi jako `Paved Road LAT`**, nie kaflami: ciemny asfalt z miękką krawędzią, prosto w osiach izometrii albo pod kątem 45°. Zbadane na se03, se04, reclamation i crc12 (2000–5700 komórek `Clear/Paved Road LAT` na mapę). **Każda droga gdzieś prowadzi:** do innej drogi, za krawędź mapy, na plac lub parking (bruk), do bazy albo na most. Ślepych końców w trawie nie ma.
+- Kafle `TemperatePavedRoadASet` (2 komórki, A*) dawały na Gibraltarze rozsypane odcinki. A* nie układał wielu ciągów, a główne drogi OSM urywają się tam, gdzie dochodziła pominięta mniejsza ulica. Recenzja: „drogi do nikąd”.
+- Konwerter: `RoadLat(polilinia)` zbiera odcinki (2 komórki szerokości, pędzel 2×2). `FinishRoads(10, 30)` zamyka końce: koniec **stykający się bokiem** z drogą na tym samym poziomie jest OK (styk po skosie wygląda jak przerwa); tak samo koniec przy krawędzi mapy. Pozostałe końce dostają prosty łącznik do najbliższej drogi w promieniu 10. Jeśli się nie da, koniec ląduje na placu (12+ komórek bruku w promieniu 3) albo zostaje przycięty do ostatniego skrzyżowania. Odcinek bez żadnego styku wypada. W logu `free ends` musi wynosić 0; arkusz waypointów zaznacza końce na placach (pomarańczowe kwadraty) i wolne końce (czerwone koła).
+- Komórka drogi na klifie, brzegu albo działce przesuwa się do najbliższej dozwolonej w promieniu 2 (`SnapRoad`). Bez tego `Sir Herbert Road` pod Skałą rozpadała się na okruchy, a pas wschodni nie miał drogi.
+- LAT: grunt `RoadG = 4`; kafle `Paved Road LAT & addons`, przejścia `Clear/Paved Road LAT`, a przy bruku `Pavement/Paved Road LAT`. Bruk liczy sąsiednią drogę jako swój grunt (`ApplyGroundRoads`). Kod terenu 11, jak bruk: przejezdny i budowlany. Skrypt misji stawia budynki obok.
+- Drogi LAT nie są `Used`, więc `Free` wprost wyklucza drogi: budynki, drzewa i ruda ich nie zasłaniają. `SmoothGround` ich nie wygładza.
+- Mur (linia nakładki) wpisz do `RoadAvoid` przed drogami. Droga przechodzi tylko przez bramy.
+- Z OSM tylko `trunk/primary/secondary` (+ `_link`). Wszystko naraz zapchałoby miasto równoległymi pasami.
 **Obiekty**
 - Budynki z pokrycia OSM (`FillAreas` → `PlaceOnCover`): w komórce musi być ≥ 40% obrysów, a wokół każdego budynku zostaje pierścień 1 komórki (ulice). Strefę bazy gracza wyłącz (`ReserveZone`).
 - Neutralne obiekty z grafiką w Temperate (fundament z Art.ini): wioska `V01–V11` 1×1, `V03` 2×2, `CITY09` magazyn 1×1, `CITY10` 2×2, `NV17` silos, `NV18` szopa, `CA0011` zbiornik 1×2, `CA0008` „jaskinia” 2×2, `CRANE` 1×1, `HANGAR` 2×3, `RUS02A` wieża 1×1, ruiny wież `DBTWR`/`DBATWR` 1×1, `AMMOCRAT`, `STEELCRATE`, `WOODCRATE`, `RABARL` 1×1, `LHUS` latarnia, `WDML` wiatrak, `HOSP` 2×2. `RUS02B` i `BARLO5` nie mają sekcji w Art.ini, nie używać.
@@ -75,6 +77,8 @@ Dla miejsc bez prawdziwej geografii (Mar Sara, Antiga, Char…) teren bierze si�
 - Skrypt terenu **nadpisuje mapę w całości**. Triggery robi osobna warstwa, która czyta mapę terenu (wzór: `build-arka00-mission.ps1`, [[missions/arka-00-triggers]]).
 - **Każda misja ARKA** dołącza `tools/MissionKit.ps1` (`. "$tools\MissionKit.ps1"` po definicji `Trigger`) i ma:
   - `Add-RevealCrate x y`: skrzynkę z odkryciem mapy obok bazy gracza (życzenie użytkownika). Komórkę trzeba zająć (`Find-Spot` + `Occupy`) **przed** rozstawieniem jednostek;
-  - `Split-MultiText; Set-DialoguePacing` przed zapisem triggerów i `Test-TextTimeline` z wynikiem 0 WARN ([[engine/triggers-and-dialogue]], „Tempo dialogów”).
+  - `Split-MultiText; Set-DialoguePacing` przed zapisem triggerów i `Test-TextTimeline` z wynikiem 0 WARN ([[engine/triggers-and-dialogue]], „Tempo dialogów”);
+  - złoża, łupy (`Add-MoneyCrate`) i powtarzane rajdy na gospodarkę według [[workflow/mission-design]] (recenzja 2026-10-27).
+- Złoża w skrypcie terenu: wielokąt albo koło w `Layer` + `CellsIn(layer, wartość, poziom)` (ruda na płaskowyżu nie spływa po klifie do miasta), kopalnia `OREMINE` jako obiekt `[Terrain]` na pierwszej wolnej komórce (`Free`).
 - Numery waypointów to kontrakt między warstwami. Pozycje mogą się przesunąć o 1–2 komórki po przebudowie, numery nigdy.
 - `HomeCell` to numer waypointu (konwerter wpisuje 98, ustaw w misji).

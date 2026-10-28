@@ -41,8 +41,9 @@ Repo = folder gry. `.gitignore` ignoruje **wszystko** (`/*`) poza `Modding/`, `C
   wersjami `Art.ini`, `Sound.ini`…) i `game.exe`. Po każdej aktualizacji trzeba więc uruchomić restore.
 - Przy każdej aktualizacji klient wykonuje też skrypty serwera `preupdateexec` i `updateexec` (sekcje `[Delete]`, `[Rename]`,
   `[ForceDeleteFolder]`…). `preupdateexec` usuwa **`MIX/ECache99.mix`** i **`INI/BattleE.ini`** (stare nazwy DTA), czyli nasz
-  MIX Marine'a ([[mods/starcraft-marine]]) i rejestrację misji ARKA. Restore przywraca je z gita, a precheck je wypisuje
-  (`DELETED`). Na dłuższą metę lepiej przenieść Marine'a na inny wolny numer MIX.
+  ówczesny MIX Marine'a ([[mods/starcraft-marine]]) i rejestrację misji ARKA. Restore przywraca je z gita, a precheck je
+  wypisuje (`DELETED`). Marine został 2026-10-27 przeniesiony na `ECACHE77` (99 jest odtąd zakazany, [[engine/shp-graphics]]);
+  `BattleE.ini` musi zostać (nazwę ustala `Resources/ClientDefinitions.ini` `BattleFSFileName=`), więc wraca przez restore.
 - Gdy klient znajdzie aktualizację, zapisuje nowy manifest jako `version_u` (jeszcze przed instalacją).
 - Hash w manifeście: 16 bajtów MD5 zapisanych dziesiętnie jeden po drugim, potem `,rozmiar w KB` (`Get-DtaHash` w
   `tools/dta-common.ps1`).

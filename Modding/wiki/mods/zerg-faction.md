@@ -215,6 +215,12 @@ Oczekiwane: `Rate` 1, `Count` = ticki z tabeli, klatki ≈ `Count`, sekundy ≈ 
   i późniejszy klucz wygrywa, więc ponowne uruchomienie generatorów (`build-sczergbase.ps1`, `build-sczergresearch.ps1`,
   `build-sczerg.ps1`) tego nie cofnie. W tym bloku trzymaj kolejne ręczne zmiany balansu.
 
+## Wolniejsze leczenie Zergów (2026-10-28, prośba użytkownika; niezweryfikowane w grze)
+
+- „Ogólnie Zergi powinny się trochę wolniej leczyć”: wszystkie 85 typów Zergów z `SelfHealing=yes` z `Terran Faction.ini` dostały `SelfHealingStep` × 0,6 (zaokrąglone, co najmniej 1), np. Zergling 3 → 2, Hydralisk 6 → 4, Overlord 16 → 10, Ultralisk 40 → 24, Hatchery 20 → 12, drony budynków 3 → 2. Wpisy (ze starą wartością w komentarzu) są w bloku `; >>> SC balance (user)` w `Terran Faction.ini`. Zergi z checkboxa STARCRAFT (`StarCraft.ini`) się nie leczą, więc tam nic nie doszło.
+- Wyjątek: `SCZDTUM` (dron Creep Tumora) ma `SelfHealingStep` ustawiony za blokiem balansu (blok creepu), więc jego zmiana nie działa; to dron, więc pominięty.
+- Misje z typami SC skopiowanymi do mapy (ARKA) dostają nowe wartości przy następnym uruchomieniu generatora misji; ARKA 5 już przebudowana.
+
 ## Dźwięki śmierci pojazdów (2026-10-27, zgłoszenie użytkownika; niezweryfikowane w grze)
 
 - Objaw: Overlord ginął z dźwiękiem zniszczonego budynku. Przyczyna: pojazdy ignorują `DieSound=`, a generatory Zergów dawały

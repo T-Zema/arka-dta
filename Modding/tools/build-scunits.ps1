@@ -1,7 +1,7 @@
 ﻿# Builds the StarCraft Terran UNITS (all except the Marine) for DTA from the user's StarCraft: Remastered install.
 # Output: -OutMix (default <game>\MIX\ECACHE97.MIX: SHPs, cameos, death anims, AUDs) and preview PNGs in -PreviewDir.
 # Rules/Art/Sound for these files: block "StarCraft Terran units" in INI/Game Options/StarCraft.ini, INI/Art.ini, INI/Sound.ini.
-# Marine: build-scmarine.ps1 (ECACHE99, other session). Buildings + construction tank: build-scterran.ps1 (ECACHE98).
+# Marine: build-scmarine.ps1 (ECACHE77, other session). Buildings + construction tank: build-scterran.ps1 (ECACHE98).
 param(
     [string]$StarCraft = "C:\Program Files (x86)\StarCraft",
     [string]$PreviewDir = "$env:TEMP\scunits-preview",

@@ -123,6 +123,14 @@ Od 2026-10-27 przy starcie (komórka 125,174) leży **skrzynka z odkryciem mapy*
 - **Raynor:** HP Vulture'a +40% (2240), wcześniej +20%.
 - **AI osady nadal nie budowało jednostek.** Prawdziwa przyczyna: pole „strona” AI triggerów było 1, a gra przyjmuje tylko 0 albo `ActsLike + 1` domu (dla `GDI1` = 7). Każdy trigger był po cichu odrzucany. Teraz strona jest liczona z `ActsLike`, a kontrola zgłasza FAIL przy złej wartości ([[engine/triggers-and-dialogue]]). Poprawka `FACTORY` → `SCFACT` z testu 2 zostaje (nie szkodzi). Drużyny ruszają po `AI triggers begin`, czyli 20 s po ocaleniu osady albo w 900 s. **Potwierdzone w grze (test 6): fabryka produkuje, drużyny idą na gniazdo.**
 
+**Creep Zergów od startu (2026-10-28, prośba użytkownika „dodaj creep klasycznie do budynków zergów”):** wcześniej misja nie miała żadnego creepu. Kampania nie ładuje bloku creepu z `Terran Faction.ini`, więc `build-arka01-mission.ps1` robi to samo co ARKA 4 ([[missions/arka-04-zielony-krysztal]], [[mods/zerg-creep]]):
+- mapa dostaje `[Basic] VeinGrowthEnabled=yes`, `[General] VeinholeGrowthRate=60`, `VeinholeShrinkRate=8`, `Insignificant=yes` dla `VEINS`/`VEINHOLEDUMMY`, 4 siewniki w `[Animations]` (`ARKA1ZC01–04`) i `ImmuneToVeins=yes` dla 886 typów;
+- pod Hatchery (komórka fundamentu (1,1)) i koloniami ((0,0)) leży Veinhole Monster (nakładka 167 + 8× 178): 6 dziur pod 7 budynkami (Pool ma creep z koła Hatchery);
+- dojrzałe żyły (126, dane 48) leżą w kole o promieniu 5 wokół dziur i pod każdym budynkiem `SCZ*` z marginesem 1 pola, razem 405 pól;
+- żyły niepołączone z dziurą (4-sąsiedztwo) gra usuwa przy wczytaniu, więc skrypt spina luźne łaty z najbliższym creepem drogą BFS po wolnym terenie. Łata bez drogi (1 pole za klifem przy Sunkenie) jest usuwana.
+
+**(niezweryfikowane w grze)**
+
 Wraki koszar i elektrowni (neutralne, 30–40% HP) przejmuje inżynier (próg `EngineerCaptureLevel` w DTA jest zakomentowany, czyli 1.0 = przejęcie od razu). Inżynierów jest 4: w oddziale startowym, u rozbitków 1 i 3, w załodze MCV.
 
 ## Do sprawdzenia w grze
@@ -136,4 +144,5 @@ Wraki koszar i elektrowni (neutralne, 30–40% HP) przejmuje inżynier (próg `E
 - AI osady: produkcja w Factory i wyjście drużyn na gniazdo **potwierdzone w teście 6**; nadal do sprawdzenia: czy SCV kopią do Refinery, czy osada odbudowuje zniszczone budynki. Globalne AI triggery strony GDI z `ai.ini` mogą też próbować budować jednostki GDI, których `GDI1` nie umie zbudować; misje DTA z domem `GDI1` (cr05) działają tak samo.
 - Czy po przeniesieniu Raynor zachowuje tag (wtedy jego śmierć nadal daje porażkę; jeśli nie, po prostu nie da, ale fałszywej porażki już nie będzie).
 - Czy `Entered by` na strefach komórek odpala na każdą jednostkę gracza (także Raynora po zmianie domu).
+- Creep gniazda: czy żyły leżą od startu pod budynkami Zergów i rosną z dziur, czy nie ranią jednostek gracza i czy po zniszczeniu gniazda schodzą (dziury z mapy nie mają znacznika „ginie z budynkiem”, zostają).
 

@@ -2,8 +2,10 @@
 # exists (Trigger, Ev, Act, Text, Enable and the $trig table) and $ini is loaded:
 #   . "$tools\MissionKit.ps1"
 #   Add-RevealCrate $x $y                 # crate next to the base: picking it up reveals the whole map
+#   Add-MoneyCrate $x $y 5000 'text'      # wood crate: picking it up pays a fixed sum (loot worth leaving the base for)
 #   Split-MultiText; Set-DialoguePacing   # before resolving $trig: one text per trigger, gaps from text length
 #   Test-TextTimeline                     # after: logs the text timeline, WARN where two texts overlap
+#   Add-ScAirArmor                        # after the SC types are copied: SC flyer armors, Allied AA, Dragoon vs Overlord
 # Wiki: engine/triggers-and-dialogue (Tempo dialogow), workflow/mission-maps.
 
 # ---------------------------------------------------------------- reading time
@@ -110,4 +112,79 @@ function Add-RevealCrate([int]$x, [int]$y, $player = 'Allies', $playerNo = 2) {
     Trigger 'revealCrate' 'Skrzynka: odkrycie mapy' @((Ev 1 $playerNo)) @((Act 16), (Text 'Skrzynka zwiadu: mapa odkryta.')) -house $player | Out-Null
     $ini.Set('CellTags', "$($y * 1000 + $x)", $trig['revealCrate'].Tag)
     $log.Add("reveal crate @ $x,$y (tag $($trig['revealCrate'].Tag))")
+}
+
+# ---------------------------------------------------------------- money crate
+# A wood crate (overlay CRATE, [OverlayTypes] 179). In a solo mission a wood crate gives [CrateRules] WoodCrate=Money
+# (SoloCrateMoney=2000); on top of that a cell tag pays a fixed sum with action 106 Give Credits (ts-patches; DTA cr05,
+# a_bridge_too_few: "106,0,<house>,<credits>,0,0,0,A") and shows a line. Review 2026-10-27: give the player loot to
+# go for (a crate in the church, cash next to the ore on the Rock). Both paths (niezweryfikowane w grze).
+$moneyCrates = 0
+function Add-MoneyCrate([int]$x, [int]$y, [int]$credits, [string]$text, $player = 'Allies', $playerNo = 2) {
+    $i = $y * 512 + $x
+    $o = [Pack]::Unpack($ini.Joined('OverlayPack'), $false); $d = [Pack]::Unpack($ini.Joined('OverlayDataPack'), $false)
+    if ($o[$i] -ne 255) { throw "crate cell $x,$y already has overlay $($o[$i])" }
+    $o[$i] = 179; $d[$i] = 0
+    $ini.SetPack('OverlayPack', [Pack]::PackData($o, $false, 8192)); $ini.SetPack('OverlayDataPack', [Pack]::PackData($d, $false, 8192))
+    $script:moneyCrates++; $key = "moneyCrate$script:moneyCrates"
+    Trigger $key "Skrzynka z pieniedzmi $script:moneyCrates" @((Ev 1 $playerNo)) @("106,0,$playerNo,$credits,0,0,0,A", (Text $text)) -house $player | Out-Null
+    $ini.Set('CellTags', "$($y * 1000 + $x)", $trig[$key].Tag)
+    $log.Add("money crate @ $x,${y}: $credits credits (tag $($trig[$key].Tag))")
+}
+
+# ---------------------------------------------------------------- Zerg builder: drones that hatch, walk and morph
+# The engine's computer player builds structures only ConYard-style (base nodes + a Factory=BuildingType building in
+# [AI] BuildConst): the building grows on the spot. Zerg buildings come from Drones (SCZD<x> with DeploysInto), so a
+# Zerg computer player builds the way DTA's cr07 lets the Soviets deploy their base: a team per building with the
+# script "4 Move to cell" -> "9 Deploy". Each node: at its time the trigger "4 Create Team" makes the house produce the
+# Drone at its Hatchery/Hive (unit factory, larvae = naval-yard production; costs the house's credits; the house needs
+# IQ >= [IQ] Production and "3 Production Begins"). A cell tag on the deploy cell sees the Drone arrive; if none came
+# within $Watchdog seconds (production failed: no money, no factory, AI quirk), the same team is hatched at $SpawnWp by
+# "80" instead, so the base still grows. Building origin = Drone cell + AdjacentCoord[7] (NW, -1,-1;
+# UnitClass::Try_To_Deploy, see patch-zergbuild-grid.asm), so pass the TOP-LEFT cell of each planned building.
+# The spot must be on creep (patch-zergbuild.ps1: Zerg buildings need creep under every cell, except Hatchery/Lair/Hive)
+# and free; a Drone that cannot deploy just stays there.
+# Needs the generator's Team/Trigger/Ev/Act/Reinf/Enable/Disable and $ini/$log; types SCZD<x> must be in the map.
+#   Add-ZergBuilder 'Nod1' 7 22 @(@('SCZSUN', 81, 114), @('SCZSPO', 88, 114)) 300 120 'zb1'
+# ---------------------------------------------------------------- SC flyer armor (engine/air-armor)
+# The block "; >>> SC air armor" of the faction file (tools/build-scairarmor.ps1): new armors for SC flyers, Allied AA
+# that does not acquire them (an ordered shot hits), Dragoons that cannot shoot the Overlord. The SC type closure has
+# already copied the flyers' Armor= and the armor sections; this adds the [ArmorTypes] entries, the Allied AA warheads
+# and weapons (Rules types) and the Dragoon warhead. SC sections the map does not have are skipped. Call after the
+# SC types are copied: Add-ScAirArmor
+function Add-ScAirArmor {
+    $enc = [Text.Encoding]::GetEncoding(28591); $b = '; >>> SC air armor'; $e = '; <<< SC air armor'
+    $t = [IO.File]::ReadAllText("$game\INI\Map Code\Terran Faction.ini", $enc)
+    $a = $t.IndexOf($b); if ($a -lt 0) { throw "Add-ScAirArmor: no '$b' block in Terran Faction.ini (run build-scairarmor.ps1)" }
+    $z = $t.IndexOf($e, $a); $body = $t.Substring($a, $z - $a)
+    $scOwn = @{}   # sections the SC files define outside the block (SC types and weapons)
+    foreach ($f in "$game\INI\Game Options\StarCraft.ini", "$game\INI\Map Code\Terran Faction.ini") {
+        $s = [IO.File]::ReadAllText($f, $enc); $i = $s.IndexOf($b); if ($i -ge 0) { $s = $s.Substring(0, $i) + $s.Substring($s.IndexOf("`n", $s.IndexOf($e, $i)) + 1) }
+        foreach ($m in [regex]::Matches($s, '(?m)^\[([^\]]+)\]')) { $scOwn[$m.Groups[1].Value] = $true }
+    }
+    $sec = $null; $skip = $false; $n = 0
+    foreach ($l in ($body -split "`r?`n")) {
+        if ($l -match '^\[([^\]]+)\]') { $sec = $Matches[1]; $skip = $scOwn.ContainsKey($sec) -and -not $ini.Has($sec); continue }
+        if ($sec -and -not $skip -and $l -match '^\s*([^;=\s][^;=]*?)\s*=\s*([^;\t]*)') { $ini.Set($sec, $Matches[1], $Matches[2].Trim()); $n++ }
+    }
+    $log.Add("SC air armor: $n keys from the faction block (Allied AA ignores SC flyers unless ordered, Dragoons cannot hit the Overlord)")
+}
+function Add-ZergBuilder($House, [int]$HouseNo, [int]$SpawnWp, $Nodes, [int]$Start, [int]$Every, [string]$Prefix, [int]$Watchdog = 300) {
+    Trigger "${Prefix}prod" "Zergi ${House}: produkcja" @((Ev 13 ([Math]::Max(1, $Start - 5)))) @((Act 3 $HouseNo)) -house $House | Out-Null
+    for ($k = 0; $k -lt $Nodes.Count; $k++) {
+        $type = $Nodes[$k][0]; $x = [int]$Nodes[$k][1]; $y = [int]$Nodes[$k][2]
+        $drone = 'SCZD' + $type.Substring(3)
+        if (-not $ini.Has($drone)) { throw "Add-ZergBuilder: drone type $drone (for $type) is not in the map" }
+        if ($ini.Get($drone, 'DeploysInto', '') -ne $type) { throw "Add-ZergBuilder: $drone does not deploy into $type" }
+        $cx = $x + 1; $cy = $y + 1; $cell = $cy * 1000 + $cx
+        $tm = Team "$Prefix ${k}: dron $type" $House $SpawnWp @($drone) @("4,$cell", '9,0')
+        $b = "${Prefix}b$k"; $w = "${Prefix}w$k"; $a = "${Prefix}a$k"
+        Trigger $b "Zergi ${House}: buduj $type nr $k" @((Ev 13 ($Start + $k * $Every))) @((Act 4 $tm 1), (Enable $w)) -house $House | Out-Null
+        Trigger $w "Zergi ${House}: dron $k nie doszedl" @((Ev 13 $Watchdog)) @((Reinf $tm $SpawnWp)) -house $House -Disabled | Out-Null
+        Trigger $a "Zergi ${House}: dron $k na miejscu" @((Ev 1 $HouseNo)) @((Disable $w)) -house $House | Out-Null
+        $key = "$cell"
+        if ($ini.Get('CellTags', $key, $null)) { $log.Add("WARN Add-ZergBuilder: cell $cx,$cy already has a cell tag, no arrival check for node $k") }
+        else { $ini.Set('CellTags', $key, $trig[$a].Tag) }
+        $log.Add("zerg builder $House node ${k}: $drone -> $type at $x,$y (drone cell $cx,$cy) from $($Start + $k * $Every) s")
+    }
 }

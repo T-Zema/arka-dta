@@ -1,0 +1,113 @@
+DTA StarCraft Mod + kampania ARKA - lista zmian
+================================================
+
+Mod do Dawn of the Tiberium Age: frakcje, jednostki i budynki ze StarCrafta, nowe łatki silnika
+i kampania mashup "ARKA: Błąd znaku" (Red Alert x StarCraft). Do prywatnego użytku: grafika
+i dźwięki StarCrafta pochodzą z legalnej kopii StarCraft: Remastered i należą do Blizzard Entertainment.
+
+
+Wersja 2026.10.28 - pierwsze wydanie (dla DTA 16.2.3)
+------------------------------------------------------
+
+INSTALACJA
+
+- DTA-SCMod-Setup.exe: jeden plik (130 MB, 322 pliki moda). Wygląd menu DTA, portrety i dźwięki SC.
+- Wymaga DTA 16.2.3. Przy innej wersji instalator ostrzega i pyta przed instalacją.
+- Przed instalacją zamknij grę i klienta DTA. Uprawnienia administratora nie są potrzebne.
+- Instalator sam znajduje folder gry. Inny folder wskażesz przyciskiem ZMIEŃ.
+- Każdy podmieniony plik DTA ma kopię w <gra>\SCMod\backup.
+- Po aktualizacji klienta DTA uruchom instalator jeszcze raz i kliknij NAPRAW. Aktualizacja przywraca
+  oryginalne pliki DTA, a NAPRAW instaluje mod z powrotem.
+- Deinstalacja: <gra>\SCMod\Odinstaluj SC Mod.exe, Panel sterowania -> Programy i funkcje albo
+  przycisk ODINSTALUJ w instalatorze. Przywraca oryginalne pliki DTA i usuwa pliki moda.
+
+SKIRMISH: OPCJA "STARCRAFT" (checkbox w lobby)
+
+- Terran: 18 budynków ze SC (Command Center jako Construction Yard, 4 przybudówki) i Construction Tank.
+- Terran: 12 jednostek (od SCV do Battlecruisera), z czego:
+    - tryby deploy: stimpack, Siege Mode, Yamato;
+    - cloak, Lockdown i EMP, leczenie;
+    - Wraith, Dropship, Valkyrie i Battlecruiser latają (tylko ze Starportu);
+    - 128 dźwięków SC.
+- Marine i Firebat jako prawdziwa piechota ze stimpackiem (klawisz D, koszt 1/4 HP).
+  Marines strzelają też do lotnictwa.
+- Zergling, Hydralisk i Ultralisk jako piechota w każdych koszarach, z regeneracją.
+- Badania Terran: 11 ulepszeń na budynkach i przybudówkach (E-Bay, Academy, Armory, Machine Shop,
+  Control Tower, Covert Ops, Physics Lab, Science Facility). Każde odblokowuje ulepszone jednostki.
+- Robotnicy (SCV, Dron, Probe): animacja wydobycia z SC. Surowce oddają tylko do rafinerii swojej
+  rasy. Refinery daje 2 SCV.
+- Dźwięki zaznaczania budynków Terran, Zergów i Protossów ze SC.
+
+NOWE FRAKCJE W SKIRMISHU
+
+- Terran (strona 6): na razie zestaw Aliantów. Z opcją STARCRAFT budynki i jednostki Terran.
+- Zerg (strona 7), pełna frakcja bez Construction Yardu:
+    - każdy z 17 budynków wyrasta z drona, z kokonem jak w SC;
+    - Hatchery, Lair i Hive wykluwają larwy;
+    - 6 typów piechoty, Infested Terran, 6 jednostek latających;
+    - 13 badań z SC (ataki i pancerze, Metabolic Boost, Adrenal Glands, Grooved Spines...);
+    - creep: Creep Tumor, kolonie i Hatchery rozlewają creep. Zergi budują tylko na creepie,
+      a creep znika po zniszczeniu budynku;
+    - Overlord podnosi limit surowców (jak silos, Storage=100);
+    - bohaterowie (Kerrigan, Duran, Torrasque, Hunter Killer, Devouring One, Unclean One, Kukulza,
+      Matriarch, Yggdrasill) i budynki z kampanii SC (Overmind, Cerebrate, Mature Chrysalis);
+      supermoc Overmind's Wrath;
+    - doradca (EVA) i sidebar Zergów, dźwięki śmierci ze SC.
+- Protoss (strona 8):
+    - 16 budynków i 16 jednostek (Gateway, Robotics, Stargate, Archony);
+    - budować można tylko w zasięgu Nexusa i Pylonów;
+    - budynki pojawiają się przywołaniem jak w SC;
+    - Carrier wypuszcza Interceptory, które wracają i dokują.
+
+MAPY SKIRMISHA
+
+- (4) The Lost Temple ze StarCrafta.
+- (4) Fighting Spirit (iCCup 1.3): kanały z mostami, mury w centrum.
+
+KAMPANIA "ARKA: BŁĄD ZNAKU" (menu misji, nagłówek ARKA)
+
+- #0 Ostatnia brama: Gibraltar, 1953. Teren odtworzony z prawdziwej mapy.
+  Obrona Giga-Chronosfery przez 30 minut, przejęcie działa 100 Ton Gun 4 inżynierami.
+- #1 Obcy piasek: Mar Sara, 2499. Rozbitkowie, odzyskanie MCV, osada Raynora, gniazdo Zergów.
+- #2 Ewakuacja: Mar Sara. Raynor w zainfekowanym Command Center, ewakuacja kolonistów
+  na lądowisko Synów Korhalu, 15 minut obrony skoku. Film briefingu.
+- #4 Zielony kryształ: Antiga Prime. Spokojna misja ekonomiczna: laboratorium Einsteina,
+  generał Duke z wraku Norad II, kopalnie kryształów.
+- #5 Upadek Tarsonis: ewakuacja cywilów z czterech dzielnic, psi-nadajniki Mengska.
+  Film briefingu.
+- Misja #3 jeszcze nie istnieje.
+- Mapy misji ze StarCrafta przeniesione z prawdziwych map kampanii SC.
+
+ZMIANY SILNIKA (łatki game.exe i Vinifera.dll)
+
+- Latające jednostki SC wiszą w powietrzu zamiast lądować. Jednostki przeciwlotnicze same atakują
+  latające pojazdy.
+- Lotniskowce: jednostki wypuszczane z matki wracają do niej.
+- Budowa: animacja Buildup 1 klatka = 1 tick, więc kokony i przywołania trwają tyle co w SC.
+- Piechota może się rozstawiać (klawisz D), np. stimpack Marine'a.
+- Piechota wsiada do wiszących transportowców (Dropship, Shuttle).
+- Żyły i Veinhole Monster jako creep Zergów (rozlewanie, kurczenie, budowa tylko na creepie).
+- Overlord liczy się do limitu surowców. Robotnicy SC nie tracą łączności z rafinerią.
+
+INNE
+
+- Misja Frostbite z cheatami: 1 000 000 $, MCV, Ion Cannon, 40+ dodatkowych jednostek.
+- Checkbox "Super Mod" w skirmishu: 8 nowych jednostek, szybsze budowanie.
+- Edytor map (World-Altering Editor) w folderze Map Editor.
+
+STAN TESTÓW
+
+Potwierdzone w grze:
+- mapa Lost Temple;
+- morf drona w budynek, creep Zergów, limit surowców z Overlorda;
+- zasięg budowania od Pylonów, powrót Interceptorów;
+- animacje robotników, stimpack Marine'a klawiszem D;
+- w misji #0: ARKA i prąd.
+
+Reszta jest zainstalowana, ale jeszcze nie przetestowana w grze. Błędy proszę zgłaszać.
+
+ZNANE OGRANICZENIA
+
+- Działka przeciwlotnicze Aliantów strzelają do lotników SC tylko na rozkaz gracza.
+- AI Zergów buduje dronami tylko w misjach. W skirmishu AI Zergów tego nie umie.
+- Nowa wersja DTA może wyłączyć łatki game.exe i Vinifera.dll. Wtedy poczekaj na nowe wydanie moda.

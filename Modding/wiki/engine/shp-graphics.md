@@ -7,7 +7,8 @@ Jak zbudowane są grafiki jednostek DTA i jak przygotować własne (np. ze StarC
 ## Gdzie leżą pliki
 
 - Wszystko jest w nieszyfrowanych MIX-ach TS w `MIX/`. Każdy ma `local mix database.dat` z nazwami plików. Silnik szuka MIX-ów po wzorcu: `EXPAND99/98`, `ECACHE05…00` itd.
-  Własne assety pakujemy do **`MIX/ECACHE99.MIX`** (wczytany razem z resztą, **(niezweryfikowane w grze)**).
+  Własne assety pakujemy do własnych `MIX/ECACHE<nn>.MIX` (rejestr numerów niżej). **Nie 99:** skrypt aktualizatora DTA
+  `preupdateexec` kasuje `MIX/ECache99.mix` przy każdej aktualizacji ([[workflow/repo-and-updates]]).
 - Ścieżki wyszukiwania (log): `;SOUNDS;SPEECH;MUSIC;INI;MIX;MOVIES;MAPS`.
 - ID pliku w MIX = CRC32 nazwy wielkimi literami z dopełnieniem do wielokrotności 4 (`Mix.Id` w `tools/ModTools.cs`).
 
@@ -54,12 +55,14 @@ Jak zbudowane są grafiki jednostek DTA i jak przygotować własne (np. ze StarC
 ## Rejestr numerów ECACHE (żeby sesje nie nadpisywały sobie MIX-ów)
 
 Gra wczytuje `MIX/ECACHE%02d.MIX` w pętli od 99 do 0 i pomija brakujące numery (`game.exe` `0x4E3F77`), więc wolne są też 06–79 (79 zajmuje [[mods/sc-building-sounds]]). **91–95 zajmuje klient** (kopiuje tam opcje z `Resources/`), 00–05 to gra.
-Zajęte przez mody: 99 Marine, 98 budynki Terran, 97 jednostki Terran, 96 Uber Supply Depot, 90 okręty TEST (Fly),
+**99 nie używać** (kasuje go aktualizacja DTA; do 2026-10-27 był tam Marine). Kolejność ładowania (99 → 0) to pierwszeństwo:
+przy tej samej nazwie pliku w dwóch MIX-ach wygrywa wyższy numer, więc przy zmianie numeru sprawdzić kolizje identyfikatorów.
+Zajęte przez mody: **77 Marine** (`tools/build-scmarine.ps1`, przeniesiony z 99), 98 budynki Terran, 97 jednostki Terran, 96 Uber Supply Depot, 90 okręty TEST (Fly),
 89 latające budynki Terran, 88 dodatkowe dźwięki broni SC (sesja frakcji, `tools/build-scsfx.ps1`),
 **87 badania SC + ulepszone jednostki** (sesja marine'a, `tools/build-scresearch.ps1`), **86 frakcja Zerg** (budynki, drony,
 `tools/build-sczergbase.ps1`, zob. [[mods/zerg-faction]]), **85 frakcja Protoss** (`tools/build-scprotoss.ps1`,
 zob. [[mods/protoss-faction]]), **84 badania Zergów** (`tools/build-sczergresearch.ps1`, zob. [[mods/zerg-research]]),
-**83 badania Protossów** (`tools/build-scprotossresearch.ps1`), **80 Zergi** (piechota), **78 robotnicy SC z animacją wydobycia** (`tools/build-scworkers.ps1`, [[mods/sc-workers]]), **82 bohaterowie i budynki specjalne Zergów** (`tools/build-sczergheroes.ps1`, zarezerwowane 2026-10-25). **81 piechota SC ze stimpackiem** (`tools/build-scinfstim.ps1`, [[mods/sc-infantry-stim]], 2026-10-27). Wolne: 06–77.
+**83 badania Protossów** (`tools/build-scprotossresearch.ps1`), **80 Zergi** (piechota), **78 robotnicy SC z animacją wydobycia** (`tools/build-scworkers.ps1`, [[mods/sc-workers]]), **82 bohaterowie i budynki specjalne Zergów** (`tools/build-sczergheroes.ps1`, zarezerwowane 2026-10-25). **81 piechota SC ze stimpackiem** (`tools/build-scinfstim.ps1`, [[mods/sc-infantry-stim]], 2026-10-27). **76 armata 100 Ton Gun ARKA 0** (`tools/build-gun100t.ps1`: `RAPARTY` przeskalowana 2× na fundament 2×2, [[missions/arka-00-triggers]], 2026-10-27). Wolne: 06–75.
 (2026-10-25: `build-scresearch.ps1` przez pomyłkę raz nadpisał 89. Zanim wybierzesz numer, przeczytaj ten rejestr.) Nowy mod: wybierz wolny numer poniżej 90 i dopisz go tutaj.
 
 ## Budynek SHP: układ i pozycja

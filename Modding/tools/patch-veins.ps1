@@ -48,6 +48,18 @@
 #    marked monster dies as on RESULT_DESTROYED in Take_Damage (next state 3, Detach_This_From_All). Tumor holes stay.
 #      0x661420  83 EC 24 55 56  sub esp,24h / push ebp / push esi   ->  E9 <cave6+40h>   (replayed, back to 0x661425)
 #      cave6 0x86C900-0x86C9D4, source patch-veins-growth.asm
+# 11-13. The creep recedes (user 2026-10-28: "creep nie schodzi"; memory probe: one monster owned the whole connected carpet,
+#    the others nothing, and a dying one shrank ~1 cell a second). Source patch-veins-shrink.asm, cave7 0x86C700-0x86C7D2:
+#    11. hook 0x58B71A now goes to cave7+0: a monster made during the game gets the word 'ZC' at +9Eh (map ones 0), then cave4.
+#    12. 0x6629AC (Build_Growth_Queue flood, "test [ebp+0A4h],80000h / jne") -> cave7+40h: a 'ZC'/'ZG' monster takes only
+#        cells within dx*dx + dy*dy <= 72 (site 9's radius), and its mature cells become growth nodes too (regrow gaps).
+#    13. 0x661408 (Update_All, delete of a shrunk monster) -> cave7+0C0h: after the delete, Place_Monsters(false) rebuilds all
+#        queues; veins nobody owns any more are removed at once.
+#    INI side: [General] VeinholeShrinkRate=5 (Rules 100) in the creep block and in creep missions.
+# 14. The radius per mission (user 2026-10-28, ARKA 5: Overlord creep to 30 cells). Sites 9 and 12 call cave8 (0x86C7E0,
+#    source patch-veins-radius.asm) instead of "add eax,edx / cmp eax,72": a 'ZC' monster (made during the game) gets
+#    [General] VeinholeMonsterStrength cells when that is 1-100 (TS reads the key into Rules +0B8h and never uses it,
+#    default 10000), every other monster and every other map keeps 72. cave6/cave7 v1 (without the call) are upgraded.
 #      cave3 0x86CE00 (0x86C700 was taken by patch-infdeploy; after the call to MapClass::operator[] the cell struct is at [esp+20h]), back to 0x415498 (test al,al).
 # Caves are in the zero tail of .p_text (see the cave registry in Modding/wiki/engine/game-exe-patching.md).
 # Usage: patch-veins.ps1 [-Revert] [-Exe <copy>]. Backup game.exe.bak = original (made by whichever patch ran first).
@@ -140,13 +152,30 @@ if ($c5.Count -ne 28) { throw "cave5 layout $($c5.Count)" }
 $h5 = New-Object System.Collections.Generic.List[byte]; $h5.AddRange((Jmp $hook5 $cave5)); $h5.AddRange((Hex '90 90'))
 # sites 9 + 10: nasm output of patch-veins-growth.asm (org 0x86C900): radius cave at +0, building-link cave at +0x40
 $cave6 = 0x86C900
-$c6 = Hex ('0F BF 44 24 14 0F BF 96 94 00 00 00 29 D0 0F AF C0 0F BF 54 24 16 0F BF 8E 96 00 00 00 29 CA 0F AF D2 01 D0 83 F8 48 ' +
+$c6v1 = Hex ('0F BF 44 24 14 0F BF 96 94 00 00 00 29 D0 0F AF C0 0F BF 54 24 16 0F BF 8E 96 00 00 00 29 CA 0F AF D2 01 D0 83 F8 48 ' +
     '7F 0C 89 F9 E8 A0 E7 BE FF E9 ED 55 DF FF 31 C0 E9 E6 55 DF FF CC CC CC CC 51 56 57 53 89 CE 83 7E 6C 03 74 7B 83 7E 68 03 ' +
     '74 75 8D 86 94 00 00 00 50 B9 48 83 74 00 E8 1D 29 CA FF 8B 78 70 31 DB 85 FF 74 28 89 F9 8B 07 FF 50 2C 83 F8 06 75 17 8B ' +
     '87 20 02 00 00 66 81 78 14 53 43 75 09 80 78 16 5A 75 03 43 EB 05 8B 7F 20 EB D4 85 DB 74 0B 66 C7 86 9E 00 00 00 5A 47 EB ' +
     '24 66 81 BE 9E 00 00 00 5A 47 75 19 66 C7 86 9E 00 00 00 00 00 C7 46 6C 03 00 00 00 31 D2 89 F1 E8 E9 BF DD FF 5B 5F 5E 59 ' +
     '83 EC 24 55 56 E9 50 4A DF FF')
+# v2 (site 14): "add eax,edx / cmp eax,72" (+22h) is "call 0x86C7E0" (the mission radius), the jg after it stays
+$c6 = [byte[]]$c6v1.Clone(); [Array]::Copy((Hex 'E8 B9 FE FF FF'), 0, $c6, 0x22, 5)
 if ($c6.Length -ne 213) { throw "cave6 layout $($c6.Length)" }
+# sites 11-13: nasm output of patch-veins-shrink.asm (org 0x86C700): marker at +0, flood at +40h, rebuild at +0C0h
+$cave7 = 0x86C700
+$c7v1 = Hex ('66 C7 80 9E 00 00 00 00 00 83 3D 94 43 7E 00 00 75 09 66 C7 80 9E 00 00 00 5A 43 E9 40 07 00 00 ' + ('CC ' * 32) +
+    'F7 85 A4 00 00 00 00 00 08 00 75 54 66 81 BE 9E 00 00 00 5A 43 74 0B 66 81 BE 9E 00 00 00 5A 47 75 39 0F BF 45 14 0F BF ' +
+    '96 94 00 00 00 29 D0 0F AF C0 0F BF 55 16 0F BF 8E 96 00 00 00 29 CA 0F AF D2 01 D0 83 F8 48 7F 17 8A 85 96 00 00 00 3C 30 ' +
+    '72 08 3C 35 0F 82 8D 62 DF FF E9 1C 62 DF FF E9 AE 63 DF FF ' + ('CC ' * 27) +
+    '8B 01 6A 01 FF 50 20 31 C9 E8 22 5C DF FF E9 3C 4C DF FF')
+# v2 (site 14): the same call at +82h (site 12's radius test)
+$c7 = [byte[]]$c7v1.Clone(); [Array]::Copy((Hex 'E8 59 00 00 00'), 0, $c7, 0x82, 5)
+if ($c7.Length -ne 211) { throw "cave7 layout $($c7.Length)" }
+# site 14: nasm output of patch-veins-radius.asm (org 0x86C7E0): the creep radius, [General] VeinholeMonsterStrength
+$cave8 = 0x86C7E0
+$c8 = Hex ('01 D0 66 81 BE 9E 00 00 00 5A 43 75 19 8B 15 88 C4 74 00 8B 92 B8 00 00 00 4A 83 FA 63 77 07 42 0F AF D2 39 D0 C3 ' +
+    '83 F8 48 C3')
+if ($c8.Length -ne 42) { throw "cave8 layout $($c8.Length)" }
 $h1 = New-Object System.Collections.Generic.List[byte]; $h1.AddRange((Jmp $hook1 $cave1)); $h1.AddRange((Hex '90 90 90'))
 $h2 = New-Object System.Collections.Generic.List[byte]; $h2.AddRange((Jmp $hook2 $cave2)); $h2.AddRange((Hex '90'))
 
@@ -160,11 +189,15 @@ $sites = @(
     @{ VA = $cave3;  Orig = (New-Object byte[] $c3.Count); New = $c3.ToArray() }
     @{ VA = $hook3;  Orig = (Hex '8B F8 6A 00 8B CF E8 28 42 04 00'); New = $h3.ToArray() }
     @{ VA = $cave4;  Orig = (New-Object byte[] $c4.Count); New = $c4.ToArray(); Legacy = $c4v1.ToArray() }
-    @{ VA = $hook4;  Orig = (Hex 'E9 C1 06 00 00');        New = (Jmp $hook4 $cave4) }
+    @{ VA = $cave8;  Orig = (New-Object byte[] $c8.Length); New = $c8 }
+    @{ VA = $cave7;  Orig = (New-Object byte[] $c7.Length); New = $c7; Legacy = $c7v1 }
+    @{ VA = $hook4;  Orig = (Hex 'E9 C1 06 00 00');        New = (Jmp $hook4 $cave7); Legacy = (Jmp $hook4 $cave4) }
+    @{ VA = 0x6629AC; Orig = (Hex 'F7 85 A4 00 00 00 00 00 08 00 0F 85 97 01 00 00'); New = (Jmp 0x6629AC ($cave7 + 0x40)) + (Hex '90 90 90 90 90 90 90 90 90 90 90') }
+    @{ VA = 0x661408; Orig = (Hex '8B 01 6A 01 FF 50 20');  New = (Jmp 0x661408 ($cave7 + 0xC0)) + (Hex '90 90') }
     @{ VA = $cave5;  Orig = (New-Object byte[] $c5.Count); New = $c5.ToArray() }
     @{ VA = $hook5;  Orig = (Hex '8B 48 78 85 C9 75 B1');  New = $h5.ToArray() }
     @{ VA = 0x661612; Orig = (Hex '0F 85 14 01 00 00');    New = (Jmp 0x661612 0x66172C) + (Hex '90') }
-    @{ VA = $cave6;  Orig = (New-Object byte[] $c6.Length); New = $c6 }
+    @{ VA = $cave6;  Orig = (New-Object byte[] $c6.Length); New = $c6; Legacy = $c6v1 }
     @{ VA = 0x661F1B; Orig = (Hex '8B CF E8 AE 91 DF FF');  New = (Jmp 0x661F1B $cave6) + (Hex '90 90') }
     @{ VA = 0x661420; Orig = (Hex '83 EC 24 55 56');        New = (Jmp 0x661420 ($cave6 + 0x40)) }
 )

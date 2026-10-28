@@ -7,12 +7,21 @@ Teren preludium kampanii [[plans/campaign-arka]]: Gibraltar z Hiszpanią na pó�
 ## Stan
 
 - **Wersja 2 (2026-10-26):** Skała z DEM w dwóch poziomach z 6 rampami, prawdziwe drogi z OSM ułożone kaflami `Paved Roads`, wschodni brzeg i pas Sir Herbert Miles Road po prawdziwej linii brzegu, ok. 300 budynków z obrysów OSM (port i przemysł na zachodzie, La Línea, miasto), atrakcje Gibraltaru jako obiekty neutralne. Kontrole przejezdności przechodzą. **(niezweryfikowane w grze)**
+- **Recenzja 2026-10-27 (v3 terenu):** drogi przerobione na `Paved Road LAT` z zamykaniem ślepych końców (jak w misjach DTA, [[workflow/mission-maps]]). Pas wschodni ma teraz drogę od granicy do Europa Point (`Sir Herbert Road`, `Dudley Ward Way`). Złoża (ok. 380 komórek rudy zamiast 15): Skała (poziom 1, wp 47), lotnisko (39), Windmill Hill (38) z kopalnią `OREMINE` (223,218). Nowe waypointy 46 (drzwi kościoła The Convent, skrzynka z pieniędzmi) i 47. Zasady: [[workflow/mission-design]]. **(niezweryfikowane w grze)**
 - Wersja 1 (ręczna Skała, drogi z bruku LAT) jest w `Modding/archive/arka00-gibraltar-v1_2026-10-26/` (+ zip), z instrukcją przywrócenia.
 - Mapa terenu jest skirmishowa do obejrzenia: `Maps/Custom/arka00_gibraltar.map`, w kliencie Skirmish → **Custom Map**, 2 graczy. Misja z triggerami: `Maps/Missions/arka00.map` (warstwa sesji 7b, niżej).
 
 Podgląd z numerami waypointów: `missions/img/arka-00-gibraltar-waypoints.jpg` (żółte = ląd, niebieskie = morze, pomarańczowe S0/S1 = starty skirmisha; skrypt zapisuje go jako `%TEMP%\arka-gibraltar\waypoints.png`, po przebudowie skopiuj). Projekt rodzajów terenu na siatce zrzutu: `missions/img/arka-00-gibraltar-design.png` (jasny brąz = poziom 1, ciemny = grań, zielone koła = rampy).
 
-**Podział pracy (2026-10-26):** teren należy do `tools/build-arka-gibraltar.ps1` (ta strona). Triggery, dialogi i kluczowe budynki robi sesja `dawn-of-the-tiberium-7b` jako osobną warstwę `tools/build-arka00-mission.ps1`. Ten skrypt czyta `Maps/Custom/arka00_gibraltar.map` tylko do odczytu i zapisuje `Maps/Missions/arka00.map`. Po przebudowie terenu wystarczy uruchomić skrypt misji ponownie (`powershell -NoProfile -File Modding\tools\build-arka00-mission.ps1`). Na terenie v2 dał `CHECKS: PASS` bez WARN: ARKA na 117,130, elektrownie 105,127 / 114,118 / 122,145 / 132,136. Warstwa misji: [[missions/arka-00-triggers]]. Format triggerów: [[engine/triggers-and-dialogue]]. Misja używa waypointów 10–14 (ARKA i elektrownie na środkach działek), 15/16 (bunkry za bramami), 17 (Tanya), 18/19/22/26/41/45 (spawny fal) i 20/21/23/25/33 (trasy). **Numery waypointów 10–45 to kontrakt między warstwami:** nie przenumerowywać. Każde przesunięcie waypointu wpisać do `log.md` i do tabeli niżej.
+**Podział pracy (2026-10-26):** teren należy do `tools/build-arka-gibraltar.ps1` (ta strona). Triggery, dialogi i kluczowe budynki robi sesja `dawn-of-the-tiberium-7b` jako osobną warstwę `tools/build-arka00-mission.ps1`. Ten skrypt czyta `Maps/Custom/arka00_gibraltar.map` tylko do odczytu i zapisuje `Maps/Missions/arka00.map`. Po przebudowie terenu wystarczy uruchomić skrypt misji ponownie (`powershell -NoProfile -File Modding\tools\build-arka00-mission.ps1`). Na terenie v2 dał `CHECKS: PASS` bez WARN: ARKA na 117,130, elektrownie 105,127 / 114,118 / 122,145 / 132,136. Warstwa misji: [[missions/arka-00-triggers]]. Format triggerów: [[engine/triggers-and-dialogue]]. Misja używa waypointów 10–14 (ARKA i elektrownie na środkach działek), 15/16 (bunkry za bramami), 17 (Tanya), 18/19/22/26/41/45 (spawny fal) i 20/21/23/25/33 (trasy). **Numery waypointów 10–47 to kontrakt między warstwami** (46–47 od 2026-10-27; nowe tylko dopisywać na końcu): nie przenumerowywać. Każde przesunięcie waypointu wpisać do `log.md` i do tabeli niżej.
+
+**Ręczna edycja w WAE (użytkownik, 2026-10-28, zapis 12:01).** `Maps/Custom/arka00_gibraltar.map` nie jest już czystym wynikiem skryptu:
+- drogi w bazie przemalowane i poszerzone (pełny kafel `Paved Road LAT` 2269 zamiast przejść krawędziowych), nowa droga od wp 12 do ARKI i na skos do 13;
+- mur `BRIK` z 35 do 61 komórek, bramy 15 i 16 zostały otwarte;
+- 27 domków usuniętych (bramy, baza, La Línea), dodane rafinerie, beczki i skrzynie w dokach oraz `ARCO` przy murze;
+- doszły samochód `CAR2G` w La Línea i 3 bombowce `BADGER` (Neutral) przy pasie startowym.
+
+Waypointy 10–47 bez zmian. **Nie uruchamiać `build-arka-gibraltar.ps1`**, dopóki tych zmian nie przeniesie się do skryptu, bo skrypt nadpisze mapę w całości. Kopia sprzed edycji: `Modding/archive/arka00-kopia_2026-10-28_1127/`. Skrypt misji (`build-arka00-mission.ps1`) tylko czyta teren i działa z ręczną mapą (po poprawce brakujących komórek, zob. [[workflow/known-mistakes]]): baza stoi, ARKA jest osiągalna z Hiszpanii, ze wszystkich plaż i z trasy zasadzki (BFS).
 
 ## Pliki i przebudowa
 
@@ -46,7 +55,7 @@ Modding\tools\build-arka-gibraltar.ps1 -DesignOnly   # tylko warstwy projektu (d
 | Mur północny (Northern Defences) | betonowy mur `BRIK` (overlay 2) w poprzek przesmyku, dwie bramy | 15 (Landport), 16 (Waterport) |
 | Lotnisko | pas startowy, terminal jako `HANGAR`, sporne pole rudy między granicą a pasem | 20, 21, 39 |
 | Hiszpania (La Línea) | gęsta zabudowa z OSM, główne aleje, pola, park z drzewami; dwie zarezerwowane strefy zbiórki Sowietów | 17 (Tanya), 18, 19 |
-| Skała, poziom 1 (Upper Rock, > 100 m) | płaskowyż z klifami, 4 rampy z miasta: NW (Willis's Road), W (Alameda / dolna stacja kolejki, nowa w v2), SW (Queen's Road przy St Michael's Cave), S (Windmill Hill Road) | 28–33 |
+| Skała, poziom 1 (Upper Rock, > 100 m) | płaskowyż z klifami, 4 rampy z miasta: NW (Willis's Road), W (Alameda / dolna stacja kolejki, nowa w v2), SW (Queen's Road przy St Michael's Cave), S (Windmill Hill Road); od 2026-10-27 także **E** od pasu wschodniego (seed 436,410, wynik 440,414; komórki ok. 150–154 × 123–134). Wcześniej przejście z pasu wschodniego na złoże na Skale miało 1 komórkę szerokości (klif x 151–153 kończył się na y 133, klif grani zaczyna się na y 135), teraz ok. 12. Trasa zasadzki misji (wp 61–63). Rajd `h2` z wp 18 dalej idzie przez Landport i rampę NW (BFS) | 28–33 |
 | Skała, poziom 2 (grań, > 220 m) | środkowy grzbiet z 2 rampami z poziomu 1 (C1 Middle Hill, C2 Spur Battery Road); północny szczyt **bez rampy** (ozdoba, nieosiągalny po ziemi) | 34, 35 |
 | Pas wschodni (Sir Herbert Miles Road) | ok. 6 komórek lądu pod klifem Skały, po prawdziwej linii brzegu, z drogą; od Eastern Beach do Europa Point; **druga droga z Hiszpanii na południe, omija mur** | 22–25 |
 | Port i przemysł (zachód) | Dockyard, Coaling Island, North Mole: bruk, 4 dźwigi, magazyny `CITY09`, szopy `NV18`, silosy `NV17`, skrzynie, beczki | 37 |
@@ -75,7 +84,7 @@ Numery 10–45 są dla misji. 0 i 1 to starty skirmisha. Litery = zapis waypoint
 | 13 | N | 146123 | Elektrownia 3 (SW) |
 | 14 | O | 137133 | Elektrownia 4 (SE), pod klifem Skały, działka 7×7 |
 | 15 | P | 107104 | Brama Landport (mur, droga z lotniska) |
-| 16 | Q | 118092 | Brama Waterport (mur, zachód) |
+| 16 | Q | 119093 | Brama Waterport (mur, zachód); 118092 do v2 |
 | 17 | R | 47069 | Tanya: park w La Línea, za liniami wroga |
 | 18 | S | 52036 | Sowieci: zbiórka NW |
 | 19 | T | 28057 | Sowieci: zbiórka NE |
@@ -93,7 +102,7 @@ Numery 10–45 są dla misji. 0 i 1 to starty skirmisha. Litery = zapis waypoint
 | 31 | AF | 184188 | Skała: dół rampy SW |
 | 32 | AG | 215230 | Skała: góra rampy S |
 | 33 | AH | 216231 | Skała: dół rampy S |
-| 34 | AI | 101123 | Skała: szczyt północny, poziom 1 nad lotniskiem (Great Siege Tunnels) |
+| 34 | AI | 102124 | Skała: szczyt północny, poziom 1 nad lotniskiem (Great Siege Tunnels); 101123 do v2 |
 | 35 | AJ | 142150 | Skała: Middle Hill, **grań (poziom 2)** |
 | 36 | AK | 236255 | Latarnia Europa Point |
 | 37 | AL | 167147 | Doki |
@@ -105,8 +114,13 @@ Numery 10–45 są dla misji. 0 i 1 to starty skirmisha. Litery = zapis waypoint
 | 43 | AR | 260247 | Morze: południe (Cieśnina) |
 | 44 | AS | 110062 | Morze: zatoka przy pasie startowym |
 | 45 | AT | 63117 | Morze: wschód, przy Eastern Beach |
+| 46 | AU | 149137 | Kościół The Convent: wolna komórka przy drzwiach; warstwa misji szuka po nim kościoła `V01`, w którym ukryte jest złoto (przejęcie inżynierem); od v3 |
+| 47 | AV | 120128 | Ruda: Skała, poziom 1 (złoże „złota na górze”), u góry rampy NW; od v3 |
+| 60 | BI | (misja) | **Nie w mapie terenu:** dopisuje go warstwa misji przy dziale 100 Ton Gun obok szpitala ([[missions/arka-00-triggers]]). Teren nie powinien używać numeru 60. |
+| 61–63 | BJ–BL | (misja) | **Nie w mapie terenu:** trasa rosyjskiej zasadzki na złoże na Skale od wschodu: 61 pas wschodni przy Catalan Bay (144,112), 62 przesmyk pod końcem klifu (155,126), 63 złoże (138,128). Przejście istnieje w terenie v3 (BFS). Teren nie powinien używać 61–63 ani zamykać tego przesmyku. |
+| 64 | BM | (misja) | **Nie w mapie terenu:** start desantów Nod na Camp Bay: otwarte morze przy południowo-zachodniej krawędzi (234,269). Wcześniej startowały z 41, w zatoce przy dokach. |
 
-Kontrole w skrypcie (przejazd po ziemi, z obiektami): Hiszpania → ARKA, Eastern Beach → ARKA, Catalan Bay → Europa Point, Camp Bay → ARKA, rampy NW/SW/S, ARKA → szczyt Skały, ARKA → grań, Tanya → zbiórka sowiecka, ARKA → ruda Windmill Hill, ARKA → doki. Wszystkie OK (v2, 2026-10-26).
+Kontrole w skrypcie (przejazd po ziemi, z obiektami; od v3 także ARKA → kościół, ruda na Skale, ruda lotnisko): Hiszpania → ARKA, Eastern Beach → ARKA, Catalan Bay → Europa Point, Camp Bay → ARKA, rampy NW/SW/S, ARKA → szczyt Skały, ARKA → grań, Tanya → zbiórka sowiecka, ARKA → ruda Windmill Hill, ARKA → doki. Wszystkie OK (v2, 2026-10-26).
 
 ## Pułapki
 
@@ -115,17 +129,18 @@ Kontrole w skrypcie (przejazd po ziemi, z obiektami): Hiszpania → ARKA, Easter
 3. **`HomeCell` to numer waypointu, nie komórka.** Konwerter wpisuje `HomeCell=98`, `AltHomeCell=99`, a takich waypointów nie ma (SE01 ma `HomeCell=2`). W misji ustaw `HomeCell=10`.
 4. **Obelisk Nod ma zasięg 9 komórek** (`LaserFire Range=9`). Z hiszpańskiego brzegu zatoki do pasa startowego jest ok. 19 komórek. „Lasery z wybrzeża Hiszpanii” to skrypt albo Obeliski po hiszpańskiej stronie granicy (rejon 20).
 5. **Mur północny nie zamyka bazy.** Dwie bramy i pas wschodni (22 → 25 → 33) to zamierzone dwa fronty. Zamknięcie pasa: obiekt przy 25 („tunel Dudley Ward zawalony”).
-6. **Mapa jest długa** (229 wierszy). Ze zbiórki 18 do ARKI jest ok. 80 komórek. Licznik 25:00 licz w sekundach gry, nie w „minutach” Rules (zob. [[workflow/known-mistakes]]).
+6. **Mapa jest długa** (229 wierszy). Ze zbiórki 18 do ARKI jest ok. 80 komórek. Licznik (dziś 30:00) licz w sekundach gry, nie w „minutach” Rules (zob. [[workflow/known-mistakes]]).
 7. **Domy:** nie zmieniaj `[Houses]` w Rules.ini ([[engine/sides-and-houses]]). Budynki cywilne i atrakcje to dom `Neutral`.
 8. **Kodowanie:** mapa w Windows-1252, nazwy w INI bez polskich znaków.
-9. **Drogi** to kafle 2-komórkowe z kodem terenu 11 (przejezdne, budowlane). Na skrzyżowaniach i tam, gdzie A* nie ułożył kafli, jest bruk LAT. Warstwa misji stawia budynki obok dróg, żeby nie zatkać przejazdu.
+9. **Drogi** to `Paved Road LAT` (od v3), 2–3 komórki szerokości, kod terenu 11 (przejezdne, budowlane). Każdy koniec łączy się z drogą, krawędzią mapy albo placem: `FinishRoads`, log `free ends 0`. Warstwa misji stawia budynki obok dróg, żeby nie zatkać przejazdu. Drogi przecinają mur tylko w bramach.
 10. **Drzewa** (ok. 310) blokują ruch i strzały. Zatkaną trasę odblokujesz usunięciem wpisu z `[Terrain]` (klucz `y*1000+x`).
-11. **Ruda** (`ZORE`, ok. 15 komórek w v2) jest opcjonalna.
+11. **Ruda** (`ZORE`, ok. 380 komórek od v3): Skała 85%, lotnisko 75%, Windmill Hill 70% + kopalnia `OREMINE`. Ruda na Skale jest tylko na poziomie 1 (`CellsIn`). Kopalnia rośnie sama, a reszta rudy się nie rozrasta (`[Ore] SpreadPercentage=0`).
 12. **Północny szczyt grani nie ma rampy.** Jednostek naziemnych tam nie postawisz. Zrzut z powietrza albo skrypt zadziała, ale silnik może je uznać za uwięzione.
 
 ## Znane wady wyglądu
 
-- Ok. 13 komórek „surowego” brzegu, w kilku miejscach, gdzie łańcuch plaży styka się z łańcuchem klifu wodnego: trawa dotyka wody prostą krawędzią. Drugi przebieg plaż na te przerwy stawiał pojedyncze kawałki plaży na morzu, więc go wyłączyłem. Lista miejsc: `%TEMP%\arka-gibraltar\rawcoast.png` (czerwone kółka).
+- **Naprawione 2026-10-27 (użytkownik: „nierówne wybrzeże”):** na południe od Catalan Bay (komórki ok. 147–156, 114–122) woda wcinała się w ląd prostokątnymi schodkami, a w morze sterczał jęzor lądu. Przyczyna: napis „EAST SIDE” na zrzucie Google w warstwie `kind`. Dwa wielokąty po prawdziwej linii brzegu, (525,342) → (501,362) → (494,372) → (492,397) w pikselach zrzutu, zaraz po `RemoveSmall`: wcięcie zamienione na ląd, jęzor na morze. Teraz brzeg to gładki łuk plaży. Kontrole przejazdów OK, wp 24 ma kod terenu 0, trasa zasadzki 22 → 61 → 62 → 63 przechodzi. Ta sama metoda pomoże przy innych napisach zrzutu, które wycięły brzeg.
+- Ok. 10 komórek „surowego” brzegu (po naprawie Catalan Bay; wcześniej 13), w kilku miejscach, gdzie łańcuch plaży styka się z łańcuchem klifu wodnego: trawa dotyka wody prostą krawędzią. Drugi przebieg plaż na te przerwy stawiał pojedyncze kawałki plaży na morzu, więc go wyłączyłem. Lista miejsc: `%TEMP%\arka-gibraltar\rawcoast.png` (czerwone kółka).
 - Drogi poziome na ekranie (wschód–zachód w Hiszpanii) układają się w schodki z kawałków ukośnych. Tak działa zestaw kafli.
 - Część krótkich odcinków dróg to bruk LAT zamiast kafli (177 odcinków, ok. 740 komórek).
 - Pas startowy zaczyna się na linii brzegu (wąski cypel w zatoce nie mieści klifów wodnych).

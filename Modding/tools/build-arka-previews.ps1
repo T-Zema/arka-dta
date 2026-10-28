@@ -51,6 +51,27 @@ $scenes = @(
         @('I', 'Nod1', 'SCZLNG', 3170, 2680, 160), @('I', 'Nod1', 'SCZHYL', 3220, 2650, 160), @('I', 'Nod1', 'SCZHYL', 3250, 2690, 160),
         @('U', 'Nod1', 'SCZINF', 3140, 2560, 160), @('U', 'Nod1', 'SCZINF', 3190, 2720, 160),
         @('S', 'CR1A', 3080, 2660), @('S', 'CR2B', 3110, 2580), @('S', 'CR3C', 3030, 2600)
+    ) },
+    @{ Map = 'arka04'; Window = @(2384, 2389, 480, 320); Items = @(
+        # Norad II lying in its basin (centre), Duke's men round it; the Allies come in from the left, the Zerg from the right
+        @('U', 'Allies', '2TNK', 2420, 2560, 32), @('U', 'Allies', '2TNK', 2460, 2610, 32), @('U', 'Allies', '1TNK', 2410, 2630, 32),
+        @('I', 'Allies', 'TANYA', 2500, 2580, 32), @('I', 'Allies', 'E1', 2470, 2540, 32), @('I', 'Allies', 'E3', 2450, 2580, 32),
+        @('I', 'Nod1', 'SCZLNG', 2700, 2560, 160), @('I', 'Nod1', 'SCZLNG', 2730, 2600, 160), @('I', 'Nod1', 'SCZLNG', 2690, 2620, 160),
+        @('I', 'Nod1', 'SCZLNG', 2760, 2560, 160), @('I', 'Nod1', 'SCZLNG', 2780, 2640, 160), @('I', 'Nod1', 'SCZHYL', 2820, 2590, 160),
+        @('I', 'Nod1', 'SCZHYL', 2830, 2650, 160), @('U', 'Nod1', 'SCZMUT', 2750, 2450, 160), @('U', 'Nod1', 'SCZMUT', 2800, 2490, 160),
+        @('S', 'CR1A', 2650, 2600), @('S', 'CR2B', 2560, 2650), @('S', 'CR3C', 2620, 2520)
+    ) },
+    @{ Map = 'arka05'; Window = @(1010, 2875, 480, 320); Items = @(
+        # the square of district Omega: civilians run up-right towards the landing zone, Tanya and the tanks cover them,
+        # the swarm pours in from the lower left
+        @('I', 'Cyw1', 'ARKCIV1', 1240, 2950, 0), @('I', 'Cyw1', 'ARKCIV2', 1270, 2935, 0), @('I', 'Cyw1', 'ARKCIV1', 1300, 2960, 0),
+        @('I', 'Cyw1', 'ARKCIV2', 1330, 2925, 0), @('I', 'Cyw1', 'ARKCIV1', 1360, 2945, 0), @('I', 'Cyw1', 'ARKCIV2', 1290, 2905, 0),
+        @('U', 'Allies', '2TNK', 1180, 3000, 128), @('U', 'Allies', '2TNK', 1290, 3040, 128), @('U', 'Allies', '1TNK', 1380, 3010, 128),
+        @('I', 'Allies', 'TANYA', 1230, 3010, 128), @('I', 'Allies', 'E1', 1330, 3000, 128), @('I', 'Allies', 'E3', 1150, 2960, 128),
+        @('I', 'Nod1', 'SCZLNG', 1080, 3050, 0), @('I', 'Nod1', 'SCZLNG', 1120, 3075, 0), @('I', 'Nod1', 'SCZLNG', 1170, 3090, 0),
+        @('I', 'Nod1', 'SCZLNG', 1050, 3100, 0), @('I', 'Nod1', 'SCZLNG', 1215, 3110, 0), @('I', 'Nod1', 'SCZHYL', 1100, 3125, 0),
+        @('I', 'Nod1', 'SCZHYL', 1170, 3130, 0), @('U', 'Nod1', 'SCZMUT', 1420, 2900, 160), @('U', 'Nod1', 'SCZMUT', 1460, 2930, 160),
+        @('S', 'CR1A', 1200, 3060), @('S', 'CR2B', 1320, 2990), @('S', 'CR3C', 1110, 3040), @('S', 'CR4A', 1400, 3060)
     ) }
 )
 

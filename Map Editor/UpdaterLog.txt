@@ -1,0 +1,4 @@
+28.10. 10:50:06.272    Logging enabled
+28.10. 10:50:06.323    Checking for updates.
+28.10. 10:50:06.348    Attempting to download version information from CnCNet (https://downloads.cncnet.org/wae/TSClient/)
+28.10. 10:50:06.730    Version information downloaded, proceeding to parsing it.

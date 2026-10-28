@@ -13,8 +13,7 @@ radius: movsx eax, word [esp+14h]
         movsx ecx, word [esi+96h]
         sub edx, ecx
         imul edx, edx
-        add eax, edx
-        cmp eax, 72
+        call 86C7E0h                    ; eax += edx, compared with the radius (patch-veins-radius.asm)
         jg .far
         mov ecx, edi
         call 45B0D0h                    ; CellClass::Can_Place_Veins

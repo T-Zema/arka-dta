@@ -2,7 +2,7 @@
 
 Pierwsza jednostka StarCrafta w DTA: Marine i Upgraded Marine ze stimpackiem pod klawiszem deploy. Dostępni po zaznaczeniu checkboxa **STARCRAFT** w lobby skirmisha, **od 2026-10-25 tylko dla frakcji Terran** (`Owner=GDI1`; wcześniej dla wszystkich, zob. [[mods/starcraft-terran-buildings]]).
 
-Źródła: `INI/Game Options/StarCraft.ini`, `INI/Art.ini` (koniec pliku), `INI/Sound.ini` (`[SoundList]` 700–713 + sekcje na końcu), `Resources/SkirmishLobby.ini`, `MIX/ECACHE99.MIX`, `Modding/tools/build-scmarine.ps1`.
+Źródła: `INI/Game Options/StarCraft.ini`, `INI/Art.ini` (koniec pliku), `INI/Sound.ini` (`[SoundList]` 700–713 + sekcje na końcu), `Resources/SkirmishLobby.ini`, `MIX/ECACHE77.MIX` (do 2026-10-27 `ECACHE99.MIX`: kasowany przez aktualizację DTA, zob. [[engine/shp-graphics]]), `Modding/tools/build-scmarine.ps1`.
 Stan: zainstalowany. **Testy w grze: brak (niezweryfikowane w grze).** Assety pochodzą z legalnej kopii użytkownika i służą wyłącznie do użytku prywatnego.
 
 ## Jednostki
@@ -60,6 +60,9 @@ Stan: poprawki wgrane, **czekają na ponowny test**.
 - 2026-10-25: rozszerzone na cały Terran, zob. [[mods/starcraft-research]]. `SCU238` jest teraz generowane przez
   `build-scresearch.ps1` (ikona poprawiona na właściwą **#238** z `upgrades.dat`, wcześniej zgadnięte #325), koszt 1800,
   a Upgraded Marine wymaga `SCRINF` (Engineering Bay) + `SCU238`.
+- 2026-10-27: w `ECACHE99.MIX` zostały kopie `SCU238.SHP`/`SCU238IC.SHP` z wersji próbnej (ikona #325). Wyższy numer MIX
+  wygrywa, więc w grze widać było starą ikonę, a nie #238 z `ECACHE87`. Przy przenosinach Marine'a na `ECACHE77` kopie
+  odpadły (`ECACHE77` = dokładnie 21 plików z `build-scmarine.ps1`), teraz działa ikona #238. **Niezweryfikowane w grze.**
 
 ## Kompromisy
 
@@ -80,4 +83,4 @@ Stan: poprawki wgrane, **czekają na ponowny test**.
 ## Odinstalowanie
 
 Przywróć `INI/Art.ini.bak`, `INI/Sound.ini.bak`, `INI/Rules.ini.bak` (uwaga: inne sesje mogły od tego czasu dopisać swoje bloki), `Resources/SkirmishLobby.ini` (wersja z archiwum super-mod-v1
-albo `.bak` + ponowne dodanie SUPER MOD), usuń `INI/Game Options/StarCraft.ini` i `MIX/ECACHE99.MIX`.
+albo `.bak` + ponowne dodanie SUPER MOD), usuń `INI/Game Options/StarCraft.ini` i `MIX/ECACHE77.MIX`.

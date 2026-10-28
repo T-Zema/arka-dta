@@ -6,7 +6,7 @@
 # their cell every 60 frames, but holes only came from the 1-in-4 random hit, one cell north (OverlayData 2), the other hits
 # left CORPSE (168) / PAVLAT; under-building seeding never passed Can_Tiberium_Germinate. Same three fixes here, VEINHOLE only:
 #   V1 0x1003DDBA  33 FF 89 45 E0 57 8B C8 E8 65 48 15 00  xor edi,edi / mov [ebp-20h],eax / push edi / mov ecx,eax /
-#                  call Can_Tiberium_Germinate  ->  own cell ([ebp-28h]) and "no overlay" only
+#                  call Can_Tiberium_Germinate  ->  own cell ([ebp-28h]) and "no overlay or VEINS" only (veins since 2026-10-28)
 #   V2 0x1003DE13  8B 4E 64 8B 89 C0 01 00 00 03 81 24 01 00 00  ... add eax,[ecx+124h]  ->  no Random(0,3) for 0xA7
 #   V3 0x1003DE5A  8B 4D E0 88 81 96 00 00 00  mov ecx,[ebp-20h] / mov [ecx+96h],al  ->  OverlayData 0 for the hole centre
 # Caves: section .scdock (added by patch-vinifera-workers.ps1, which owns its first 0x100 bytes) + 0x100, source
@@ -50,32 +50,45 @@ $V1ret = $build.V1 + 13; $V2ret = $build.V2 + 15; $V3ret = $build.V3 + 9
 
 # the caves of patch-vinifera-veins.asm (V1 at +0x00, V2 at +0x50, V3 at +0x80), emitted here so the relative calls and jumps
 # fit any build and section address; for DTA 16.2.2 this is byte for byte the nasm output (org 0x106DB100).
-$cb = New-Object System.Collections.Generic.List[byte]
-function Emit([byte[]]$b) { $cb.AddRange($b) }
-function EmitRel([string]$op, [int]$to) { $b = Hex $op; Emit $b; Emit (Rel ($cave + $cb.Count - $b.Length) ($b.Length + 4) $to) }
-function PadTo([int]$n) { while ($cb.Count -lt $n) { Emit (Hex 'CC') } }
-Emit (Hex '31 FF 89 45 E0')                  # v1: xor edi,edi / mov [ebp-20h],eax       (original)
-Emit (Hex '8B 4E 64 8B 89 C0 01 00 00')      #     ecx = AnimType->TiberiumSpawnType
-Emit (Hex '85 C9 74 29')                     #     test ecx,ecx / jz .normal
-Emit (Hex '81 B9 24 01 00 00 A7 00 00 00 75 1D')   # cmp [ecx+124h],0A7h (VEINHOLE) / jne .normal
-Emit (Hex '8D 45 D8 50 B9 48 83 74 00')      #     lea eax,[ebp-28h] (own cell) / push eax / mov ecx,748348h (Map)
-EmitRel 'E8' $build.Map                      #     call MapClass::operator[]
-Emit (Hex '89 45 E0 83 78 30 FF 0F 94 C0')   #     mov [ebp-20h],eax / cmp [eax+30h],-1 (no overlay) / sete al
-EmitRel 'E9' $V1ret                          #     jmp test al,al
-Emit (Hex '57 8B 4D E0')                     # .normal: push edi / mov ecx,[ebp-20h]
-EmitRel 'E8' $build.Germ                     #     call Can_Tiberium_Germinate
-EmitRel 'E9' $V1ret
-PadTo 0x50
-Emit (Hex '8B 4E 64 8B 89 C0 01 00 00 81 B9 24 01 00 00 A7 00 00 00 75 02 31 C0 03 81 24 01 00 00')   # v2: no Random(0,3) for VEINHOLE
-EmitRel 'E9' $V2ret
-PadTo 0x80
-Emit (Hex '8B 4D E0 81 79 30 A7 00 00 00 75 02 31 C0 88 81 96 00 00 00')   # v3: OverlayData 0 for the hole centre
-EmitRel 'E9' $V3ret
-$caveBytes = $cb.ToArray()
-if ($caveBytes.Length -ne 153) { throw "cave layout $($caveBytes.Length)" }
+# Cave version 2 (2026-10-28): V1 also seeds on a cell with VEINS (126). Since patch-zergbuild.ps1 the colonies (Creep, Sunken,
+# Spore) must stand on creep, so their seed cell always had veins and "no overlay" refused every hole (user: the Spore Colony
+# spreads no creep). Version 1 is accepted as the installed state and overwritten.
+function Build-Cave([bool]$onVeins) {
+    $script:cb = New-Object System.Collections.Generic.List[byte]
+    $jz = if ($onVeins) { '30' } else { '29' }; $jne = if ($onVeins) { '24' } else { '1D' }
+    Emit (Hex '31 FF 89 45 E0')                  # v1: xor edi,edi / mov [ebp-20h],eax       (original)
+    Emit (Hex '8B 4E 64 8B 89 C0 01 00 00')      #     ecx = AnimType->TiberiumSpawnType
+    Emit (Hex "85 C9 74 $jz")                    #     test ecx,ecx / jz .normal
+    Emit (Hex "81 B9 24 01 00 00 A7 00 00 00 75 $jne")   # cmp [ecx+124h],0A7h (VEINHOLE) / jne .normal
+    Emit (Hex '8D 45 D8 50 B9 48 83 74 00')      #     lea eax,[ebp-28h] (own cell) / push eax / mov ecx,748348h (Map)
+    EmitRel 'E8' $build.Map                      #     call MapClass::operator[]
+    if ($onVeins) {
+        Emit (Hex '89 45 E0 8B 48 30 83 F9 FF 74 03 83 F9 7E 0F 94 C0')   # mov [ebp-20h],eax / ecx = overlay / -1 or 7Eh (VEINS) / sete al
+    } else {
+        Emit (Hex '89 45 E0 83 78 30 FF 0F 94 C0')   # mov [ebp-20h],eax / cmp [eax+30h],-1 (no overlay) / sete al
+    }
+    EmitRel 'E9' $V1ret                          #     jmp test al,al
+    Emit (Hex '57 8B 4D E0')                     # .normal: push edi / mov ecx,[ebp-20h]
+    EmitRel 'E8' $build.Germ                     #     call Can_Tiberium_Germinate
+    EmitRel 'E9' $V1ret
+    PadTo 0x50
+    Emit (Hex '8B 4E 64 8B 89 C0 01 00 00 81 B9 24 01 00 00 A7 00 00 00 75 02 31 C0 03 81 24 01 00 00')   # v2: no Random(0,3) for VEINHOLE
+    EmitRel 'E9' $V2ret
+    PadTo 0x80
+    Emit (Hex '8B 4D E0 81 79 30 A7 00 00 00 75 02 31 C0 88 81 96 00 00 00')   # v3: OverlayData 0 for the hole centre
+    EmitRel 'E9' $V3ret
+    $out = $script:cb.ToArray()
+    if ($out.Length -ne 153) { throw "cave layout $($out.Length)" }
+    return ,$out
+}
+function Emit([byte[]]$b) { $script:cb.AddRange($b) }
+function EmitRel([string]$op, [int]$to) { $b = Hex $op; Emit $b; Emit (Rel ($cave + $script:cb.Count - $b.Length) ($b.Length + 4) $to) }
+function PadTo([int]$n) { while ($script:cb.Count -lt $n) { Emit (Hex 'CC') } }
+$caveBytes = Build-Cave $true
+$caveV1 = [byte[]](Build-Cave $false) + (New-Object byte[] (0x100 - 153))
 function Hook([int]$at, [int]$to, [int]$len) { $b = New-Object System.Collections.Generic.List[byte]; $b.Add(0xE9); $b.AddRange((Rel $at 5 $to)); while ($b.Count -lt $len) { $b.Add(0x90) }; return ,$b.ToArray() }
 $sites = @(
-    @{ VA = $cave;     Orig = (New-Object byte[] 0x100);                                             New = ([byte[]]$caveBytes + (New-Object byte[] (0x100 - 153))) }
+    @{ VA = $cave;     Orig = (New-Object byte[] 0x100);                                             New = ([byte[]]$caveBytes + (New-Object byte[] (0x100 - 153))); Legacy = $caveV1 }
     @{ VA = $build.V1; Orig = ([byte[]](Hex '33 FF 89 45 E0 57 8B C8 E8') + (Rel ($build.V1 + 8) 5 $build.Germ)); New = (Hook $build.V1 $cave 13) }
     @{ VA = $build.V2; Orig = (Hex '8B 4E 64 8B 89 C0 01 00 00 03 81 24 01 00 00');                  New = (Hook $build.V2 ($cave + 0x50) 15) }
     @{ VA = $build.V3; Orig = (Hex '8B 4D E0 88 81 96 00 00 00');                                    New = (Hook $build.V3 ($cave + 0x80) 9) }
@@ -84,7 +97,7 @@ function Is([byte[]]$want, [int]$va) { $o = Off $va; for ($i = 0; $i -lt $want.L
 $from = if ($Revert) { 'New' } else { 'Orig' }; $to = if ($Revert) { 'Orig' } else { 'New' }
 $todo = @($sites | Where-Object { -not (Is $_[$to] $_.VA) })
 if ($todo.Count -eq 0) { "already $(if ($Revert) { 'original' } else { 'patched' }), nothing to do"; return }
-foreach ($s in $todo) { if (-not (Is $s[$from] $s.VA)) { throw ("unexpected bytes at 0x{0:X}: not the Vinifera.dll this patch was made for" -f $s.VA) } }
+foreach ($s in $todo) { if (-not (Is $s[$from] $s.VA) -and -not ($s.Legacy -and (Is $s.Legacy $s.VA))) { throw ("unexpected bytes at 0x{0:X}: not the Vinifera.dll this patch was made for" -f $s.VA) } }
 if (-not $isCopy -and -not $Revert -and -not (Test-Path "$target.bak")) { Copy-Item $target "$target.bak" }
 foreach ($s in $todo) { [Array]::Copy([byte[]]$s[$to], 0, $bytes, (Off $s.VA), $s[$to].Length) }
 [IO.File]::WriteAllBytes($target, $bytes)

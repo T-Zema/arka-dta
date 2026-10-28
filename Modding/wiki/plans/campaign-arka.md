@@ -52,7 +52,7 @@ Scenariusz kampanii mashup RA1 × StarCraft (preludium, 11 misji, 2 misje bonuso
 
 **Mapa:** zbudowana (teren, waypointy, bez triggerów), zob. [[missions/arka-00-gibraltar]]: `Maps/Custom/arka00_gibraltar.map`, skrypt `tools/build-arka-gibraltar.ps1`, tabela waypointów i pułapki dla autora triggerów.
 
-**Rozgrywka:** obrona na czas (licznik 25:00), Alianci kontra Sowieci + Nod.
+**Rozgrywka:** obrona na czas (licznik 30:00; w pierwszym projekcie 25:00, użytkownik wydłużył spokojny początek o 5 min, 2026-10-27), Alianci kontra Sowieci + Nod.
 1. **Utrzymaj ARKĘ** (ogromny budynek Chronosfery w środku bazy): zniszczenie = porażka.
 2. **Chroń 4 elektrownie** zasilające rdzeń: każda utracona spowalnia licznik.
 3. *(opcjonalne)* **Odbij Tanyę** zrzuconą za liniami wroga. Wraca z dokumentem Nod: *Kane wie o ARCE i chce, żeby wystartowała.* Jest w nim też zdjęcie Kane'a. Bez pomocy gracza Tanya przebija się sama, ranna i bez dokumentu. Wtedy o udziale Nod Einstein dowiaduje się dopiero z kryształu (misja 1).
@@ -177,6 +177,10 @@ To początek psionicznego haczyka (zob. Wątki postaci).
 
 ## Misja 4: „Zielony kryształ” (Antiga Prime, 2499)
 
+**Mapa i misja:** zbudowane (teren z mapy kampanii SC T6 „Norad II”, TEMPERATE, 83 triggery), zob. [[missions/arka-04-zielony-krysztal]]: `Maps/Missions/arka04.map`, skrypty `tools/build-arka04-antiga.ps1` i `tools/build-arka04-mission.ps1`. Różnice względem planu: 20 minut analizy bez licznika na ekranie (Einstein melduje postęp), Norad II bez presji czasu, misja ekonomiczna (ubogie pole przy bazie, ekspansje, kopalnie kryształów, Stickler Woods z odrastającą rudą), Duke jako Marine-bohater (4000 HP jak Raynor-Marine, +50% obrażeń) walczy dla gracza po ewakuacji, oddział Synów Korhalu jako nagroda za gniazdo w centrum, sekret w gnieździe NE. **(niezweryfikowane w grze)**
+
+**Daty (sprawdzone 2026-10-27):** rok 2499 dla Antigi zgadza się z SC1 (Episode I: Mar Sara, powstanie na Antidze i Norad II w pierwszym roku Wielkiej Wojny, 2499; upadek Tarsonis 2500, jak w misji 5). Część źródeł datuje Antigę na przełom 2499/2500, co nie przeczy kampanii. Lore od użytkownika (oceany i skamieniałości, winnice, Stickler Woods, masakra Andasar City w 2478 przez por. Nadanera) to tło z czasów SC1, nie SC2; Andasar i Stickler Woods są użyte w misji 4.
+
 **Przerywnik:** Einstein urządza laboratorium w namiocie obok ARKI i bada odłamek z rdzenia. Analiza i nazwy „Kryształ X” oraz „zielony szajs” są w sekcji o Krysztale X. W środku rozmowy włącza się alarm: Zergi ze wszystkich stron idą w stronę laboratorium.
 > **Einstein:** „One nie idą na nas. Idą na próbkę. One ją *czują*.”
 > **Mengsk** (ekran): „Mam dla was jeszcze jedno zadanie. Okręt flagowy Konfederacji, Norad II, rozbił się dwadzieścia kilometrów od was. Na pokładzie jest generał Duke. Uratujcie go.”
@@ -203,6 +207,8 @@ To zapowiedź misji 9.
 > **Tanya:** „Profesorze, zaczyna mi się pan podobać.”
 
 ## Misja 5: „Upadek Tarsonis” (Tarsonis, 2500)
+
+**Mapa i misja:** zbudowane (teren z mapy kampanii SC „Operation Silent Scream”, `Terran10`: Tarsonis z trzema psi-nadajnikami; TEMPERATE, ulice LAT do 4 dzielnic, 128 triggerów, film `ARKA05B`), zob. [[missions/arka-05-tarsonis]]: `Maps/Missions/arka05.map`, skrypty `tools/build-arka05-tarsonis.ps1` i `tools/build-arka05-mission.ps1`. Różnice względem planu: ewakuacja to obrona lądowiska przez 7:00 (silnik nie sprawdzi, czy bohater stoi na lądowisku), karabin Kerrigan jest tylko w tekście, a „Mengsk zapamięta” nie przechodzi do misji 7 jako zmienna, bo misje ARKA to osobne bitwy. **(niezweryfikowane w grze)**
 
 **Przerywnik:** Synowie Korhalu ruszają na stolicę Konfederacji. Mengsk mówi Aliantom, że to atak na system obrony planety. Prawdę Einstein odkrywa dopiero na mostku.
 > **Einstein:** „Pan postawił te pudła w mieście. Tam są miliony ludzi.”
@@ -583,8 +589,8 @@ Ostatni „skok” ARKI nie prowadzi przez czas. Einstein odwraca biegunowość 
 ## Uwagi techniczne (niezweryfikowane w grze)
 
 - Strony już w modzie: Alianci, Sowieci, Nod (DTA), Terranie (dom `GDI1`, [[mods/terran-faction]]), Zergi (`Nod1`, [[mods/zerg-faction]], bohaterowie w [[mods/zerg-heroes]]), Protossi (`GDI2`, [[mods/protoss-faction]]). Te domy są dziś ustawione pod skirmish, więc to, jak mapa misji je zadeklaruje, trzeba sprawdzić przy pierwszej mapie (zob. [[engine/sides-and-houses]]).
-- Einstein = kopia `Scientist` (Rules ok. linii 4694) z własnym `Name=`. Tanya = `[TANYA]`. ARKA = kopia Chronosfery (`Name=Chronosphere`, Rules ok. linii 15859) z wysokim HP i bez supermocy (albo z uszkodzonym stanem jako „wrak”).
-- Raynor (Vulture-bohater) istnieje jako typ misji `ARKRAYN` w mapie misji 1 (kopia `SCVULT`, zob. [[missions/arka-01-marsara]]); kolejne misje mogą go skopiować. Duke **jeszcze nie istnieje** jako bohater misji (w skirmishu jest `SCHERO`). Wzorem może być [[mods/zerg-heroes]] (złota kopia, `BuildLimit=1`).
+- Einstein = kopia `Scientist` (Rules ok. linii 4694) z własnym `Name=`. Tanya = `[TANYA]`, a każda mapa misji ARKA nadpisuje jej `Strength=2500` (Rules 1000 × 2,5; prośby użytkownika 2026-10-28: najpierw +50%, potem 2500). Linia jest w `build-arka00/01/02/04/05-mission.ps1`, a nowa misja z Tanyą musi ją skopiować. ARKA = kopia Chronosfery (`Name=Chronosphere`, Rules ok. linii 15859) z wysokim HP i bez supermocy (albo z uszkodzonym stanem jako „wrak”).
+- Raynor (Vulture-bohater) istnieje jako typ misji `ARKRAYN` w mapie misji 1 (kopia `SCVULT`, zob. [[missions/arka-01-marsara]]); kolejne misje mogą go skopiować. Jest w misjach 1, 2, 4 i 5. Od 2026-10-28 ma +300% HP względem dawnej wartości (użytkownik: „szybko pada”): misja 1 to `SCVULT` × 5,6, misje 2, 4 i 5 × 4,8. Nowa misja z Raynorem bierze × 4,8. Duke **jeszcze nie istnieje** jako bohater misji (w skirmishu jest `SCHERO`). Wzorem może być [[mods/zerg-heroes]] (złota kopia, `BuildLimit=1`).
 - Przechodzenie rozbitków i oddziału Raynora pod gracza: każda grupa to osobny dom, a wejście gracza w strefę komórek odpala `36 All change house` (zrobione w misji 1). **Typy SC w misji kampanii trzeba skopiować do mapy**, bo opcja STARCRAFT i kod mapy frakcji się nie ładują (zob. [[missions/arka-01-marsara]]).
 - **Gracz budujący Terran od misji 7:** jednostki i budynki SC mają `Owner=GDI1`. Dom gracza (Alianci) trzeba dopisać do `Owner=` w INI mapy misji, a Terran Command Center Raynora dać jako budynek startowy albo przejmowany. Do sprawdzenia.
 - **Bohaterowie do zrobienia:** Raynor (Vulture), Kerrigan jako Ghost (misje 3–5), Duke (misje 4 i 13), Fenix jako Zealot i Dragoon, Karax (grafika High Templara, misja 8), Tassadar (High Templar, neutralny), Zeratul (Dark Templar), Hyperion (Battlecruiser z Yamato), agent Nod (zamaskowany szpieg), Einstein, Kane. Gotowa jest Kerrigan jako Królowa Ostrzy ([[mods/zerg-heroes]]), Cerebrat do misji 10 też jest w tym modzie. Tanya jest w DTA.

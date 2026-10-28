@@ -1,0 +1,27 @@
+{
+  "movie": "ARKA05B",
+  "title": "MISJA 5 · UPADEK TARSONIS",
+  "place": "TARSONIS · 2500",
+  "link": "HYPERION // MOSTEK",
+  "speakers": [
+    { "key": "mengsk",   "name": "ARCTURUS MENGSK", "tint": "#D8B040" },
+    { "key": "einstein", "name": "EINSTEIN",        "tint": "#7FE0C8" },
+    { "key": "raynor",   "name": "JIM RAYNOR",      "tint": "#E0A040" },
+    { "key": "tanya",    "name": "TANYA ADAMS",     "tint": "#4FA3E0" }
+  ],
+  "lines": [
+    { "speaker": "mengsk",   "text": "Synowie Korhalu uderzają na Tarsonis. Wasze oddziały zabezpieczą obrzeża New Gettysburga, kiedy wyłączymy system obrony planety." },
+    { "speaker": "einstein", "text": "Pan postawił te pudła w mieście. Tam są miliony ludzi." },
+    { "speaker": "mengsk",   "text": "Historia wybacza zwycięzcom, profesorze." },
+    { "speaker": "einstein", "text": "Nie, panie Mengsk. Historia ich tylko zapisuje." },
+    { "speaker": "raynor",   "text": "Moje transportowce czekają w kraterze za miastem. Zabierzemy stamtąd każdego, kogo zdążymy wyciągnąć z dzielnic." },
+    { "speaker": "tanya",    "text": "A te jego nadajniki mają podstawy. Podstawy lubią C4." }
+  ],
+  "objectives": [
+    { "text": "Doprowadź co najmniej 30 cywilów z 4 dzielnic na lądowisko" },
+    { "text": "(opcjonalnie) Zniszcz psi-nadajniki Mengska" },
+    { "text": "Dotrzyj do oddziału Kerrigan, gdy wezwie pomocy" },
+    { "text": "Utrzymaj lądowisko do startu ostatniego transportu" },
+    { "text": "Tanya i Raynor muszą przetrwać", "warn": true }
+  ]
+}

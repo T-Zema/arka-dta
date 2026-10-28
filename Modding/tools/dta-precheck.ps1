@@ -33,8 +33,8 @@ foreach ($k in $new.Files.Keys) { if (-not $cur.Files.ContainsKey($k) -or $cur.F
 foreach ($k in $cur.Files.Keys) { if (-not $new.Files.ContainsKey($k)) { $changed[$k] = $true } }
 "files the update changes: $($changed.Count)"
 
-# the updater's own scripts run at EVERY update: [Delete]/[Rename] of preupdateexec/updateexec (DTA 16.2.3 deletes our
-# MIX/ECACHE99.MIX and INI/BattleE.ini, names old DTA versions used)
+# the updater's own scripts run at EVERY update: [Delete]/[Rename] of preupdateexec/updateexec (DTA 16.2.3 deletes
+# MIX/ECache99.mix, our Marine MIX until it moved to 77, and INI/BattleE.ini, names old DTA versions used)
 $execHit = @{}
 foreach ($x in 'preupdateexec', 'updateexec') {
     try {

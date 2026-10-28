@@ -1,6 +1,6 @@
 # ARKA 0 „Ostatnia brama”: warstwa misji (triggery, dialogi, baza)
 
-Skrypt, budynki i dialogi preludium kampanii [[plans/campaign-arka]] na terenie z [[missions/arka-00-gibraltar]]. Etap 1: pełny szkielet scenariusza (start, licznik 25:00, elektrownie, Tanya, fale, agent Nod, finał) i kluczowe budynki. Balans fal, trudność, Obeliski w Hiszpanii i przerywniki graficzne są na później. **(niezweryfikowane w grze)**
+Skrypt, budynki i dialogi preludium kampanii [[plans/campaign-arka]] na terenie z [[missions/arka-00-gibraltar]]. Etap 1: pełny szkielet scenariusza (start, licznik 30:00, elektrownie, Tanya, fale, agent Nod, finał) i kluczowe budynki. Balans fal, trudność, Obeliski w Hiszpanii i przerywniki graficzne są na później. **(niezweryfikowane w grze)**
 
 Źródła: `Modding/tools/build-arka00-mission.ps1`, `Maps/Custom/arka00_gibraltar.map` (teren, sesja mapy), [[engine/triggers-and-dialogue]] (format i wzorce z misji DTA), `INI/Rules.ini` (`[RAPDOX]`, jednostki), `INI/Art.ini` (fundamenty).
 
@@ -29,7 +29,8 @@ Po przebudowie terenu przez sesję mapy wystarczy uruchomić skrypt ponownie (ko
 | `Soviet` (3) | fale z Hiszpanii, strażnicy Tanyi | `Nod`, `Allies1` |
 | `Nod` (1) | desanty z morza, Stealth Tanki, agent | `Soviet`, `Allies1` |
 | `Allies1` (10) | Tanya przed odbiciem (złota); sprzymierzona ze wszystkimi, więc strażnicy jej nie ruszają | wszyscy |
-| `Neutral`, `Special` | budynki cywilne z terenu | |
+| `Neutral` (4) | budynki cywilne z terenu | `Allies` (od 2026-10-27 w obie strony; wcześniej miasto było wrogie) |
+| `Special` (5) | to, co gracz przejmuje inżynierem: armata `GUN100T`, kościół `CONVENT` | Soviet i Nod mają go na swoich listach |
 
 ## Budynki i siły startowe
 
@@ -40,15 +41,18 @@ Po przebudowie terenu przez sesję mapy wystarczy uruchomić skrypt ponownie (ko
 - **Baza** (skrypt szuka najbliższej wolnej działki z 1 komórką odstępu, poza działkami ARKI i elektrowni, **nie na drogach**: kod terenu 11 = kafle Paved Roads i bruk, żeby budynek nie zatkał przejazdu): `AFACT` Construction Yard, `RATENT` koszary, `RAPROC` rafineria, `AWEAP` fabryka, `RADOME` radar. Przy każdej bramie muru (15, 16) 2× `RAPBOX` i `RAGUN`.
 - **Wojsko:** 3× `2TNK`, 2× `1TNK`, `RANG`, 6× `E1`, 3× `E3`, `MEDIC`, `ENGINEER`, a od 2026-10-27 też `RAHARV` (misja `Harvest`). Rafineria postawiona w mapie nie daje darmowego harvestera; gracz musiał go zbudować.
 - **Skrzynka z odkryciem mapy** (ułatwienie na życzenie użytkownika): przy Construction Yardzie, `Add-RevealCrate` z `tools/MissionKit.ps1` ([[engine/triggers-and-dialogue]], pułapka 9). **(niezweryfikowane w grze)**
+- **Złoto w kościele** (recenzja 2026-10-27, zmienione przez użytkownika tego samego dnia): skrzynki nie leżą już na mapie. Kościół The Convent (`V01` najbliżej wp 46) staje się typem `CONVENT`: kopia kluczy `[V01]` plus `Capturable=true` i `Unsellable=yes`. `V01` w Rules nie jest do przejęcia i ma `CarriesCrate=yes`, a pozostałe kościoły miasta zostają bez zmian. Inżynier, który wejdzie do kościoła (przejęcie, tag `ARKA0G13`, `1 Entered by` Allies), daje `106 Give Credits` 5000 i tekst. Wskazówka: plotka Einsteina o przeorze (330 s, w spokojnym początku). Inżynier zużyty na kościół brakuje potem przy armacie (4 inżynierów), i to jest zamierzony wybór. 3 skrzynki × 1500 przy rudzie na Skale usunięte, rajd `h2` nadal tam jedzie. **(niezweryfikowane w grze)**
 - **Tanya** (`TANYA`, dom `Allies1`, misja Sleep) na 17 w La Línea; straż sowiecka: 3× `E1`, `E2`, `E3`, 2× `DOG`, `3TNK` (Area Guard). Strefa odbicia: komórki w promieniu 3 od Tanyi.
 
 Rozstawienie sprawdzone na renderze (CNCMaps): budynki stoją na trawie w mieście, bez kolizji z murem, drzewami i klifami.
 
-## Przebieg (czasy w sekundach gry, 1500 = 25:00 na liczniku)
+## Przebieg (czasy w sekundach gry, 1800 = 30:00 na liczniku)
+
+**Od 2026-10-27 (użytkownik): spokojny początek dłuższy o 5 minut.** W generatorze `At N` = `Elapsed N + $calm` (`$calm = 300`). Każde zaplanowane zdarzenie od fali 1 (fale, desanty, rajdy `h1first`–`h3first`, Jaki, agent, Tanya sama, armata) jest **o 300 s później, niż podaje tabela**, a licznik ma 30:00 (`1500 + $calm`). Wstęp, łańcuchy i odstępy rajdów powtarzanych bez zmian. Wyjątek: „Połowa ładowania” na 1035 s (prawdziwa połowa to `78 + 1800/2` = 978 s, ale wtedy nachodziła na teksty `t1` i `h3first`). Szturm (1560 s) wypada jak wcześniej ok. 5 min przed skokiem. Wskazówka o armacie 550 s, zaraz po fali 1 (510 s).
 
 | Kiedy | Trigger | Co się dzieje |
 |---|---|---|
-| 1, 38, 78, 106, 134, 170 | Start 1–5 | kamera na ARKĘ, muzyka AWAIT, von Esling („…Ktoś musi zamknąć drzwi”), cel główny, **licznik 25:00 start (78)**, cel: elektrownie, Stavros o Tanyi, cel dodatkowy, znacznik radaru na 17. Odstępy wylicza `Set-DialoguePacing` z długości kwestii (wcześniej 6–12 s, za szybko) |
+| 1, 38, 78, 106, 134, 170 | Start 1–5 | kamera na ARKĘ, muzyka AWAIT, von Esling („…Ktoś musi zamknąć drzwi”), cel główny, **licznik 30:00 start (78)**, cel: elektrownie, Stavros o Tanyi, cel dodatkowy, znacznik radaru na 17. Odstępy wylicza `Set-DialoguePacing` z długości kwestii (wcześniej 6–12 s, za szybko) |
 | 210 | Fala 1 | sama piechota (9× `E1`, 5× `E2`; czołg usunięty, test 4) z 18 → zbiórka na granicy (20), ~24 s czekania → atak w ruchu na ARKĘ (`16,10`) → Hunt; Hell March |
 | 300 | Fala 2 | z 19 prosto na ARKĘ (`16,10` → `11,14`), bez zbiórki |
 | 420 | Nod 1 | `NLST` z zatoki (41) na Camp Bay (26): 2× `ARTY`, 2× `LTNK`, 2× `BGGY` |
@@ -66,6 +70,8 @@ Rozstawienie sprawdzone na renderze (CNCMaps): budynki stoją na trawie w mieśc
 | 1260 | Szturm | duża fala + Jaki, Stavros: „Pięć minut do skoku!” |
 | 1310 | Piechota Nod 4 | `NLST` 45 → Eastern Beach (23), 10 piechoty |
 | 1110 | Agent Nod | `SPY` Nod (w mapie `Disguised=no`, widoczny) z plaży Camp Bay (26) + odsłonięcie okolicy 26, skrypt `15,10` (wejście do ARKI); szpieg w przebraniu = „kameleon”. Wejście w pierścień 32 komórek wokół ARKI → błysk, agent przechodzi z `Nod2` (sojusz ze wszystkimi) do `Nod` i można go zabić, znacznik radaru, Einstein: „Zlapcie go, zanim ucieknie!”. Wcześniej znikał tylko z drużyny i zostawał nietykalny (test 2026-10-27) |
+| 350 / 565 / 700, potem co 200 / 260 / 220 | Rajdy `h1`–`h3` (recenzja 2026-10-27, [[workflow/mission-design]]) | małe oddziały na gospodarkę, powtarzane do skoku, wyłączane w `fin0`. **Lotnisko:** 2× `DOG`, 3× `E1`, `3TNK` z 19 → `16,39` → `0,3` (zbieracze) → `16,10` → `11,14`. **Skała:** 3× `E1`, 2× `E2`, `V2RL` z 18 → `16,47` (przez rampę NW, obok bazy). **Kopalnia:** Nod 2× `AIBIKE`, 2× `AIBGGY` z tunelu Dudley Ward (25) → `16,38` → `0,3` → `16,13` (elektrownia 3). Tekst tylko przy pierwszym rajdzie każdego rodzaju. **(niezweryfikowane w grze)** |
+
 
 Desanty piechoty: `3,<plaża>` → `8,2` (rozładunek) → `16,10` → `11,14` (działa, test 3). Desanty pojazdów: wzór cr06 `3,<plaża>` → `8,2` → `11,14` i warianty `AIARTY`/`AILTNK`/`AIBGGY`/`AIBIKE` (`GuardRange=12`), bo z `16,10` wysadzone pojazdy stały **(niezweryfikowane w grze)**. Mapa podnosi `NLST` do 10 pasażerów. Poduszkowce (`HVC`, `HVR`, `HVCSAM`) usunięte: to rakiety chemiczne/hover spoza epoki (użytkownik).
 | licznik = 0 | Finał 0–8 | wyłącza porażki, blokuje wejście, kamera na ARKĘ, dialog Einstein/Stavros („Plus siedem, profesorze”), błysk, „Kryształ jarzy się na zielono”, konsola `ROK DOCELOWY: 2499`, ostatnia transmisja von Eslinga, duży błysk, **wygrana** |
@@ -95,6 +101,48 @@ Dialogi: `[Tutorial]` mapy, numery 9001–9031, ASCII bez polskich znaków. Kwes
   - **szpieg** w osobnym domu `Nod2`, sprzymierzonym z wszystkimi, więc nikt do niego nie strzela. Ma skrypt `3,10`. Wejście w pierścień wokół ARKI daje błysk, tekst i `5 Destroy Team` (szpieg „znika w rdzeniu”);
   - **szturm sowiecki** (1260 s): `16,10` → `11,14` od razu, bez zbiórki.
 - **Test 6:** fala 5 (Mamuty, Tesla, V2) czekała na zbiórce do końca → fale 2–5 bez zbiórki, fala 5 o 2 min wcześniej (900 s). Zbiórkę ma tylko piechota fali 1.
+
+- **Recenzja kolegi (2026-10-27):** nie było czego zbierać, drogi prowadziły donikąd, a bazy nie opłacało się rozbudowywać. Zmiany: teren v3 (złoża, kopalnia, drogi LAT: [[missions/arka-00-gibraltar]]), skrzynki z pieniędzmi i rajdy powtarzane (wyżej). Ogólne zasady dla następnych misji: [[workflow/mission-design]]. „100 Ton Gun” przy szpitalu (4 inżynierów do przejęcia) zrobiła osobna sesja 2e: sekcja niżej.
+
+## 100 Ton Gun (Nelson's Anchorage), 4 inżynierów
+
+Na życzenie użytkownika (2026-10-27): brytyjska armata nadbrzeżna, którą gracz może przejąć i obrócić przeciw desantom Nod. Blok `# --- 100 Ton Gun` w `build-arka00-mission.ps1`. **(niezweryfikowane w grze)**
+
+- **Test użytkownika 2026-10-27:** przejmowanie (4 inżynierów) działa. Po teście: armata 2×2 i 4× mocniejsza, dom `Special` zamiast `Neutral` (niżej).
+- **Miejsce:** wolna działka 2×2 obok szpitala `HOSP` z mapy terenu (teraz 209,207, szpital 206,206), od strony miasta, poza strefą lądowania Camp Bay (wp 26, r 0–3). Prawdziwe działo stoi w Rosia Bay, tuż obok. Waypoint **60** = działo (dopisany przez warstwę misji, bo teren ma 0–47).
+- **Typ `GUN100T`** w mapie: klucze `[RAPARTY]` „Shore Artillery” (`TechLevel=-1`, `Owner=Neutral`, nieużywany w żadnej mapie DTA) przepisane ręcznie, bo `$Inherits` z mapy nie sięga do Rules. 8000 HP, `Capturable=true`, `Unsellable=yes`, `ROT=1`.
+- **Grafika 2×2** (`tools/build-gun100t.ps1`): `RAPARTY.SHP` (48×48, 6 klatek) i wieżyczka `RAPARTY_A.SHP` (64 klatki) z `Cache.mix` przeskalowane 2× metodą najbliższego sąsiada do `GUN100T.SHP` / `GUN100T_A.SHP` (96×96) w `MIX/ECACHE76.MIX`. W Art.ini jest blok `; >>> 100 Ton Gun` z `[GUN100T]` (`Foundation=2x2`, `PrimaryFireFLH=216,0,-48`) i `[GUN100T_A]` (`$Inherits=GUN_A`). Środek kanwy to górny wierzchołek fundamentu ([[engine/shp-graphics]]), więc skalowanie wokół niego zamienia romb 1×1 na 2×2. Mapa nie może zmienić Art.ini, dlatego to osobny skrypt w plikach gry (przy aktualizacji DTA odtwarza go `dta-restore`). Render pokazuje dużą platformę z lufą. **Test 2026-10-28:** w grze była sama podstawa bez lufy, bo `GUN100T_A` nie była na liście `[Animations]`. Mapa dopisuje `ARKA0A1=GUN100T_A`. Lufa i jej obrót **(niezweryfikowane po poprawce)**.
+- **Dom `Special`:** armata i kościół należą do `Special`, a reszta miasta (`Neutral`) jest od 2026-10-27 sojusznikiem gracza w obie strony. Wcześniej wszystkie cywilne budynki pokazywały się jako wrogie (test użytkownika). `Special` nie jest sojusznikiem gracza, więc inżynier może wejść, a Sowieci i Nod mają go na liście sojuszników i nie atakują.
+- **Cisza przed przejęciem:** `Powered=yes`, `Power=-20`. `Special` nie ma elektrowni, więc działo nie strzela do gracza. Po przejęciu zależy od prądu gracza.
+- **Broń `Armstrong100T`:** pocisk Krążownika (`BallisticIowa`, `CRU1GUN`, `CRUMUZ_*`), `Damage=1000` (4× pierwsza wersja, użytkownik), `ROF=300`, `Range=18`, `MinimumRange=4.5`, głowica `CruiserHE` (450% na heavy, czyli 4500 na trafienie; `NLST` ma `naval_heavy` z `BaseArmor=heavy` i 3333 HP, więc tonie od jednego pocisku). Nazwa inna niż budynku: sekcje `GUN100T` i `Gun100T` byłyby jedną sekcją INI.
+- **4 inżynierów (licznik na triggerach):** silnik zna próg przejęcia (`EngineerCaptureLevel`), ale DTA go wyłączyło, bo znikał kursor wejścia (`Rules.ini` `[General]`), a opcja lobby „Multi Engineer” to globalna opcja skirmisha. Łańcuch na tagu działa (wzór cra12 „Car 1 Hijacked” → „Convert to Allies2 (delay)”):
+
+| Trigger | Zdarzenie | Akcje |
+|---|---|---|
+| `gunCap1` (tag `ARKA0G12`, powtarzalny, dom Special) | `1 Entered by` Allies (przejęcie inżynierem) | wyłącz siebie, włącz `gunBack1` |
+| `gunBack1` (powiązany) | `13 Elapsed 1` | `14 Change House` → Special, wyłącz siebie, włącz `gunCap2`, tekst 1/4 |
+| `gunCap2`/`gunBack2`, `gunCap3`/`gunBack3` | jak wyżej | 2/4, 3/4 |
+| `gunCap4` | `1 Entered by` Allies | **bez odbicia**, znacznik radaru, tekst 4/4, Einstein, von Esling |
+
+  Odbicie jest opóźnione o 1 s, bo `TechnoClass::Captured` odpala tag **przed** zmianą domu, a akcje idą od razu: `14` w tym samym triggerze zostałoby nadpisane przez samo przejęcie. `14` też jest przejęciem (pułapka 6 w [[engine/triggers-and-dialogue]]), więc następny licznik włącza się dopiero po `14` w tej samej liście akcji. Między przejęciem a odbiciem działo przez 1 s należy do gracza.
+- **Teksty:** `At 250` = 550 s, zaraz po fali 1 (510 s, „Sowiecka piechota przekracza granicę”), Stavros: „Ruscy już są. Przy szpitalu…” (armata Armstronga, ostatni strzał w 1902), cel dodatkowy „4 inżynierów”, potem 1/4–4/4 i dwie kwestie po przejęciu. Gracz ma na starcie 1 inżyniera, resztę szkoli w koszarach.
+- **Do sprawdzenia w grze:** grafika 2×2 i obrót wieżyczki, czy działo milczy przed przejęciem, czy strzela na 18 komórek i trafia łodzie na wodzie.
+
+## Zasadzka na złożu na Skale od wschodu i mocniejsze desanty Nod (2026-10-27)
+
+Na życzenie użytkownika (rysunek trasy na zrzucie). **(niezweryfikowane w grze)**
+
+- **Trasa istniała:** przeszukanie terenu (BFS po kodach kafli, mury z nakładek zablokowane) znalazło przejście: Devil's Tower Rd (wp 22) → pas wschodni → wybrzeże przy Catalan Bay (144,112) → przesmyk między końcem klifu a wybrzeżem (155,126) → dolina → złoże (138,128). Rampa nie była potrzebna. Waypointy warstwy misji: **61** (144,112), **62** (155,126), **63** (138,128).
+- **Drużyna `$tmH4`** „Zasadzka: ruda na Skale od wschodu” (Soviet, start 19): 4× `E1`, 2× `E2`, 2× `DOG`, 2× `3TNK`. Skrypt `16,22` → `16,61` → `16,62` → `16,63` → `5,20` (czatuje 2 min na złożu) → `0,3` (zbieracze) → `16,10` → `11,14`. Wychodzi razem z `h1first` (650 s), czyli z kwestią „Będą polować na nasze zbieracze”. Stavros dokłada drugą kwestię o oddziale idącym przez Catalan Bay, a radar dostaje znacznik na 62.
+- **Desanty Nod:** piechota w Catalan Bay (`i2`), Europa Point (`i3`) i Eastern Beach (`i4`) ma po 2 załadowane `NLST` zamiast jednego. Nowe desanty pojazdów (`Landing`, wewnętrzna strefa r 0–1 była tam wolna): `n4` Europa Point (1200 + 300 s: 3× `AILTNK`, 2× `AIARTY`, `AIBGGY`) i `n5` Catalan Bay (840 + 300 s: 2× `AILTNK`, 2× `AIBIKE`, 2× `AIBGGY`). `n3` na Eastern Beach dostał trzeci `AILTNK`.
+
+## Desanty Nod po teście 2026-10-28
+
+**(niezweryfikowane w grze)**
+
+- **Piechota ze wschodu stała bezczynnie** (użytkownik). Z obu wschodnich plaż jest lądowa droga do ARKI (BFS: z Catalan Bay przez Skałę i rampę NW, z Eastern Beach przez Landport), więc desant utykał najpewniej na rozładunku `8,2`, który w grze działał tylko na Camp Bay. `i2` (Catalan Bay, strefa r 2–3) i `i4` (Eastern Beach, strefa r 4–5) idą teraz przez `Landing`: pusty `NLST` dopływa, a 20 piechoty pojawia się na plaży i rusza `16,10` → `11,14`. Drużyny `$tmI2`/`$tmI4` usunięte.
+- **Południe mocniej:** `iS` (790 + 300 = 1090 s) wysyła załadowany `NLST` z 43 na Europa Point i włącza `iSr`, który powtarza to co 180 s aż do skoku (`fin0` go wyłącza). Do tego `i3` (2× `NLST`) i `n4` (pojazdy) na 1500 s.
+- **Z południa znaczy z południa:** desanty na Camp Bay (`n1`, `i1`, `t1`) startowały z wp 41, czyli w zatoce przy dokach, na północ od plaży i tuż pod bazą. Teraz startują z **wp 64** (234,269), z otwartego morza przy południowo-zachodniej krawędzi mapy. Punkt dopisuje warstwa misji, a woda z 64 do Camp Bay jest drożna wzdłuż zachodniego brzegu (BFS po wodzie, 57 komórek). Europa Point startuje z 43 (południowa krawędź), wschód z 42 i 45 (wschodnia krawędź). Puste transportowce wracają na swój punkt startu i znikają.
 
 ## Do zrobienia (następne etapy)
 

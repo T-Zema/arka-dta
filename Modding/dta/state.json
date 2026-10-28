@@ -5,7 +5,7 @@
                       "path":  "game.exe",
                       "kind":  "patched",
                       "base":  "441801152051110917621178718669220192204",
-                      "ours":  "11911419641611431745195198951211122027153",
+                      "ours":  "12917512315312418418218541105140178882320458",
                       "pinned":  false,
                       "reproducible":  true
                   },
@@ -13,18 +13,18 @@
                       "path":  "INI/Art.ini",
                       "kind":  "modified",
                       "base":  "792073321530421595153819925211044212188",
-                      "ours":  "158232201524199157192102342131662464616236",
+                      "ours":  "13203126119128227227206253985352381745350",
                       "binary":  false
                   },
                   {
                       "path":  "INI/BattleE.ini",
                       "kind":  "new",
-                      "ours":  "1111711495491144154207190131174633115882238"
+                      "ours":  "348321118383961422213920422123119018013851"
                   },
                   {
                       "path":  "INI/Game Options/StarCraft.ini",
                       "kind":  "new",
-                      "ours":  "174130193412113615914672245182316111463134"
+                      "ours":  "126208371541641526317787221217253164230226"
                   },
                   {
                       "path":  "INI/Game Options/Super Mod.ini",
@@ -34,7 +34,7 @@
                   {
                       "path":  "INI/Map Code/Terran Faction.ini",
                       "kind":  "new",
-                      "ours":  "271782322084413118737267543632099820349"
+                      "ours":  "23190127624018554153255862229243732762"
                   },
                   {
                       "path":  "INI/MPMaps.ini",
@@ -58,14 +58,1221 @@
                       "binary":  false
                   },
                   {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_10_55_55.map",
+                      "kind":  "new",
+                      "ours":  "223162111451171197012484206941081822083"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_00_55.map",
+                      "kind":  "new",
+                      "ours":  "133781213812422527020523014316020919318045"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_05_55.map",
+                      "kind":  "new",
+                      "ours":  "9014117725113652282419725215421921314988124"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_10_55.map",
+                      "kind":  "new",
+                      "ours":  "14920911361479324215924214916015310473140128"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_15_55.map",
+                      "kind":  "new",
+                      "ours":  "1312191438914136200246173331811431201229358"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_20_55.map",
+                      "kind":  "new",
+                      "ours":  "1012221841163610617329203121422212072131741"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_25_55.map",
+                      "kind":  "new",
+                      "ours":  "111187206112161131552039912015116812417649170"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_30_55.map",
+                      "kind":  "new",
+                      "ours":  "129243210162741522059322178222210242438108"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_35_55.map",
+                      "kind":  "new",
+                      "ours":  "12881832291542382823518514916734113185114228"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_40_55.map",
+                      "kind":  "new",
+                      "ours":  "15315216207163145135731321335123343243142124"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_45_55.map",
+                      "kind":  "new",
+                      "ours":  "15315216207163145135731321335123343243142124"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_50_55.map",
+                      "kind":  "new",
+                      "ours":  "109143163105193234315217215556148316520033"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_55_55.map",
+                      "kind":  "new",
+                      "ours":  "231180166601841581391221872192615188226197185"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/AutoSaves/autosave_2026_10_28_12_00_55.map",
+                      "kind":  "new",
+                      "ours":  "1321571422482221693836152147712132479539113"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/Actions.ini",
+                      "kind":  "new",
+                      "ours":  "12098318167204811721881484614411863918"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/AIMappingInstructions.md",
+                      "kind":  "new",
+                      "ours":  "695321215163125125226701710619518585241246"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/ArtOverrides.ini",
+                      "kind":  "new",
+                      "ours":  "236170136247250112461616516210824569220211170"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/BaseMap.ini",
+                      "kind":  "new",
+                      "ours":  "282423426181841661462623835102253121"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/Bridges.ini",
+                      "kind":  "new",
+                      "ours":  "200130758924924844187178449615321225321958"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/BrushSizes.ini",
+                      "kind":  "new",
+                      "ours":  "199206210203189818160102511191311302689243"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/ConnectedOverlays.ini",
+                      "kind":  "new",
+                      "ours":  "170110188138902063622122120015214171124274"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/ConnectedTileDrawer.ini",
+                      "kind":  "new",
+                      "ours":  "245177127111119133118169141206937415514221965"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/Constants.ini",
+                      "kind":  "new",
+                      "ours":  "40115128238171722041422061181219414114611091"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/EditorRules.ini",
+                      "kind":  "new",
+                      "ours":  "10721092418116118724446103871621316410770"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/EditorThemes.ini",
+                      "kind":  "new",
+                      "ours":  "219143631212216521670195116149251591304523"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/Events.ini",
+                      "kind":  "new",
+                      "ours":  "74161721132082469672909318490149216221195"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/FileManagerConfig.ini",
+                      "kind":  "new",
+                      "ours":  "115121961131623446951152811622517411446254"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/OverlayCollections.ini",
+                      "kind":  "new",
+                      "ours":  "782620425114884164244232436610423825320217"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/ScriptActions.ini",
+                      "kind":  "new",
+                      "ours":  "7310821581302271127718221084151186204160222"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/SmudgeCollections.ini",
+                      "kind":  "new",
+                      "ours":  "109190213227101731901515951112177142167252"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/Speeches.ini",
+                      "kind":  "new",
+                      "ours":  "8273852172032639491989123725213729146"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/TeamTypeFlags.ini",
+                      "kind":  "new",
+                      "ours":  "581641914797239161162542191961742028171"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/TerrainGeneratorPresets.ini",
+                      "kind":  "new",
+                      "ours":  "200765617418020662150425243215207172184243"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/TerrainObjectCollections.ini",
+                      "kind":  "new",
+                      "ours":  "1808110810424690171896364196140511258742"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/TerrainTypeImpassability.ini",
+                      "kind":  "new",
+                      "ours":  "239163211620068222111104105331649722206240"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/Theaters.ini",
+                      "kind":  "new",
+                      "ours":  "11590244311279914555591831205789066"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/Tiberiums.ini",
+                      "kind":  "new",
+                      "ours":  "1282476921616541214123122051509024518560"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/EditorControlsPanel.ini",
+                      "kind":  "new",
+                      "ours":  "1997886549451142318249168415613819787"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/UIConstants.ini",
+                      "kind":  "new",
+                      "ours":  "170192130204101718535855271862221297180"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/AboutWindow.ini",
+                      "kind":  "new",
+                      "ours":  "63401832061182308839110218174521508017728"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/AircraftOptionsWindow.ini",
+                      "kind":  "new",
+                      "ours":  "23812205064140112135515915715219205128221"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/AITriggersWindow.ini",
+                      "kind":  "new",
+                      "ours":  "10151341634125161992501522552151844847"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/ApplyINICodeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "77175942082476203243263224412918711116936"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/AutoApplyImpassableOverlayWindow.ini",
+                      "kind":  "new",
+                      "ours":  "23181199987231135135177662296255625350"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/BasicSectionConfigWindow.ini",
+                      "kind":  "new",
+                      "ours":  "2171661421171139924044115142151242014916145"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/ChangeHeightWindow.ini",
+                      "kind":  "new",
+                      "ours":  "2305323410424210595100992181319421448236207"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/ConfigureAlliesWindow.ini",
+                      "kind":  "new",
+                      "ours":  "551141981532481641501701651181214770544229"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/CopiedEntryTypesWindow.ini",
+                      "kind":  "new",
+                      "ours":  "215182432184411116523314818818106218218104"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/CreateAllianceWindow.ini",
+                      "kind":  "new",
+                      "ours":  "188169281820615421051462549015720962193144"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/CreateNewMapWindow.ini",
+                      "kind":  "new",
+                      "ours":  "461396712421179110103137934125923912082"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/CreateRandomTriggerSetWindow.ini",
+                      "kind":  "new",
+                      "ours":  "47324413214713660253206244941341031151862"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/DeleteTerrainGeneratorPresetWindow.ini",
+                      "kind":  "new",
+                      "ours":  "17121331652015023112225143100194238147224160"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/DeletionModeConfigurationWindow.ini",
+                      "kind":  "new",
+                      "ours":  "241135613781141112025215868282397146"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/EditHouseTypeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "18817223022011414184618443901478774195"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/ExpandMapWindow.ini",
+                      "kind":  "new",
+                      "ours":  "2012401741251247613321202931149018640211157"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/FindWaypointWindow.ini",
+                      "kind":  "new",
+                      "ours":  "122183201771862471485514021915924421910778136"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/GenerateStandardHousesWindow.ini",
+                      "kind":  "new",
+                      "ours":  "812321271082551191872191391349159115224246"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/HistoryWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1701224312019610028132220149281011571449879"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/HotkeyConfigurationWindow.ini",
+                      "kind":  "new",
+                      "ours":  "82922103723911682052221589715016410726156"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/HousesWindow.ini",
+                      "kind":  "new",
+                      "ours":  "19312218610719721614385923723521223912623665"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/InfantryOptionsWindow.ini",
+                      "kind":  "new",
+                      "ours":  "194121724213402625458173951101065366"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/InputTerrainGeneratorPresetNameWindow.ini",
+                      "kind":  "new",
+                      "ours":  "14707316118020010623515116188211193122792"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/LightingSettingsWindow.ini",
+                      "kind":  "new",
+                      "ours":  "101209661011601382481088118391133723713230"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/LocalVariablesWindow.ini",
+                      "kind":  "new",
+                      "ours":  "69170293499246184317816815106418729236"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/MapSizeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1431167525119477227150141094014332249126154"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/MegamapGenerationOptionsWindow.ini",
+                      "kind":  "new",
+                      "ours":  "422493710123411185404918616770142228115"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/NewHouseWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1582211717618190239200104564125122722619237"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/PlaceWaypointWindow.ini",
+                      "kind":  "new",
+                      "ours":  "48661121752483314318470102454243107159152"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/RenderedObjectsConfigurationWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1922207344153211958169701077814620614543"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/RunScriptWindow.ini",
+                      "kind":  "new",
+                      "ours":  "371139314423721232120910713023925186116193"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/ScriptsWindow.ini",
+                      "kind":  "new",
+                      "ours":  "23318623015119015510515715413347173112705216"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectActionWindow.ini",
+                      "kind":  "new",
+                      "ours":  "14496162177711794810120461351591572742142"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectAnimationWindow.ini",
+                      "kind":  "new",
+                      "ours":  "5943157156332122352341211212224012347112"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectBridgeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "172150211923315132231102561551492013218696"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectBuildingTargetWindow.ini",
+                      "kind":  "new",
+                      "ours":  "30150184139352179193104255106179814822140"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectBuildingTypeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "2660767913124576210171150112132229136175138"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectColorsWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1963484431491731062114086189140101842137"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectConnectedTileWindow.ini",
+                      "kind":  "new",
+                      "ours":  "19013912913540136227992240231141109105177255"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectEventWindow.ini",
+                      "kind":  "new",
+                      "ours":  "561952920886185102213310724102693563170"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectGlobalVariableWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1851665115510819822081413193792107165"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectHouseTypeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "13318894892032195214717392174166163158188232"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectHouseWindow.ini",
+                      "kind":  "new",
+                      "ours":  "204109140209199110522105354112104168245166192"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectLocalVariableWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1328838145249191238250206742092501179232128"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectParticleSystemTypeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "12531842361472202421531891091299212914710990"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectScriptActionPresetOptionWindow.ini",
+                      "kind":  "new",
+                      "ours":  "45129522381251525519312617112316216249237233"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectScriptActionWindow.ini",
+                      "kind":  "new",
+                      "ours":  "110203175146217239109160162126189208519488221"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectScriptWindow.ini",
+                      "kind":  "new",
+                      "ours":  "10111411141131082152177997132602356522963"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectSoundWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1902302292372407221022313841158219135151118"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectSpeechWindow.ini",
+                      "kind":  "new",
+                      "ours":  "7214111446416425564971190120221471636"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectStringWindow.ini",
+                      "kind":  "new",
+                      "ours":  "17613279122251742002810015599208331865288"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectSuperWeaponTypeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "70857511315293168542362071581353214143202"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectTagWindow.ini",
+                      "kind":  "new",
+                      "ours":  "11719219615220110108247910210074127713134"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectTaskForceWindow.ini",
+                      "kind":  "new",
+                      "ours":  "123504515231542041011322251915410190193227"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectTeamTypeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "851619613311023920020999230351524712089"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectTechnoTypeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "14263165121214172170179190572082514856199140"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectThemeWindow.ini",
+                      "kind":  "new",
+                      "ours":  "9914310416491197709615425431614622372193"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectTileSetWindow.ini",
+                      "kind":  "new",
+                      "ours":  "2304525258208176143147217682431991475142158"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectTriggerWindow.ini",
+                      "kind":  "new",
+                      "ours":  "571292379073401634017320215622514112825034"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SelectTutorialLineWindow.ini",
+                      "kind":  "new",
+                      "ours":  "200247225502213519143213263648189177379"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/SettingsPanel.ini",
+                      "kind":  "new",
+                      "ours":  "241201890161302222522045527133214201153208"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/StructureOptionsWindow.ini",
+                      "kind":  "new",
+                      "ours":  "381033517684222155294170256538103180103"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/TagsWindow.ini",
+                      "kind":  "new",
+                      "ours":  "69715817012724720520422299184112181354469"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/TaskforcesWindow.ini",
+                      "kind":  "new",
+                      "ours":  "78592011692492109252545710218165146165125"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/TeamTypesWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1716490172361542117712453105332225160"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/TriggersWindow.ini",
+                      "kind":  "new",
+                      "ours":  "51118122224871162719213819723190921647820"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Default/UI/Windows/VehicleOptionsWindow.ini",
+                      "kind":  "new",
+                      "ours":  "1621270156991481723287236019725321523928"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/DefaultSettings.ini",
+                      "kind":  "new",
+                      "ours":  "202248141121301671571393072219188248213160219"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Scripts/Activate Assign Mission Cursor Action.cs",
+                      "kind":  "new",
+                      "ours":  "28164171026109134169117114495140142248217"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Scripts/Add Map Reveal Trigger.cs",
+                      "kind":  "new",
+                      "ours":  "3254085636921170938319141231188207197"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Scripts/Count Credits On Map.cs",
+                      "kind":  "new",
+                      "ours":  "187598156245161412531582221952538130154187"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Scripts/Disable All Debug Triggers.cs",
+                      "kind":  "new",
+                      "ours":  "9179889180216551121861821648798407625"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Scripts/List Unused Scripting Elements.cs",
+                      "kind":  "new",
+                      "ours":  "15173135215235675420043921812181083225222"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Scripts/Make Civilian Vehicles Sleep.cs",
+                      "kind":  "new",
+                      "ours":  "1901017719914210011722106462291773122732159"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Scripts/Remove All Terrain Objects.cs",
+                      "kind":  "new",
+                      "ours":  "248791231762501811061761091301978986144190156"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Scripts/Set Map Difficulty Settings.cs",
+                      "kind":  "new",
+                      "ours":  "91143231232253322212817797761144467229105"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Scripts/Smoothen Water.cs",
+                      "kind":  "new",
+                      "ours":  "7036138142551888666155721441323095138234"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Translations.ini",
+                      "kind":  "new",
+                      "ours":  "1264317977939113242638810715011219215368"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Translations/en/ObjectNames_en.ini",
+                      "kind":  "new",
+                      "ours":  "70102308691104194133907718122215524347234"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Translations/en/Translation_en.ini",
+                      "kind":  "new",
+                      "ours":  "131901192713324317122455917315519013296"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Config/Translations/zh-Hans/Translation_zh-Hans.ini",
+                      "kind":  "new",
+                      "ours":  "22715642194996673415418022512314812978244"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/celltag.png",
+                      "kind":  "new",
+                      "ours":  "261781961671261962432611923214723512015811182"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/checkBoxChecked.png",
+                      "kind":  "new",
+                      "ours":  "17860185163201923331151203178254164150244"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/checkBoxCheckedD.png",
+                      "kind":  "new",
+                      "ours":  "129661081271001018911410241441024818815699"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/checkBoxCheckedRed.png",
+                      "kind":  "new",
+                      "ours":  "449314192471491261421306250691789193145"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/checkBoxClear.png",
+                      "kind":  "new",
+                      "ours":  "236104165919616216772474615243714692234"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/checkBoxClearD.png",
+                      "kind":  "new",
+                      "ours":  "25374147228704719910721486356173210241207"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/checkBoxClearRed.png",
+                      "kind":  "new",
+                      "ours":  "78217186133123255192151374126149210103256"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/comboBoxArrow.png",
+                      "kind":  "new",
+                      "ours":  "198731146212401885614812715143511804176"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/cursor.cur",
+                      "kind":  "new",
+                      "ours":  "19515195238551525912286422112427479244231"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/Fonts.ini",
+                      "kind":  "new",
+                      "ours":  "244221102647314316448176973481222137224151"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/generictile.png",
+                      "kind":  "new",
+                      "ours":  "172242105888515297871782311221241098516698"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/generictilewithborder.png",
+                      "kind":  "new",
+                      "ours":  "491592171622225419214413664154311761171255"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/icehighlight.png",
+                      "kind":  "new",
+                      "ours":  "226111839053120726117629217134180174"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/impassablehighlight.png",
+                      "kind":  "new",
+                      "ours":  "187441011442551521222272231731872336221577214"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/mainmenubg0.png",
+                      "kind":  "modified",
+                      "base":  "140160178142539713221114280482168615111211",
+                      "ours":  "1902112142497717524823531016410123922537",
+                      "binary":  true
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/NotoSansSC-SemiBold.ttf",
+                      "kind":  "new",
+                      "ours":  "13446159158205232112819848181301668021124"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/openedComboBoxArrow.png",
+                      "kind":  "new",
+                      "ours":  "2001232451412142322501142541921120011185223191"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/rangeindicator.png",
+                      "kind":  "new",
+                      "ours":  "234119192451462031112538714420738929449173"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/sbBackground.png",
+                      "kind":  "new",
+                      "ours":  "8381198100251251501901351765811314219224948"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/sbDownArrow.png",
+                      "kind":  "new",
+                      "ours":  "7524314017323115157101197606755191244119173"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/sbDownArrowHovered.png",
+                      "kind":  "new",
+                      "ours":  "24820520258403579314124817833661162761"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/sbMiddle.png",
+                      "kind":  "new",
+                      "ours":  "721611812262107104248592718625518454116186"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/sbThumbBottom.png",
+                      "kind":  "new",
+                      "ours":  "23019111615360217178269411611051964376180"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/sbThumbTop.png",
+                      "kind":  "new",
+                      "ours":  "217170131391821312101911411312145042165175244"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/sbUpArrow.png",
+                      "kind":  "new",
+                      "ours":  "195762259319118168235220595412415410076"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/sbUpArrowHovered.png",
+                      "kind":  "new",
+                      "ours":  "153192207835451981731422323218384202243202"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/Shaders/AlphaImageToAlphaMap.xnb",
+                      "kind":  "new",
+                      "ours":  "67189582314019821421120240121702168666170"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/Shaders/AlphaMapApply.xnb",
+                      "kind":  "new",
+                      "ours":  "194116100485431202207021910124219150101195"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/Shaders/BackdropBlur.xnb",
+                      "kind":  "new",
+                      "ours":  "13117580103188721111176459127531095175"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/Shaders/PalettedColorDraw.xnb",
+                      "kind":  "new",
+                      "ours":  "12414195103152125852131801252102206281154165"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/Shaders/PalettedDrawNoDepth.xnb",
+                      "kind":  "new",
+                      "ours":  "417697103227725121824723012613034244179118"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/Shaders/PalettedTerrainDraw.xnb",
+                      "kind":  "new",
+                      "ours":  "89384220496167161932301642282313016145228"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/sortbutton.png",
+                      "kind":  "new",
+                      "ours":  "461745481211502201835261262384018917746"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/SpriteFont0.xnb",
+                      "kind":  "new",
+                      "ours":  "1831231951225013625395142127664864267109"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/SpriteFont1.xnb",
+                      "kind":  "new",
+                      "ours":  "153196197144441073113316241461266999128"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/star.png",
+                      "kind":  "new",
+                      "ours":  "21320224617184138422454214219392200208163220"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/tileborder.png",
+                      "kind":  "new",
+                      "ours":  "24423518424715915277253113120013223524052171"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/2dmode.png",
+                      "kind":  "new",
+                      "ours":  "2143049115801282351224914145138128175145241"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/deletionmode.png",
+                      "kind":  "new",
+                      "ours":  "8725423786100011638127194208817764242170"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/drawconnectedtiles.png",
+                      "kind":  "new",
+                      "ours":  "18011213920517352152451232471391806017427216"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/flattenground.png",
+                      "kind":  "new",
+                      "ours":  "120229791511811462511002131821072674108167242"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/frameworkmode.png",
+                      "kind":  "new",
+                      "ours":  "1789924015414462561931471671311495525170212"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/generateterrain.png",
+                      "kind":  "new",
+                      "ours":  "5012711712225170124914566502402021324366"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/lowercells.png",
+                      "kind":  "new",
+                      "ours":  "15811045391081315818261842151962241362251"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/lowerground.png",
+                      "kind":  "new",
+                      "ours":  "1968217701121921271678380127923138144204"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/lowerground_steep.png",
+                      "kind":  "new",
+                      "ours":  "91252202221552311591491849119125031479320"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/placewaypoint.png",
+                      "kind":  "new",
+                      "ours":  "1322038237902341161091612012201102192119168"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/raisecells.png",
+                      "kind":  "new",
+                      "ours":  "5471243624333107136255861711454937176"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/raiseground.png",
+                      "kind":  "new",
+                      "ours":  "4722721923889201236412919824519108840154"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/raiseground_steep.png",
+                      "kind":  "new",
+                      "ours":  "1172063639139109198187205385716253825611"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/ToolIcons/terraingeneratoroptions.png",
+                      "kind":  "new",
+                      "ours":  "241592181882119824411412417616825138117220163"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/trackbarBackground.png",
+                      "kind":  "new",
+                      "ours":  "1181926533599990229741201989621622716257"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Content/trackbarButton.png",
+                      "kind":  "new",
+                      "ours":  "13793170238951702392552111262720014915488128"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Cyotek.Drawing.BitmapFont.dll",
+                      "kind":  "new",
+                      "ours":  "186136110204142245125219198324514514921765237"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/FontStashSharp.Base.dll",
+                      "kind":  "new",
+                      "ours":  "1431046206161132178262150166203761365141"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/FontStashSharp.MonoGame.dll",
+                      "kind":  "new",
+                      "ours":  "1151178351051271251081189114245369653114"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/FontStashSharp.Rasterizers.StbTrueTypeSharp.dll",
+                      "kind":  "new",
+                      "ours":  "76144811228734872308392169171192970142"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/FontStashSharp.TextShapers.HarfBuzz.dll",
+                      "kind":  "new",
+                      "ours":  "9984541611261247760922062304019591122144"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/HarfBuzzSharp.dll",
+                      "kind":  "new",
+                      "ours":  "229813207154151220193117972452181031431628"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/ImeSharp.dll",
+                      "kind":  "new",
+                      "ours":  "2499490175119201513723651226194139194184"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/MapEditorLibrary.dll",
+                      "kind":  "new",
+                      "ours":  "159506665200248148132462421601781844710464"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/MapEditorLibrary.pdb",
+                      "kind":  "new",
+                      "ours":  "580240146521821385311071894251333391"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/MapEditorMCP.dll",
+                      "kind":  "new",
+                      "ours":  "120181189454682512266552541205769255160"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/MapEditorMCP.pdb",
+                      "kind":  "new",
+                      "ours":  "2073618214038701408914622111169174158156126"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/MapEditorSettings.ini",
+                      "kind":  "new",
+                      "ours":  "1001451217736170216130211931812163249214112"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/marble.mix",
+                      "kind":  "new",
+                      "ours":  "1291157418293123155170118114251156131307896"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.CodeAnalysis.CSharp.dll",
+                      "kind":  "new",
+                      "ours":  "16575218646466436420811011410734143173160"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.CodeAnalysis.dll",
+                      "kind":  "new",
+                      "ours":  "2234324813924376159180321222132211196240112"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.CodeAnalysis.Scripting.dll",
+                      "kind":  "new",
+                      "ours":  "5108383214423015412635202844131111223213"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.AI.Abstractions.dll",
+                      "kind":  "new",
+                      "ours":  "156218241165621833684516684127139762091"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.Caching.Abstractions.dll",
+                      "kind":  "new",
+                      "ours":  "1294208681421691566264551361824723212234"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.Configuration.Abstractions.dll",
+                      "kind":  "new",
+                      "ours":  "33831397221301914122734912532020787181"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+                      "kind":  "new",
+                      "ours":  "241249181151131236517620016023810314563253125"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.DependencyInjection.dll",
+                      "kind":  "new",
+                      "ours":  "151251631484382016315822181331323033182"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.Diagnostics.Abstractions.dll",
+                      "kind":  "new",
+                      "ours":  "1531719317910991761741315420412018590199158"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.FileProviders.Abstractions.dll",
+                      "kind":  "new",
+                      "ours":  "2341896925125350501035207152389122120233"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.Hosting.Abstractions.dll",
+                      "kind":  "new",
+                      "ours":  "885025001571281921413861211541731904842"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.Logging.Abstractions.dll",
+                      "kind":  "new",
+                      "ours":  "106179148986121815525379221236632190154250"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.Options.dll",
+                      "kind":  "new",
+                      "ours":  "210293818065112901681038084166210158"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Microsoft.Extensions.Primitives.dll",
+                      "kind":  "new",
+                      "ours":  "83148921856417890170228349396213220103233"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/ModelContextProtocol.Core.dll",
+                      "kind":  "new",
+                      "ours":  "1916512317127109164731891986272109158216246"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/ModelContextProtocol.dll",
+                      "kind":  "new",
+                      "ours":  "18321938159787108911352132088480152214193"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/MonoGame.Framework.dll",
+                      "kind":  "new",
+                      "ours":  "1614959521362129317414616413359949086210"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Rampastring.Tools.dll",
+                      "kind":  "new",
+                      "ours":  "5719356145326710341868981146358970211"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Rampastring.XNAUI.WindowsDX.dll",
+                      "kind":  "new",
+                      "ours":  "14267881232522442191167523724013817116572"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpDX.Direct2D1.dll",
+                      "kind":  "new",
+                      "ours":  "186421291531051342324423312412193252243362"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpDX.Direct3D11.dll",
+                      "kind":  "new",
+                      "ours":  "14170982282209716023717316723411011810069179"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpDX.Direct3D9.dll",
+                      "kind":  "new",
+                      "ours":  "1434920410824624862229318833815619012955"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpDX.dll",
+                      "kind":  "new",
+                      "ours":  "13048441761131582822322720915959930195192"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpDX.DXGI.dll",
+                      "kind":  "new",
+                      "ours":  "1695325520923814213140512232261941191434012"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpDX.Mathematics.dll",
+                      "kind":  "new",
+                      "ours":  "2554223623879203068421291771621304558211"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpDX.MediaFoundation.dll",
+                      "kind":  "new",
+                      "ours":  "50732181131171822085221814459103188143114"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpDX.XAudio2.dll",
+                      "kind":  "new",
+                      "ours":  "94119164141146902121417824517022312957134138"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpDX.XInput.dll",
+                      "kind":  "new",
+                      "ours":  "1912147792041221992271421848156421733192"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpGen.Runtime.COM.dll",
+                      "kind":  "new",
+                      "ours":  "10090254281419214312124416820211614246213"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SharpGen.Runtime.dll",
+                      "kind":  "new",
+                      "ours":  "20811444211841942461732120123112585155186181"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/SixLabors.ImageSharp.dll",
+                      "kind":  "new",
+                      "ours":  "37179922836220182142150248102813439111188"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/StbImageSharp.dll",
+                      "kind":  "new",
+                      "ours":  "892402341643421817172228218191226231703166"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/StbTrueTypeSharp.dll",
+                      "kind":  "new",
+                      "ours":  "192492417423817830823373981721404823847"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/System.Diagnostics.DiagnosticSource.dll",
+                      "kind":  "new",
+                      "ours":  "1212048616822701271651938743810372209160"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/System.IO.Pipelines.dll",
+                      "kind":  "new",
+                      "ours":  "2081851637418914063237559120145368845139"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/System.Net.ServerSentEvents.dll",
+                      "kind":  "new",
+                      "ours":  "218240101311471197017422352246243240112183157"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/System.Text.Encodings.Web.dll",
+                      "kind":  "new",
+                      "ours":  "47197246134228106189105181072322259179242245"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/System.Text.Json.dll",
+                      "kind":  "new",
+                      "ours":  "1314116013260377412121512210667188170195250"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/TextCopy.dll",
+                      "kind":  "new",
+                      "ours":  "2303015012150211995510317382115737364138"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/TsfSharp.dll",
+                      "kind":  "new",
+                      "ours":  "332363425522917629371201098223024322610874"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/UserData/MissingTranslationValues.ini",
+                      "kind":  "new",
+                      "ours":  "77168151862531217513321952131164248161122"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/WAECache.mix",
+                      "kind":  "new",
+                      "ours":  "34255164160184601477912714244261932478190"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/Westwind.Scripting.dll",
+                      "kind":  "new",
+                      "ours":  "1382061342171501621921314414249952220912047"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/WorldAlteringEditor.deps.json",
+                      "kind":  "new",
+                      "ours":  "482051404330232401135525513514217650026"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/WorldAlteringEditor.dll",
+                      "kind":  "new",
+                      "ours":  "384910214721451921099149110216220531180"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/WorldAlteringEditor.exe",
+                      "kind":  "new",
+                      "ours":  "1068318524936188811802429213159159132172198"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/WorldAlteringEditor.pdb",
+                      "kind":  "new",
+                      "ours":  "22618411644221100244237175292061391146525422"
+                  },
+                  {
+                      "path":  "Map Editor/Editor/WorldAlteringEditor.runtimeconfig.json",
+                      "kind":  "new",
+                      "ours":  "166722522923396961571788624656324436"
+                  },
+                  {
+                      "path":  "Map Editor/LocalVersion",
+                      "kind":  "new",
+                      "ours":  "15724828191662021228630198105718511610632"
+                  },
+                  {
+                      "path":  "Map Editor/SecondStageUpdater/SecondStageUpdater.exe",
+                      "kind":  "new",
+                      "ours":  "1512112113071112165243342442413821164218205"
+                  },
+                  {
+                      "path":  "Map Editor/SecondStageUpdater/SecondStageUpdaterBG.png",
+                      "kind":  "new",
+                      "ours":  "214911602216515896241223236853718982244200"
+                  },
+                  {
+                      "path":  "Map Editor/SecondStageUpdater/SecondStageUpdaterConfig.ini",
+                      "kind":  "new",
+                      "ours":  "5401497312923122120821152131962351969201"
+                  },
+                  {
+                      "path":  "Map Editor/SecondStageUpdaterLog.txt",
+                      "kind":  "new",
+                      "ours":  "951866176218195209382177582100171195255217"
+                  },
+                  {
+                      "path":  "Map Editor/Updater/ServerVersion",
+                      "kind":  "new",
+                      "ours":  "782301891111292272107306289103192194125133"
+                  },
+                  {
+                      "path":  "Map Editor/UpdaterLog.txt",
+                      "kind":  "new",
+                      "ours":  "187462230157125140251252238106156120234236"
+                  },
+                  {
                       "path":  "Maps/Custom/arka00_gibraltar.map",
                       "kind":  "new",
-                      "ours":  "177412061224108453418625425220932824757"
+                      "ours":  "1772311621692324016235105169162642391769"
                   },
                   {
                       "path":  "Maps/Custom/arka00_gibraltar.png",
                       "kind":  "new",
-                      "ours":  "848124314915624345154310522510416916228246"
+                      "ours":  "193048671912911916117977871631869579129"
                   },
                   {
                       "path":  "Maps/Custom/arka01_marsara.map",
@@ -86,6 +1293,26 @@
                       "path":  "Maps/Custom/arka02_marsara.png",
                       "kind":  "new",
                       "ours":  "16126908421525311022565252496248242170"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka04_antiga.map",
+                      "kind":  "new",
+                      "ours":  "5479191155206018914117256201805038242135"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka04_antiga.png",
+                      "kind":  "new",
+                      "ours":  "60861462362041923114423712020723133135113252"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka05_tarsonis.map",
+                      "kind":  "new",
+                      "ours":  "707518211652109014961051431189224201126"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka05_tarsonis.png",
+                      "kind":  "new",
+                      "ours":  "15115717114410199892185425236783157109244"
                   },
                   {
                       "path":  "Maps/Custom/sc_fighting_spirit.map",
@@ -110,7 +1337,7 @@
                   {
                       "path":  "Maps/Missions/arka00.map",
                       "kind":  "new",
-                      "ours":  "562451243207112192181192001171961992397165"
+                      "ours":  "31645569173461231181752351755484768510"
                   },
                   {
                       "path":  "Maps/Missions/arka00.png",
@@ -120,7 +1347,7 @@
                   {
                       "path":  "Maps/Missions/arka01.map",
                       "kind":  "new",
-                      "ours":  "239132741988111695170138411861763733135"
+                      "ours":  "1441072002334821102401738815124822212247239"
                   },
                   {
                       "path":  "Maps/Missions/arka01.png",
@@ -130,7 +1357,7 @@
                   {
                       "path":  "Maps/Missions/arka02.map",
                       "kind":  "new",
-                      "ours":  "97226104681971721092197254207802542209142"
+                      "ours":  "181952324192178772461251619323489180224234"
                   },
                   {
                       "path":  "Maps/Missions/arka02.png",
@@ -138,11 +1365,41 @@
                       "ours":  "2321491931445018483183115751516012862188230"
                   },
                   {
+                      "path":  "Maps/Missions/arka04.map",
+                      "kind":  "new",
+                      "ours":  "178131212112373315706622221124219723237110"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka04.png",
+                      "kind":  "new",
+                      "ours":  "11691392062121502421316213733198197103249"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka05.map",
+                      "kind":  "new",
+                      "ours":  "2022425919314105190461311632212431470122210"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka05.png",
+                      "kind":  "new",
+                      "ours":  "2457725223815124010236161120186137121579051"
+                  },
+                  {
                       "path":  "Maps/Missions/FRSTBITE.MAP",
                       "kind":  "modified",
                       "base":  "67191861409167961431511868713625119823145",
                       "ours":  "476384991951162022773152630792552",
                       "binary":  false
+                  },
+                  {
+                      "path":  "MIX/ECACHE76.MIX",
+                      "kind":  "new",
+                      "ours":  "59250151186159982155915713310817915018972104"
+                  },
+                  {
+                      "path":  "MIX/ECACHE77.MIX",
+                      "kind":  "new",
+                      "ours":  "23920235012515513782848776856519192255"
                   },
                   {
                       "path":  "MIX/ECACHE78.MIX",
@@ -225,11 +1482,6 @@
                       "ours":  "511241881196014141120226187231551385860243"
                   },
                   {
-                      "path":  "MIX/ECACHE99.MIX",
-                      "kind":  "new",
-                      "ours":  "658139127682471791438166224222181240116205"
-                  },
-                  {
                       "path":  "MIX/SideC07.mix",
                       "kind":  "new",
                       "ours":  "150207157197185247146472214859083436165"
@@ -278,6 +1530,11 @@
                       "path":  "MOVIES/ARKA02B.MP4",
                       "kind":  "new",
                       "ours":  "17412538914513911831921793720151227548"
+                  },
+                  {
+                      "path":  "MOVIES/ARKA05B.MP4",
+                      "kind":  "new",
+                      "ours":  "19313410821614813771115833401952015839103"
                   },
                   {
                       "path":  "Resources/GameOptions.ini",
@@ -372,7 +1629,7 @@
                       "path":  "Vinifera.dll",
                       "kind":  "patched",
                       "base":  "419111601214931251146975112423810215232",
-                      "ours":  "212105237892521397472311001171735015969",
+                      "ours":  "9125185207437623818020722413448871666227",
                       "pinned":  false,
                       "reproducible":  true
                   }

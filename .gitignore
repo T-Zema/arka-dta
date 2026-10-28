@@ -9,8 +9,9 @@
 !/CLAUDE.md
 !/Modding/
 
-# Modding: local only (binary cache, zips duplicating the archive folders, probe logs)
+# Modding: local only (binary cache, zips duplicating the archive folders, probe logs, built installer)
 /Modding/.dta-cache/
+/Modding/dist/
 /Modding/archive/*.zip
 /Modding/tools/*.log
 
@@ -29,6 +30,281 @@
 !/INI/MPMaps.ini
 !/INI/Rules.ini
 !/INI/Sound.ini
+!/Map Editor/
+/Map Editor/*
+!/Map Editor/Editor/
+/Map Editor/Editor/*
+!/Map Editor/Editor/AutoSaves/
+/Map Editor/Editor/AutoSaves/*
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_10_55_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_00_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_05_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_10_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_15_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_20_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_25_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_30_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_35_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_40_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_45_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_50_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_11_55_55.map
+!/Map Editor/Editor/AutoSaves/autosave_2026_10_28_12_00_55.map
+!/Map Editor/Editor/Config/
+/Map Editor/Editor/Config/*
+!/Map Editor/Editor/Config/Default/
+/Map Editor/Editor/Config/Default/*
+!/Map Editor/Editor/Config/Default/Actions.ini
+!/Map Editor/Editor/Config/Default/AIMappingInstructions.md
+!/Map Editor/Editor/Config/Default/ArtOverrides.ini
+!/Map Editor/Editor/Config/Default/BaseMap.ini
+!/Map Editor/Editor/Config/Default/Bridges.ini
+!/Map Editor/Editor/Config/Default/BrushSizes.ini
+!/Map Editor/Editor/Config/Default/ConnectedOverlays.ini
+!/Map Editor/Editor/Config/Default/ConnectedTileDrawer.ini
+!/Map Editor/Editor/Config/Default/Constants.ini
+!/Map Editor/Editor/Config/Default/EditorRules.ini
+!/Map Editor/Editor/Config/Default/EditorThemes.ini
+!/Map Editor/Editor/Config/Default/Events.ini
+!/Map Editor/Editor/Config/Default/FileManagerConfig.ini
+!/Map Editor/Editor/Config/Default/OverlayCollections.ini
+!/Map Editor/Editor/Config/Default/ScriptActions.ini
+!/Map Editor/Editor/Config/Default/SmudgeCollections.ini
+!/Map Editor/Editor/Config/Default/Speeches.ini
+!/Map Editor/Editor/Config/Default/TeamTypeFlags.ini
+!/Map Editor/Editor/Config/Default/TerrainGeneratorPresets.ini
+!/Map Editor/Editor/Config/Default/TerrainObjectCollections.ini
+!/Map Editor/Editor/Config/Default/TerrainTypeImpassability.ini
+!/Map Editor/Editor/Config/Default/Theaters.ini
+!/Map Editor/Editor/Config/Default/Tiberiums.ini
+!/Map Editor/Editor/Config/Default/UI/
+/Map Editor/Editor/Config/Default/UI/*
+!/Map Editor/Editor/Config/Default/UI/EditorControlsPanel.ini
+!/Map Editor/Editor/Config/Default/UI/UIConstants.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/
+/Map Editor/Editor/Config/Default/UI/Windows/*
+!/Map Editor/Editor/Config/Default/UI/Windows/AboutWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/AircraftOptionsWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/AITriggersWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/ApplyINICodeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/AutoApplyImpassableOverlayWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/BasicSectionConfigWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/ChangeHeightWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/ConfigureAlliesWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/CopiedEntryTypesWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/CreateAllianceWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/CreateNewMapWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/CreateRandomTriggerSetWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/DeleteTerrainGeneratorPresetWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/DeletionModeConfigurationWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/EditHouseTypeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/ExpandMapWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/FindWaypointWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/GenerateStandardHousesWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/HistoryWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/HotkeyConfigurationWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/HousesWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/InfantryOptionsWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/InputTerrainGeneratorPresetNameWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/LightingSettingsWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/LocalVariablesWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/MapSizeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/MegamapGenerationOptionsWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/NewHouseWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/PlaceWaypointWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/RenderedObjectsConfigurationWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/RunScriptWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/ScriptsWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectActionWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectAnimationWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectBridgeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectBuildingTargetWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectBuildingTypeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectColorsWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectConnectedTileWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectEventWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectGlobalVariableWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectHouseTypeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectHouseWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectLocalVariableWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectParticleSystemTypeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectScriptActionPresetOptionWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectScriptActionWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectScriptWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectSoundWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectSpeechWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectStringWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectSuperWeaponTypeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectTagWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectTaskForceWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectTeamTypeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectTechnoTypeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectThemeWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectTileSetWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectTriggerWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SelectTutorialLineWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/SettingsPanel.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/StructureOptionsWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/TagsWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/TaskforcesWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/TeamTypesWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/TriggersWindow.ini
+!/Map Editor/Editor/Config/Default/UI/Windows/VehicleOptionsWindow.ini
+!/Map Editor/Editor/Config/DefaultSettings.ini
+!/Map Editor/Editor/Config/Scripts/
+/Map Editor/Editor/Config/Scripts/*
+!/Map Editor/Editor/Config/Scripts/Activate Assign Mission Cursor Action.cs
+!/Map Editor/Editor/Config/Scripts/Add Map Reveal Trigger.cs
+!/Map Editor/Editor/Config/Scripts/Count Credits On Map.cs
+!/Map Editor/Editor/Config/Scripts/Disable All Debug Triggers.cs
+!/Map Editor/Editor/Config/Scripts/List Unused Scripting Elements.cs
+!/Map Editor/Editor/Config/Scripts/Make Civilian Vehicles Sleep.cs
+!/Map Editor/Editor/Config/Scripts/Remove All Terrain Objects.cs
+!/Map Editor/Editor/Config/Scripts/Set Map Difficulty Settings.cs
+!/Map Editor/Editor/Config/Scripts/Smoothen Water.cs
+!/Map Editor/Editor/Config/Translations.ini
+!/Map Editor/Editor/Config/Translations/
+/Map Editor/Editor/Config/Translations/*
+!/Map Editor/Editor/Config/Translations/en/
+/Map Editor/Editor/Config/Translations/en/*
+!/Map Editor/Editor/Config/Translations/en/ObjectNames_en.ini
+!/Map Editor/Editor/Config/Translations/en/Translation_en.ini
+!/Map Editor/Editor/Config/Translations/zh-Hans/
+/Map Editor/Editor/Config/Translations/zh-Hans/*
+!/Map Editor/Editor/Config/Translations/zh-Hans/Translation_zh-Hans.ini
+!/Map Editor/Editor/Content/
+/Map Editor/Editor/Content/*
+!/Map Editor/Editor/Content/celltag.png
+!/Map Editor/Editor/Content/checkBoxChecked.png
+!/Map Editor/Editor/Content/checkBoxCheckedD.png
+!/Map Editor/Editor/Content/checkBoxCheckedRed.png
+!/Map Editor/Editor/Content/checkBoxClear.png
+!/Map Editor/Editor/Content/checkBoxClearD.png
+!/Map Editor/Editor/Content/checkBoxClearRed.png
+!/Map Editor/Editor/Content/comboBoxArrow.png
+!/Map Editor/Editor/Content/cursor.cur
+!/Map Editor/Editor/Content/Fonts.ini
+!/Map Editor/Editor/Content/generictile.png
+!/Map Editor/Editor/Content/generictilewithborder.png
+!/Map Editor/Editor/Content/icehighlight.png
+!/Map Editor/Editor/Content/impassablehighlight.png
+!/Map Editor/Editor/Content/mainmenubg0.png
+!/Map Editor/Editor/Content/NotoSansSC-SemiBold.ttf
+!/Map Editor/Editor/Content/openedComboBoxArrow.png
+!/Map Editor/Editor/Content/rangeindicator.png
+!/Map Editor/Editor/Content/sbBackground.png
+!/Map Editor/Editor/Content/sbDownArrow.png
+!/Map Editor/Editor/Content/sbDownArrowHovered.png
+!/Map Editor/Editor/Content/sbMiddle.png
+!/Map Editor/Editor/Content/sbThumbBottom.png
+!/Map Editor/Editor/Content/sbThumbTop.png
+!/Map Editor/Editor/Content/sbUpArrow.png
+!/Map Editor/Editor/Content/sbUpArrowHovered.png
+!/Map Editor/Editor/Content/Shaders/
+/Map Editor/Editor/Content/Shaders/*
+!/Map Editor/Editor/Content/Shaders/AlphaImageToAlphaMap.xnb
+!/Map Editor/Editor/Content/Shaders/AlphaMapApply.xnb
+!/Map Editor/Editor/Content/Shaders/BackdropBlur.xnb
+!/Map Editor/Editor/Content/Shaders/PalettedColorDraw.xnb
+!/Map Editor/Editor/Content/Shaders/PalettedDrawNoDepth.xnb
+!/Map Editor/Editor/Content/Shaders/PalettedTerrainDraw.xnb
+!/Map Editor/Editor/Content/sortbutton.png
+!/Map Editor/Editor/Content/SpriteFont0.xnb
+!/Map Editor/Editor/Content/SpriteFont1.xnb
+!/Map Editor/Editor/Content/star.png
+!/Map Editor/Editor/Content/tileborder.png
+!/Map Editor/Editor/Content/ToolIcons/
+/Map Editor/Editor/Content/ToolIcons/*
+!/Map Editor/Editor/Content/ToolIcons/2dmode.png
+!/Map Editor/Editor/Content/ToolIcons/deletionmode.png
+!/Map Editor/Editor/Content/ToolIcons/drawconnectedtiles.png
+!/Map Editor/Editor/Content/ToolIcons/flattenground.png
+!/Map Editor/Editor/Content/ToolIcons/frameworkmode.png
+!/Map Editor/Editor/Content/ToolIcons/generateterrain.png
+!/Map Editor/Editor/Content/ToolIcons/lowercells.png
+!/Map Editor/Editor/Content/ToolIcons/lowerground.png
+!/Map Editor/Editor/Content/ToolIcons/lowerground_steep.png
+!/Map Editor/Editor/Content/ToolIcons/placewaypoint.png
+!/Map Editor/Editor/Content/ToolIcons/raisecells.png
+!/Map Editor/Editor/Content/ToolIcons/raiseground.png
+!/Map Editor/Editor/Content/ToolIcons/raiseground_steep.png
+!/Map Editor/Editor/Content/ToolIcons/terraingeneratoroptions.png
+!/Map Editor/Editor/Content/trackbarBackground.png
+!/Map Editor/Editor/Content/trackbarButton.png
+!/Map Editor/Editor/Cyotek.Drawing.BitmapFont.dll
+!/Map Editor/Editor/FontStashSharp.Base.dll
+!/Map Editor/Editor/FontStashSharp.MonoGame.dll
+!/Map Editor/Editor/FontStashSharp.Rasterizers.StbTrueTypeSharp.dll
+!/Map Editor/Editor/FontStashSharp.TextShapers.HarfBuzz.dll
+!/Map Editor/Editor/HarfBuzzSharp.dll
+!/Map Editor/Editor/ImeSharp.dll
+!/Map Editor/Editor/MapEditorLibrary.dll
+!/Map Editor/Editor/MapEditorLibrary.pdb
+!/Map Editor/Editor/MapEditorMCP.dll
+!/Map Editor/Editor/MapEditorMCP.pdb
+!/Map Editor/Editor/MapEditorSettings.ini
+!/Map Editor/Editor/marble.mix
+!/Map Editor/Editor/Microsoft.CodeAnalysis.CSharp.dll
+!/Map Editor/Editor/Microsoft.CodeAnalysis.dll
+!/Map Editor/Editor/Microsoft.CodeAnalysis.Scripting.dll
+!/Map Editor/Editor/Microsoft.Extensions.AI.Abstractions.dll
+!/Map Editor/Editor/Microsoft.Extensions.Caching.Abstractions.dll
+!/Map Editor/Editor/Microsoft.Extensions.Configuration.Abstractions.dll
+!/Map Editor/Editor/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+!/Map Editor/Editor/Microsoft.Extensions.DependencyInjection.dll
+!/Map Editor/Editor/Microsoft.Extensions.Diagnostics.Abstractions.dll
+!/Map Editor/Editor/Microsoft.Extensions.FileProviders.Abstractions.dll
+!/Map Editor/Editor/Microsoft.Extensions.Hosting.Abstractions.dll
+!/Map Editor/Editor/Microsoft.Extensions.Logging.Abstractions.dll
+!/Map Editor/Editor/Microsoft.Extensions.Options.dll
+!/Map Editor/Editor/Microsoft.Extensions.Primitives.dll
+!/Map Editor/Editor/ModelContextProtocol.Core.dll
+!/Map Editor/Editor/ModelContextProtocol.dll
+!/Map Editor/Editor/MonoGame.Framework.dll
+!/Map Editor/Editor/Rampastring.Tools.dll
+!/Map Editor/Editor/Rampastring.XNAUI.WindowsDX.dll
+!/Map Editor/Editor/SharpDX.Direct2D1.dll
+!/Map Editor/Editor/SharpDX.Direct3D11.dll
+!/Map Editor/Editor/SharpDX.Direct3D9.dll
+!/Map Editor/Editor/SharpDX.dll
+!/Map Editor/Editor/SharpDX.DXGI.dll
+!/Map Editor/Editor/SharpDX.Mathematics.dll
+!/Map Editor/Editor/SharpDX.MediaFoundation.dll
+!/Map Editor/Editor/SharpDX.XAudio2.dll
+!/Map Editor/Editor/SharpDX.XInput.dll
+!/Map Editor/Editor/SharpGen.Runtime.COM.dll
+!/Map Editor/Editor/SharpGen.Runtime.dll
+!/Map Editor/Editor/SixLabors.ImageSharp.dll
+!/Map Editor/Editor/StbImageSharp.dll
+!/Map Editor/Editor/StbTrueTypeSharp.dll
+!/Map Editor/Editor/System.Diagnostics.DiagnosticSource.dll
+!/Map Editor/Editor/System.IO.Pipelines.dll
+!/Map Editor/Editor/System.Net.ServerSentEvents.dll
+!/Map Editor/Editor/System.Text.Encodings.Web.dll
+!/Map Editor/Editor/System.Text.Json.dll
+!/Map Editor/Editor/TextCopy.dll
+!/Map Editor/Editor/TsfSharp.dll
+!/Map Editor/Editor/UserData/
+/Map Editor/Editor/UserData/*
+!/Map Editor/Editor/UserData/MissingTranslationValues.ini
+!/Map Editor/Editor/WAECache.mix
+!/Map Editor/Editor/Westwind.Scripting.dll
+!/Map Editor/Editor/WorldAlteringEditor.deps.json
+!/Map Editor/Editor/WorldAlteringEditor.dll
+!/Map Editor/Editor/WorldAlteringEditor.exe
+!/Map Editor/Editor/WorldAlteringEditor.pdb
+!/Map Editor/Editor/WorldAlteringEditor.runtimeconfig.json
+!/Map Editor/LocalVersion
+!/Map Editor/SecondStageUpdater/
+/Map Editor/SecondStageUpdater/*
+!/Map Editor/SecondStageUpdater/SecondStageUpdater.exe
+!/Map Editor/SecondStageUpdater/SecondStageUpdaterBG.png
+!/Map Editor/SecondStageUpdater/SecondStageUpdaterConfig.ini
+!/Map Editor/SecondStageUpdaterLog.txt
+!/Map Editor/Updater/
+/Map Editor/Updater/*
+!/Map Editor/Updater/ServerVersion
+!/Map Editor/UpdaterLog.txt
 !/Maps/
 /Maps/*
 !/Maps/Custom/
@@ -39,6 +315,10 @@
 !/Maps/Custom/arka01_marsara.png
 !/Maps/Custom/arka02_marsara.map
 !/Maps/Custom/arka02_marsara.png
+!/Maps/Custom/arka04_antiga.map
+!/Maps/Custom/arka04_antiga.png
+!/Maps/Custom/arka05_tarsonis.map
+!/Maps/Custom/arka05_tarsonis.png
 !/Maps/Custom/sc_fighting_spirit.map
 !/Maps/Custom/sc_fighting_spirit.png
 !/Maps/Custom/sc_lost_temple.map
@@ -51,9 +331,15 @@
 !/Maps/Missions/arka01.png
 !/Maps/Missions/arka02.map
 !/Maps/Missions/arka02.png
+!/Maps/Missions/arka04.map
+!/Maps/Missions/arka04.png
+!/Maps/Missions/arka05.map
+!/Maps/Missions/arka05.png
 !/Maps/Missions/FRSTBITE.MAP
 !/MIX/
 /MIX/*
+!/MIX/ECACHE76.MIX
+!/MIX/ECACHE77.MIX
 !/MIX/ECACHE78.MIX
 !/MIX/ECACHE79.MIX
 !/MIX/ECACHE80.MIX
@@ -70,7 +356,6 @@
 !/MIX/ECACHE96.MIX
 !/MIX/ECACHE97.MIX
 !/MIX/ECACHE98.MIX
-!/MIX/ECACHE99.MIX
 !/MIX/SideC07.mix
 !/MIX/SideC08.mix
 !/MIX/SideC09.mix
@@ -83,6 +368,7 @@
 !/MOVIES/
 /MOVIES/*
 !/MOVIES/ARKA02B.MP4
+!/MOVIES/ARKA05B.MP4
 !/Resources/
 /Resources/*
 !/Resources/GameOptions.ini

@@ -28,6 +28,16 @@ powershell -NoProfile -File Modding\tools\build-arka-previews.ps1 -Only arka02
 - **Zoom 1,5×** (nie 2×): 96×96 kafli SC daje `Size=0,0,76,153`, trochę więcej niż misja 1. Przy 2× droga do miasta i z powrotem byłaby za długa. Skrypt skaluje minikafle najbliższym sąsiadem z ułamkową skalą (`Floor(x / 1.5)`).
 - **Beton:** szare platformy bazy SC (płaskowyże o szarym średnim kolorze SC) dostają `Pavement LAT tile`. Jedna z nich jest lądowiskiem Synów Korhalu (wp 19). W mieście na plac wokół CC, schronów i budynków też idzie beton (na pustyni to ciemnooliwkowe plamy). Asfaltowe drogi SC nie są przenoszone.
 - Gejzery usunięte jak w misji 1. Minerały SC to niebieskie klejnoty: pole przy bazie (32 komórki) i dwa przy gnieździe.
+- **Ekspansja (2026-10-28, miejsce zaznaczone przez użytkownika na renderze):** skrypt misji dokłada 35 pól klejnotów (nakładki 31–34, dane 9–11, jak konwerter) wokół skał na wschodniej równinie na północ od miasta, komórka 123,78. **(niezweryfikowane w grze)**
+- **Creep od startu (2026-10-28, prośba użytkownika):** pod każdym Hatchery, Creep, Sunken i Spore Colony `Nod1` mapa ma Veinhole Monstera: nakładka 167 w komórce siewu budynku (Hatchery (1,1), kolonie (0,0)), 8× `VEINHOLEDUMMY` 3×3 i wyrośnięte żyły (126, dane 48) na pierścieniu 5×5, tak jak DTA zapisuje potwora w mapie. Bez żył w polu 5×5 `Place_Monsters` przy wczytaniu nie zbuduje kolejki wzrostu ([[engine/veins]]). Dziury co najmniej 3 pola od siebie. Wyszło 8 dziur: gniazdo (Hatchery, 3 Sunken, 2 Creep) i miasto (Creep Colony, Sunken w bramie). Mapa ma też to, czego misja nie dostaje z kodu frakcji: `[Basic] VeinGrowthEnabled=yes`, `[General] VeinholeGrowthRate=60` i `ImmuneToVeins=yes` dla 850 typów (Rules i skopiowane SC, plus bohaterowie ARKI). Dziury z mapy nie mają znacznika „ginie z budynkiem”, więc zostają po zniszczeniu budynku ([[mods/zerg-creep]]). **(niezweryfikowane w grze)**
+- **Creep wersja 2 (2026-10-28, wzorem ARKA 4):** wersja pierwsza kładła żyły tylko na pierścieniu 5×5 wokół dziur, więc Pool, Hydra Den, Spire i zainfekowane CC stały na gołej ziemi. Teraz:
+  - żyły leżą w kole o promieniu 5 wokół dziury i pod każdym budynkiem `SCZ*` z marginesem 1 pola;
+  - blok jest zapisywany na końcu, po skrzynkach;
+  - mapa dostaje `Insignificant=yes` dla `VEINS`/`VEINHOLEDUMMY` i 4 siewniki w `[Animations]` (`ARKA2ZC01–04`);
+  - dziura sprawdza teren 3×3 (czysty grunt). Gdy pole siewnika leży przy skale, dziura przechodzi na inne pole fundamentu: Sunken 169,122 → 170,122, Sunken przy bramie miasta 82,88 → 83,89. Pierwsza wersja kładła tam `VEINHOLEDUMMY` na skale;
+  - luźne łaty żył (bez połączenia z dziurą, gra usuwa je przy wczytaniu) skrypt spina z creepem drogą BFS.
+
+  Wynik: 8 dziur pod 12 budynkami, 619 pól żył, 0 luźnych. **(niezweryfikowane w grze)**
 - Kontrole: 0 nieudanych łańcuchów klifów, wszystkie 46 waypointów osiągalne z wraku. Skrypt wypisuje długość drogi do każdego (wrak → lądowisko 35 komórek, bród 52, brama miasta 81, CC 84, schrony 96–111, gniazdo 122).
 - Biała linia murów wzdłuż środkowej rzeki to mury konwertera z nieprzechodnich doodadów SC (jak w misji 1).
 
@@ -38,7 +48,7 @@ Współrzędne w kaflach oryginalnej mapy SC (96×96). Skrypt przesuwa każdy na
 | Nr | Kafel SC | Co | Nr | Kafel SC | Co |
 |---|---|---|---|---|---|
 | 10 | 9,86 | wrak ARKI | 30 | 88,70 | zainfekowane Command Center |
-| 11 | 22,88 | start oddziału gracza | 31 | 84,75 | przed CC (tu wychodzi Raynor) |
+| 11 | 22,88 | start oddziału gracza | 31 | 84,75 | przed CC (punkt na trasie Raynora; drzwi CC = wp 61, liczony przez generator) |
 | 12–15 | 3,81 / 16,82 / 3,92 / 17,93 | 4 elektrownie rdzenia | 32–34 | 82,85 / 92,90 / 93,64 | schrony 1–3 |
 | 16 | 27,90 | Construction Yard | 35 | 78,67 | brama miasta |
 | 17 | 31,86 | koszary | 36–39 | 87,80 / 91,76 / 85,91 / 94,82 | ruiny miasta |
@@ -74,11 +84,11 @@ Współrzędne w kaflach oryginalnej mapy SC (96×96). Skrypt przesuwa każdy na
 
 | Kiedy | Co się dzieje |
 |---|---|
-| 1–234 | Raynor (mapa kolonii), Duke („aresztować”), Tanya, Raynor („pojadę przodem”), Stavros (bród na południu), cel 1, warunki porażki, gniazdo na północy. Raynor odjeżdża drużyną `GDI2` (`3,43` → `3,31` → `37` usuń): „wchodzi” do CC. Jego Marines zostają u gracza. |
+| 1–234 | Raynor (mapa kolonii), Duke („aresztować”), Tanya, Raynor („pojadę przodem”), Stavros (bród na południu), cel 1, warunki porażki, gniazdo na północy. Raynor czeka 3 minuty w bazie (`5,30`, dodane 2026-10-27: użytkownik zgłosił, że jedzie za wcześnie), potem odjeżdża drużyną `GDI2` (`3,43` → `3,31` → `3,61` → `39,19` → `37` usuń): „wchodzi” do CC przez komórkę tuż pod nim (wp 61, liczona przez generator przy budynku, 2026-10-27; wcześniej znikał na wp 31, ok. 10 komórek dalej) i ustawia lokalną 19 „Raynor w CC”. Jego Marines zostają u gracza. |
 | `Nod2` bez jednostek | cel 1 wykonany (droga czysta) |
-| wejście w strefę bramy (wp 35, r ≤ 6) albo przedpola (wp 43, r ≤ 4), najpóźniej 1200 | Raynor przez radio: odcięty w CC. **Licznik 10:00** (zdrowie Raynora), cel 2: wysadzić CC |
+| wejście w strefę bramy (wp 35, r ≤ 6) albo przedpola (wp 43, r ≤ 4) **po** ustawieniu lokalnej 19 (triggery stref są wyłączone, włącza je `rayInCC`; inaczej Raynor wzywałby z drogi), najpóźniej 1200 | Raynor przez radio: odcięty w CC. **Licznik 10:00** (zdrowie Raynora), cel 2: wysadzić CC |
 | strefa tuż przy CC przed uwolnieniem | Tanya: „Wyłaź, kowboju, zaraz będzie głośno.” |
-| CC zniszczone (`48`) | licznik stop, błysk, drużyna gracza z Raynorem na wp 31 („Mogłaś zapukać!”), fajerwerki z muzeum, „Robione ręcznie”, cel 3 |
+| CC zniszczone (`48`) | licznik stop, błysk, drużyna gracza z Raynorem na wp 61 tuż pod ruiną CC („Mogłaś zapukać!”), fajerwerki z muzeum, „Robione ręcznie”, cel 3 |
 | cel 3 + 41 s | Synowie Korhalu lądują przy platformie (5 Marines, 2 Goliathy, 2 Dropshipy), Mengsk ×2, Einstein o bankierze |
 | gracz był w strefie schronu (r ≤ 4, kiedykolwiek) **i** cel 3 aktywny | wychodzi 6 kolonistów (dom schronu) na wolnej komórce przed bunkrem (wp 56–58), sami idą na lądowisko; skrypt `39,N` ustawia lokalną „uratowany”, `37` usuwa ich („na pokładzie”) |
 | 2 schrony uratowane | **skok**: licznik 15:00, muzyka, 4 elektrownie muszą wytrzymać; fale +60 (8 Zerglingów), +200 (zachód), +330 (północ, z Infested Terran), +440 (3 Mutaliski), +500 (trudny), +540 **Konfederacja** z zachodu (6 Marines, 2 Firebaty, 2 Vulture'y, 2 Goliathy, Siege Tank) z kwestią Duke'a, +680 dwie fale naraz, +830 flota Protossów na radarze |
@@ -124,6 +134,7 @@ Film w stylu SC `MOVIES\ARKA02B.MP4` (Raynor, Duke przechwycony, Stavros, Einste
 - Czy film `ARKA02B` odtwarza się przed misją (w `Debug/DEBUG_*.LOG` szukać `Play_Movie` i `ARKA02B`).
 
 - Czy koloniści wychodzą przed bunkrem po celu 3 (wersja 2).
+- Czy „Schron k stracony” nie pojawia się 5 s po wyjściu kolonistów: `ARKCIV1/2` mają z `C2` `Civilian=yes`, a zdarzenie `9` według `FSData.ini` pomija cywilów (zob. [[engine/triggers-and-dialogue]], pułapka 15). Jeśli tak, dopisać `Civilian=no` jak w [[missions/arka-05-tarsonis]].
 
 - Czy Raynor jadący jako `GDI2` dociera do CC i znika (`37`), i czy wraca po wysadzeniu.
 - Czy `Tag=` drużyny działa (śmierć Raynora po uwolnieniu = porażka).

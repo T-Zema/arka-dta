@@ -1,7 +1,7 @@
 # Builds the StarCraft Terran BUILDINGS for DTA from the user's StarCraft: Remastered install.
 # Output: -OutMix (default <game>\MIX\ECACHE98.MIX: SHPs) and preview PNGs in -PreviewDir.
 # Rules/Art for these files: INI/Game Options/StarCraft.ini and INI/Art.ini, blocks "StarCraft Terran buildings".
-# Marine/units are built separately by build-scmarine.ps1 into ECACHE99.MIX (other session, do not merge).
+# Marine/units are built separately by build-scmarine.ps1 into ECACHE77.MIX (other session, do not merge).
 param(
     [string]$StarCraft = "C:\Program Files (x86)\StarCraft",
     [string]$PreviewDir = "$env:TEMP\scterran-preview",

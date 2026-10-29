@@ -2,7 +2,7 @@
 
 Druga misja na Mar Sarze z [[plans/campaign-arka]]. Teren to mapa kampanii StarCrafta **T3 „Desperate Alliance”** (w SC: przetrwać 30 minut do ewakuacji przez Synów Korhalu) z CASC użytkownika, powiększona 1,5× i przeniesiona na pustynny teatr DTA. Na niej: baza Aliantów przy wraku ARKI, Mar Sara City z zainfekowanym Command Center, trzy schrony z kolonistami, lądowisko Synów Korhalu i 15 minut ładowania skoku. Kompletna od startu do wygranej, **(niezweryfikowane w grze)**.
 
-Źródła: CASC StarCrafta `SD/campaign/Terran/Terran03/staredit/scenario.chk` (T3, 96×96 badlands; obejrzane też T1 Wasteland), `Modding/tools/build-arka02-marsara.ps1`, `Modding/tools/build-arka02-mission.ps1`, `Modding/tools/build-arka-previews.ps1`, `Map Editor/FinalSun/FSData.ini` (`[Scripts]` 37 i 39), `Maps/Missions/cr07.map` (`Tag=` w drużynie), `INI/Map Code/SC Factions/010 Zerg faction.ini` (`[SCZICC]`, `[SCZINF]`), `INI/Rules.ini` (`[TANYA]` `C4=yes`, `[C2]`, `[C8]`), [[missions/arka-01-marsara]] (wzór).
+Źródła: CASC StarCrafta `SD/campaign/Terran/Terran03/staredit/scenario.chk` (T3, 96×96 badlands; obejrzane też T1 Wasteland), `Modding/tools/build-arka02-marsara.ps1`, `Modding/tools/build-arka02-mission.ps1`, `Modding/tools/ZergAI.ps1`, `Modding/tools/build-arka-previews.ps1`, `Map Editor/FinalSun/FSData.ini` (`[Scripts]` 37 i 39), `Maps/Missions/cr07.map` (`Tag=` w drużynie), `INI/Map Code/SC Factions/010 Zerg faction.ini` (`[SCZICC]`, `[SCZINF]`), `INI/Rules.ini` (`[TANYA]` `C4=yes`, `[C2]`, `[C8]`), [[missions/arka-01-marsara]] (wzór).
 
 ## Pliki
 
@@ -74,7 +74,8 @@ Współrzędne w kaflach oryginalnej mapy SC (96×96). Skrypt przesuwa każdy na
 | `Soviet2` | ruiny Mar Sara City (Supply Depoty, Barracks, Academy), sojusznik |
 | `Soviet` (3) | Synowie Korhalu (Mengsk) |
 | `GDI2` (8) | Raynor w drodze do miasta: **sprzymierzony ze wszystkimi** (też z Zergami), żeby nikt go nie zastrzelił po drodze |
-| `Nod1` (7) | Zergi: gniazdo, miasto, fale |
+| `Nod1` (7) | Zergi: miasto i fale z krawędzi mapy. 0 kredytów, więc nie naprawia zainfekowanego CC |
+| `Nod` (1) | **gniazdo na północy** z własnym AI (od 2026-10-29, `ZergAI.ps1`): `IQ=5`, 3000 kredytów na drony, wykluwa drużyny w Spawning Pool |
 | `Nod2` (9) | stada na drodze do miasta („droga czysta” = wszystkie jednostki `Nod2` zniszczone) |
 | `GDI` (0) | oddział Konfederacji z rozkazem aresztowania Raynora, wrogi wszystkim |
 | `Neutral` | nieużywany. W wersji 1 miał ruiny i schrony, ale SC Bunker `Neutral` ma działko i strzelał do gracza (test 2026-10-27) |
@@ -94,9 +95,39 @@ Współrzędne w kaflach oryginalnej mapy SC (96×96). Skrypt przesuwa każdy na
 | gracz był w strefie schronu (r ≤ 4, kiedykolwiek) **i** cel 3 aktywny | wychodzi 6 kolonistów (dom schronu) na wolnej komórce przed bunkrem (wp 56–58), sami idą na lądowisko; skrypt `39,N` ustawia lokalną „uratowany”, `37` usuwa ich („na pokładzie”) |
 | 2 schrony uratowane | **skok**: licznik 15:00, muzyka, 4 elektrownie muszą wytrzymać; fale +60 (8 Zerglingów), +200 (zachód), +330 (północ, z Infested Terran), +440 (3 Mutaliski), +500 (trudny), +540 **Konfederacja** z zachodu (6 Marines, 2 Firebaty, 2 Vulture'y, 2 Goliathy, Siege Tank) z kwestią Duke'a, +680 dwie fale naraz, +830 flota Protossów na radarze |
 | licznik 0 | porażki wyłączone, błyski, „SKOK!”, epilog na Antidze Prime (Mengsk „spóźniliście się trzy dni”, „dla nas to była sekunda”, „to był mój dom”), **wygrana** |
-| 560 / 1000, od 1500 co 450 | najazdy na bazę (zachód, gniazdo), dopóki stoi Wylegarnia i nie zaczął się skok |
+| 560 | dzikie stado z zachodu (wp 46) |
+| od 300 | **AI gniazda** (niżej): drużyny wyklute w gnieździe na zbieracze, bazę, kolonistów i ARKĘ, obrona gniazda, pomoc dla miasta |
 
 **Porażka:** śmierć Einsteina, Tanyi lub Raynora (po uwolnieniu), zniszczenie wraku ARKI, licznik Raynora do zera, 2 schrony stracone (wszyscy koloniści grupy zginęli, zanim doszli), wszystkie 4 elektrownie zniszczone, utrata wszystkiego. Każda zniszczona elektrownia wydłuża licznik o 60 s.
+
+## AI gniazda Zergów (2026-10-29, prośba użytkownika)
+
+„Daj Zerga bardziej aktywnego … ma atakować, bronić się, odpowiadać na ataki gracza … ale naprawdę buduje Zergi czy Broodlingi”. Gniazdo (Wylegarnia, Spawning Pool, Hydralisk Den, Spire, kolonie, strażnicy, Overlordy) należy teraz do domu `Nod`, a jego zachowanie robi `Add-ZergAI` z [[engine/zerg-ai]]. Usunięte zostały najazdy z gniazda wykluwane wcześniej akcją `80` (`raid2`, `raidRep`, fale skoku 1 i 5 z wp 20). Fala skoku 1 idzie teraz z północnej krawędzi (wp 44). Bez zmian zostały stado z zachodu (560 s), fale skoku z krawędzi, Mutaliski i Konfederacja. **(niezweryfikowane w grze)**
+
+| Zamówienie | Skład (Hard) | Kiedy | Trasa |
+|---|---|---|---|
+| na zbieracze | 4 Zerglingi, 2 Broodlingi | od 300 s co 360 s, do skoku | bród zachodni (wp 40), `0,3` harvestery, Hunt |
+| najazd | 6 Zerglingów, 2 Hydraliski | od 480 s co 420 s, do skoku | linia obrony N (45), baza (10), Hunt |
+| duży najazd | 6 Zerglingów, 4 Broodlingi, 4 Hydraliski | od 1500 s co 480 s, do skoku | równina (41), wschodnie podejście (53), baza |
+| na kolonistów | 5 Zerglingów, 3 Broodlingi | co 300 s od celu 3 (lokalna 15) do skoku | bród południowy (51), Hunt |
+| atak na ARKĘ | 8 Zerglingów, 4 Broodlingi, 4 Hydraliski | co 150 s w czasie skoku (lokalna 8) | bród zachodni, baza |
+| obrona | 6 Zerglingów, 4 Broodlingi | alarm: gracz w pasie 5–8 pól od budynków gniazda (844 komórki, tag `ARKA2Z01`) albo atakuje Den, Spire lub kolonie gniazda (`ARKA2Z02`); potem 150 s przerwy | Hunt od gniazda |
+| kontratak | 6 Zerglingów | razem z obroną | linia obrony N, baza |
+| pomoc dla miasta | 4 Zerglingi, 2 Hydraliski | gracz atakuje Creep Colony albo Sunken w bramie miasta (`ARKA2Z03`); potem 240 s | przedpole (43), miasto (52), Area Guard |
+| rozbudowa | 3 drony → Sunken Colony | 600, 900, 1200 s | 76,73 / 64,83 / 60,87, od strony środkowej równiny, na creepie |
+
+- Koniec gniazda: zniszczenie Wylegarni (stary trigger `hatch`, teraz z lokalną 21) albo Spawning Pool (`ARKA2Z04`). Potem nie ma zamówień ani zapasowego wyklucia.
+- Easy i Medium mają te same zamówienia, z drużynami 1/2 i 3/4.
+- Stavros na starcie: „Gniazdo na północy wykluwa Zergi i wysyła je na nas. Bez Wylegarni albo Niecki ucichnie.”
+- Hydraliski i Broodlingi wymagają w tej mapie tylko Niecki i Wylegarni (`Prerequisite=SCZPOL,SCZHAT`). Hydralisk Den nie jest potrzebny, a Broodling nie wymaga Queen's Nest.
+
+**Do sprawdzenia w grze:**
+- czy przy Niecce pojawiają się nowe Zerglingi i Broodlingi (produkcja) i czy drużyna rusza dopiero w komplecie;
+- czy około 240 s po zamówieniu drużyna nie pojawia się „z powietrza” na wp 20. To byłby strażnik, czyli znak, że produkcja nie działa;
+- czy wejście pod gniazdo wywołuje kwestię Stavrosa i obronę;
+- czy ostrzał kolonii w mieście ściąga posiłki;
+- czy drony stawiają Sunkeny;
+- czy tempo nie jest za ostre.
 
 ## Odstępstwa od planu
 
@@ -125,6 +156,15 @@ Użytkownik zgłosił: koloniści nie wychodzą po uwolnieniu Raynora, bunkry w 
 
 - **C4 Tanyi na zainfekowane CC:** Tanya mogła tylko strzelać. Przyczyna w `game.exe` (`InfantryClass::What_Action`, `0x4D73BA`, wejście przekierowane przez DTA do `0x86B0E0` i z powrotem). Piechota z `C4=yes` (`InfantryTypeClass::IsBomber`, `+0x4AF`) dostaje akcję Sabotage (15) zamiast Attack (5) tylko wtedy, gdy typ budynku ma **`IsRepairable`** (`TechnoTypeClass+0x450`, `Repairable=`). Budynki Zergów w `StarCraft.ini` mają `Repairable=no`. W mapie `SCZICC` dostaje `Repairable=yes` i `ClickRepairable=no`; Zergi i tak nie naprawią, bo `Nod1` ma 0 kredytów **(niezweryfikowane w grze)**.
 - **Dropshipy na lądowisku:** razem z lądowaniem Synów Korhalu pojawiają się 2 Dropshipy (`Soviet`, skrypt `11,5` „stój”) na wp 59 i 60 obok lądowiska. Nie stoją na samym wp 19, bo tam idą koloniści i stojący Dropship mógłby zablokować im dojście (skrypt nie doszedłby do „uratowani”). Drużyna Synów Korhalu na wp 54 nie ma już Dropshipów.
+
+## Przypominajki celów (2026-10-29)
+
+Prośba użytkownika: przypominajki celów i postęp we wszystkich misjach, „ale nie przesadzaj”. Funkcje `Add-ObjectiveReminder` i `Add-CountProgress` z `Modding/tools/MissionKit.ps1` ([[engine/triggers-and-dialogue]]):
+- **Cel 1 (droga):** przypominajka co 900 s gry od tekstu celu (`intro6`) do oczyszczenia drogi (lokalna 13).
+- **Cel 3 (schrony):** przypominajka co 900 s od tekstu celu (`shelters`) do startu skoku (lokalna 8). Postęp: po każdym uratowanym schronie „Uratowane schrony: k z 3 (potrzeba 2)” (lokalne 2–4, kolejność dowolna). Ta linia zastąpiła osobny tekst pilota w `civSaved1–3`, żeby nie było dwóch tekstów naraz; trzeci schron ma własną linię (`civAll`).
+- Cele 2 (Raynor) i 4 (skok) mają licznik na ekranie, więc bez przypominajki.
+
+Przebudowa: CHECKS PASS, oś tekstów 0 WARN. **(niezweryfikowane w grze)**
 
 ## Briefing (2026-10-27)
 

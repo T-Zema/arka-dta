@@ -141,7 +141,8 @@ function NewCell($n) { $script:infSub = 4; $null }   # start a fresh cell for th
 # ================================================================ the ARKA (Giga-Chronosphere): a non-buildable RAPDOX copy
 $ini.Set('BuildingTypes', 'ARKA0B1', 'ARKACORE')
 $arka = [ordered]@{
-    Name = 'ARKA (Giga-Chronosfera)'; Image = 'RAPDOX'; Nominal = 'yes'; Strength = '20000'; Armor = 'heavy'
+    # 28000 = 20000 + 40% (user 2026-10-29)
+    Name = 'ARKA (Giga-Chronosfera)'; Image = 'RAPDOX'; Nominal = 'yes'; Strength = '28000'; Armor = 'heavy'
     TechLevel = '-1'; Adjacent = '1'; Sight = '10'; Owner = 'Allies'; Cost = '2800'; Points = '28'; Power = '-200'
     Capturable = 'false'; Crewed = 'yes'; Unsellable = 'yes'; Explosion = 'FBALL1,FBALL2,FBALL3'
     ScrapExplosion = 'FBALL1_SCRAP,FBALL2_SCRAP,FBALL3_SCRAP'; MaxDebris = '0'
@@ -150,6 +151,20 @@ $arka = [ordered]@{
 foreach ($k in $arka.Keys) { $ini.Set('ARKACORE', $k, $arka[$k]) }
 # Tanya: 2500 HP in every ARKA mission (user 2026-10-28: first +50%, then 2500; Rules [TANYA] Strength=1000)
 $ini.Set('TANYA', 'Strength', '2500')
+# TANYA0 = Tanya waiting in the park: a copy of [TANYA] with Immune=yes (user 2026-10-29: she died before the rescue,
+# untouchable until she is picked up). No $Inherits from the map into Rules, so the keys are copied. On the rescue she
+# is erased (action 115 on her tag) and the real TANYA of the player appears in her place (team $tmTanya).
+$in = $false
+foreach ($l in $rulesText) {
+    if ($l -match '^\[([^\]]+)\]') { if ($in) { break }; $in = $matches[1] -eq 'TANYA'; continue }
+    if ($in -and $l -match '^\s*([^;=\s][^=]*?)\s*=\s*([^;]*?)\s*(;.*)?$') { $ini.Set('TANYA0', $matches[1], $matches[2]) }
+}
+# Immune=yes alone did not stop fire in ARKA 1 (wreck nearly destroyed, workflow/known-mistakes), so she also wears a
+# Vinifera armor that no warhead hurts and nobody targets, force-fires at or retaliates against (pattern arka_wreck)
+$ini.Set('ArmorTypes', 'ARKA0ARM', 'arka_vip')
+foreach ($kv in ([ordered]@{ Modifier = '0%'; ForceFire = 'no'; Retaliate = 'no'; PassiveAcquire = 'no' }).GetEnumerator()) { $ini.Set('arka_vip', $kv.Key, $kv.Value) }
+foreach ($kv in ([ordered]@{ Image = 'TANYA'; Strength = '2500'; Immune = 'yes'; Armor = 'arka_vip'; TechLevel = '-1' }).GetEnumerator()) { $ini.Set('TANYA0', $kv.Key, $kv.Value) }
+$ini.Set('InfantryTypes', 'ARKA0I1', 'TANYA0')
 
 # ================================================================ houses
 $ini.Sections.Remove('Houses') | Out-Null; $ini.Order.Remove('Houses') | Out-Null
@@ -187,12 +202,51 @@ function Place-OnWaypoint($type, $x, $y, $tag) {
 }
 Place-OnWaypoint 'ARKACORE' ($ax - 1) ($ay - 1) 'ARKA0G01'
 for ($k = 1; $k -le 4; $k++) { $p = $wp[10 + $k]; Place-OnWaypoint 'RAPOWR' ($p[0] - 1) ($p[1] - 1) ("ARKA0G0" + (1 + $k)) }
+# wall round the ARKA (user 2026-10-29): concrete wall BRIK (overlay 2) on the square ring 4 cells out from the 2x2 core.
+# Gates where a road crosses the ring (road on both sides of the cell, across the wall: troops, the Nod agent's walk to
+# the core); a road running along the ring (the east side, terrain after the WAE edit) is walled over. Without two gate
+# cells the middles of the screen-west and screen-east sides open. Placed before the base, so nothing else is set on it.
+$wallId = 2; $wallSet = New-Object 'Collections.Generic.HashSet[int]'; $gateN = 0
+$isRoad = { param($x, $y) $code[$y * $GW + $x] -eq 11 }
+for ($x = $ax - 5; $x -le $ax + 4; $x++) { for ($y = $ay - 5; $y -le $ay + 4; $y++) {
+    $nrm = @(); if ($x -eq $ax - 5) { $nrm += , @(-1, 0) }; if ($x -eq $ax + 4) { $nrm += , @(1, 0) }
+    if ($y -eq $ay - 5) { $nrm += , @(0, -1) }; if ($y -eq $ay + 4) { $nrm += , @(0, 1) }
+    if (-not $nrm.Count) { continue }
+    $gate = $false
+    if (& $isRoad $x $y) { foreach ($n in $nrm) { if ((& $isRoad ($x + $n[0]) ($y + $n[1])) -and (& $isRoad ($x - $n[0]) ($y - $n[1]))) { $gate = $true } } }
+    if ($gate) { $gateN++; continue }
+    if (Buildable $x $y) { [void]$wallSet.Add($y * 512 + $x) }
+} }
+if ($gateN -lt 2) { foreach ($c in @(@(($ax - 5), $ay), @(($ax - 5), ($ay - 1)), @(($ax + 4), $ay), @(($ax + 4), ($ay - 1)))) { [void]$wallSet.Remove($c[1] * 512 + $c[0]) } }
+$wo = [Pack]::Unpack($ini.Joined('OverlayPack'), $false); $wd = [Pack]::Unpack($ini.Joined('OverlayDataPack'), $false)
+foreach ($i in $wallSet) { $wo[$i] = $wallId; $block[$i] = $true }
+# wall frame = a bit per joined neighbour: N, E, S, W (ScToDta.WallFrames, learned from DTA maps)
+foreach ($i in $wallSet) {
+    $m = 0; $b = 0
+    foreach ($d in -512, 1, 512, -1) { if ($wo[$i + $d] -eq $wallId) { $m = $m -bor (1 -shl $b) }; $b++ }
+    $wd[$i] = $m
+}
+$ini.SetPack('OverlayPack', [Pack]::PackData($wo, $false, 8192)); $ini.SetPack('OverlayDataPack', [Pack]::PackData($wd, $false, 8192))
+$log.Add("ARKA wall: $($wallSet.Count) BRIK cells, $gateN road gate cells$(if ($gateN -lt 2) { ' (+ west/east gates)' })")
+# static defences in the corners inside the wall: gun turrets on the screen-north and screen-south corners, AA guns
+# (the Yaks) on the other two, a pillbox next to each turret
+function Place-Inner($type, $tx, $ty) {
+    $f = Foundation $type; $script:noRoad = $true
+    try { $s = Find-Spot $tx $ty $f[0] $f[1] 0 $true } finally { $script:noRoad = $false }
+    Add-Building 'Allies' $type $s[0] $s[1]
+}
+Place-Inner 'RAGUN'  ($ax - 4) ($ay - 4); Place-Inner 'RAPBOX' ($ax - 3) ($ay - 4)
+Place-Inner 'RAGUN'  ($ax + 3) ($ay + 3); Place-Inner 'RAPBOX' ($ax + 2) ($ay + 3)
+Place-Inner 'RAAGUN' ($ax + 1) ($ay - 4); Place-Inner 'RAAGUN' ($ax - 4) ($ay + 3)   # +1: the road inside the east side
 # west of the ARKA (screen west = -x +y), north-west for the factories, refinery towards the airfield ore
 Place-Building 'Allies' 'AFACT'  ($ax - 8)  ($ay + 4)
 Place-Building 'Allies' 'RATENT' ($ax - 5)  ($ay - 8)
 Place-Building 'Allies' 'RAPROC' ($ax - 14) ($ay - 6)
 Place-Building 'Allies' 'AWEAP'  ($ax - 12) ($ay + 10)
 Place-Building 'Allies' 'RADOME' ($ax - 2)  ($ay + 8)
+# two Advanced Power Plants (+200 each) in the base for the wall's defences (-210) and whatever the player builds
+Place-Building 'Allies' 'RAAPWR' ($ax - 10) ($ay - 1)
+Place-Building 'Allies' 'RAAPWR' ($ax - 4)  ($ay + 13)
 # gate defences: two pillboxes and a turret just inside each gate (towards the base)
 foreach ($g in 15, 16) {
     $gx = $wp[$g][0]; $gy = $wp[$g][1]
@@ -214,7 +268,15 @@ NewCell 0; foreach ($t in 'E1', 'E1', 'E1', 'E1', 'E1', 'E1') { Add-Inf 'Allies'
 NewCell 0; foreach ($t in 'E3', 'E3', 'E3', 'MEDIC', 'ENGINEER') { Add-Inf 'Allies' $t ($ax + 1) ($ay + 5) }
 # Tanya behind enemy lines (La Linea park, wp 17) and her Soviet guards
 $tx = $wp[17][0]; $ty = $wp[17][1]
-NewCell 0; Add-Inf 'Allies1' 'TANYA' $tx $ty 'Sleep' 'ARKA0G11'   # tag: her line on reaching the ARKA (trigger tanyaHome)
+# a clearing round her: the park's trees within 3 cells hid her (user 2026-10-29: "more visible in the park")
+$treeGone = 0
+foreach ($kv in @($ini.Section('Terrain'))) {
+    $v = [int]$kv.Key; $x = $v % 1000; $y = [Math]::Floor($v / 1000)
+    if ([Math]::Max([Math]::Abs($x - $tx), [Math]::Abs($y - $ty)) -le 3) { [void]$ini.Section('Terrain').Remove($kv); $block[$y * $GW + $x] = $false; $treeGone++ }
+}
+$log.Add("Tanya's clearing: $treeGone trees removed round $tx,$ty")
+# the untouchable stand-in (TANYA0); tag ARKA0G14 = trigger tanyaErase. The real Tanya comes with $tmTanya.
+NewCell 0; Add-Inf 'Allies1' 'TANYA0' $tx $ty 'Sleep' 'ARKA0G14'
 NewCell 0; foreach ($t in 'E1', 'E1', 'E2', 'DOG') { Add-Inf 'Soviet' $t ($tx + 4) ($ty + 2) 'Area Guard' }
 NewCell 0; foreach ($t in 'E1', 'E3', 'DOG') { Add-Inf 'Soviet' $t ($tx - 3) ($ty + 4) 'Area Guard' }
 Add-Unit 'Soviet' '3TNK' ($tx + 2) ($ty + 6) 'Area Guard'
@@ -228,7 +290,7 @@ function Say([string]$s) { $script:textNo++; $ini.Set('Tutorial', "$script:textN
 
 # ================================================================ taskforces, scripts, teams
 $tfN = 0; $scN = 0; $tmN = 0
-function Team($name, $house, $spawnWp, [string[]]$members, [string[]]$script) {
+function Team($name, $house, $spawnWp, [string[]]$members, [string[]]$script, $tag = $null) {
     $script:tfN++; $script:scN++; $script:tmN++
     $tf = 'ARKA0F{0:D2}' -f $script:tfN; $sc = 'ARKA0S{0:D2}' -f $script:scN; $tm = 'ARKA0M{0:D2}' -f $script:tmN
     $ini.Set('TaskForces', "$($script:tfN - 1)", $tf); $ini.Set('ScriptTypes', "$($script:scN - 1)", $sc); $ini.Set('TeamTypes', "$($script:tmN - 1)", $tm)
@@ -242,6 +304,7 @@ function Team($name, $house, $spawnWp, [string[]]$members, [string[]]$script) {
         Reinforce = 'no'; TaskForce = $tf; TechLevel = 0; Aggressive = 'no'; Autocreate = 'no'; GuardSlower = 'no'; OnTransOnly = 'no'
         AvoidThreats = 'no'; LooseRecruit = 'no'; VeteranLevel = 1; IsBaseDefense = 'no'; OnlyTargetHouseEnemy = 'no'
         TransportsReturnOnUnload = 'no'; AreTeamMembersRecruitable = 'no' }
+    if ($tag) { $v['Tag'] = $tag }   # a team tag goes onto every member it creates (DTA cr07, ARKA 2 "Raynor wychodzi")
     foreach ($k in $v.Keys) { $ini.Set($tm, $k, "$($v[$k])") }
     $tm
 }
@@ -272,6 +335,8 @@ $tmS6 = Team 'Sowieci szturm'  'Soviet' 19 @('4TNK', '4TNK', '3TNK', '3TNK', '3T
 $tmAir = Team 'Sowieckie Jaki' 'Soviet' 18 @('YAK', 'YAK') @('1,10', '3,18', '37,0')
 $tmN2 = Team 'Nod Stealth pas wschodni' 'Nod' 22 @('STNK', 'STNK', 'STNK') $east
 $tmAgent = Team 'Agent Nod'             'Nod2' 26 @('SPY') @('3,10', '11,10')
+# the real Tanya, the player's, where the stand-in stood; her tag ARKA0G11 = tanyaHome (linked to tanyaDead)
+$tmTanya = Team 'Tanya'                 'Allies' 17 @('TANYA') @('11,5') 'ARKA0G11'
 # Nod lands only with real transports (pattern of cr06; no hovercraft, user 2026-10-27): the NLST is the first member
 # of the taskforce and the reinforcement spawns it loaded with the rest. Sea waypoint -> beach: 64 -> 26 Camp Bay,
 # 45 -> 23 Eastern Beach, 42 -> 24 Catalan Bay, 43 -> 27 Europa Point. The map raises NLST to 10 passengers.
@@ -302,13 +367,18 @@ $tmH4 = Team 'Zasadzka: ruda na Skale od wschodu' 'Soviet' 19 @('E1', 'E1', 'E1'
 
 # ================================================================ triggers
 $trN = 0; $trig = [ordered]@{}
-$ini.Set('VariableNames', '0', 'Tanya uratowana,0'); $ini.Set('VariableNames', '1', 'Final,0')
+$ini.Set('VariableNames', '0', 'Tanya uratowana,0'); $ini.Set('VariableNames', '1', 'Final,0'); $ini.Set('VariableNames', '2', 'Armata przejeta,0')
 function Ev([int]$id, $p = 0) { "$id,0,$p" }
 # mission events at a time from the start: the calm opening is 5 min longer than in the first version (user
 # 2026-10-27: the gun event right after the Russians arrive), so every scheduled event moves by $calm and the
 # countdown grows by the same 5 min (30:00). The opening dialogue and chained triggers keep their own times.
-$calm = 300
-function At([int]$s) { Ev 13 ($s + $script:calm) }
+# 2026-10-29 (user: no time to read, make the game a little longer, above all at the dialogues): the schedule after the
+# calm opening is stretched by $stretch, and the countdown with it (1500 x 1.12 + 300 = 1980 = 33:00). The numbers in
+# the generator stay those of the 30:00 version.
+$calm = 300; $stretch = 1.12
+function At([int]$s) { Ev 13 ([int][Math]::Round($s * $script:stretch) + $script:calm) }
+function Every([int]$s) { Ev 13 ([int][Math]::Round($s * $script:stretch)) }   # gaps of repeating raids
+$countdown = [int][Math]::Round(1500 * $stretch) + $calm
 function Act([int]$id, $p = 0, [int]$kind = 0, [int]$w = 0) { "$id,$kind,$p,0,0,0,0,$(WpLetter $w)" }
 function Text($s) { Act 11 (Say $s) }
 function Reinf($team, $w) { Act 80 $team 1 $w }
@@ -327,6 +397,8 @@ function Trigger($key, $name, [string[]]$events, [string[]]$actions, $house = 'A
 $ids = @{}
 foreach ($k in 'intro2', 'intro3', 'intro4', 'intro5', 'tanya2', 'tanya3', 'tanya4', 'fin1', 'fin2', 'fin3', 'fin4', 'fin5', 'fin6', 'fin7', 'fin8') { $ids[$k] = $null }
 . "$tools\MissionKit.ps1"   # reveal crate, one text per trigger, dialogue gaps from text length, timeline check
+# user 2026-10-29: still no time to read with 3 -> 1.5x longer gaps between the lines of this mission
+$GameSecPerReal = 4.5
 Add-RevealCrate $crate[0] $crate[1]
 # loot (review 2026-10-27; changed by the user the same day): the Convent's gold is hidden INSIDE the church, not on a
 # crate at its door, and the cash crates by the ore on the Rock are gone. An engineer that enters (captures) the church
@@ -380,14 +452,14 @@ function Landing($key, $name, [int]$at, [int]$sea, [int]$beach, [string[]]$cargo
 # --- opening: von Esling's briefing, objectives, timer 30:00
 Trigger 'intro' 'Start: kamera i von Esling' @((Ev 13 1)) @(
     (Act 48 1 0 10), (Act 20 58),
-    (Text 'Gen. von Esling: Komandorze, ARKA potrzebuje 30 minut ladowania. Sowieci ida od strony Hiszpanii, Nod od morza.'),
+    (Text "Gen. von Esling: Komandorze, ARKA potrzebuje $([int]($countdown / 60)) minut ladowania. Sowieci ida od strony Hiszpanii, Nod od morza."),
     (Enable 'intro2')) | Out-Null
 Trigger 'intro2' 'Start 2: zamknac drzwi' @((Ev 13 7)) @(
     (Text 'Gen. von Esling: Gdy rdzen osiagnie pelna moc, wszyscy w polu Chronosfery znikna stad. Ja zostaje. Ktos musi zamknac drzwi.'),
     (Enable 'intro3')) -Disabled | Out-Null
 Trigger 'intro3' 'Start 3: cele i licznik' @((Ev 13 8)) @(
     (Text 'Cel glowny: utrzymaj ARKE do konca odliczania. Zniszczenie ARKI = porazka.'),
-    (Act 27 (1500 + $calm)), (Act 23), (Act 17 10),
+    (Act 27 $countdown), (Act 23), (Act 17 10),
     (Enable 'intro4')) -Disabled | Out-Null
 Trigger 'intro4' 'Start 4: elektrownie' @((Ev 13 6)) @(
     (Text 'Cel: chron 4 elektrownie zasilajace rdzen. Kazda utracona wydluza ladowanie.'),
@@ -395,7 +467,7 @@ Trigger 'intro4' 'Start 4: elektrownie' @((Ev 13 6)) @(
 Trigger 'intro5' 'Start 5: Tanya za liniami' @((Ev 13 12)) @(
     (Text 'Plk Stavros: Tanya Adams zostala zrzucona za liniami wroga, w parku w La Linea. Podobno niesie cos waznego.'),
     (Text 'Cel dodatkowy: odbij Tanye w La Linea (polnocny wschod, za granica).'),
-    (Act 55 6 0 17), (Act 17 17)) -Disabled | Out-Null
+    (Act 55 6 0 17), (Act 17 17), (Act 8 0 0 17)) -Disabled | Out-Null   # 8: drop zone flare over her clearing
 
 # --- losing: the ARKA (destroyed, not infiltrated: the Nod agent is allowed to reach it) or everything
 Trigger 'arkaLost' 'ARKA zniszczona' @((Ev 29)) @(
@@ -410,10 +482,15 @@ for ($k = 1; $k -le 4; $k++) {
 }
 
 # --- Tanya: rescued (cell tags round wp 17) or breaks out alone at 15:00
+# The rescue swaps the untouchable stand-in (TANYA0, house Allies1) for the player's real Tanya: the team appears on wp
+# 17 and tanyaErase removes the stand-in a second later (115 erases the objects carrying the trigger's own tag, the
+# pattern of ARKA 5 "Roj zabiera Kerrigan"). No house change any more, so the capture/destroyed trap (pitfall 6) is gone;
+# tanyaArm still waits 5 s, so the swap cannot trip the defeat.
 Trigger 'tanya' 'Tanya odbita' @((Ev 1 $H.Allies)) @(
-    (Act 36 $H.Allies), (Act 56 0),
+    (Reinf $tmTanya 17), (Enable 'tanyaErase'), (Act 56 0),
     (Text 'Tanya: Najwyzszy czas, Komandorze! Mam cos z sowieckiej kwatery: dokument Nod.'),
     (Disable 'tanyaAlone'), (Enable 'tanyaJoke'), (Enable 'tanyaArm')) -house 'Allies1' -tag 'ARKA0G10' | Out-Null
+Trigger 'tanyaErase' 'Tanya: atrapa znika' @((Ev 13 1)) @('115,0,0,0,0,0,0,A') -house 'Allies1' -Disabled -tag 'ARKA0G14' | Out-Null
 Trigger 'tanyaJoke' 'Tanya: klop i drzewa' @((Ev 13 7)) @(
     (Text 'Tanya: Klop, drzewo, drugie drzewo, trzecie drzewo... Tarzan by sie zarumienil. Gdzie moj prysznic?'), (Enable 'tanya2')) -Disabled | Out-Null
 Trigger 'tanya2' 'Tanya 2: dokument' @((Ev 13 7)) @(
@@ -430,22 +507,24 @@ Trigger 'tanya4' 'Tanya 4: zdjecie' @((Ev 13 7)) @(
 Trigger 'tanyaHome' 'Tanya w bazie' @((Ev 34 10)) @(
     (Text 'Tanya: Ruscy przeszukali caly park, tylko nie klop i nie korony drzew. Nikt nie patrzy w gore. Zupelnie jak swinie.'),
     (Disable 'tanyaHome')) -tag 'ARKA0G11' -Repeat -link 'tanyaDead' | Out-Null
-# Tanya killed = mission failed (user test 2026-10-27: nothing happened). The house change that hands her to the player
-# counts as a capture, which fires "destroyed" on her tag (pitfall 6), so tanyaDead is armed only 5 s after it.
+# Tanya killed = mission failed (user test 2026-10-27: nothing happened). Armed 5 s after she joins (once a house change,
+# which fires "destroyed" on her tag, pitfall 6; since 2026-10-29 a swap, the delay stays as a margin).
 Trigger 'tanyaDead' 'Tanya zginela' @((Ev 29)) @(
     (Text 'Plk Stavros: Tanya nie zyje! Stracilismy najlepszego agenta Aliantow... Misja nieudana.'), (Act 2 $H.Allies)) -Disabled | Out-Null
 Trigger 'tanyaArm' 'Tanya: uzbroj porazke' @((Ev 13 5)) @((Enable 'tanyaDead')) -Disabled | Out-Null
 Trigger 'tanyaAlone' 'Tanya przebija sie sama' @((At 900), (Ev 37 0)) @(
-    (Act 36 $H.Allies),
+    (Reinf $tmTanya 17), (Enable 'tanyaErase'),
     (Text 'Tanya: Nie czekam dluzej, przebijam sie sama! Dokument przepadl, ale wracam.'),
-    (Act 55 6 0 17), (Disable 'tanya'), (Enable 'tanyaArm')) -house 'Allies1' | Out-Null
+    (Act 55 6 0 17), (Disable 'tanya'), (Enable 'tanyaArm'), (Disable 'remTanya')) -house 'Allies1' | Out-Null
 
 # --- waves (elapsed game seconds from the start; the timer starts at about 0:30)
 Trigger 'w1' 'Fala 1: Sowieci z polnocy' @((At 210)) @(   # after the opening dialogue (ends ~200 s)
     (Reinf $tmS1 18), (Act 20 43), (Act 55 3 0 20),
     (Text 'Plk Stavros: Sowiecka piechota przekracza granice! Ida na Landport.')) | Out-Null
-Trigger 'w2' 'Fala 2: Sowieci NE' @((At 300)) @((Reinf $tmS2 19), (Act 55 3 0 21)) | Out-Null
-Landing 'n1' 'Nod 1: artyleria Camp Bay' 420 64 26 @('AIARTY', 'AIARTY', 'AILTNK', 'AILTNK', 'AIBGGY', 'AIBGGY') 0 1 `
+# w2 at 225 (was 300): before the gun dialogue (At 250), not in the middle of it (Test-QuietDialogue, 2026-10-29)
+Trigger 'w2' 'Fala 2: Sowieci NE' @((At 225)) @((Reinf $tmS2 19), (Act 55 3 0 21)) | Out-Null
+# n1 at 445 (was 420): after Stavros' two lines on the raids (h1first, At 350)
+Landing 'n1' 'Nod 1: artyleria Camp Bay' 445 64 26 @('AIARTY', 'AIARTY', 'AILTNK', 'AILTNK', 'AIBGGY', 'AIBGGY') 0 1 `
     'Plk Stavros: Transportowiec Nod od strony Ciesniny! Wiezie artylerie na plaze Camp Bay, od poludnia miasta.'
 Trigger 'i1' 'Nod: piechota Camp Bay' @((At 540)) @(
     (Reinf $tmI1 64), (Act 55 3 0 26), (Text 'EVA: Desant piechoty Nod na Camp Bay.')) | Out-Null
@@ -453,21 +532,21 @@ Trigger 'i1' 'Nod: piechota Camp Bay' @((At 540)) @(
 # the ARKA exists (BFS), so the landing got stuck at the unload (8,2), which was only ever seen working at Camp Bay.
 # The east infantry lands like the vehicles now: the empty NLST sails in and 20 infantry appear on the beach as it
 # arrives, then attack-move on the ARKA. Zones: Catalan Bay r 2-3 (n5 has r 0-1), Eastern Beach r 4-5 (t2, n3 below).
-Landing 'i2' 'Nod: piechota Catalan Bay' 840 42 24 ($nodInf + $nodInf) 2 3 'EVA: Desant piechoty Nod w Catalan Bay, po wschodniej stronie Skaly.'
+Landing 'i2' 'Nod: piechota Catalan Bay' 845 42 24 ($nodInf + $nodInf) 2 3 'EVA: Desant piechoty Nod w Catalan Bay, po wschodniej stronie Skaly.'
 Trigger 'i3' 'Nod: piechota Europa Point' @((At 1200)) @(
     (Reinf $tmI3 43), (Reinf $tmI3 43), (Act 55 3 0 27), (Text 'EVA: Desant piechoty Nod na Europa Point.')) | Out-Null
 Landing 'i4' 'Nod: piechota Eastern Beach' 1310 45 23 ($nodInf + $nodInf) 4 5
 # the south tip (user 2026-10-28: more landings from the end of the south): from 1090 s a loaded NLST from the Strait
 # (43, south edge) lands at Europa Point every 180 s up to the jump, on top of i3 and n4 (real unload, as at Camp Bay)
-Trigger 'iS' 'Nod: desant poludnie 1' @((At 790)) @(
+# iS at 810 (was 790): after the h3first line
+Trigger 'iS' 'Nod: desant poludnie 1' @((At 810)) @(
     (Reinf $tmI3 43), (Act 55 3 0 27), (Enable 'iSr'), (Text 'EVA: Transportowiec Nod od strony Ciesniny, kurs na Europa Point.')) | Out-Null
-Trigger 'iSr' 'Nod: desant poludnie powtarzany' @((Ev 13 180)) @((Reinf $tmI3 43), (Act 55 3 0 27)) -Repeat -Disabled | Out-Null
+Trigger 'iSr' 'Nod: desant poludnie powtarzany' @((Every 180)) @((Reinf $tmI3 43), (Act 55 3 0 27)) -Repeat -Disabled | Out-Null
 Trigger 'w3' 'Fala 3: Sowieci, V2' @((At 480)) @((Reinf $tmS3 18), (Act 55 3 0 20)) | Out-Null
 Trigger 'air1' 'Jaki nad baza' @((At 600)) @((Reinf $tmAir 18), (Text 'EVA: Sowieckie lotnictwo nadlatuje od polnocy.')) | Out-Null
 Trigger 'w4' 'Fala 4: Sowieci, Mamut' @((At 720)) @((Reinf $tmS4 19), (Act 55 3 0 21)) | Out-Null
-# half of the charge: the countdown starts at about 78 s (intro3), so the true half is 978 s; 1035 lets the t1 and
-# h3first lines (960 / 1000 s) be read first
-Trigger 'half' 'Polowa ladowania' @((Ev 13 1035)) @((Text 'Einstein: Rdzen naladowany w polowie. Prosze ich jeszcze chwile powstrzymac, Komandorze.')) | Out-Null
+# half of the charge: countdown start (intro3, known after the pacing pass) + half the countdown; the time is set below
+Trigger 'half' 'Polowa ladowania' @((Ev 13 1)) @((Text 'Einstein: Rdzen naladowany w polowie. Prosze ich jeszcze chwile powstrzymac, Komandorze.')) | Out-Null
 Trigger 'n2' 'Nod 2: Stealth na pasie wschodnim' @((At 960)) @(
     (Reinf $tmN2 22),
     (Text 'Einstein: Czujniki rdzenia lapia zaklocenia na wschodnim pasie pod Skala. Cos tam jedzie, czego nie widac.')) | Out-Null
@@ -477,7 +556,7 @@ Landing 'n3' 'Nod 3: artyleria Eastern Beach' 1140 45 23 @('AIARTY', 'AIARTY', '
 # vehicles with the infantry landings in the south and east (user 2026-10-27: stronger Nod landings there); the inner
 # zone (r 0-1) of these beaches was still free
 Landing 'n4' 'Nod 4: pancerna Europa Point' 1200 43 27 @('AILTNK', 'AILTNK', 'AILTNK', 'AIARTY', 'AIARTY', 'AIBGGY') 0 1
-Landing 'n5' 'Nod 5: pancerna Catalan Bay' 840 42 24 @('AILTNK', 'AILTNK', 'AIBIKE', 'AIBIKE', 'AIBGGY', 'AIBGGY') 0 1
+Landing 'n5' 'Nod 5: pancerna Catalan Bay' 845 42 24 @('AILTNK', 'AILTNK', 'AIBIKE', 'AIBIKE', 'AIBGGY', 'AIBGGY') 0 1
 Trigger 'w6' 'Fala 6: sowiecki szturm' @((At 1260)) @(
     (Reinf $tmS6 19), (Reinf $tmAir 18), (Act 55 3 0 21),
     (Text 'Plk Stavros: Piec minut do skoku! Wszystko, co maja, idzie na nas. Wszystkie jednostki do obwodu ARKI!')) | Out-Null
@@ -505,15 +584,16 @@ Landing 't2' 'Nod: transportowiec Eastern Beach' 1080 45 23 @('AIBIKE', 'AIBIKE'
 # --- harassment: repeating raids on the ore fields (pattern of arka01/arka02: a repeating trigger with Elapsed Time,
 # disabled, switched on once; Enable resets the Elapsed count). First raids at about 350 / 565 / 700 s, then every
 # 200 / 260 / 220 s up to the jump; the finale switches them off. Only the first raid of each kind has a line.
-Trigger 'h1' 'Rajd powtarzany: lotnisko' @((Ev 13 200)) @((Reinf $tmH1 19), (Act 55 3 0 39)) -Repeat -Disabled | Out-Null
-Trigger 'h2' 'Rajd powtarzany: Skala'    @((Ev 13 260)) @((Reinf $tmH2 18), (Act 55 3 0 47)) -Repeat -Disabled | Out-Null
-Trigger 'h3' 'Rajd powtarzany: kopalnia' @((Ev 13 220)) @((Reinf $tmH3 25), (Act 55 3 0 38)) -Repeat -Disabled | Out-Null
+Trigger 'h1' 'Rajd powtarzany: lotnisko' @((Every 200)) @((Reinf $tmH1 19), (Act 55 3 0 39)) -Repeat -Disabled | Out-Null
+Trigger 'h2' 'Rajd powtarzany: Skala'    @((Every 260)) @((Reinf $tmH2 18), (Act 55 3 0 47)) -Repeat -Disabled | Out-Null
+Trigger 'h3' 'Rajd powtarzany: kopalnia' @((Every 220)) @((Reinf $tmH3 25), (Act 55 3 0 38)) -Repeat -Disabled | Out-Null
 Trigger 'h1first' 'Rajd 1: lotnisko' @((At 350)) @((Reinf $tmH1 19), (Reinf $tmH4 19), (Act 55 3 0 39), (Act 55 3 0 62), (Enable 'h1'),
     (Text 'Plk Stavros: Sowiecki oddzial idzie na rude przy lotnisku. Beda polowac na nasze zbieracze, postawcie tam obrone!'),
     (Text 'Plk Stavros: Drugi oddzial idzie wschodnim pasem, przez Catalan Bay, na zloze na Skale!')) | Out-Null
 Trigger 'h2first' 'Rajd 1: Skala' @((At 565)) @((Reinf $tmH2 18), (Act 55 3 0 47), (Enable 'h2'),
     (Text 'EVA: Piechota wroga kieruje sie na zloze na Skale.')) | Out-Null
-Trigger 'h3first' 'Rajd 1: kopalnia' @((At 700)) @((Reinf $tmH3 25), (Act 55 3 0 38), (Enable 'h3'),
+# At 765 (was 700): after the t1 landing line and the half-charge line (2026-10-29 pacing)
+Trigger 'h3first' 'Rajd 1: kopalnia' @((At 765)) @((Reinf $tmH3 25), (Act 55 3 0 38), (Enable 'h3'),
     (Text 'Einstein: Motocykle Nod wyjechaly z tunelu Dudley Ward! Jada na kopalnie na Windmill Hill.')) | Out-Null
 
 # --- 100 Ton Gun (Nelson's Anchorage, user 2026-10-27): a 2x2 shore gun of house Special by the hospital, over Camp Bay
@@ -572,7 +652,7 @@ for ($k = 1; $k -le 3; $k++) {
         (Act 14 $H.Special), (Disable "gunBack$k"), (Enable "gunCap$($k + 1)"), (Text $gunLines[$k])) -house 'Special' -Disabled -link "gunCap$($k + 1)" | Out-Null
 }
 Trigger 'gunCap4' 'Armata: przejecie 4' @((Ev 1 $H.Allies)) @(
-    (Disable 'gunCap4'), (Act 55 6 0 60),
+    (Disable 'gunCap4'), (Act 55 6 0 60), (Act 56 2),
     (Text 'Inzynier 4/4: armata gotowa! Bog chroni Krola. I nasze bebenki.'), (Enable 'gunJoke1')) -house 'Special' -Disabled | Out-Null
 Trigger 'gunJoke1' 'Armata: Einstein' @((Ev 13 7)) @(
     (Text 'Einstein: Kaliber 17,72 cala. Strzela raz na kilka minut i trafia mniej wiecej co czwarty raz. Ale jak trafi, Nod przestaje istniec w promieniu boiska.'),
@@ -597,7 +677,33 @@ Trigger 'fin6' 'Final 6: von Esling' @((Ev 13 6)) @(
 Trigger 'fin7' 'Final 7: blysk' @((Ev 13 (Get-ReadSecs @($ini.Get('Tutorial', "$textNo", ''))))) @((Act 66 10), (Act 64 10), (Enable 'fin8')) -Disabled | Out-Null
 Trigger 'fin8' 'Final 8: wygrana' @((Ev 13 10)) @((Act 1 $H.Allies)) -Disabled | Out-Null
 
+# objective reminders (user 2026-10-29: "reminders of the objectives and their progress, but do not overdo it"). The
+# gun has its own k/4 progress lines, the countdown is on screen. Each reminder is switched on by a starter trigger
+# without text (a reminder enabled from a dialogue trigger would join that dialogue's chain in the timeline checks);
+# the starters' times are set after the pacing pass, from the end of the opening and of the gun hint. The gaps put each
+# first reminder into a free slot of the text timeline (0 WARN): Tanya at ~1286 s (before she breaks out at 1308 s),
+# the main objective at ~1430 s, the gun at ~1675 s; the next firings would come after the jump
+Trigger 'remOnA' 'Przypomnienia: start (wstep)' @((Ev 13 1)) @() | Out-Null
+Trigger 'remOnB' 'Przypomnienia: start (armata)' @((Ev 13 1)) @() | Out-Null
+Add-ObjectiveReminder 'remMain' 'Cel (przypomnienie): utrzymaj ARKE i 4 elektrownie do konca odliczania.' -From 'remOnA' -Until 1 -Every 1135
+Add-ObjectiveReminder 'remTanya' 'Cel dodatkowy (przypomnienie): odbij Tanye w parku w La Linea, za granica na polnocnym wschodzie.' -From 'remOnA' -Until 0 -Every 991
+Add-ObjectiveReminder 'remGun' 'Cel dodatkowy (przypomnienie): 4 inzynierow do armaty przy szpitalu nad Camp Bay.' -From 'remOnB' -Until 2 -Every 993
+$trig['fin0'].Actions = @($trig['fin0'].Actions) + @((Disable 'remTanya'), (Disable 'remGun'))
+
 Split-MultiText; Set-DialoguePacing
+# reminder starters: when the last line of the opening (intro5 chain) and of the gun hint has been read
+$tt = Get-TriggerTimes
+$endA = @($tt.Keys | Where-Object { $_ -like 'intro5*' } | ForEach-Object { $tt[$_] + (Get-ReadSecs @(Get-TriggerTexts $trig[$_])) } | Measure-Object -Maximum)[0].Maximum
+$endB = $tt['gunHint2'] + (Get-ReadSecs @(Get-TriggerTexts $trig['gunHint2']))
+$trig['remOnA'].Events = @(Ev 13 ([int]$endA)); $trig['remOnB'].Events = @(Ev 13 ([int]$endB))
+$log.Add("reminders: start at ${endA}s (Tanya +991 s, main +1135 s) and ${endB}s (gun +993 s)")
+# clock-bound lines from the real countdown start: half of the charge, and Stavros' "five minutes to the jump" with the
+# final assault 5 min before the end (it used to drift with the opening's length)
+$t0 = (Get-TriggerTimes)['intro3']
+$trig['half'].Events = @(Ev 13 ($t0 + [int]($countdown / 2)))
+$trig['w6'].Events = @(Ev 13 ($t0 + $countdown - 300))
+$log.Add("countdown $countdown s from ${t0}s: half at $($t0 + [int]($countdown / 2))s, assault at $($t0 + $countdown - 300)s, jump at $($t0 + $countdown)s")
+$quietWarn = Test-QuietDialogue   # before Add-Difficulty: it moves the enemy reinforcements into helper triggers
 Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)
 $textWarn = Test-TextTimeline
 
@@ -623,7 +729,7 @@ foreach ($k in $basic.Keys) { $ini.Set('Basic', $k, $basic[$k]) }
 $brief = @(
     'Gibraltar, 1953. Alianci przegrali wojne. Londyn padl, a sowiecko-nodyjski walec stoi u bram Twierdzy.',
     '@@Pod Skala prof. Einstein konczy Projekt ARKA: Giga-Chronosfere, ktora przeniesie cala baze z ludzmi w przeszlosc.',
-    '@@Rdzen potrzebuje 30 minut ladowania. Utrzymaj ARKE i 4 elektrownie, ktore ja zasilaja. Sowieci nadejda z Hiszpanii, Nod od morza.')
+    "@@Rdzen potrzebuje $([int]($countdown / 60)) minut ladowania. Utrzymaj ARKE i 4 elektrownie, ktore ja zasilaja. Sowieci nadejda z Hiszpanii, Nod od morza.")
 for ($i = 0; $i -lt $brief.Count; $i++) { $ini.Set('Briefing', "$($i + 1)", $brief[$i]) }
 $ini.Set('SpecialFlags', 'Visceroids', 'no')
 
@@ -653,7 +759,7 @@ Side=2
 IconPath=alliesicon.png
 PlayerAlwaysOnNormalDifficulty=yes
 Categories=CAT_SA
-LongDescription=Gibraltar, 1953. Alianci przegrali wojne, a ostatni przyczolek trzyma gen. von Esling. Pod Skala prof. Einstein konczy Projekt ARKA: Giga-Chronosfere, ktora ma przeniesc cala baze w przeszlosc. @@Rdzen potrzebuje 30 minut ladowania. Utrzymaj ARKE i 4 elektrownie. Sowieci nadejda z Hiszpanii, Nod od morza.
+LongDescription=Gibraltar, 1953. Alianci przegrali wojne, a ostatni przyczolek trzyma gen. von Esling. Pod Skala prof. Einstein konczy Projekt ARKA: Giga-Chronosfere, ktora ma przeniesc cala baze w przeszlosc. @@Rdzen potrzebuje $([int]($countdown / 60)) minut ladowania. Utrzymaj ARKE i 4 elektrownie. Sowieci nadejda z Hiszpanii, Nod od morza.
 "@
     # merge: keep the entries of the other ARKA missions (build-arka01-mission.ps1 adds M_ARKA01 to the same file)
     [IO.File]::WriteAllText("$work\BattleE.new.ini", $battle, [Text.Encoding]::ASCII)
@@ -675,6 +781,8 @@ $wpUsed = 10..45
 $sec = { param($n) @($ini.Section($n)).Count }
 foreach ($k in $trig.Keys) { foreach ($a in $trig[$k].Actions) { $p = $a -split ','; if ($p[0] -eq '80') { if (-not $ini.Has($p[2])) { $log.Add("FAIL team $($p[2]) missing"); $fail++ } } } }
 foreach ($kv in $ini.Section('Structures')) { $p = $kv.Value -split ','; if ($p[6] -ne 'None' -and -not $ini.Get('Tags', $p[6], $null)) { $log.Add("FAIL structure tag $($p[6]) has no [Tags] entry"); $fail++ } }
+foreach ($kv in $ini.Section('Infantry')) { $p = $kv.Value -split ','; if ($p[8] -ne 'None' -and -not $ini.Get('Tags', $p[8], $null)) { $log.Add("FAIL infantry tag $($p[8]) has no [Tags] entry"); $fail++ } }
+foreach ($kv in $ini.Section('TeamTypes')) { $tg = $ini.Get($kv.Value, 'Tag', $null); if ($tg -and -not $ini.Get('Tags', $tg, $null)) { $log.Add("FAIL team $($kv.Value) tag $tg has no [Tags] entry"); $fail++ } }
 foreach ($id in ($ini.Section('TaskForces') | ForEach-Object { $_.Value })) { foreach ($kv in $ini.Section($id)) { if ($kv.Key -match '^\d+$' -and $kv.Value -notmatch '^\d+,\w+$') { $log.Add("FAIL taskforce $id entry '$($kv.Value)'"); $fail++ } } }
 foreach ($kv in $ini.Section('Triggers')) { if (($kv.Value -split ',').Count -ne 8) { $log.Add("FAIL trigger $($kv.Key) has $(($kv.Value -split ',').Count) fields"); $fail++ } }
 # ground teams must not use script action 1 (attack waypoint): they stop there for good (user test 2026-10-27)
@@ -685,7 +793,7 @@ foreach ($kv in $ini.Section('TeamTypes')) {
 }
 # landing waypoints: the transports spawn on water (code 9/1) and sail to a beach cell they can unload on
 foreach ($n in 64, 26, 45, 23, 42, 24, 43, 27) { $log.Add("wp $n @ $($wp[$n][0]),$($wp[$n][1]) terrain code $($code[$wp[$n][1] * $GW + $wp[$n][0]])") }
-$log.Add($(if ($fail) { "CHECKS: $fail FAIL" } else { 'CHECKS: PASS (teams exist, every object tag has a trigger)' }) + "; text timeline: $textWarn WARN")
+$log.Add($(if ($fail) { "CHECKS: $fail FAIL" } else { 'CHECKS: PASS (teams exist, every object tag has a trigger)' }) + "; text timeline: $textWarn WARN; waves during dialogue: $quietWarn WARN")
 $log | Set-Content "$work\log.txt" -Encoding UTF8
 $log
 

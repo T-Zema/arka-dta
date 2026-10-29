@@ -167,6 +167,36 @@ Użytkownik zgłosił: Zergi na górze strzelają do jakiejś kolonii, Duke ma l
   **(niezweryfikowane w grze: AI-produkcja piechoty, dron AI zbierający do Extractora)**
 - `VeinholeShrinkRate=8` (było 5; prośba: zanikanie o 40% wolniej).
 
+## Wersja 7 (2026-10-29)
+
+- **Oblężenie odsunięte od Norad II** (użytkownik: „Norad II jest atakowany sunkenami czy innymi Zergami na początku gry”):
+  - przyczyna: pierścień z wersji 4 liczył 13–21 pól tylko od kadłuba i Duke'a (wp 34, 35), a nie od bunkrów (wp 36, 37) i oddziału. Sunken (175,116) stał 11,4 pola od bunkra, a Sunken ma `Sight=12` (`GuardRange=8`), więc walka zaczynała się od razu;
+  - teraz pierścień ma promień 18 (zamiast 16) i pasmo 15–23 pola od kadłuba, Duke'a **i obu bunkrów**. Ta sama granica 15 obowiązuje stada przy koloniach i kolonie na płaskowyżu NW;
+  - kąt trafiający w klif próbuje promieni 19, 17, 20, 21, 16. Wynik: 10 kolonii i 5 stad (było 9 i 4); kąty 210° i 240° nie mają miejsca;
+  - najbliższy Sunken stoi teraz 15 pól od bunkra albo Marine (było 11,4), najbliższy Spore 14,1 (tylko przeciwlotniczy).
+
+  **(niezweryfikowane w grze)**
+
+## Przypominajki celów (2026-10-29)
+
+Prośba użytkownika: „przypominajki objectivów i ich progress, ale nie przesadzaj”. Funkcje `Add-ObjectiveReminder` i `Add-CountProgress` z `tools/MissionKit.ps1` ([[engine/triggers-and-dialogue]]):
+- **Cel 1** (analiza) bez przypominajki: postęp już mówią kwestie Einsteina „połowa” i „trzy czwarte”.
+- **Cel 2, faza 1**: „Cel 2 (przypomnienie): dotrzyj do Norad II w niecce na poludniowym wschodzie.” co 1030 s gry od `mengsk5`, do zmiennej 8 (obrona Norad II ruszyła). Odstęp 1030 zamiast 900, bo pierwsze przypomnienie w 1374 s wpadało w dialog analizy (1200–1496 s).
+- **Cel 2, faza 2**: „Cel 2 (przypomnienie): przewiez Duke'a Dropshipem do laboratorium Einsteina.” co 900 s od `drop3`, do zmiennej 1 (Duke w bazie).
+- **Gniazda (cel dodatkowy)**: „Gniazda Zergow (cel dodatkowy): 1 z 2 zniszczone.” po pierwszym z gniazd (zmienne 2 i 3, dowolna kolejność). Drugie gniazdo ma już własną kwestię.
+- Cel 3 (ostatnia fala) jest krótki, więc nie ma przypominajki.
+
+Oś tekstów: 0 WARN, CHECKS PASS. **(niezweryfikowane w grze)**
+
+## Wersja 8 (2026-10-29, posterunki zaznaczone na renderze niecki)
+
+- **Pas na północ od niecki** (komórki 144,108–151,101): Sunken (145,106), Spore (148,103), Sunken (151,101), stado 6 Zerglingów i stado 5 Zerglingów + 2 Hydraliski.
+- **Otwarty teren na zachód od niecki** (ok. 134,125): Sunken (134,124), Spore (133,127), stado 6 Zerglingów + 1 Hydralisk.
+- Stada mają `Area Guard`, wszystko stoi ≥ 15 pól od kadłuba, Duke'a i bunkrów (`FarFromHull`, jak pierścień z wersji 7). Pozycje to cele dla `Find-Spot`, który przesuwa je na najbliższe wolne pole. Siewniki creepu pod nowe kolonie dokłada generator jak w wersji 6.
+- Ze zrzutu na komórki: zrzut z Painta to wycinek renderu przesunięty o ok. (−60, +12) px. Kadr wycinka zaczyna się w pikselu (1827, 2059) pełnego renderu, a dalej działa wzór z wersji 5.
+
+**(niezweryfikowane w grze)**
+
 ## Do sprawdzenia w grze
 
 - Czy laboratorium (`BIO`, `Image=BIOE_UP`) i ARKA są widoczne (renderer ich nie rysuje).

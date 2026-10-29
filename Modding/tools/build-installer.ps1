@@ -1,13 +1,13 @@
 # Builds the installer of our mods: Modding\dist\DTA-SCMod-Setup.exe (one file; it leaves an uninstaller in <game>\SCMod\).
 # Wiki: workflow/installer.
-#   1. assets (Modding\installer\assets, only when missing or -Assets): DTA client graphics (main menu background, Classic
-#      buttons, race icons, icon) + StarCraft portraits (HD2 webm -> JPEG strips, ffmpeg via pixi) and UI sounds from CASC
+#   1. assets (Modding\installer\assets, only when missing or -Assets), all from the local StarCraft: SD glue screens
+#      (DDS -> PNG), SC1 bitmap fonts, UI sounds (CASC) and the icon of StarCraft.exe
 #   2. the program: tools\ScModSetup.cs compiled with the csc of .NET Framework 4, assets as resources
 #   3. the payload: every file of Modding\dta\state.json as it is on disk (files/<path>) + the pristine DTA copy of each
 #      modified/patched file (base/<path>, for a clean uninstall even where our file was already in place) + manifest.json
 #   4. exe = program + zip + int64 zip length + "SCMODPK1"
 # Usage: build-installer.ps1 [-Assets] [-NoPayload] [-Version 2026.10.28] [-Out <exe>]
-#   -NoPayload: only the program (= the uninstaller), for trying the window: <exe> /shot <png> [idle|busy|ask|done|hover]
+#   -NoPayload: only the program (= the uninstaller), for trying the window: <exe> /shot <png> [idle|busy|ask|done|hover] uninstall
 param([switch]$Assets, [switch]$NoPayload, [string]$Version = (Get-Date -Format 'yyyy.MM.dd'), [string]$Out = '')
 . "$PSScriptRoot\dta-common.ps1"
 
@@ -18,60 +18,85 @@ New-Item -ItemType Directory -Force $assetDir, $work, (Split-Path $Out) | Out-Nu
 $scDir = 'C:\Program Files (x86)\StarCraft'
 
 # ---- 1. assets ----
-$dtaAssets = [ordered]@{
-    'bg.png'      = 'Resources\DTA Theme\MainMenu\mainmenubg.png'
-    'lineh.png'   = 'Resources\DTA Theme\MainMenu\lineh.png'
-    'btn.png'     = 'Resources\Classic Theme\MainMenu\button1.png'
-    'btn_c.png'   = 'Resources\Classic Theme\MainMenu\button1_c.png'
-    'terran.png'  = 'Resources\terranicon.png'
-    'zerg.png'    = 'Resources\zergicon.png'
-    'protoss.png' = 'Resources\protossicon.png'
-    'app.ico'     = 'Resources\mainclienticon.ico'
+# glue screens of the SD (640x480) StarCraft: uncompressed 32-bit DDS -> PNG
+$scImages = [ordered]@{
+    'glue_bg.png'    = 'SD/glue/palnl/backgnd.DDS'   # the moon over a rocky plain
+    'glue_title.png' = 'SD/glue/title/title.DDS'     # title screen: the logo is cut out of it at run time
+    'glue_popup.png' = 'SD/glue/palmm/popopup.DDS'   # popup panel
 }
-$scSounds = [ordered]@{
+# SC1 bitmap fonts (FONT format with RLE glyphs; the HD ones are DDS atlases)
+$scFiles = [ordered]@{
+    'font16x.fnt' = 'SD/font/font16x.fnt'; 'font16.fnt' = 'SD/font/font16.fnt'; 'font14.fnt' = 'SD/font/font14.fnt'
     'click.wav' = 'SD/sound/misc/button.wav'; 'hover.wav' = 'SD/sound/glue/mouseover.wav'
-    'transmission.wav' = 'SD/sound/misc/transmission.wav'; 'done.wav' = 'SD/sound/glue/scorefillend.wav'
-    'error.wav' = 'SD/sound/misc/buzz.wav'; 'open.wav' = 'SD/sound/glue/swishin.wav'
+    'done.wav' = 'SD/sound/glue/scorefillend.wav'; 'error.wav' = 'SD/sound/misc/buzz.wav'; 'open.wav' = 'SD/sound/glue/swishin.wav'
 }
-# portrait key -> CASC folder/prefix; clips fid00-02 (idle, fidgets) and tlk00 (talking)
-$heroes = [ordered]@{ raynor = 'HD2/portrait/ujim/ura'; kerrigan = 'HD2/portrait/uikerr/uik'; zeratul = 'HD2/portrait/uzeratul/uze' }
-$clips = 'fid00', 'fid01', 'fid02', 'tlk00'
-
-foreach ($k in $dtaAssets.Keys) {
-    $d = Join-Path $assetDir $k
-    if ($Assets -or -not (Test-Path $d)) { Copy-Item (Join-Path $DtaRoot $dtaAssets[$k]) $d -Force }
-}
-$needSc = $Assets -or @($scSounds.Keys | Where-Object { -not (Test-Path (Join-Path $assetDir $_)) }).Count -gt 0 -or
-          @(foreach ($h in $heroes.Keys) { foreach ($c in $clips) { if (-not (Test-Path (Join-Path $assetDir "${h}_$c.jpg"))) { 1 } } }).Count -gt 0
-if ($needSc) {
-    "assets: StarCraft portraits and sounds from CASC"
+$need = $Assets -or @(@($scImages.Keys) + @($scFiles.Keys) + 'app.ico' | Where-Object { -not (Test-Path (Join-Path $assetDir $_)) }).Count -gt 0
+if ($need) {
+    "assets: StarCraft glue screens, fonts, sounds and icon"
     Add-Type -Path "$PSScriptRoot\Casc.cs" -ReferencedAssemblies System.IO.Compression
-    Add-Type -AssemblyName System.Drawing
-    $casc = New-Object Casc $scDir
-    foreach ($k in $scSounds.Keys) { [IO.File]::WriteAllBytes((Join-Path $assetDir $k), $casc.ReadFile($scSounds[$k])) }
-    $jpg = [Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() | Where-Object { $_.MimeType -eq 'image/jpeg' }
-    $ep = New-Object Drawing.Imaging.EncoderParameters 1
-    $ep.Param[0] = New-Object Drawing.Imaging.EncoderParameter ([Drawing.Imaging.Encoder]::Quality), 90L
-    foreach ($h in $heroes.Keys) {
-        foreach ($c in $clips) {
-            $tmp = Join-Path $work "portrait\$h-$c"
-            Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue; New-Item -ItemType Directory -Force $tmp | Out-Null
-            $path = $heroes[$h] + $c + '.webm'
-            $key = @($casc.Root.Keys | Where-Object { $_ -ieq $path })[0]   # CASC paths keep their odd casing
-            if (-not $key) { Write-Warning "no $path in CASC"; continue }
-            [IO.File]::WriteAllBytes("$tmp\clip.webm", $casc.ReadFile($key))
-            $ErrorActionPreference = 'Continue'
-            & pixi exec --spec ffmpeg ffmpeg -hide_banner -loglevel error -y -i "$tmp\clip.webm" "$tmp\f%03d.png" 2>&1 | Out-Null
-            $ErrorActionPreference = 'Stop'
-            $frames = @(Get-ChildItem "$tmp\f*.png" | Sort-Object Name)
-            if (-not $frames) { throw "ffmpeg gave no frames for $path" }
-            $strip = New-Object Drawing.Bitmap (224 * $frames.Count), 240
-            $g = [Drawing.Graphics]::FromImage($strip)
-            for ($i = 0; $i -lt $frames.Count; $i++) { $im = [Drawing.Image]::FromFile($frames[$i].FullName); $g.DrawImage($im, $i * 224, 0, 224, 240); $im.Dispose() }
-            $g.Dispose(); $strip.Save((Join-Path $assetDir "${h}_$c.jpg"), $jpg, $ep); $strip.Dispose()
-            "  $h $c : $($frames.Count) frames"
+    Add-Type -ReferencedAssemblies System.Drawing -TypeDefinition @'
+using System; using System.Collections.Generic; using System.Drawing; using System.Drawing.Imaging; using System.IO;
+using System.Runtime.InteropServices;
+public static class ScAsset {
+    // DDS with an uncompressed 32-bit pixel format (channel masks at 92..104) -> PNG
+    public static void DdsToPng(byte[] b, string png) {
+        if (BitConverter.ToInt32(b, 88) != 32) throw new Exception("not an uncompressed 32-bit DDS");
+        int h = BitConverter.ToInt32(b, 12), w = BitConverter.ToInt32(b, 16);
+        uint[] m = { BitConverter.ToUInt32(b, 92), BitConverter.ToUInt32(b, 96), BitConverter.ToUInt32(b, 100), BitConverter.ToUInt32(b, 104) };
+        int[] px = new int[w * h];
+        for (int i = 0; i < px.Length; i++) {
+            uint v = BitConverter.ToUInt32(b, 128 + i * 4);
+            px[i] = (int)(((m[3] == 0 ? 255 : Ch(v, m[3])) << 24) | (Ch(v, m[0]) << 16) | (Ch(v, m[1]) << 8) | Ch(v, m[2]));
+        }
+        using (Bitmap bmp = new Bitmap(w, h, PixelFormat.Format32bppArgb)) {
+            BitmapData d = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            Marshal.Copy(px, 0, d.Scan0, px.Length); bmp.UnlockBits(d); bmp.Save(png, ImageFormat.Png);
         }
     }
+    static uint Ch(uint v, uint m) { if (m == 0) return 0; int s = 0; while (((m >> s) & 1) == 0) s++; return (v & m) >> s; }
+
+    // the first icon group of an exe as an .ico file
+    [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)] static extern IntPtr LoadLibraryEx(string f, IntPtr h, uint flags);
+    [DllImport("kernel32")] static extern bool FreeLibrary(IntPtr h);
+    delegate bool EnumProc(IntPtr h, IntPtr type, IntPtr name, IntPtr l);
+    [DllImport("kernel32", CharSet = CharSet.Unicode)] static extern bool EnumResourceNames(IntPtr h, IntPtr type, EnumProc cb, IntPtr l);
+    [DllImport("kernel32", CharSet = CharSet.Unicode)] static extern IntPtr FindResource(IntPtr h, IntPtr name, IntPtr type);
+    [DllImport("kernel32")] static extern IntPtr LoadResource(IntPtr h, IntPtr r);
+    [DllImport("kernel32")] static extern IntPtr LockResource(IntPtr r);
+    [DllImport("kernel32")] static extern uint SizeofResource(IntPtr h, IntPtr r);
+    static byte[] Res(IntPtr m, IntPtr name, int type) {
+        IntPtr r = FindResource(m, name, (IntPtr)type);
+        if (r == IntPtr.Zero) return null;
+        byte[] b = new byte[SizeofResource(m, r)]; Marshal.Copy(LockResource(LoadResource(m, r)), b, 0, b.Length); return b;
+    }
+    public static byte[] ExeIcon(string exe) {
+        IntPtr m = LoadLibraryEx(exe, IntPtr.Zero, 0x22);   // as datafile + image resource
+        if (m == IntPtr.Zero) return null;
+        byte[] ico = null;
+        EnumProc cb = delegate(IntPtr h, IntPtr t, IntPtr name, IntPtr l) {
+            byte[] grp = Res(m, name, 14);   // RT_GROUP_ICON: 6-byte header + 14-byte entries (.., nID)
+            if (grp == null) return true;
+            int n = BitConverter.ToUInt16(grp, 4); List<byte[]> img = new List<byte[]>();
+            for (int i = 0; i < n; i++) img.Add(Res(m, (IntPtr)BitConverter.ToUInt16(grp, 6 + i * 14 + 12), 3));
+            MemoryStream ms = new MemoryStream(); BinaryWriter w = new BinaryWriter(ms);
+            w.Write((ushort)0); w.Write((ushort)1); w.Write((ushort)n);
+            int off = 6 + 16 * n;
+            for (int i = 0; i < n; i++) { w.Write(grp, 6 + i * 14, 8); w.Write((uint)img[i].Length); w.Write((uint)off); off += img[i].Length; }
+            foreach (byte[] b in img) w.Write(b);
+            ico = ms.ToArray(); return false;
+        };
+        EnumResourceNames(m, (IntPtr)14, cb, IntPtr.Zero);
+        FreeLibrary(m);
+        return ico;
+    }
+}
+'@
+    $casc = New-Object Casc $scDir
+    foreach ($k in $scImages.Keys) { [ScAsset]::DdsToPng($casc.ReadFile($scImages[$k]), (Join-Path $assetDir $k)) }
+    foreach ($k in $scFiles.Keys) { [IO.File]::WriteAllBytes((Join-Path $assetDir $k), $casc.ReadFile($scFiles[$k])) }
+    $ico = [ScAsset]::ExeIcon((Join-Path $scDir 'x86_64\StarCraft.exe'))
+    if ($ico) { [IO.File]::WriteAllBytes((Join-Path $assetDir 'app.ico'), $ico) }
+    else { Write-Warning 'no icon in StarCraft.exe, using the DTA client icon'; Copy-Item (Join-Path $DtaRoot 'Resources\mainclienticon.ico') (Join-Path $assetDir 'app.ico') -Force }
 }
 
 # ---- 2. program ----

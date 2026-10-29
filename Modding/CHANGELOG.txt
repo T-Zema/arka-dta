@@ -1,9 +1,110 @@
+DTA StarCraft Mod + ARKA campaign - changelog
+==============================================
+
+A mod for Dawn of the Tiberium Age: StarCraft factions, units and buildings, new engine patches
+and the mashup campaign "ARKA: Sign Error" (Red Alert x StarCraft). For private use: the StarCraft
+graphics, sounds and music come from a legal copy of StarCraft: Remastered and belong to Blizzard
+Entertainment. Each version is described in English first, then in Polish (versions before
+2026.10.29: Polish only).
+
 DTA StarCraft Mod + kampania ARKA - lista zmian
 ================================================
 
 Mod do Dawn of the Tiberium Age: frakcje, jednostki i budynki ze StarCrafta, nowe łatki silnika
-i kampania mashup "ARKA: Błąd znaku" (Red Alert x StarCraft). Do prywatnego użytku: grafika
-i dźwięki StarCrafta pochodzą z legalnej kopii StarCraft: Remastered i należą do Blizzard Entertainment.
+i kampania mashup "ARKA: Błąd znaku" (Red Alert x StarCraft). Do prywatnego użytku: grafika,
+dźwięki i muzyka StarCrafta pochodzą z legalnej kopii StarCraft: Remastered i należą do Blizzard
+Entertainment. Każda wersja jest opisana najpierw po angielsku, potem po polsku (wersje przed
+2026.10.29: tylko po polsku).
+
+
+Version 2026.10.29 - StarCraft-style installer in English, StarCraft music, ARKA fixes (for DTA 16.2.3)
+--------------------------------------------------------------------------------------------------------
+
+INSTALLATION
+
+- Run the new DTA-SCMod-Setup.exe and click "Update StarCraft Mod". The previous version does not
+  have to be uninstalled.
+- The installer now looks like the 1998 StarCraft installer: the StarCraft logo, the moon screen,
+  the StarCraft menu font and sounds. It is in English by default; "Language: English" in the menu
+  switches it to Polish (the choice is remembered).
+- Fewer technical details on screen: the log is under "Details" once the work is done.
+
+STARCRAFT MUSIC (new)
+
+- All 23 StarCraft tracks as DTA music: 14 in the in-game random playlist (title, Terran, Zerg,
+  Protoss, Radio Free Zerg), 9 short ones (ready room, victory, defeat) for mission scripts.
+
+"ARKA: SIGN ERROR" CAMPAIGN
+
+- All missions: a reminder of the current objective now and then (about every 15 minutes of game
+  time) and progress counters ("2 of 3") for objectives with several parts.
+- #0 Gibraltar: Tanya waits on a clearing marked with a flare and joins when you reach her; the ARKA
+  has 28000 HP, a wall with 2 gates, 2 more gun turrets, pillboxes, AA guns and 2 power plants; more
+  time between dialogue lines; the core charges for 33 minutes.
+- #1 Foreign Sand (Obcy piasek): the ARKA wreck can no longer be shot at; the Zerg nest has one
+  entrance (a passage) instead of two, 5 more Sunken Colonies and guards. When both side Sunkens
+  fall, the Spawning Pool keeps sending Zerglings and Broodlings until you destroy it.
+- #2 Evacuation (Ewakuacja): the Zerg nest has a new AI: squads hatch in the basin and raid your
+  harvesters, attack in larger waves, settle new ground, defend and counter-attack when you hit the
+  nest, help in the city and grow Sunken Colonies.
+- #4 Green Crystal (Zielony kryształ): the siege of Norad II starts further from the hull, Duke and
+  the bunkers; new Zerg outposts north and west of the basin.
+
+TEST STATUS
+
+- The mission changes and the music are not tested in the game yet. The maps passed the generator
+  checks; the installer passed the 5 sandbox tests (install, re-install, uninstall, install over
+  files already in place, repair after a DTA update).
+
+KNOWN LIMITATIONS
+
+- The ARKA campaign (briefings and dialogue) is in Polish only.
+- The music files lie loose in the MUSIC folder; that the game finds them there is not checked yet.
+
+
+Wersja 2026.10.29 - instalator w stylu StarCrafta po angielsku, muzyka StarCrafta, poprawki ARKA (dla DTA 16.2.3)
+------------------------------------------------------------------------------------------------------------------
+
+INSTALACJA
+
+- Uruchom nowy DTA-SCMod-Setup.exe i kliknij "Update StarCraft Mod" ("Aktualizuj StarCraft Mod").
+  Poprzednia wersja nie musi być odinstalowana.
+- Instalator wygląda teraz jak instalator StarCrafta z 1998 roku: logo StarCrafta, ekran z księżycem,
+  font i dźwięki menu StarCrafta. Domyślnie jest po angielsku; pozycja "Language: English" w menu
+  przełącza na polski (wybór jest zapamiętany).
+- Mniej technicznych szczegółów na ekranie: log jest pod "Szczegóły" po zakończeniu pracy.
+
+MUZYKA STARCRAFTA (nowe)
+
+- Wszystkie 23 utwory StarCrafta jako muzyka DTA: 14 w losowej playliście gry (tytułowy, Terran, Zerg,
+  Protoss, Radio Free Zerg), 9 krótkich (ready room, zwycięstwo, porażka) do skryptów misji.
+
+KAMPANIA "ARKA: BŁĄD ZNAKU"
+
+- Wszystkie misje: co jakiś czas (mniej więcej co 15 minut gry) przypomnienie bieżącego celu
+  i licznik postępu ("2 z 3") przy celach z kilku części.
+- #0 Gibraltar: Tanya czeka na polanie oznaczonej flarą i dołącza, gdy do niej dotrzesz; ARKA ma
+  28000 HP, mur z 2 bramami, 2 dodatkowe działa, bunkry, działka przeciwlotnicze i 2 elektrownie;
+  więcej czasu między kwestiami dialogów; rdzeń ładuje się 33 minuty.
+- #1 Obcy piasek: wraku ARKI nie da się już ostrzeliwać; gniazdo Zergów ma jedno wejście (przesmyk)
+  zamiast dwóch, 5 nowych Sunken Colony i straż. Gdy padną oba boczne Sunkeny, Spawning Pool wysyła
+  Zerglingi i Broodlingi, dopóki go nie zniszczysz.
+- #2 Ewakuacja: gniazdo Zergów ma nowe AI: oddziały wykluwają się w niecce i najeżdżają zbieraczy,
+  atakują większymi falami, zajmują nowy teren, bronią się i kontratakują, gdy uderzysz w gniazdo,
+  pomagają w mieście i budują Sunken Colony.
+- #4 Zielony kryształ: oblężenie Norad II zaczyna się dalej od kadłuba, Duke'a i bunkrów; nowe
+  posterunki Zergów na północ i zachód od niecki.
+
+STAN TESTÓW
+
+- Zmiany w misjach i muzyka nie są jeszcze sprawdzone w grze. Mapy przeszły kontrole generatorów,
+  a instalator 5 testów w piaskownicy (instalacja, ponowna instalacja, deinstalacja, instalacja na
+  plikach już na miejscu, naprawa po aktualizacji DTA).
+
+ZNANE OGRANICZENIA
+
+- Kampania ARKA (odprawy i dialogi) jest tylko po polsku.
+- Pliki muzyki leżą luzem w folderze MUSIC; że gra je tam znajduje, nie jest jeszcze sprawdzone.
 
 
 Wersja 2026.10.28.2 - poziomy trudności kampanii ARKA (dla DTA 16.2.3)

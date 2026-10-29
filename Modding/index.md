@@ -46,7 +46,7 @@ Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. His
 - [[engine/transports]]: wsiadanie do transportu (`IsVehicleTransport=yes`, transport musi stać), łatka `patch-airboard.ps1` dla piechoty.
 - [[engine/buildup-timing]]: czas Buildupu (ok. 81 ticków), łatka `patch-buildup.ps1`, czas produkcji (minimum 54 ticki).
 - [[engine/veins]]: żyły i Veinhole Monster: tworzenie w trakcie gry, wzrost, własność, kurczenie (`VeinholeShrinkRate`).
-- [[engine/zerg-ai]]: AI Zergów buduje dronami (`Add-ZergBuilder` w `MissionKit.ps1`), skirmish wymagałby łatki.
+- [[engine/zerg-ai]]: AI Zergów buduje dronami (`Add-ZergBuilder` w `MissionKit.ps1`), skirmish wymagałby łatki. **Ogólne AI gniazda** `Add-ZergAI` (`tools/ZergAI.ps1`): produkcja w Niecce, ataki, alarm i obrona, kontratak, pomoc, rozbudowa.
 - [[engine/triggers-and-dialogue]]: **jak pisać misje**: format triggerów, drużyny, ID zdarzeń i akcji, czas, dialogi i ich tempo, `[Tutorial]` (ARKA 9000+), trudność, `Battle.ini`/`BattleE.ini`, `dump-triggers.ps1`.
 - [[engine/briefing-movies]]: filmy briefingu w stylu SC (`Brief=`, `MOVIES/*.MP4`, `build-briefing.ps1`). Niezweryfikowane w grze.
 - [[engine/sides-and-houses]]: `[Sides]`/`[Houses]`, `Side=` klienta = indeks domu, pliki strony `SIDEC/SPEECH%02d.MIX`.
@@ -73,16 +73,17 @@ Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. His
 | [[mods/sc-building-sounds]] | nietestowany | dźwięki zaznaczania budynków SC (`ECACHE79`) |
 | [[mods/sc-workers]] | animacje działają | SCV/Dron/Probe z animacją wydobycia, Refinery daje 2 SCV (`ECACHE78`) |
 | [[mods/sc-infantry-stim]] | nietestowany | łatka deploy piechoty `patch-infdeploy.ps1`, Marine i Firebat jako piechota (`ECACHE81`) |
+| [[mods/sc-music]] | nietestowany | 23 utwory SC jako tematy DTA (luźne `MUSIC\SC*.AUD`, indeksy 89–111 w `Theme.ini`) |
 | [[mods/sc-lost-temple]] | **działa w grze**, zarchiwizowana | mapa SC (4)Lost Temple |
 | [[mods/sc-fighting-spirit]] | zarchiwizowana, nietestowana | mapa SC (4)Fighting Spirit |
 
 ## Misje (kampania ARKA)
 - [[plans/campaign-arka]]: scenariusz kampanii mashup RA1 × StarCraft „ARKA: Błąd znaku” (preludium, misje 1–11, bonusowe 12–13). HTML: `exports/campaign-arka.html`, przebudowa `tools/build-campaign-html.ps1` po każdej zmianie strony.
-- [[workflow/mission-design]]: **zasady projektu misji** (czytaj przed każdą misją): złoża na różnym ryzyku + kopalnia, skrzynki z kasą, rajdy AI na zbieracze, drogi bez ślepych końców.
+- [[workflow/mission-design]]: **zasady projektu misji** (czytaj przed każdą misją): złoża na różnym ryzyku + kopalnia, skrzynki z kasą, rajdy AI na zbieracze, drogi bez ślepych końców, najpierw dialog, potem fala (`Test-QuietDialogue`).
 - [[workflow/mission-maps]]: mapy misji z prawdziwego terenu (Google Maps + OSM + DEM → DTA).
 - [[missions/arka-00-gibraltar]]: teren preludium (Gibraltar 1953), waypointy 10–47 jako kontrakt z warstwą misji.
-- [[missions/arka-00-triggers]]: warstwa misji preludium (`arka00.map`): ARKA, elektrownie, fale Sowietów, desanty Nod, 100 Ton Gun do przejęcia inżynierami. Testy 2026-10-27: ARKA i prąd działają.
-- [[missions/arka-01-marsara]]: ARKA 1 „Obcy piasek” (dla użytkownika „misja 2”): mapa SC T2 Backwater Station, typy SC skopiowane do mapy, creep od startu. Nietestowana.
+- [[missions/arka-00-triggers]]: warstwa misji preludium (`arka00.map`): ARKA, elektrownie, fale Sowietów, desanty Nod, 100 Ton Gun do przejęcia inżynierami. Testy 2026-10-27: ARKA i prąd działają. Od 2026-10-29: nietykalna Tanya-atrapa, mur i obrona wokół ARKI (28 000 HP), licznik 33:00, fale nie w trakcie dialogów.
+- [[missions/arka-01-marsara]]: ARKA 1 „Obcy piasek” (dla użytkownika „misja 2”): mapa SC T2 Backwater Station, typy SC skopiowane do mapy, creep od startu, przesmyk gniazda z produkcją obrońców w Spawning Poolu, wrak ARKI z pancerzem 0%. Nietestowana.
 - [[missions/arka-02-ewakuacja]]: ARKA 2 „Ewakuacja”: mapa SC T3 Desperate Alliance, eskorta kolonistów, licznik skoku. Nietestowana.
 - [[missions/arka-04-zielony-krysztal]]: ARKA 4 „Zielony kryształ”: mapa SC T6 Norad II, TEMPERATE, misja ekonomiczna, Duke jako Marine. Nietestowana. (Misja 3 nie jest zbudowana.)
 - [[missions/arka-05-tarsonis]]: ARKA 5 „Upadek Tarsonis”: CASC `Terran10`, ewakuacja cywilów liczona na kredytach, `Civilian=no`. Nietestowana.
@@ -104,7 +105,7 @@ Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. His
 - [[workflow/tools-catalog]]: katalog skryptów (biblioteki, generatory z numerami MIX i plikami INI, łatki, misje, repo, sondy).
 - [[workflow/tooling]]: parser INI w PowerShell, kodowanie INI (Latin-1), pułapki PowerShella, narzędzia C#.
 - [[workflow/repo-and-updates]]: git w folderze gry: `dta-capture.ps1` po każdej zmianie, `dta-precheck.ps1`/`dta-restore.ps1` przy aktualizacji DTA (aktualizacja przywraca zmienione pliki DTA i usuwa `ECACHE99.MIX`/`BattleE.ini`).
-- [[workflow/installer]]: instalator i deinstalator `Modding/dist/DTA-SCMod-Setup.exe` (`build-installer.ps1`, budować po `dta-capture`), UI sprawdzać tylko przez `/shot`.
+- [[workflow/installer]]: instalator i deinstalator `Modding/dist/DTA-SCMod-Setup.exe` w stylu instalatora SC 1998 (grafika i font SC1 z CASC; `build-installer.ps1`, budować po `dta-capture`), UI sprawdzać tylko przez `/shot`.
 - [[workflow/scmap-pipeline]]: mapa SC → `Maps/Custom` jednym poleceniem `port-scmap.ps1`.
 
 ## Archiwa

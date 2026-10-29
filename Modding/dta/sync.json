@@ -6,6 +6,7 @@
         "^Modding/",
         "^(\\.git|\\.gitignore|\\.gitattributes|README\\.md|CLAUDE\\.md)$",
         "^\\.git/",
+        "^\\.claude/",
         "^Client/",
         "^Debug/",
         "^Saved Games/",

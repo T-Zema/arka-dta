@@ -883,6 +883,12 @@ Trigger 'endWin' 'Wygrana' @((Ev 13 40)) @((Act 1 $H.Allies)) -Disabled
 if (Get-Command Add-ProtossTriggers -ErrorAction SilentlyContinue) { Add-ProtossTriggers }
 if (Get-Command Add-ZergTriggers -ErrorAction SilentlyContinue) { Add-ZergTriggers }
 
+# objective reminders (user 2026-10-29: "reminders and progress for every mission, but do not overdo it"): every 15:00
+# of the timer while objective 1 or 2 is open. The progress of objective 1 is already the pilot's count every 6
+# civilians (count1-8); objective 3 has the on-screen timer
+Add-ObjectiveReminder 'remCiv' 'Cel (przypomnienie): doprowadz na ladowisko 30 cywilow. Wyjda, gdy dotrzesz na plac dzielnicy.' -From 'intro6' -Until $V.Done30
+Add-ObjectiveReminder 'remKer' 'Cel (przypomnienie): dotrzyj do pozycji Kerrigan na poludniu.' -From 'call6' -Until $V.Scene
+
 Split-MultiText; Set-DialoguePacing
 Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)
 $textWarn = Test-TextTimeline

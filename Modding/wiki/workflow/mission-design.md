@@ -26,6 +26,10 @@ Misja obronna z licznikiem (ARKA 0: 30 minut) i bogatą bazą startową nie daje
    - finał wyłącza rajdy (`54 Disable`).
 4. **Powód do rozbudowy:** cele dodatkowe za bazą (zakładnik, budynek do przejęcia, kopalnia), które wymagają oddziału, a nie tylko obrony.
 5. **Mapa czytelna:** drogi prowadzą gdzieś, jak w misjach DTA ([[workflow/mission-maps]], „Drogi”).
+6. **Najpierw przeczytać, potem walczyć** (lekcja użytkownika po teście ARKA 0, 2026-10-29: „jak lecą teksty, to daj graczowi przeczytać i potem zwiększ dynamikę gry”). Podczas dialogu fabularnego (łańcuch 2+ kwestii) nie przychodzi żadna fala, desant ani rajd; tempo rośnie dopiero po ostatniej kwestii. Fala zapowiedziana pierwszą kwestią łańcucha może przyjść razem z nią. W generatorze:
+   - `Test-QuietDialogue` z `MissionKit.ps1` (po `Set-DialoguePacing`, **przed** `Add-Difficulty`) daje `WARN`, gdy wróg (akcje `7`/`80` z drużyną spoza sojuszników gracza, także kolejne odpalenia powtarzanych rajdów) przychodzi w trakcie dialogu. Misja ma mieć 0 WARN; naprawa = przesunąć falę przed dialog albo za niego, nie skracać dialogu;
+   - odstępy między kwestiami liczyć hojnie: w ARKA 0 `$GameSecPerReal = 4.5` (domyślnie 3 było za mało, zob. [[engine/triggers-and-dialogue]] „Tempo dialogów”);
+   - kwestie zależne od zdarzeń (odbicie zakładnika, przejęcie) nie mają znanego czasu. Trzymać je krótkie (2–3 kwestie) albo dawać je wtedy, gdy wiadomo, że jest spokojnie.
 
 ## Lista kontrolna nowej misji
 
@@ -33,13 +37,14 @@ Misja obronna z licznikiem (ARKA 0: 30 minut) i bogatą bazą startową nie daje
 - [ ] 1–4 skrzynki z pieniędzmi w ciekawych miejscach, waypoint przy każdej.
 - [ ] Rajdy powtarzane na każde złoże, `0,3` w skrypcie, wyłączane w finale.
 - [ ] Oś czasu tekstów 0 WARN po dodaniu rajdów (`Test-TextTimeline`).
+- [ ] Żadna fala w trakcie dialogu: `Test-QuietDialogue` 0 WARN (zasada 6).
 - [ ] Drogi bez wolnych końców (`free ends 0` w logu terenu).
 
 ## Stan w misjach
 
 | Misja | Złoża | Łupy | Harras |
 |---|---|---|---|
-| ARKA 0 ([[missions/arka-00-triggers]]) | Skała (wp 47), lotnisko (39), Windmill Hill + `OREMINE` (38) | złoto ukryte w kościele: inżynier wchodzi do The Convent, 5000 (skrzynki na Skale usunięte); armata 100 Ton Gun za 4 inżynierów | 3 rajdy powtarzane od 650 / 865 / 1000 s, co 200 / 260 / 220 s |
+| ARKA 0 ([[missions/arka-00-triggers]]) | Skała (wp 47), lotnisko (39), Windmill Hill + `OREMINE` (38) | złoto ukryte w kościele: inżynier wchodzi do The Convent, 5000 (skrzynki na Skale usunięte); armata 100 Ton Gun za 4 inżynierów | 3 rajdy powtarzane od 692 / 933 / 1157 s, co 224 / 291 / 246 s (od 2026-10-29: harmonogram ×1,12) |
 | ARKA 1 ([[missions/arka-01-marsara]]) | do przejrzenia | – | fala powtarzana co 300 s od 1500 s |
 | ARKA 2 ([[missions/arka-02-ewakuacja]]) | do przejrzenia | – | najazd powtarzany co 450 s od 1500 s |
 | ARKA 4 ([[missions/arka-04-zielony-krysztal]]) | pole bazy ubogie (wp 15), NW (20, lekko strzeżone), centrum (21, w gnieździe), Stickler Woods (39, najbogatsze, gniazdo NE), przy Hive (41); przy każdym kopalnia **niebieskich kryształów** (`OREMINE2` z `TiberiumToSpawn=6`; złota brak na prośbę użytkownika) | 4 skrzynki: Norad II 3000, centrum 2000, Stickler 2500, NW 1500 | rajdy powtarzane `0,3`: centrum → NW od 900 co 600, Hive → Stickler od 1500 co 720, zachód → pole bazy od 1300 co 540; wyłączane przy ostatniej fali; AI Zergów dobudowuje kolonie |

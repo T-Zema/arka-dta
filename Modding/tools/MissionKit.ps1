@@ -7,6 +7,7 @@
 #   Test-TextTimeline                     # after: logs the text timeline, WARN where two texts overlap
 #   Add-ScAirArmor                        # after the SC types are copied: SC flyer armors, Allied AA, Dragoon vs Overlord
 #   Add-Difficulty                        # after Set-DialoguePacing: Easy/Medium waves and money from the client's level
+#   Add-ObjectiveReminder / Add-CountProgress   # before Split-MultiText: objective reminders, "k of n" progress lines
 # Wiki: engine/triggers-and-dialogue (Tempo dialogow, Poziom trudnosci), workflow/mission-maps.
 
 # ---------------------------------------------------------------- reading time
@@ -67,7 +68,7 @@ function Set-DialoguePacing {
 # ---------------------------------------------------------------- timeline check
 # Times are known for triggers that start enabled with only Elapsed Time, and for chains Enabled from them; event
 # driven triggers (zones, deaths) are left out. WARN when a text starts before the previous one has been read.
-function Test-TextTimeline {
+function Get-TriggerTimes {
     $at = @{}; $queue = New-Object Collections.Queue
     foreach ($k in $trig.Keys) {
         $t = $trig[$k]; $ev = @($t.Events)
@@ -82,6 +83,10 @@ function Test-TextTimeline {
             $at[$p[2]] = $at[$k] + [int](($ev[0] -split ',')[2]); $queue.Enqueue($p[2])
         }
     }
+    $at
+}
+function Test-TextTimeline {
+    $at = Get-TriggerTimes
     $rows = foreach ($k in $at.Keys) { $tx = @(Get-TriggerTexts $trig[$k]); if ($tx.Count) { [pscustomobject]@{ T = $at[$k]; Read = (Get-ReadSecs $tx); Key = $k; Text = $tx[0] } } }
     $rows = @($rows | Sort-Object T)
     $warn = 0
@@ -91,6 +96,45 @@ function Test-TextTimeline {
         if ($i -gt 0 -and $r.T -lt $rows[$i - 1].T + $rows[$i - 1].Read) { $log.Add("WARN text '$($r.Key)' at $($r.T)s starts before '$($rows[$i - 1].Key)' ($($rows[$i - 1].T)s + $($rows[$i - 1].Read)s) is read"); $warn++ }
     }
     foreach ($k in $trig.Keys) { if (@(Get-TriggerTexts $trig[$k]).Count -gt 1) { $log.Add("WARN trigger '$k' shows $(@(Get-TriggerTexts $trig[$k]).Count) texts at once"); $warn++ } }
+    $warn
+}
+
+# ---------------------------------------------------------------- quiet dialogue (user, ARKA 0, 2026-10-29)
+# "When the texts run, let the player read them, then raise the pace." A dialogue = a timed chain of 2+ texts (a text
+# trigger that enables the next text trigger); no enemy may arrive between its first line and the end of reading its last
+# one, except in the chain's own triggers (a wave announced by its first line is fine). Enemy arrivals: 7/80 with a team
+# of a house that is not on the player's Allies list, in timed triggers and in repeating Elapsed triggers enabled from
+# them (all firings up to $horizon). Call after Set-DialoguePacing and BEFORE Add-Difficulty (which moves the waves into
+# helper triggers). Returns the WARN count.
+function Test-QuietDialogue($player = 'Allies', [int]$horizon = 4000) {
+    $friends = @($ini.Get($player, 'Allies', $player) -split ',' | ForEach-Object { $_.Trim() })
+    $at = Get-TriggerTimes
+    $isEnemy = { param($t) foreach ($a in $t.Actions) { $p = $a -split ','; if ($p[0] -in '7', '80' -and $p[1] -eq '1' -and $ini.Get($p[2], 'House', '') -notin $friends) { return $true } }; $false }
+    $nextText = { param($t) foreach ($a in $t.Actions) { $p = $a -split ','; if ($p[0] -eq '53' -and $trig[$p[2]] -and $trig[$p[2]].Disabled -and -not $trig[$p[2]].Repeat -and @(Get-TriggerTexts $trig[$p[2]]).Count) { return $p[2] } }; $null }   # a repeating objective reminder is not the next line
+    $arrivals = New-Object Collections.Generic.List[object]
+    foreach ($k in $at.Keys) {
+        if (& $isEnemy $trig[$k]) { $arrivals.Add(@($at[$k], $k)) }
+        foreach ($a in $trig[$k].Actions) {   # repeating raids switched on here
+            $p = $a -split ','; if ($p[0] -ne '53') { continue }; $r = $trig[$p[2]]
+            if (-not $r -or -not $r.Repeat -or -not (& $isEnemy $r)) { continue }
+            $ev = @($r.Events); if ($ev.Count -ne 1 -or ($ev[0] -split ',')[0] -ne '13') { continue }
+            $gap = [int](($ev[0] -split ',')[2]); for ($s = $at[$k] + $gap; $gap -gt 0 -and $s -le $horizon; $s += $gap) { $arrivals.Add(@($s, $p[2])) }
+        }
+    }
+    $heads = @{}; foreach ($k in $at.Keys) { if (@(Get-TriggerTexts $trig[$k]).Count) { $heads[$k] = $true } }
+    foreach ($k in $at.Keys) { $n = & $nextText $trig[$k]; if ($n -and @(Get-TriggerTexts $trig[$k]).Count) { $heads.Remove($n) } }
+    $warn = 0
+    foreach ($h in $heads.Keys) {
+        $chain = @($h); $k = $h
+        while (($n = & $nextText $trig[$k]) -and $at.ContainsKey($n) -and $n -notin $chain) { $chain += $n; $k = $n }
+        if ($chain.Count -lt 2) { continue }
+        $from = $at[$h]; $to = $at[$k] + (Get-ReadSecs @(Get-TriggerTexts $trig[$k]))
+        foreach ($e in $arrivals) {
+            if ($e[0] -gt $from -and $e[0] -lt $to -and $e[1] -notin $chain) {
+                $log.Add("WARN enemy '$($e[1])' arrives at $($e[0])s during the dialogue '$h' ($from-${to}s)"); $warn++
+            }
+        }
+    }
     $warn
 }
 
@@ -298,4 +342,37 @@ function Add-ZergBuilder($House, [int]$HouseNo, [int]$SpawnWp, $Nodes, [int]$Sta
         else { $ini.Set('CellTags', $key, $trig[$a].Tag) }
         $log.Add("zerg builder $House node ${k}: $drone -> $type at $x,$y (drone cell $cx,$cy) from $($Start + $k * $Every) s")
     }
+}
+
+# ---------------------------------------------------------------- objective reminders and progress (user 2026-10-29)
+# "Add objective reminders and their progress to all missions, but do not overdo it." Call before Split-MultiText (the
+# Enable goes to the last line of the $From chain, so the reminder starts after the objective has been read).
+#   Add-ObjectiveReminder 'remNest' 'Cel: zniszcz gniazdo...' -From 'nestObj' -Until 7
+# A disabled repeating trigger shows the line every $Every game seconds (900 = 15:00 on the timer, a few real minutes;
+# Elapsed Time restarts on every firing, as DTA's repeating raids) from the moment $From enables it; a one-shot trigger
+# switches it off once every local in $Until is set (or the generator disables $Key itself). Repeating, so the text
+# timeline check leaves it out: keep the line short.
+function Add-ObjectiveReminder([string]$Key, [string]$Text, [string[]]$From, [int[]]$Until = @(), [int]$Every = 900, $player = 'Allies') {
+    foreach ($f in $From) { if (-not $trig.Contains($f)) { throw "Add-ObjectiveReminder: no trigger '$f'" } }
+    Trigger $Key "Przypomnienie celu $Key" @((Ev 13 $Every)) @((Text $Text)) -house $player -Disabled -Repeat | Out-Null
+    foreach ($f in $From) { $trig[$f].Actions = @($trig[$f].Actions) + @(Enable $Key) }   # several = alternatives (zone or time)
+    if ($Until.Count) { Trigger "$Key~off" "Przypomnienie celu $Key wylaczone" @($Until | ForEach-Object { Ev 36 $_ }) @((Disable $Key)) -house $player | Out-Null }
+    $script:reminders++
+}
+# One progress line when the k-th of n locals gets set (k = 1..n-1), in any order: a one-shot trigger per k-subset of the
+# locals (all events must hold, AND), the first one of each k switches off its siblings. The line for n of n is the
+# generator's own "objective done" text. $Line gets k and n:
+#   Add-CountProgress 'surv' @(0, 1, 2) { param($k, $n) "Rozbitkowie: $k z $n zebranych." }
+function Add-CountProgress([string]$Key, [int[]]$Locals, [scriptblock]$Line, $player = 'Allies') {
+    $n = $Locals.Count; if ($n -lt 2 -or $n -gt 4) { throw "Add-CountProgress: 2-4 locals, got $n" }
+    for ($k = 1; $k -lt $n; $k++) {
+        $sets = @(for ($m = 1; $m -lt (1 -shl $n); $m++) { $s = @(for ($i = 0; $i -lt $n; $i++) { if ($m -band (1 -shl $i)) { $Locals[$i] } }); if ($s.Count -eq $k) { , $s } })
+        $tx = Text (& $Line $k $n)
+        $keys = @(for ($i = 0; $i -lt $sets.Count; $i++) { "$Key~$k~$i" })
+        for ($i = 0; $i -lt $sets.Count; $i++) {
+            $off = @(for ($j = 0; $j -lt $sets.Count; $j++) { if ($j -ne $i) { Disable $keys[$j] } })
+            Trigger $keys[$i] "Postep $Key $k z $n ($i)" @($sets[$i] | ForEach-Object { Ev 36 $_ }) (@($tx) + $off) -house $player | Out-Null
+        }
+    }
+    $script:progressLines += $n - 1
 }

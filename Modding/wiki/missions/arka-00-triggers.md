@@ -34,7 +34,7 @@ Po przebudowie terenu przez sesję mapy wystarczy uruchomić skrypt ponownie (ko
 
 ## Budynki i siły startowe
 
-- **ARKA** = nowy typ `ARKACORE` (w mapie, `Image=RAPDOX`): 20 000 HP, `Armor=heavy`, bez supermocy, nie do zbudowania (`TechLevel=-1`), nie do przejęcia i sprzedania. Stoi na waypoincie 10 (lewy górny róg 117,130).
+- **ARKA** = nowy typ `ARKACORE` (w mapie, `Image=RAPDOX`): 28 000 HP (do 2026-10-29: 20 000), otoczona murem (sekcja „Poprawki po teście 2026-10-29”), `Armor=heavy`, bez supermocy, nie do zbudowania (`TechLevel=-1`), nie do przejęcia i sprzedania. Stoi na waypoincie 10 (lewy górny róg 117,130).
 - **4 elektrownie** `RAPOWR` na środkach działek 11–14, każda z własnym tagiem.
 - ARKA i elektrownie stają dokładnie na waypointach. Gdy fundament jest zablokowany (np. po przebudowie terenu), skrypt bierze najbliższe wolne miejsce i wypisuje `WARN` (teren v1: elektrownia 4 przesunięta z 132,136 na 131,136, bo stała pod klifem; teren v2: 0 przesunięć).
 - Teren DTA jest płaski: w v2 wszystkie 29 083 komórki mają `Level=0`, a flaga `Ramp` w TMP wynosi 0 (sprawdzone 2026-10-26). „Poziomy” Skały to tylko kafle klifów z kodem 7/8, więc warunek „kod 0 albo 11–14” nie wpuszcza fundamentu na klif. Test wysokości z TMP byłby pusty i go usunięto. Rampy to zwykłe komórki bez klifu. Gdyby trzeba było odróżnić płaskowyż od nizin, zalewa się teren od wp 10 z pominięciem ramp (wp 28–33 i C1/C2). Dziś wystarcza promień szukania i render.
@@ -42,7 +42,7 @@ Po przebudowie terenu przez sesję mapy wystarczy uruchomić skrypt ponownie (ko
 - **Wojsko:** 3× `2TNK`, 2× `1TNK`, `RANG`, 6× `E1`, 3× `E3`, `MEDIC`, `ENGINEER`, a od 2026-10-27 też `RAHARV` (misja `Harvest`). Rafineria postawiona w mapie nie daje darmowego harvestera; gracz musiał go zbudować.
 - **Skrzynka z odkryciem mapy** (ułatwienie na życzenie użytkownika): przy Construction Yardzie, `Add-RevealCrate` z `tools/MissionKit.ps1` ([[engine/triggers-and-dialogue]], pułapka 9). **(niezweryfikowane w grze)**
 - **Złoto w kościele** (recenzja 2026-10-27, zmienione przez użytkownika tego samego dnia): skrzynki nie leżą już na mapie. Kościół The Convent (`V01` najbliżej wp 46) staje się typem `CONVENT`: kopia kluczy `[V01]` plus `Capturable=true` i `Unsellable=yes`. `V01` w Rules nie jest do przejęcia i ma `CarriesCrate=yes`, a pozostałe kościoły miasta zostają bez zmian. Inżynier, który wejdzie do kościoła (przejęcie, tag `ARKA0G13`, `1 Entered by` Allies), daje `106 Give Credits` 5000 i tekst. Wskazówka: plotka Einsteina o przeorze (330 s, w spokojnym początku). Inżynier zużyty na kościół brakuje potem przy armacie (4 inżynierów), i to jest zamierzony wybór. 3 skrzynki × 1500 przy rudzie na Skale usunięte, rajd `h2` nadal tam jedzie. **(niezweryfikowane w grze)**
-- **Tanya** (`TANYA`, dom `Allies1`, misja Sleep) na 17 w La Línea; straż sowiecka: 3× `E1`, `E2`, `E3`, 2× `DOG`, `3TNK` (Area Guard). Strefa odbicia: komórki w promieniu 3 od Tanyi.
+- **Tanya** (od 2026-10-29 nietykalna atrapa `TANYA0`, podmieniana przy odbiorze, niżej; dom `Allies1`, misja Sleep) na 17 w La Línea, na polanie; straż sowiecka: 3× `E1`, `E2`, `E3`, 2× `DOG`, `3TNK` (Area Guard). Strefa odbicia: komórki w promieniu 3 od Tanyi.
 
 Rozstawienie sprawdzone na renderze (CNCMaps): budynki stoją na trawie w mieście, bez kolizji z murem, drzewami i klifami.
 
@@ -76,7 +76,7 @@ Rozstawienie sprawdzone na renderze (CNCMaps): budynki stoją na trawie w mieśc
 Desanty piechoty: `3,<plaża>` → `8,2` (rozładunek) → `16,10` → `11,14` (działa, test 3). Desanty pojazdów: wzór cr06 `3,<plaża>` → `8,2` → `11,14` i warianty `AIARTY`/`AILTNK`/`AIBGGY`/`AIBIKE` (`GuardRange=12`), bo z `16,10` wysadzone pojazdy stały **(niezweryfikowane w grze)**. Mapa podnosi `NLST` do 10 pasażerów. Poduszkowce (`HVC`, `HVR`, `HVCSAM`) usunięte: to rakiety chemiczne/hover spoza epoki (użytkownik).
 | licznik = 0 | Finał 0–8 | wyłącza porażki, blokuje wejście, kamera na ARKĘ, dialog Einstein/Stavros („Plus siedem, profesorze”), błysk, „Kryształ jarzy się na zielono”, konsola `ROK DOCELOWY: 2499`, ostatnia transmisja von Eslinga, duży błysk, **wygrana** |
 
-**Odbicie Tanyi:** wejście gracza w strefę → cały dom `Allies1` przechodzi do gracza (`36`), zmienna 0 „Tanya uratowana”, łańcuch: „Mam dokument Nod” → „Klop, drzewo, drugie drzewo, trzecie drzewo… Tarzan by się zarumienił” → „Kane wie o ARCE. I chce, żeby wystartowała.” → Einstein „Kim jest ten Kane?” → „Mamy jedno zdjęcie”.
+**Odbicie Tanyi:** wejście gracza w strefę → atrapa znika, a prawdziwa Tanya gracza pojawia się na jej miejscu (od 2026-10-29; wcześniej cały dom `Allies1` przechodził do gracza akcją `36`), zmienna 0 „Tanya uratowana”, łańcuch: „Mam dokument Nod” → „Klop, drzewo, drugie drzewo, trzecie drzewo… Tarzan by się zarumienił” → „Kane wie o ARCE. I chce, żeby wystartowała.” → Einstein „Kim jest ten Kane?” → „Mamy jedno zdjęcie”.
 
 **Tanya w bazie:** tag `ARKA0G11` na samej Tanyi i zdarzenie `34 Comes near waypoint` z waypointem 10 (ARKA) → „Ruscy przeszukali cały park, tylko nie klop i nie korony drzew… Zupełnie jak świnie.” Promień „near” nieznany **(niezweryfikowane w grze)**.
 
@@ -143,6 +143,31 @@ Na życzenie użytkownika (rysunek trasy na zrzucie). **(niezweryfikowane w grze
 - **Piechota ze wschodu stała bezczynnie** (użytkownik). Z obu wschodnich plaż jest lądowa droga do ARKI (BFS: z Catalan Bay przez Skałę i rampę NW, z Eastern Beach przez Landport), więc desant utykał najpewniej na rozładunku `8,2`, który w grze działał tylko na Camp Bay. `i2` (Catalan Bay, strefa r 2–3) i `i4` (Eastern Beach, strefa r 4–5) idą teraz przez `Landing`: pusty `NLST` dopływa, a 20 piechoty pojawia się na plaży i rusza `16,10` → `11,14`. Drużyny `$tmI2`/`$tmI4` usunięte.
 - **Południe mocniej:** `iS` (790 + 300 = 1090 s) wysyła załadowany `NLST` z 43 na Europa Point i włącza `iSr`, który powtarza to co 180 s aż do skoku (`fin0` go wyłącza). Do tego `i3` (2× `NLST`) i `n4` (pojazdy) na 1500 s.
 - **Z południa znaczy z południa:** desanty na Camp Bay (`n1`, `i1`, `t1`) startowały z wp 41, czyli w zatoce przy dokach, na północ od plaży i tuż pod bazą. Teraz startują z **wp 64** (234,269), z otwartego morza przy południowo-zachodniej krawędzi mapy. Punkt dopisuje warstwa misji, a woda z 64 do Camp Bay jest drożna wzdłuż zachodniego brzegu (BFS po wodzie, 57 komórek). Europa Point startuje z 43 (południowa krawędź), wschód z 42 i 45 (wschodnia krawędź). Puste transportowce wracają na swój punkt startu i znikają.
+
+## Poprawki po teście 2026-10-29
+
+Na życzenie użytkownika. **(niezweryfikowane w grze)**
+
+- **Tanya widoczna i nietykalna przed odbiorem** (ginęła w parku). W parku stoi atrapa `TANYA0`: kopia kluczy `[TANYA]` z Rules (bez `$Inherits`) z `Immune=yes` i pancerzem Vinifery `arka_vip` (`Modifier=0%`, `ForceFire=no`, `Retaliate=no`, `PassiveAcquire=no`, wzór `arka_wreck` z ARKA 1, bo samo `Immune` nie chroni przed ogniem: [[workflow/known-mistakes]]), `Image=TANYA`, dom `Allies1`, tag `ARKA0G14`. Wokół niej polana: 4 drzewa w promieniu 3 komórek usunięte z `[Terrain]`, a `intro5` stawia flarę (`8 Drop Zone Flare`) na wp 17. Odbicie (`tanya`) albo „sama” (`tanyaAlone`, 1308 s) już nie zmienia domu (`36`). Prawdziwa `TANYA` gracza pojawia się na wp 17 z drużyny `$tmTanya` (skrypt `11,5`, `Tag=ARKA0G11`, czyli tag `tanyaHome` → `tanyaDead`), a 1 s później `tanyaErase` usuwa atrapę (`115 Erase Attached Object` na własnym tagu, wzór ARKA 5). Po odbiorze Tanya jest zwykła (2500 HP), a jej śmierć dalej przegrywa misję. Do sprawdzenia: czy tag drużyny trafia na Tanyę (kwestia „Ruscy przeszukali cały park…” przy ARCE).
+- **ARKA: 28 000 HP** (+40%).
+- **Mur wokół ARKI:** `BRIK` (nakładka 2, ramki z bitów sąsiadów N/E/S/W jak `ScToDta.WallFrames`) na kwadratowym pierścieniu 4 komórki od rdzenia (x 113–122, y 126–135), 30 komórek. Bramy są tylko tam, gdzie droga przecina pierścień w poprzek (droga po obu stronach komórki): 2 bramy po 3 komórki na drodze N–S przy wschodnim boku. Droga wzdłuż boku jest zamurowana. Pierścień tagów agenta Nod (r ≤ 3) jest w środku, a agent wchodzi bramą. W rogach wewnątrz: 2× `RAGUN` (rogi północny i południowy na ekranie), obok każdej `RAPBOX`, 2× `RAAGUN` na Jaki (razem −210 prądu).
+- **2× `RAAPWR`** (+200 każda) w bazie: 108,123 i 125,139. To nie są elektrownie rdzenia, więc ich utrata nie wydłuża licznika.
+- **Dłuższa gra i czas na czytanie:**
+  - odstępy kwestii ×1,5 (`$GameSecPerReal = 4.5`, [[engine/triggers-and-dialogue]]);
+  - harmonogram po spokojnym początku rozciągnięty o 12% (`$stretch`, funkcje `At` i `Every` dla rajdów powtarzanych). Licznik ma **33:00** (`$countdown` = 1500 × 1,12 + 300 = 1980), teksty i opis w kliencie mówią o 33 minutach. Liczby w generatorze i w tabeli wyżej zostały z wersji 30:00. Prawdziwy czas = liczba × 1,12 + 300;
+  - „Połowa ładowania” i szturm `w6` („Pięć minut do skoku”) liczą się od startu licznika (`intro3`, 117 s), już nie z ręki: połowa 1107 s, szturm 1797 s, skok 2097 s;
+  - nowa reguła „najpierw przeczytać, potem walczyć” (zasada 6 w [[workflow/mission-design]]): `Test-QuietDialogue` znalazł 2 fale w trakcie dialogów. Przesunięcia: `w2` 300 → 225 (przed dialogiem o armacie), `n1` 420 → 445 (po dwóch kwestiach o rajdach), `h3first` 700 → 765, `iS` 790 → 810, `i2`/`n5` 840 → 845 (żeby teksty się nie nakładały). Wynik: 0 WARN w obu testach.
+
+## Przypominajki celów (2026-10-29)
+
+Prośba użytkownika: „przypominajki objectivów i ich progress, ale nie przesadzaj”. `Add-ObjectiveReminder` z `MissionKit.ps1` ([[engine/triggers-and-dialogue]]). **(niezweryfikowane w grze)**
+
+- Przypominajki włączają dwa triggery-startery bez tekstu (`remOnA` po wstępie, 295 s; `remOnB` po wskazówce o armacie, 682 s), a nie triggery dialogów: przypominajka włączona z dialogu dołączyłaby do jego łańcucha w `Test-QuietDialogue`. Czasy starterów generator liczy po `Set-DialoguePacing`.
+- Odstępy dobrane tak, żeby pierwsze wyświetlenie wpadło w wolne miejsce osi tekstów (0 WARN); kolejne wypadłyby już po skoku:
+  - `remTanya` ok. 1286 s: „odbij Tanye w parku w La Linea…”, wyłączana przez odbicie (lokalna 0) i przez `tanyaAlone` (1308 s);
+  - `remMain` ok. 1430 s: „utrzymaj ARKE i 4 elektrownie do konca odliczania”, do lokalnej 1 (finał);
+  - `remGun` ok. 1675 s: „4 inzynierow do armaty przy szpitalu nad Camp Bay”, do nowej lokalnej 2 `Armata przejeta` (ustawia `gunCap4`).
+- `fin0` wyłącza przypominajki Tanyi i armaty. Postęp „k z n” ma już armata (kwestie 1/4–4/4); elektrownie mają kwestię przy każdej stracie, odliczanie jest na ekranie, więc nowych liczników nie ma.
 
 ## Do zrobienia (następne etapy)
 

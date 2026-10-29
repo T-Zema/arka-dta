@@ -412,25 +412,31 @@ Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZH
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL', 'SCZHYL') 50 0 0 'Area Guard'
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZINF', 'SCZINF') 51 0 0 'Area Guard'
 # a denser siege round the basin (user 2026-10-28: more Sunken/Spore and Zerg round Norad II): a ring of colonies and
-# packs 13-20 cells from the hull, every 30 degrees, Sunken and Spore in turn; nothing closer than 13 cells to the hull
-# or to Duke, so the siege still waits for the player (Sunken GuardRange 8)
+# packs 15-23 cells from the hull, every 30 degrees, Sunken and Spore in turn; nothing closer than 15 cells to the hull,
+# Duke or his two bunkers, so the siege still waits for the player (Sunken GuardRange 8 but Sight 12). Was 13-21 from
+# the hull and Duke only: a Sunken stood 11 cells from a bunker and the siege started at once (user 2026-10-29: 2 further)
 $ringN = 0; $packN = 0
 $siege = @(@('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL'), @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG'),
     @('SCZHYL', 'SCZHYL', 'SCZHYL', 'SCZLNG', 'SCZLNG'), @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZINF', 'SCZINF', 'SCZHYL'), @('SCZULT', 'SCZLNG', 'SCZLNG', 'SCZLNG'))
-function FarFromHull($x, $y, $r) { foreach ($n in 34, 35) { if (($x - $wp[$n][0]) * ($x - $wp[$n][0]) + ($y - $wp[$n][1]) * ($y - $wp[$n][1]) -lt $r * $r) { return $false } }; $true }
+function FarFromHull($x, $y, $r) { foreach ($n in 34, 35, 36, 37) { if (($x - $wp[$n][0]) * ($x - $wp[$n][0]) + ($y - $wp[$n][1]) * ($y - $wp[$n][1]) -lt $r * $r) { return $false } }; $true }
 for ($deg = 0; $deg -lt 360; $deg += 30) {
     $rad = $deg * [Math]::PI / 180
     $type = if (($deg / 30) % 2) { 'SCZSPO' } else { 'SCZSUN' }
-    $tx = [int]($wp[34][0] + [Math]::Cos($rad) * 16); $ty = [int]($wp[34][1] + [Math]::Sin($rad) * 16)
-    if ($code[$ty * $GW + $tx] -lt 0) { continue }
-    try { $s = Find-Spot $tx $ty 2 2 0 $true } catch { continue }
-    if (-not (FarFromHull $s[0] $s[1] 13) -or (FarFromHull $s[0] $s[1] 21)) { continue }
+    # radius 18 first; where that falls on a cliff or off the band, nearer or farther (the ring keeps all its colonies)
+    $s = $null
+    foreach ($rr in 18, 19, 17, 20, 21, 16) {
+        $tx = [int]($wp[34][0] + [Math]::Cos($rad) * $rr); $ty = [int]($wp[34][1] + [Math]::Sin($rad) * $rr)
+        if ($code[$ty * $GW + $tx] -lt 0) { continue }
+        try { $c = Find-Spot $tx $ty 2 2 0 $true } catch { continue }
+        if ((FarFromHull $c[0] $c[1] 15) -and -not (FarFromHull $c[0] $c[1] 23)) { $s = $c; break }
+    }
+    if (-not $s) { $log.Add("WARN siege ring: no spot at $deg deg"); continue }
     Add-Building 'Nod1' $type $s[0] $s[1]; $ringN++
     # a pack beside every second colony
     if ($deg % 60 -eq 0) {
         $pk = $siege[$packN % $siege.Count]; $packN++
         try { $q = Find-Spot ($s[0] + 3) ($s[1] + 1) 1 1 0 $true } catch { continue }
-        if (FarFromHull $q[0] $q[1] 13) { NewCell; foreach ($t in $pk) { if (Is-Vehicle $t) { Add-Unit 'Nod1' $t $q[0] $q[1] 'Area Guard' } else { Add-Inf 'Nod1' $t $q[0] $q[1] 'Area Guard' } } }
+        if (FarFromHull $q[0] $q[1] 15) { NewCell; foreach ($t in $pk) { if (Is-Vehicle $t) { Add-Unit 'Nod1' $t $q[0] $q[1] 'Area Guard' } else { Add-Inf 'Nod1' $t $q[0] $q[1] 'Area Guard' } } }
     }
 }
 $log.Add("Norad II siege ring: $ringN colonies, $packN packs")
@@ -440,7 +446,7 @@ $log.Add("Norad II siege ring: $ringN colonies, $packN packs")
 $extraN = 0
 foreach ($c in @(@('SCZSUN', 132, 116), @('SCZSPO', 135, 119), @('SCZSUN', 137, 116))) {
     $s = Find-Spot $c[1] $c[2] 2 2 0 $true
-    if (-not (FarFromHull $s[0] $s[1] 13)) { $log.Add("WARN extra $($c[0]) near $($c[1]),$($c[2]) too close to the hull, skipped"); continue }
+    if (-not (FarFromHull $s[0] $s[1] 15)) { $log.Add("WARN extra $($c[0]) near $($c[1]),$($c[2]) too close to the hull, skipped"); continue }
     Add-Building 'Nod1' $c[0] $s[0] $s[1]; $extraN++
 }
 $log.Add("Norad II rim: $extraN extra colonies")
@@ -453,6 +459,21 @@ foreach ($pk in @(@(134, 96, @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL',
     NewCell; foreach ($t in $pk[2]) { if (Is-Vehicle $t) { Add-Unit 'Nod1' $t $pk[0] $pk[1] 'Area Guard' } else { Add-Inf 'Nod1' $t $pk[0] $pk[1] 'Area Guard' } }
 }
 $log.Add("north of the rim: 3 colonies, 2 packs (total extra colonies $extraN)")
+# two more guard posts (user 2026-10-29, marked on the render of the basin): the strip north of the basin (cells
+# 144,108-151,101) and the open ground west of it (round 134,125): a few colonies and packs, mostly Zerglings. All
+# 15+ cells from the hull, Duke and the bunkers, as the ring
+$postN = 0
+foreach ($c in @(@('SCZSUN', 145, 106), @('SCZSPO', 148, 103), @('SCZSUN', 151, 101), @('SCZSUN', 134, 124), @('SCZSPO', 133, 127))) {
+    $s = Find-Spot $c[1] $c[2] 2 2 0 $true
+    if (-not (FarFromHull $s[0] $s[1] 15)) { $log.Add("WARN post $($c[0]) near $($c[1]),$($c[2]) too close to the hull, skipped"); continue }
+    Add-Building 'Nod1' $c[0] $s[0] $s[1]; $postN++
+}
+foreach ($pk in @(@(147, 106, @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG')), @(150, 103, @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL')),
+        @(135, 126, @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL')))) {
+    $q = Find-Spot $pk[0] $pk[1] 1 1 0 $true
+    NewCell; foreach ($t in $pk[2]) { if (Is-Vehicle $t) { Add-Unit 'Nod1' $t $q[0] $q[1] 'Area Guard' } else { Add-Inf 'Nod1' $t $q[0] $q[1] 'Area Guard' } }
+}
+$log.Add("guard posts N and W of the basin: $postN colonies, 3 packs")
 
 # ================================================================ the centre nest (Nod1): the closest raids; its field is expansion 2
 Place-AtWp 'Nod1' 'SCZHAT' 22 1 'ARKA4G06'
@@ -826,6 +847,14 @@ Trigger 'end3' 'Koniec 3: Mengsk' @((Ev 13 5)) @((Text 'Mengsk (ekran): Swietnie
 Trigger 'end4' 'Koniec 4: Einstein' @((Ev 13 5)) @((Text 'Einstein (do Tanyi, gdy ekran gasnie): Dam mu kawalek szkla. Zielonego.'), (Enable 'end5')) -Disabled
 Trigger 'end5' 'Koniec 5: Tanya' @((Ev 13 5)) @((Text 'Tanya: Profesorze, zaczyna mi sie pan podobac.'), (Enable 'endWin')) -Disabled
 Trigger 'endWin' 'Wygrana' @((Ev 13 40)) @((Act 1 $H.Allies)) -Disabled
+
+# objective reminders and progress (user 2026-10-29: "for every mission, but do not overdo it"): objective 1 already has
+# Einstein's silent 1/2 and 3/4 lines; objective 2 gets a reminder every 15:00 of the timer in each of its open phases
+# (reach Norad II until the hold starts, local 8; fly Duke to the laboratory until he is there, local 1); the optional
+# nests count 1 of 2
+Add-ObjectiveReminder 'remNorad' 'Cel 2 (przypomnienie): dotrzyj do Norad II w niecce na poludniowym wschodzie.' -From 'mengsk5' -Until 8 -Every 1030   # 900 would fall into Einstein's analysis dialogue (1200-1496 s)
+Add-ObjectiveReminder 'remDuke' 'Cel 2 (przypomnienie): przewiez Duke''a Dropshipem do laboratorium Einsteina.' -From 'drop3' -Until 1
+Add-CountProgress 'nests' @(2, 3) { param($k, $n) "Gniazda Zergow (cel dodatkowy): $k z $n zniszczone." }
 
 Split-MultiText; Set-DialoguePacing
 Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)

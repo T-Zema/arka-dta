@@ -11,7 +11,8 @@ Skrypty liczą folder gry jako `$PSScriptRoot\..\..`, więc działają tylko z `
 | Plik | Do czego |
 |---|---|
 | `MapCode.ps1` | łańcuch warstw kodu mapy frakcji (`Get-MapCodeLayer`, `Read-MapCodeText`, `Set-MapCodeBlock`, `New-MapCodeLayer`), [[engine/map-code-layers]] |
-| `MissionKit.ps1` | pomocniki misji ARKA: tempo dialogów, skrzynki, `Add-ZergBuilder`, `Add-ScAirArmor`, [[engine/triggers-and-dialogue]] |
+| `MissionKit.ps1` | pomocniki misji ARKA: tempo dialogów, skrzynki, `Add-ZergBuilder`, `Add-ScAirArmor`, przypominajki celów i postęp „k z n” (`Add-ObjectiveReminder`, `Add-CountProgress`), [[engine/triggers-and-dialogue]] |
+| `ZergAI.ps1` | `Add-ZergAI`: ogólne AI gniazda Zergów w misji (produkcja w Niecce, ataki, alarm i obrona, kontratak, pomoc dla innego miejsca, rozbudowa dronami); po `MissionKit.ps1`, wołać **po** `Add-Difficulty`. [[engine/zerg-ai]] |
 | `dta-common.ps1` | wspólne funkcje `dta-capture`/`dta-restore`/`dta-precheck` |
 | `ModTools.cs` | MIX, SHP, GRP, AUD, palety, PCX, arkusze podglądu ([[workflow/tooling]]) |
 | `Casc.cs` | odczyt CASC StarCraft: Remastered ([[engine/starcraft-assets]]) |
@@ -47,6 +48,7 @@ Kolumna „INI”: gdzie piszą z `-Install` (bloki `; >>> X` … `; <<< X`, ka�
 | `build-scbldgsounds.ps1` | `ECACHE79` | warstwa `050 SC building select sounds`, `StarCraft.ini`, `Sound.ini` | [[mods/sc-building-sounds]] |
 | `build-scinfstim.ps1` | `ECACHE81` | `StarCraft.ini`, `Art.ini`, `Sound.ini` | [[mods/sc-infantry-stim]] |
 | `build-scairarmor.ps1` | – | warstwa `100 SC air armor`, `StarCraft.ini` | [[engine/air-armor]] |
+| `build-scmusic.ps1` | luźne `MUSIC\SC*.AUD` | `Theme.ini` (`[Themes]` + sekcje utworów) | [[mods/sc-music]] |
 | `build-gun100t.ps1` | `ECACHE76` | `Art.ini` (działo misji ARKA 0) | [[missions/arka-00-triggers]] |
 
 **Kolejność ponownego uruchamiania** (późniejsze czytają wynik wcześniejszych): `build-sczergbase` → `build-scprotoss` → `build-sczergheroes` → `build-sczergresearch` → `build-scprotossresearch` → `build-scbldgsounds`, `build-scworkers` → `build-sczergcreep` → `build-sczergdeath` → `build-scairarmor`. Po zmianie typów SC przebuduj też misje ARKA (kopiują typy do map).

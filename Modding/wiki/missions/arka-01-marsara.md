@@ -79,7 +79,7 @@ Typy własne misji: `ARKAWRAK` (wrak ARKI: `Image=RAPDOX`, 20 000 HP, start 35%,
 | `Soviet2` | załoga MCV | jw. |
 | `GDI1` (6) | osada Mar Sara: **komputerowy sojusznik, który gra** | `IQ=5`, 4000 kredytów; CC, Barracks, Academy, 3 Supply Depoty, 3 bunkry, Refinery przy kryształach, Terran Factory, 3 SCV na minerałach (`Harvest`), cywile `C2`; 11 węzłów bazy (odbudowa); od startu `Production Begins`, po oblężeniu `AI triggers begin`: drużyna obrony (4 Marines + Firebat) i ataki na gniazdo (6 Marines + 2 Firebaty, 4 Vulture'y) z `[AITriggerTypes]` mapy; wzorzec w [[engine/triggers-and-dialogue]] |
 | `GDI2` (8) | Raynor i 8 Marines | przechodzi do gracza po ocaleniu osady |
-| `Nod1` (7) | gniazdo Zergów | Hatchery, Spawning Pool, 3 Creep, 2 Sunken, 2 Overlordy, straże; fale |
+| `Nod1` (7) | gniazdo Zergów | Hatchery, Spawning Pool, 3 Creep, 7 Sunkenów (od 2026-10-29), 2 Overlordy, straże; fale; `IQ=5`, 0 kredytów, produkcja dopiero po upadku przesmyku |
 | `Nod2` (9) | rój oblegający osadę | osobny dom, żeby „wszystkie jednostki zniszczone” mierzyło tylko oblężenie |
 | `Soviet` (3) | Obserwator Protossów | sprzymierzony ze wszystkimi, pojawia się w finale |
 
@@ -130,6 +130,19 @@ Od 2026-10-27 przy starcie (komórka 125,174) leży **skrzynka z odkryciem mapy*
 - żyły niepołączone z dziurą (4-sąsiedztwo) gra usuwa przy wczytaniu, więc skrypt spina luźne łaty z najbliższym creepem drogą BFS po wolnym terenie. Łata bez drogi (1 pole za klifem przy Sunkenie) jest usuwana.
 
 **(niezweryfikowane w grze)**
+
+**Wrak ARKI nie do ostrzelania (2026-10-29).** Użytkownik: „ARKĘ mogę naparzać od początku gry, prawie ją rozwaliłem”. `Immune=yes` nie chroni budynku przed obrażeniami, a neutralny budynek pokazuje graczowi kursor ataku. Wrak dostał pancerz Vinifery `arka_wreck` (`[ArmorTypes] ARKA1WRK`, `Modifier=0%`, `ForceFire=no`, `Retaliate=no`, `PassiveAcquire=no`; mechanizm: [[engine/air-armor]]). Żadna głowica bez własnego `Modifier.arka_wreck` go nie rani, gracz nie ma kursora ataku, fale Zergów same go nie wybiorą. Przejęcie inżynierem nie jest bronią, więc powinno działać **(niezweryfikowane w grze)**.
+
+**Przesmyk do gniazda i obrona Zergów (2026-10-29).** Użytkownik (dwa zrzuty): „wjeżdżasz w pierwszego Sunkena i już wygrałeś, bo po prawej nic nie ma, a po lewej łatwo go ominąć, a potem dojeżdżają pomarańczowi Terranie”. BFS po terenie pokazał dwa wejścia od strony gracza: szczelinę między dwoma klifami przy Sunkenie wp 34 i furtkę szeroką na 1 komórkę między wschodnim końcem klifu SE a krawędzią mapy (127,60). Trzecia droga to daleki objazd przez osadę i północny zachód (nią chodzą drużyny kolonii). Zmiany w `build-arka01-mission.ps1`:
+- furtka zamknięta skałą `SROCK03` w `[Terrain]` (127,60); kontrola generatora: od wschodu (wp 16) do Wylegarni nie da się dojść inaczej niż przez przesmyk (BFS bez komórek x < 60 i r ≤ 4 wokół wp 46);
+- waypoint misji **46** = przesmyk (94,62), poza kontraktem terenu 10–45;
+- Sunkeny: zachodni przy klifie (89,60, tag `ARKA1G08`), wschodni przy klifie SE (98,60, `ARKA1G09`), za przesmykiem (93,57), w drodze do Wylegarni (94,46), na południe od Wylegarni (78,33), przy zachodnim wejściu (61,29); straż przesmyku 4 Zerglingi + 2 Hydraliski (`Area Guard`);
+- **produkcja po upadku przesmyku** (oba Sunkeny boczne zniszczone, zmienne 10 i 11): `3 Production Begins` dla `Nod1`, `106` daje mu 3200 kredytów (ok. 5 drużyn po 625), `4 Create Team` drużyny „Spawning Pool: obrona” (4 Zerglingi + 3 Broodlingi, `16,46` → `11,10`), potem co 150 s, dopóki stoi Spawning Pool (tag `ARKA1G07`, zmienna 12). Jednostki są **produkowane** w Poolu, nie pojawiają się z powietrza. Broodling (`SCZBRD`) doszedł do korzeni typów SC; jego `Prerequisite=SCZNES` wypada przy filtrze. `Nod1` ma `IQ=5` (`[IQ] Production=5`), ale bez `Production Begins` nic nie buduje.
+- Kwestie: „Przesmyk przelamany! Ale gniazdo sie broni…” i „Spawning Pool zniszczony…”.
+
+**(niezweryfikowane w grze: czy AI produkuje piechotę przez `Create Team`; w ARKA 4 drony-pojazdy działały)**
+
+**Przypominajki celów (2026-10-29)** (`Add-CountProgress`, `Add-ObjectiveReminder` z `MissionKit.ps1`, [[engine/triggers-and-dialogue]]): „Rozbitkowie: k z 3 grup zebranych.” przy pierwszej i drugiej grupie (w dowolnej kolejności); przypominajka co 900 s gry: rozbitkowie + MCV (od celu na starcie do zmiennych 0–3), pomoc kolonii (od oblężenia do zmiennej 6), gniazdo (od 400 s do wygranej). **(niezweryfikowane w grze)**
 
 Wraki koszar i elektrowni (neutralne, 30–40% HP) przejmuje inżynier (próg `EngineerCaptureLevel` w DTA jest zakomentowany, czyli 1.0 = przejęcie od razu). Inżynierów jest 4: w oddziale startowym, u rozbitków 1 i 3, w załodze MCV.
 

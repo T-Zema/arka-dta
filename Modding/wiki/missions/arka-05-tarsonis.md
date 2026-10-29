@@ -152,6 +152,11 @@ Liczone przez skrypt misji: 65–68 wyjścia cywilów na placach (Delta, Nova, O
   
   **(niezweryfikowane w grze: czy `1,N` każe Overlordowi strzelać w pustą komórkę, czy odłamek z głowicy stawia dziurę jak odłamek z budynku)**
 - **Budynki nie stają na ulicach**: skrypt misji czyta kafle `Paved Road` z `IsoMapPack5` (`Theater.SetOf`) i `Place-AtWp` omija te komórki.
+- **Przypominajki celów (2026-10-29)**, prośba użytkownika „przypominajki i postęp, ale nie przesadzaj”. Używa `Add-ObjectiveReminder` z `MissionKit.ps1`: powtarzalny trigger co 900 s gry, dopóki cel jest otwarty.
+  - `remCiv`: „Cel (przypomnienie): doprowadz na ladowisko 30 cywilow…”. Włącza go `intro6`, wyłącza zmienna `30 cywilow` (28).
+  - `remKer`: „Cel (przypomnienie): dotrzyj do pozycji Kerrigan na poludniu.” Włącza go `call6`, wyłącza `Scena Kerrigan` (27).
+  - Postęp celu 1 to istniejący komunikat pilota co 6 cywilów (`count1–8`), więc nowego licznika nie ma. Cel 3 ma licznik na ekranie (7:00), bez przypominajki.
+  - CHECKS PASS, 0 WARN na osi tekstów. **(niezweryfikowane w grze)**
 
 ## Odstępstwa od planu
 

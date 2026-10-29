@@ -92,7 +92,7 @@ function Get-ScClosure([string[]]$roots) {
     @($inc.Keys)
 }
 $scRoots = @(
-    'SCZLNG', 'SCZHYL', 'SCZMUT', 'SCZOVL',                         # Zerg units
+    'SCZLNG', 'SCZHYL', 'SCZMUT', 'SCZOVL', 'SCZBRD',               # Zerg units (Broodlings: the Pool's defence squads)
     'SCZHAT', 'SCZPOL', 'SCZCRP', 'SCZSUN',                         # Zerg nest
     'SCMARINE', 'SCFIRE', 'SCVULT', 'SCSCV',                        # colony units (Raynor = SCVULT copy below)
     'SCCC', 'SCBARR', 'SCACAD', 'SCBUNK', 'SCDEPO', 'SCFACT', 'SCREFI',   # colony buildings (factory + refinery: the colony AI produces and mines)
@@ -240,11 +240,18 @@ $ini.Set('TANYA', 'Strength', "$([int]([int]$rules['TANYA']['Strength'] * 2.5))"
 # Change House = mission failed on capture (the capture springs the tag before the owner changes).
 $wrakType = 'RAPDOX'; $fcache[$wrakType] = @(2, 2)
 $wrak = [ordered]@{
-    Name = 'Wrak ARKI'; Strength = '20000'; Armor = 'heavy'; TechLevel = '-1'; Sight = '8'; Power = '0'; Powered = 'no'; Capturable = 'true'
+    Name = 'Wrak ARKI'; Strength = '20000'; TechLevel = '-1'; Sight = '8'; Power = '0'; Powered = 'no'; Capturable = 'true'
     Crewed = 'no'; Unsellable = 'yes'; Repairable = 'no'; ClickRepairable = 'no'; SuperWeapon = 'none'; NukeSilo = 'no'; AIBuildThis = 'no'
     Immune = 'yes'   # test 4 (2026-10-27): the engineer's capture still lost the mission; an indestructible wreck needs no judges
+    Armor = 'arka_wreck'
 }
 foreach ($k in $wrak.Keys) { $ini.Set($wrakType, $k, $wrak[$k]) }
+# Immune=yes does not stop damage to a building (user 2026-10-29: "I can pound the ARKA from the start, nearly destroyed
+# it"; a neutral building shows the attack cursor). A Vinifera armor (engine/air-armor) that no warhead hurts, forces fire
+# at, retaliates against or picks by itself: no attack cursor for the player, Zerg waves ignore it. Capture by an
+# engineer is not a weapon, so it still works (niezweryfikowane w grze).
+$ini.Set('ArmorTypes', 'ARKA1WRK', 'arka_wreck')
+foreach ($kv in ([ordered]@{ Modifier = '0%'; ForceFire = 'no'; Retaliate = 'no'; PassiveAcquire = 'no' }).GetEnumerator()) { $ini.Set('arka_wreck', $kv.Key, $kv.Value) }
 # index of RAPDOX in [BuildingTypes] = order of first appearance in the Rules list (matches DTA's own "#n" comments)
 $wrakIdx = -1; $bi = 0; $seenB = @{}; $inB = $false
 foreach ($l in [IO.File]::ReadAllLines("$game\INI\Rules.ini", $enc)) {
@@ -296,7 +303,7 @@ House 'Soviet1' 'AlliesSide'   'LightBlue'  $friends 0  2 'no'                # 
 House 'Soviet2' 'AlliesSide'   'LightBlue'  $friends 0  2 'no'                # MCV crew (south)
 House 'GDI1'    'GDISide'      'Orange'     $friends 40 6 'no' 'North' 5      # Mar Sara colony: computer ally, IQ 5 = produces and rebuilds by itself
 House 'GDI2'    'GDISide'      'LightGold'  $friends 0  6 'no'                # Jim Raynor and his Marines
-House 'Nod1'    'NodSide'      'Purple'     'Nod1,Nod2,Soviet' 0 7 'no' 'North' 3   # Zerg nest
+House 'Nod1'    'NodSide'      'Purple'     'Nod1,Nod2,Soviet' 0 7 'no' 'North' 5   # Zerg nest: IQ 5 = the Pool can produce, but only after Production Begins (the choke falls)
 House 'Nod2'    'NodSide'      'Purple'     'Nod1,Nod2,Soviet' 0 7 'no' 'North' 3   # Zerg swarm on the colony
 House 'Soviet'  'SovietSide'   'Gold'       'Soviet,Allies,Allies1,Allies2,Soviet1,Soviet2,GDI1,GDI2,Nod1,Nod2' 0 3 'no'   # Protoss Observer
 House 'Neutral' 'CivilianSide' 'Grey'       'Neutral' 0 4 'no'
@@ -372,9 +379,27 @@ Squad 'GDI2' @('SCMARINE', 'SCMARINE') 36 1 2 'Guard'
 
 # ================================================================ Zerg nest (NE plateau) and Zerg packs
 Place-AtWp 'Nod1' 'SCZHAT' 19 1 'ARKA1G06'
-Place-AtWp 'Nod1' 'SCZPOL' 30 1
+Place-AtWp 'Nod1' 'SCZPOL' 30 1 'ARKA1G07'
 foreach ($n in 31, 32, 33) { Place-AtWp 'Nod1' 'SCZCRP' $n 0 }
-foreach ($n in 34, 35) { Place-AtWp 'Nod1' 'SCZSUN' $n 0 }
+Place-AtWp 'Nod1' 'SCZSUN' 34 0 'ARKA1G08'   # west flank of the choke
+Place-AtWp 'Nod1' 'SCZSUN' 35 0
+# The nest's choke (user 2026-10-29, screenshots: "you drive into the first Sunken and have won: nothing on the right,
+# the one on the left is easy to bypass, then the orange Terrans finish it"). The nest has two ways in from the player's
+# side: the gap between the two cliff tips by the first Sunken (wp 34) and a 1-cell gap between the east end of the SE
+# cliff and the map edge (127,60), round which the waves of a flank attack could walk. The east gap gets a rock, the
+# south gap Sunkens on both cliff tips and one behind, a guard pack; inside, Sunkens on the way to the Hatchery and at
+# the west entrance (the long way round through the colony is the only other road). Waypoint 46 = the choke (mission
+# waypoint, outside the terrain contract 10-45).
+$wp[46] = @(94, 62); $ini.Set('Waypoints', '46', "$(62 * 1000 + 94)")
+function Place-AtCell($house, $type, [int]$tx, [int]$ty, $tag = 'None') { $f = Foundation $type; $s = Find-Spot $tx $ty $f[0] $f[1] 0 $true; Add-Building $house $type $s[0] $s[1] $tag 0 }
+Place-AtCell 'Nod1' 'SCZSUN' 98 60 'ARKA1G09'   # east flank of the choke (by the SE cliff tip)
+Place-AtCell 'Nod1' 'SCZSUN' 93 57              # behind the choke
+Place-AtCell 'Nod1' 'SCZSUN' 94 46              # on the way from the choke to the Hatchery
+Place-AtCell 'Nod1' 'SCZSUN' 78 33              # south of the Hatchery
+Place-AtCell 'Nod1' 'SCZSUN' 61 29              # west entrance (the road through the colony)
+$gap = @(127, 60)
+if ($code[$gap[1] * $GW + $gap[0]] -ne 0 -or $block[$gap[1] * $GW + $gap[0]]) { throw "east gap cell $($gap -join ',') is not open ground any more (terrain changed?): find the gap again" }
+$ini.Set('Terrain', "$($gap[1] * 1000 + $gap[0])", 'SROCK03'); $block[$gap[1] * $GW + $gap[0]] = $true
 foreach ($t in 'SCZOVL', 'SCZOVL') { Add-Unit 'Nod1' $t ($wp[19][0] - 4) ($wp[19][1] + 3) 'Guard' }
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG') 20 0 0 'Area Guard'
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG') 20 3 2 'Area Guard'
@@ -384,6 +409,8 @@ Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG') 45 0 0 'Area Guard'    # north ravi
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG') 21 0 0 'Area Guard'    # central valley (no Hydralisk before Einstein's line about them)
 Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG') 29 0 0 'Area Guard'    # by the MCV
 Squad 'Nod1' @('SCZLNG') 29 2 1 'Area Guard'
+Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') 46 0 -3 'Area Guard'   # the choke's guard pack
+Squad 'Nod1' @('SCZHYL', 'SCZHYL') 46 -1 -5 'Area Guard'
 
 # ================================================================ cell-tag zones (one tag per cell; inner zones first)
 function Zone($tag, [int]$n, [int]$rMin, [int]$rMax) {
@@ -457,6 +484,10 @@ $tmW4     = Team 'Fala 4: hydraliski'   'Nod1' 20 @('SCZLNG', 'SCZLNG', 'SCZLNG'
 $tmMuta   = Team 'Mutalisk'             'Nod1' 25 @('SCZMUT') @('1,10', '11,14')   # one, with Tanya's "they fly too?!" (user: do not oversaturate)
 $tmRep    = Team 'Fala powtarzana'      'Nod1' 20 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL', 'SCZHYL') $toCrash
 $tmObs    = Team 'Obserwator Protossow' 'Soviet' 26 @('SCPOBSV') @('11,5')
+# the nest defends itself once the choke has fallen (user 2026-10-29: "a small number of Zerglings and Broodlings,
+# PRODUCED, not spawned, from the Spawning Pool"): "4 Create Team" makes Nod1 hatch the squad at its Pool for its own
+# credits (as the harassment of ARKA 4); the squad attack-moves to the choke and guards it
+$tmPool   = Team 'Spawning Pool: obrona' 'Nod1' 30 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZBRD', 'SCZBRD', 'SCZBRD') @('16,46', '11,10')
 # colony AI teams: one stays home, two strike the nest (north plateau -> west approach -> Hatchery -> hunt)
 $tmColDef = Team 'Kolonia: obrona'        'GDI1' 18 @('SCMARINE', 'SCMARINE', 'SCMARINE', 'SCMARINE', 'SCFIRE') @('3,18', '11,10') 1 -AI
 $tmColAtk = Team 'Kolonia: atak piechoty' 'GDI1' 18 @('SCMARINE', 'SCMARINE', 'SCMARINE', 'SCMARINE', 'SCMARINE', 'SCMARINE', 'SCFIRE', 'SCFIRE') @('3,23', '3,35', '16,19', '11,14') 2 -AI
@@ -468,7 +499,7 @@ AITrigger 'Kolonia Vulture'  $tmColVul 'GDI1' $colSide
 
 # ================================================================ triggers
 $trN = 0; $trig = [ordered]@{}
-foreach ($v in @('Rozbitkowie 1,0', 'Rozbitkowie 2,0', 'Rozbitkowie 3,0', 'MCV odzyskany,0', 'Pierwszy kontakt,0', 'Oblezenie kolonii,0', 'Raynor dolaczyl,0', 'Final,0', 'Wrak przejety,0', 'Wrak u gracza,0')) { $ini.Set('VariableNames', "$($trN)", $v); $trN++ }
+foreach ($v in @('Rozbitkowie 1,0', 'Rozbitkowie 2,0', 'Rozbitkowie 3,0', 'MCV odzyskany,0', 'Pierwszy kontakt,0', 'Oblezenie kolonii,0', 'Raynor dolaczyl,0', 'Final,0', 'Wrak przejety,0', 'Wrak u gracza,0', 'Przesmyk zachod,0', 'Przesmyk wschod,0', 'Pool zniszczony,0')) { $ini.Set('VariableNames', "$($trN)", $v); $trN++ }
 $trN = 0
 function Ev([int]$id, $p = 0) { "$id,0,$p" }
 function Act([int]$id, $p = 0, [int]$kind = 0, [int]$w = 0) { "$id,$kind,$p,0,0,0,0,$(WpLetter $w)" }
@@ -588,6 +619,16 @@ Trigger 'muta' 'Mutaliski' @((Ev 13 1380)) @((Reinf $tmMuta 25), (Act 55 3 0 25)
 Trigger 'wHard' 'Fala dodatkowa (trudny)' @((Ev 13 1080), (Ev 27 12)) @((Reinf $tmMuta 25), (Reinf $tmW3 20))
 Trigger 'wRep' 'Fala powtarzana' @((Ev 13 300)) @((Reinf $tmRep 20), (Act 55 3 0 21)) -Repeat -Disabled
 Trigger 'wRepOn' 'Fale powtarzane wlaczone' @((Ev 13 1500)) @((Enable 'wRep'))
+# the choke: both flank Sunkens dead = Nod1 starts producing (credits for about five squads of 625), a squad now and one
+# every 150 s while the Spawning Pool stands
+Trigger 'chokeW' 'Przesmyk: Sunken zachodni' @((Ev 29)) @((Act 56 10)) -house 'Nod1' -tag 'ARKA1G08'
+Trigger 'chokeE' 'Przesmyk: Sunken wschodni' @((Ev 29)) @((Act 56 11)) -house 'Nod1' -tag 'ARKA1G09'
+Trigger 'choke' 'Przesmyk przelamany' @((Ev 36 10), (Ev 36 11)) @(
+    (Act 3 $H.Nod1), "106,0,$($H.Nod1),3200,0,0,0,A", (Act 4 $tmPool 1), (Enable 'poolDef'),
+    (Text 'Plk Stavros: Przesmyk przelamany! Ale gniazdo sie broni: Spawning Pool wykluwa nowe Zergi.'))
+Trigger 'poolDef' 'Spawning Pool: kolejna druzyna' @((Ev 13 150), (Ev 37 12)) @((Act 4 $tmPool 1)) -house 'Nod1' -Repeat -Disabled
+Trigger 'pool' 'Spawning Pool zniszczony' @((Ev 29)) @((Act 56 12), (Disable 'poolDef'),
+    (Text 'Plk Stavros: Spawning Pool zniszczony. Gniazdo nie wykluje juz obroncow.')) -tag 'ARKA1G07'
 Trigger 'hatch' 'Wylegarnia zniszczona' @((Ev 29)) (@((Text 'Plk Stavros: Wylegarnia plonie! Nic juz z niej nie wyjdzie.')) + @($wavesOff | ForEach-Object { Disable $_ }) + @((Disable 'wRepOn'))) -tag 'ARKA1G06'
 
 # --- secret: an engineer inside the wreck (enabled by arkaHit or arkaCaptured, whichever comes first)
@@ -610,7 +651,15 @@ Trigger 'win3' 'Final 3: Obserwator' @((Ev 13 7)) @(
     (Text 'Na skraju pustyni cos migocze w powietrzu... i znika.'), (Enable 'win4')) -Disabled
 Trigger 'win4' 'Final 4: wygrana' @((Ev 13 5)) @((Act 1 $H.Allies)) -Disabled
 
+# objective reminders and progress (user 2026-10-29: "for every mission, but do not overdo it"): survivors counted,
+# a reminder every 15:00 of the timer while an objective is open
+Add-CountProgress 'surv' @(0, 1, 2) { param($k, $n) "Rozbitkowie: $k z $n grup zebranych." }
+Add-ObjectiveReminder 'remSurv' 'Cel (przypomnienie): zbierz rozbitkow (znaczniki na radarze) i odzyskaj MCV na poludniu.' -From 'intro6' -Until 0, 1, 2, 3
+Add-ObjectiveReminder 'remCol' 'Cel (przypomnienie): pomoz kolonii Mar Sary na polnocnym zachodzie. Raynor musi przezyc.' -From 'col', 'colT' -Until 6
+Add-ObjectiveReminder 'remNest' 'Cel (przypomnienie): zniszcz gniazdo Zergow na polnocnym wschodzie (wszystkie budynki).' -From 'nestObj' -Until 7
+
 Split-MultiText; Set-DialoguePacing
+$quietWarn = Test-QuietDialogue   # no wave during a dialogue (workflow/mission-design rule 6); before Add-Difficulty
 Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)
 $textWarn = Test-TextTimeline
 
@@ -785,7 +834,19 @@ foreach ($kv in $ini.Section('AITriggerTypes')) {
 foreach ($kv in $ini.Section('GDI1')) { if ($kv.Key -match '^\d{3}$') { $bt = ($kv.Value -split ',')[0]; if (-not ($ini.Has($bt) -or $rules.ContainsKey($bt))) { $log.Add("FAIL GDI1 node $bt undefined"); $fail++ } } }
 # Prerequisite/BuiltAt in copied SC types must name something that exists
 foreach ($s in $scTypes) { foreach ($k in 'Prerequisite', 'BuiltAt') { $v = $ini.Get($s, $k, $null); if ($v) { foreach ($tok in ($v -split ',')) { $tok = $tok.Trim(); if ($tok -and $tok -notmatch '^(POWER|FACTORY|BARRACKS|RADAR|TECH|PROC|none)$' -and -not ($ini.Has($tok) -or $rules.ContainsKey($tok))) { $log.Add("FAIL $s $k names $tok"); $fail++ } } } } }
-$log.Add($(if ($fail) { "CHECKS: $fail FAIL" } else { 'CHECKS: PASS (types defined, teams exist, every tag has a trigger, prerequisites resolve)' }) + "; text timeline: $textWarn WARN")
+# the nest's choke is the only way in from the east half: with the choke (wp 46, r 4) closed and the far west road
+# (x < 60, through the colony) left out, nothing walks from the east plateau (wp 16) to the Hatchery
+$solid = @{}; foreach ($kv in $ini.Section('Terrain')) { $solid[[int]$kv.Key] = $true }
+$seen = New-Object 'bool[]' ($GW * $GW); $q = New-Object Collections.Generic.Queue[int]; $q.Enqueue($wp[16][1] * $GW + $wp[16][0]); $reach = $false
+while ($q.Count -and -not $reach) {
+    $i = $q.Dequeue(); foreach ($o in -1, 1, -$GW, $GW, (-$GW - 1), (-$GW + 1), ($GW - 1), ($GW + 1)) {
+        $j = $i + $o; $x = $j % $GW; $y = [int][Math]::Floor($j / $GW)   # [int]: a double key would miss the [Terrain] rock
+        if ($seen[$j] -or $code[$j] -ne 0 -or $solid[$y * 1000 + $x] -or $x -lt 60 -or ([Math]::Max([Math]::Abs($x - $wp[46][0]), [Math]::Abs($y - $wp[46][1])) -le 4)) { continue }
+        $seen[$j] = $true; if ([Math]::Abs($x - $wp[19][0]) -le 2 -and [Math]::Abs($y - $wp[19][1]) -le 2) { $reach = $true; break }; $q.Enqueue($j)
+    }
+}
+if ($reach) { $log.Add("FAIL the nest can be entered from the east past the choke (gap at the SE cliff open?)"); $fail++ } else { $log.Add("nest: the choke (wp 46) is the only way in from the east") }
+$log.Add($(if ($fail) { "CHECKS: $fail FAIL" } else { 'CHECKS: PASS (types defined, teams exist, every tag has a trigger, prerequisites resolve)' }) + "; text timeline: $textWarn WARN; waves during dialogue: $quietWarn WARN")
 $log | Set-Content "$work\log.txt" -Encoding UTF8
 $log | Where-Object { $_ -notmatch '^building ' }
 

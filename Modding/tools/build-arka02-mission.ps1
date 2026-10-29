@@ -91,7 +91,7 @@ function Get-ScClosure([string[]]$roots) {
     @($inc.Keys)
 }
 $scRoots = @(
-    'SCZLNG', 'SCZHYL', 'SCZMUT', 'SCZOVL', 'SCZINF',                       # Zerg units (Infested Terrans in the city)
+    'SCZLNG', 'SCZHYL', 'SCZMUT', 'SCZOVL', 'SCZINF', 'SCZBRD', 'SCZDSUN',  # Zerg units (Infested Terrans in the city), the nest's Broodlings and colony Drones
     'SCZHAT', 'SCZPOL', 'SCZHDN', 'SCZSPI', 'SCZCRP', 'SCZSUN', 'SCZICC',   # Zerg nest + the infested Command Center
     'SCMARINE', 'SCFIRE', 'SCVULT', 'SCGOLI', 'SCSIEGE', 'SCDROP',          # Raynor's men, Sons of Korhal, the Confederate squad
     'SCCC', 'SCBARR', 'SCACAD', 'SCBUNK', 'SCDEPO', 'SCREFI',               # Mar Sara City (neutral ruins, shelters = bunkers)
@@ -128,8 +128,21 @@ $ini.Set('SCZICC', 'Strength', '6000')
 # ...and Repairable=yes, or Tanya's C4 never works on it: InfantryClass::What_Action (0x4D73BA) turns a C4 infantry's
 # attack on a building into Sabotage only when the building type has IsRepairable (TechnoTypeClass+0x450, Vinifera.pdb).
 # The Zerg buildings of StarCraft.ini say Repairable=no (test 2026-10-27: Tanya could only shoot it). Nod1 has 0 credits,
-# so the Zerg never repair it anyway
+# so the Zerg never repair it anyway (the nest that has money is the house Nod, see ZergAI.ps1 below)
 $ini.Set('SCZICC', 'Repairable', 'yes'); $ini.Set('SCZICC', 'ClickRepairable', 'no')
+# the nest's AI (house Nod, user 2026-10-29: "naprawde buduje zergi czy broodlingi") hatches Zerglings, Broodlings and
+# Hydralisks in its Spawning Pool: Nod in Owner, and Pool + Hatchery as the only prerequisites (no Hatchery, no new
+# Zerg; not the Den: a squad with Hydralisks would wait for ever once the Den falls). The Broodling loses its Queen's Nest
+foreach ($t in 'SCZLNG', 'SCZHYL', 'SCZBRD') {
+    $s = $ini.Section($t); for ($i = $s.Count - 1; $i -ge 0; $i--) { if ($s[$i].Key -like 'Prerequisite*') { $s.RemoveAt($i) } }
+    $ini.Set($t, 'Owner', 'Nod1,Nod'); $ini.Set($t, 'Prerequisite', 'SCZPOL,SCZHAT')
+}
+# the colony Drone hatched at the Hatchery (Naval/BuiltAt stay: larva exit), without the faction's prerequisites
+$s = $ini.Section('SCZDSUN'); for ($i = $s.Count - 1; $i -ge 0; $i--) { if ($s[$i].Key -like 'Prerequisite*') { $s.RemoveAt($i) } }
+$ini.Set('SCZDSUN', 'Owner', 'Nod'); $ini.Set('SCZDSUN', 'TechLevel', '1')
+# the Hydralisk Den is a research "construction yard" in the faction file (Factory=BuildingType, zerg-research): an IQ 5
+# house must not take it for a ConYard (as in ARKA 5)
+$s = $ini.Section('SCZHDN'); for ($i = $s.Count - 1; $i -ge 0; $i--) { if ($s[$i].Key -in 'Factory', 'Upgrades') { $s.RemoveAt($i) } }
 # anti-air as in mission 1: rockets and Gauss rifles hit air AND ground whichever weapon the engine picks
 function Resolve-Rules($sec) { $chain = @(); $s = $sec; while ($s -and $rules.ContainsKey($s) -and $chain.Count -lt 5) { $chain = , $s + $chain; $s = $rules[$s]['$Inherits'] }; $m = [ordered]@{}; foreach ($c in $chain) { foreach ($k in $rules[$c].Keys) { if ($k -ne '$Inherits') { $m[$k] = $rules[$c][$k] } } }; $m }
 $aag = Resolve-Rules 'AGHeatSeeker'; $aag['AA'] = 'yes'; $aag['AG'] = 'yes'
@@ -269,9 +282,12 @@ House 'Soviet1' 'AlliesSide'   'LightBlue'  $friends 0  2 'no'                # 
 House 'Soviet2' 'AlliesSide'   'LightBlue'  $friends 0  2 'no'
 House 'Soviet'  'GDISide'      'Gold'       $friends 0  3 'no'                # Sons of Korhal (Mengsk)
 # Raynor on his way into the city: allied with everybody, so neither the Zerg nor the player shoot him on the road
-House 'GDI2'    'GDISide'      'LightGold'  ($friends + ',Nod1,Nod2,GDI') 0 6 'no'
-House 'Nod1'    'NodSide'      'Purple'     'Nod1,Nod2,GDI2' 0 7 'no' 'North' 3   # Zerg: nest, Mar Sara City, waves
-House 'Nod2'    'NodSide'      'Purple'     'Nod1,Nod2,GDI2' 0 7 'no' 'North' 3   # Zerg packs on the road to the city
+House 'GDI2'    'GDISide'      'LightGold'  ($friends + ',Nod,Nod1,Nod2,GDI') 0 6 'no'
+House 'Nod1'    'NodSide'      'Purple'     'Nod,Nod1,Nod2,GDI2' 0 7 'no' 'North' 3   # Zerg: Mar Sara City, waves from the map edges
+House 'Nod2'    'NodSide'      'Purple'     'Nod,Nod1,Nod2,GDI2' 0 7 'no' 'North' 3   # Zerg packs on the road to the city
+# the nest in the north: its own house with an AI that produces (IQ 5, ZergAI.ps1), apart from Nod1, whose 0 credits
+# keep the infested CC unrepaired; 3000 credits for the colony Drones (squads are paid per order)
+House 'Nod'     'NodSide'      'Purple'     'Nod,Nod1,Nod2,GDI2' 30 1 'no' 'North' 5
 House 'GDI'     'GDISide'      'DarkRed'    'GDI,GDI2' 0 0 'no' 'West' 3       # Confederate squad sent to arrest Raynor
 House 'Neutral' 'CivilianSide' 'Grey'       'Neutral' 0 4 'no'
 House 'Special' 'SpecialSide'  'Grey'       'Special' 0 5 'no'
@@ -367,8 +383,9 @@ Place-AtWp 'Soviet2' 'SCBARR' 37 1 'None' 90
 Place-AtWp 'Soviet2' 'SCDEPO' 38 0 'None' 150
 Place-AtWp 'Soviet2' 'SCACAD' 39 1 'None' 100
 Place-AtWp 'Soviet2' 'SCDEPO' 36 0 'None' 80 0 4 2
-Place-AtWp 'Nod1' 'SCZCRP' 52 0
-Place-AtWp 'Nod1' 'SCZSUN' 35 0 'None' 256 0 4 3                                       # inside the city gate
+# the city's colonies carry the relief tag: the player hitting them makes the nest send help (ZergAI.ps1)
+Place-AtWp 'Nod1' 'SCZCRP' 52 0 'ARKA2Z03'
+Place-AtWp 'Nod1' 'SCZSUN' 35 0 'ARKA2Z03' 256 0 4 3                                   # inside the city gate
 foreach ($i in 0..9) {
     $a = $rnd.NextDouble() * 6.283; $r = 3 + $rnd.NextDouble() * 6
     $sx = [int]($wp[30][0] + [Math]::Cos($a) * $r); $sy = [int]($wp[30][1] + [Math]::Sin($a) * $r)
@@ -407,17 +424,54 @@ Squad 'Nod2' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') 43 0 0 'Area Gu
 Squad 'Nod2' @('SCZINF', 'SCZINF') 43 2 2 'Area Guard'
 Squad 'Nod2' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') 40 0 0 'Area Guard'
 
-# ================================================================ Zerg nest (north): the source of the raids on the base
-Place-AtWp 'Nod1' 'SCZHAT' 21 1 'ARKA2G07'
-Place-AtWp 'Nod1' 'SCZPOL' 22 1
-Place-AtWp 'Nod1' 'SCZHDN' 23 1
-Place-AtWp 'Nod1' 'SCZSPI' 24 1
-foreach ($n in 25, 26, 27) { Place-AtWp 'Nod1' 'SCZSUN' $n 0 }
-foreach ($n in 28, 29) { Place-AtWp 'Nod1' 'SCZCRP' $n 0 }
-foreach ($t in 'SCZOVL', 'SCZOVL') { Add-Unit 'Nod1' $t ($wp[21][0] - 4) ($wp[21][1] + 3) 'Guard' }
-Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') 20 0 0 'Area Guard'
-Squad 'Nod1' @('SCZHYL', 'SCZHYL', 'SCZHYL') 21 -3 4 'Area Guard'
-Squad 'Nod1' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL') 27 2 2 'Area Guard'
+# ================================================================ Zerg nest (north): house Nod, the AI of ZergAI.ps1
+# tags: Hatchery = "Wylegarnia zniszczona" (also the nest lost), Spawning Pool = nest lost (no more hatching), the other
+# buildings = "the player attacks the nest" (alarm: defense squad + counter-raid)
+Place-AtWp 'Nod' 'SCZHAT' 21 1 'ARKA2G07'
+Place-AtWp 'Nod' 'SCZPOL' 22 1 'ARKA2Z04'
+Place-AtWp 'Nod' 'SCZHDN' 23 1 'ARKA2Z02'
+Place-AtWp 'Nod' 'SCZSPI' 24 1 'ARKA2Z02'
+foreach ($n in 25, 26, 27) { Place-AtWp 'Nod' 'SCZSUN' $n 0 'ARKA2Z02' }
+foreach ($n in 28, 29) { Place-AtWp 'Nod' 'SCZCRP' $n 0 'ARKA2Z02' }
+foreach ($t in 'SCZOVL', 'SCZOVL') { Add-Unit 'Nod' $t ($wp[21][0] - 4) ($wp[21][1] + 3) 'Guard' }
+# the rally point (wp 20: produced squads gather there, fallback hatching) stays free: the guard pack stands beside it
+Reserve $wp[20][0] $wp[20][1] 1
+Squad 'Nod' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') 20 3 3 'Area Guard'
+Squad 'Nod' @('SCZHYL', 'SCZHYL', 'SCZHYL') 21 -3 4 'Area Guard'
+Squad 'Nod' @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL') 27 2 2 'Area Guard'
+# growth: 3 more Sunken Colonies the nest's Drones morph into (Add-ZergBuilder through ZergAI.ps1), on the side that
+# faces the player (towards the central plain, wp 41). Every cell of a spot within 3.6 of a creep source of the nest
+# (Hatchery foundation cell (1,1), colony (0,0)), so the creep disc (radius 5) lies under it; spots 4+ cells apart
+$nestB = @($structs | Where-Object { ($_.Value -split ',')[0] -eq 'Nod' } | ForEach-Object { $p = $_.Value -split ','; , @($p[1], [int]$p[3], [int]$p[4]) })
+$seeds = @(foreach ($b in $nestB) { if ($b[0] -eq 'SCZHAT') { , @(($b[1] + 1), ($b[2] + 1)) } elseif ($b[0] -in 'SCZSUN', 'SCZCRP') { , @($b[1], $b[2]) } })
+$growPlan = New-Object Collections.Generic.List[object]; $cands = @()
+foreach ($sd in $seeds) { for ($x = $sd[0] - 4; $x -le $sd[0] + 3; $x++) { for ($y = $sd[1] - 4; $y -le $sd[1] + 3; $y++) {
+    if (-not (Free $x $y 2 2 1 $false)) { continue }
+    $ok = $true
+    foreach ($cc in @(@($x, $y), @(($x + 1), $y), @($x, ($y + 1)), @(($x + 1), ($y + 1)))) {
+        if (-not @($seeds | Where-Object { ($_[0] - $cc[0]) * ($_[0] - $cc[0]) + ($_[1] - $cc[1]) * ($_[1] - $cc[1]) -le 13 }).Count) { $ok = $false; break }
+    }
+    if ($ok) { $cands += , @($x, $y, (($x - $wp[41][0]) * ($x - $wp[41][0]) + ($y - $wp[41][1]) * ($y - $wp[41][1]))) }
+} } }
+foreach ($cd in @($cands | Sort-Object { $_[2] })) {
+    if ($growPlan.Count -ge 3) { break }
+    if (@($growPlan | Where-Object { [Math]::Max([Math]::Abs($_[1] - $cd[0]), [Math]::Abs($_[2] - $cd[1])) -lt 4 }).Count) { continue }
+    if (-not (Free $cd[0] $cd[1] 2 2 1 $false)) { continue }
+    $growPlan.Add(@('SCZSUN', $cd[0], $cd[1])); Occupy $cd[0] $cd[1] 2 2; Reserve ($cd[0] + 1) ($cd[1] + 1) 1
+    $log.Add("nest growth: Sunken Colony planned @ $($cd[0]),$($cd[1])")
+}
+if ($growPlan.Count -lt 3) { $log.Add("WARN nest growth: only $($growPlan.Count) Sunken spots on the creep") }
+# alarm band: the cells 5-8 (Chebyshev) from the nest's buildings and planned colonies; entering them = alarm
+$nestCells = New-Object Collections.Generic.List[object]
+foreach ($b in $nestB) { $f = Foundation $b[0]; for ($x = $b[1]; $x -lt $b[1] + $f[0]; $x++) { for ($y = $b[2]; $y -lt $b[2] + $f[1]; $y++) { $nestCells.Add(@($x, $y)) } } }
+foreach ($g in $growPlan) { for ($x = $g[1]; $x -lt $g[1] + 2; $x++) { for ($y = $g[2]; $y -lt $g[2] + 2; $y++) { $nestCells.Add(@($x, $y)) } } }
+$nx0 = ($nestCells | ForEach-Object { $_[0] } | Measure-Object -Minimum -Maximum); $ny0 = ($nestCells | ForEach-Object { $_[1] } | Measure-Object -Minimum -Maximum)
+$alarmBand = @(for ($x = $nx0.Minimum - 8; $x -le $nx0.Maximum + 8; $x++) { for ($y = $ny0.Minimum - 8; $y -le $ny0.Maximum + 8; $y++) {
+    if ($x -lt 0 -or $y -lt 0 -or $code[$y * $GW + $x] -lt 0) { continue }
+    $d = 99; foreach ($nc in $nestCells) { $e = [Math]::Max([Math]::Abs($nc[0] - $x), [Math]::Abs($nc[1] - $y)); if ($e -lt $d) { $d = $e; if ($d -lt 5) { break } } }
+    if ($d -ge 5 -and $d -le 8) { , @($x, $y) }
+} })
+$log.Add("nest alarm band: $($alarmBand.Count) cells")
 
 # ================================================================ cell-tag zones (one tag per cell; inner zones first)
 function Zone($tag, [int]$n, [int]$rMin, [int]$rMax) {
@@ -480,17 +534,14 @@ $tmSoK    = Team 'Synowie Korhalu' 'Soviet' 54 @('SCMARINE', 'SCMARINE', 'SCMARI
 # the Dropships the colonists board: one team per pad, guarding (they stand on the landing zone till the end)
 $tmDrop1  = Team 'Dropship SK 1' 'Soviet' 59 @('SCDROP') @('11,5')
 $tmDrop2  = Team 'Dropship SK 2' 'Soviet' 60 @('SCDROP') @('11,5')
-# raids on the base before the jump phase (stop when the Hatchery dies or the jump begins)
+# a wild pack from the west before the jump phase (the nest's own raids are hatched by its AI, ZergAI.ps1 below)
 $tmRaid1  = Team 'Najazd z zachodu'   'Nod1' 46 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') $toBase
-$tmRaid2  = Team 'Najazd z gniazda'   'Nod1' 20 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL') $toBase
-$tmRaidR  = Team 'Najazd powtarzany'  'Nod1' 20 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL') $toBase
-# the jump phase (15:00)
-$tmP1     = Team 'Skok: fala 1'       'Nod1' 20 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') $toBase
+# the jump phase (15:00): swarms from the map edges; the nest adds its hatched squads
+$tmP1     = Team 'Skok: fala 1'       'Nod1' 46 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG') $toBase
 $tmP2     = Team 'Skok: fala 2'       'Nod1' 46 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL', 'SCZHYL', 'SCZHYL') $toBase
 $tmP3     = Team 'Skok: fala 3'       'Nod1' 44 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL', 'SCZHYL', 'SCZHYL', 'SCZINF', 'SCZINF') $toBase
 $tmMuta   = Team 'Skok: mutaliski'    'Nod1' 50 @('SCZMUT', 'SCZMUT', 'SCZMUT') @('1,10', '11,14')
 $tmConf   = Team 'Konfederacja'       'GDI'  55 @('SCMARINE', 'SCMARINE', 'SCMARINE', 'SCMARINE', 'SCMARINE', 'SCMARINE', 'SCFIRE', 'SCFIRE', 'SCVULT', 'SCVULT', 'SCGOLI', 'SCGOLI', 'SCSIEGE') $toBase
-$tmP5a    = Team 'Skok: fala 5 polnoc' 'Nod1' 20 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZHYL', 'SCZHYL', 'SCZHYL', 'SCZHYL', 'SCZHYL') $toBase
 $tmP5b    = Team 'Skok: fala 5 wschod' 'Nod1' 47 @('SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZLNG', 'SCZINF', 'SCZINF', 'SCZINF') $toBase
 
 # ================================================================ triggers
@@ -512,6 +563,7 @@ function Trigger($key, $name, [string[]]$events, [string[]]$actions, $house = 'A
     $script:trig[$key] = @{ Id = $id; Name = $name; House = $house; Events = $events; Actions = $actions; Disabled = [bool]$Disabled; Repeat = [bool]$Repeat; Tag = $tag; Diff = $diff }
 }
 . "$tools\MissionKit.ps1"   # reveal crate, one text per trigger, dialogue gaps from text length, timeline check
+. "$tools\ZergAI.ps1"      # the nest's general AI (Add-ZergAI, called after Add-Difficulty)
 Add-ScAirArmor             # SC flyer armors: Allied AA fires at SC flyers only on order, Dragoons cannot hit the Overlord
 Add-RevealCrate $crate[0] $crate[1]
 
@@ -528,7 +580,7 @@ Trigger 'intro6' 'Start 6: cel 1' @((Ev 13 5)) @(
     (Text 'Cel 1: oczysc droge do Mar Sara City (plaskowyz na wschodzie) z Zerglingow i Infested Terran.'),
     (Act 55 6 0 51), (Act 55 6 0 43), (Act 55 2 0 35), (Enable 'intro7')) -Disabled
 Trigger 'intro7' 'Start 7: straty' @((Ev 13 5)) @((Text 'Einstein, Tanya, Raynor, wrak ARKI i cztery elektrownie przy wraku musza przetrwac.'), (Enable 'intro8')) -Disabled
-Trigger 'intro8' 'Start 8: gniazdo' @((Ev 13 5)) @((Text 'Plk Stavros: Gniazdo na polnocy wysyla najazdy na baze. Jesli padnie ich Wylegarnia, bedzie spokojniej.'), (Act 55 6 0 21)) -Disabled
+Trigger 'intro8' 'Start 8: gniazdo' @((Ev 13 5)) @((Text 'Plk Stavros: Gniazdo na polnocy wykluwa Zergi i wysyla je na nas. Bez Wylegarni albo Niecki ucichnie.'), (Act 55 6 0 21)) -Disabled
 
 # --- losing
 Trigger 'einLost' 'Einstein zginal' @((Ev 29)) @((Text 'Plk Stavros: Einstein nie zyje. Bez niego nikt z nas nie wroci do domu.'), (Act 2 $H.Allies)) -tag 'ARKA2G03'
@@ -591,9 +643,10 @@ for ($k = 1; $k -le 3; $k++) {
     # units only (Ev 9): the house also owns its bunker
     Trigger "civLost$k" "Schron $k stracony" @((Ev 9 $H[$civHouses[$k - 1]]), (Ev 37 (1 + $k))) @(
         (Act 56 (4 + $k)), (Text "Plk Stavros: Stracilismy kolonistow ze schronu $k.")) -Disabled
-    Trigger "civSaved$k" "Schron $k uratowany" @((Ev 36 (1 + $k))) @(
-        (Disable "civLost$k"), (Text "Pilot Synow Korhalu: Kolonisci ze schronu $k na pokladzie. Startujemy!"))
+    # the boarding line with the count comes from Add-CountProgress below (one text per moment, not two)
+    Trigger "civSaved$k" "Schron $k uratowany" @((Ev 36 (1 + $k))) @((Disable "civLost$k"))
 }
+Trigger 'civAll' 'Wszystkie schrony uratowane' @((Ev 36 2), (Ev 36 3), (Ev 36 4)) @((Text 'Pilot Synow Korhalu: Kolonisci ze wszystkich 3 schronow na pokladzie. Startujemy!'))
 foreach ($pr in @(@('A', 5, 6), @('B', 5, 7), @('C', 6, 7))) {
     Trigger "civFail$($pr[0])" "Dwa schrony stracone $($pr[0])" @((Ev 36 $pr[1]), (Ev 36 $pr[2])) @(
         (Text 'Einstein: Nie uratowalismy prawie nikogo. Nie po to tu przyszlismy.'), (Act 2 $H.Allies))
@@ -604,7 +657,7 @@ $p4 = @('p4a', 'p4b', 'p4c')
 foreach ($pr in @(@('p4a', 2, 3), @('p4b', 2, 4), @('p4c', 3, 4))) {
     Trigger $pr[0] "Dwa schrony uratowane $($pr[0])" @((Ev 36 $pr[1]), (Ev 36 $pr[2])) (@((Enable 'jumpStart')) + @($p4 | Where-Object { $_ -ne $pr[0] } | ForEach-Object { Disable $_ }))
 }
-$raidsOff = @('raid1', 'raid2', 'raidRep', 'raidRepOn')
+$raidsOff = @('raid1')
 Trigger 'jumpStart' 'Skok: start' @((Ev 13 3)) (@(
     (Act 56 8), (Act 27 900), (Act 23), (Act 20 48), (Act 48 1 0 10), (Act 55 4 0 10),
     (Text 'Einstein: ARKA nie poleci jak statek, ale zrobi jeden krotki skok w przestrzeni. Rdzen potrzebuje 15 minut i pradu z czterech elektrowni.'),
@@ -612,7 +665,7 @@ Trigger 'jumpStart' 'Skok: start' @((Ev 13 3)) (@(
     @($raidsOff | ForEach-Object { Disable $_ })) -Disabled
 Trigger 'jump2' 'Skok: cel' @((Ev 13 5)) @((Text 'Cel 4: bron wraku ARKI i elektrowni, az rdzen sie naladuje. Wszystko w polu ARKI skoczy razem z nami.'), (Enable 'jump3')) -Disabled
 Trigger 'jump3' 'Skok: Mengsk' @((Ev 13 5)) @((Text 'Mengsk (radio): Wspolrzedne Antigi Prime macie w komputerze, profesorze. Do zobaczenia po drugiej stronie.')) -Disabled
-Trigger 'p4w1' 'Skok: fala 1' @((Ev 13 60)) @((Reinf $tmP1 20), (Act 55 3 0 40)) -Disabled
+Trigger 'p4w1' 'Skok: fala 1' @((Ev 13 60)) @((Reinf $tmP1 44), (Act 55 3 0 44)) -Disabled   # north edge (the nest hatches its own)
 Trigger 'p4w2' 'Skok: fala 2' @((Ev 13 200)) @((Reinf $tmP2 46), (Act 55 3 0 46), (Text 'EVA: Wrog nadciaga od zachodu.')) -Disabled
 Trigger 'p4w3' 'Skok: fala 3' @((Ev 13 330)) @((Reinf $tmP3 44), (Act 55 3 0 40), (Text 'Einstein: Ida ze wszystkich stron. Czuja, ze rdzen sie budzi.')) -Disabled
 Trigger 'p4muta' 'Skok: mutaliski' @((Ev 13 440)) @((Reinf $tmMuta 50), (Act 55 3 0 50), (Text 'Tanya: Latajace! Rakiety w gore!')) -Disabled
@@ -623,7 +676,7 @@ Trigger 'p4conf2' 'Skok: Konfederacja 2' @((Ev 13 5)) @((Text 'Jim Raynor: Duke 
 # both Terran sides look alike (same SC units): say which is which (Confederates dark red, Sons of Korhal gold)
 Trigger 'p4conf3' 'Skok: Konfederacja 3' @((Ev 13 5)) @((Text 'Tanya: To ci od aresztowania, czy ci od ratowania?'), (Enable 'p4conf4')) -Disabled
 Trigger 'p4conf4' 'Skok: Konfederacja 4' @((Ev 13 5)) @((Text 'Jim Raynor: Ci od aresztowania. Ratujacy maja zlote pancerze.')) -Disabled
-Trigger 'p4w5' 'Skok: fala 5' @((Ev 13 680)) @((Reinf $tmP5a 20), (Reinf $tmP5b 47), (Act 55 3 0 40), (Act 55 3 0 47)) -Disabled
+Trigger 'p4w5' 'Skok: fala 5' @((Ev 13 680)) @((Reinf $tmP5b 47), (Act 55 3 0 47)) -Disabled
 Trigger 'p4prot' 'Skok: Protossi' @((Ev 13 830)) @((Act 55 6 0 49), (Act 17 49),
     (Text 'Plk Stavros: Na radarze cos wielkiego na orbicie. Nie nasze i nie Konfederacji.'), (Enable 'p4prot2')) -Disabled
 Trigger 'p4prot2' 'Skok: Protossi 2' @((Ev 13 5)) @((Text 'Jim Raynor: To ci, ktorzy spalili Chau Sare. Profesorze, wlaczaj to cholerstwo!')) -Disabled
@@ -643,13 +696,46 @@ Trigger 'endWin' 'Wygrana' @((Ev 13 40)) @((Act 1 $H.Allies)) -Disabled
 
 # --- raids on the base while the player is away (off when the Hatchery dies or the jump starts)
 Trigger 'raid1' 'Najazd 1' @((Ev 13 560)) @((Reinf $tmRaid1 46), (Act 55 3 0 46), (Text 'EVA: Baza atakowana od zachodu.'))
-Trigger 'raid2' 'Najazd 2' @((Ev 13 1000)) @((Reinf $tmRaid2 20), (Act 55 3 0 40), (Text 'EVA: Wrog nadciaga z polnocy.'))
-Trigger 'raidRep' 'Najazd powtarzany' @((Ev 13 450)) @((Reinf $tmRaidR 20), (Act 55 3 0 40)) -Repeat -Disabled
-Trigger 'raidRepOn' 'Najazdy powtarzane wlaczone' @((Ev 13 1500)) @((Enable 'raidRep'))
-Trigger 'hatch' 'Wylegarnia zniszczona' @((Ev 29)) (@((Text 'Plk Stavros: Wylegarnia na polnocy plonie! Najazdy na baze ustana.')) + @($raidsOff | ForEach-Object { Disable $_ })) -tag 'ARKA2G07'
+Trigger 'hatch' 'Wylegarnia zniszczona' @((Ev 29)) (@((Text 'Plk Stavros: Wylegarnia na polnocy plonie! Gniazdo nie wykluje juz ani jednego Zerga.')) + @($raidsOff | ForEach-Object { Disable $_ })) -tag 'ARKA2G07'
+
+# objective reminders and progress (user 2026-10-29: "for every mission, but do not overdo it"). Objectives 2 (Raynor)
+# and 4 (the jump) have the on-screen timer, so no reminder; the shelters count the boarded groups
+Add-CountProgress 'civ' @(2, 3, 4) { param($k, $n) "Pilot Synow Korhalu: Kolonisci na pokladzie. Uratowane schrony: $k z $n (potrzeba 2)." }
+Add-ObjectiveReminder 'remRoad' 'Cel (przypomnienie): oczysc droge do Mar Sara City (plaskowyz na wschodzie) z Zergow.' -From 'intro6' -Until 13
+Add-ObjectiveReminder 'remCiv' 'Cel (przypomnienie): doprowadz kolonistow z 2 z 3 schronow na ladowisko Synow Korhalu.' -From 'shelters' -Until 8
 
 Split-MultiText; Set-DialoguePacing
 Add-Difficulty   # client level: Easy = half waves + double money, Medium = 3/4 + 50%, Hard = as written (MissionKit)
+
+# --- the nest's general AI (user 2026-10-29: more active Zerg that attack, defend and answer the player's attacks with
+# squads the Spawning Pool really hatches). Phases: local 8 = jump, 15 = shelters objective. Routes: west ford (40)
+# and the northern defence line (45), the central plain and the eastern approach (41, 53), the southern ford (51)
+$L = 'SCZLNG'; $Br = 'SCZBRD'; $Hy = 'SCZHYL'
+$zai = Add-ZergAI @{
+    House = 'Nod'; HouseNo = $H.Nod; Prefix = 'zai'; Rally = 20; Player = 'Allies'; PlayerNo = $H.Allies; Watchdog = 240
+    Squads = [ordered]@{
+        Har   = @{ Name = 'Gniazdo: na zbieracze';    M = @($L, $L, $L, $L, $Br, $Br);                                   S = @('16,40', '0,3', '11,14') }
+        Raid  = @{ Name = 'Gniazdo: najazd';          M = @($L, $L, $L, $L, $L, $L, $Hy, $Hy);                           S = @('16,45', '16,10', '11,14') }
+        Heavy = @{ Name = 'Gniazdo: duzy najazd';     M = @($L, $L, $L, $L, $L, $L, $Br, $Br, $Br, $Br, $Hy, $Hy, $Hy, $Hy); S = @('16,41', '16,53', '16,10', '11,14') }
+        Conv  = @{ Name = 'Gniazdo: na kolonistow';   M = @($L, $L, $L, $L, $L, $Br, $Br, $Br);                          S = @('16,51', '11,14') }
+        Jump  = @{ Name = 'Gniazdo: atak na ARKE';    M = @($L, $L, $L, $L, $L, $L, $L, $L, $Br, $Br, $Br, $Br, $Hy, $Hy, $Hy, $Hy); S = @('16,40', '16,10', '11,14') }
+        Def   = @{ Name = 'Gniazdo: obrona';          M = @($L, $L, $L, $L, $L, $L, $Br, $Br, $Br, $Br);                 S = @('11,14') }
+        Ctr   = @{ Name = 'Gniazdo: kontratak';       M = @($L, $L, $L, $L, $L, $L);                                     S = @('16,45', '16,10', '11,14') }
+        Rel   = @{ Name = 'Gniazdo: pomoc dla miasta'; M = @($L, $L, $L, $L, $Hy, $Hy);                                  S = @('16,43', '16,52', '11,10') }
+    }
+    Orders = @(
+        @{ Sq = 'Har';   At = 300;  Every = 360; When = @('37,0,8') },               # harvesters, all mission long
+        @{ Sq = 'Raid';  At = 480;  Every = 420; When = @('37,0,8') },               # the base from the north
+        @{ Sq = 'Heavy'; At = 1500; Every = 480; When = @('37,0,8') },               # bigger ones once the city fight is on
+        @{ Sq = 'Conv';  At = 0;    Every = 300; When = @('36,0,15', '37,0,8') },    # the colonists' road (objective 3)
+        @{ Sq = 'Jump';  At = 0;    Every = 150; When = @('36,0,8') })               # everything on the ARKA during the jump
+    Alarm = @{ Tag = 'ARKA2Z01'; HitTag = 'ARKA2Z02'; Zone = $alarmBand; Sq = 'Def'; Counter = 'Ctr'; Cooldown = 150
+        Text = 'Plk Stavros: Gniazdo nas wyczulo. Wykluwa obroncow, a stado zerglingow biegnie na baze!' }
+    Reliefs = @(@{ Tag = 'ARKA2Z03'; Sq = 'Rel'; Cooldown = 240; Text = 'Tanya: Z gniazda na polnocy ida posilki do miasta. Pospieszmy sie.' })
+    LostTags = @('ARKA2Z04')
+    Grow = @{ Wp = 20; Nodes = $growPlan; Start = 600; Every = 300 }
+}
+$trig['hatch'].Actions = @($trig['hatch'].Actions) + @(Act 56 $zai.Lost)   # the Hatchery's own trigger also ends the nest
 $textWarn = Test-TextTimeline
 
 # resolve symbolic trigger references and write [Triggers]/[Events]/[Actions]/[Tags]
@@ -678,7 +764,7 @@ $o = [Pack]::Unpack($ini.Joined('OverlayPack'), $false); $od = [Pack]::Unpack($i
 $foreign = @{}; $zb = @()
 foreach ($kv in $structs) {
     $p = $kv.Value -split ','; $f = Foundation $p[1]; $bx = [int]$p[3]; $by = [int]$p[4]
-    if ($p[0] -match '^Nod[12]$' -and $p[1] -like 'SCZ*') { $zb += , @($p[1], $bx, $by, $f[0], $f[1]); continue }
+    if ($p[0] -match '^Nod[12]?$' -and $p[1] -like 'SCZ*') { $zb += , @($p[1], $bx, $by, $f[0], $f[1]); continue }
     for ($i = $bx; $i -lt $bx + $f[0]; $i++) { for ($j = $by; $j -lt $by + $f[1]; $j++) { $foreign[$j * 512 + $i] = $true } }
 }
 function Creep-Free($x, $y) { $c = $code[$y * $GW + $x]; $i = $y * 512 + $x; ($c -eq 0 -or ($c -ge 11 -and $c -le 14)) -and $o[$i] -eq 255 -and -not $terrCell[$y * 1000 + $x] -and -not $foreign[$i] }

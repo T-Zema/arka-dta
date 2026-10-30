@@ -5455,7 +5455,7 @@ EliteAbilities=SELF_HEAL,ROF
 VoiceFeedback=
 SelfHealingCap=1.0
 SelfHealingStep=2
-GuardRange=2.75
+GuardRange=3.75
 
 [InfantryTypes]
 ARKA4IN001=SCZLNG
@@ -5502,6 +5502,7 @@ SelfHealingCap=1.0
 SelfHealingStep=4
 
 [SCZULT]
+GuardRange=3.5
 Name=Ultralisk
 Image=SCULTRA
 Description=Huge Zerg assault beast.@@Kaiser blades cleave everything in melee. Heavily armored.@@Regenerates.
@@ -5728,6 +5729,7 @@ SelfHealingStep=3
 ImmuneToVeins=yes
 
 [SCZBRD]
+GuardRange=2.93
 Name=Broodling
 Image=SCBROOD
 Description=Tiny Zerg swarm creature.@@Very fast melee biter.@@Regenerates.

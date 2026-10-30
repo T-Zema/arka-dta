@@ -4,8 +4,7 @@ DTA StarCraft Mod + ARKA campaign - changelog
 A mod for Dawn of the Tiberium Age: StarCraft factions, units and buildings, new engine patches
 and the mashup campaign "ARKA: Sign Error" (Red Alert x StarCraft). For private use: the StarCraft
 graphics, sounds and music come from a legal copy of StarCraft: Remastered and belong to Blizzard
-Entertainment. Each version is described in English first, then in Polish (versions before
-2026.10.29: Polish only).
+Entertainment.
 
 DTA StarCraft Mod + kampania ARKA - lista zmian
 ================================================
@@ -13,8 +12,300 @@ DTA StarCraft Mod + kampania ARKA - lista zmian
 Mod do Dawn of the Tiberium Age: frakcje, jednostki i budynki ze StarCrafta, nowe łatki silnika
 i kampania mashup "ARKA: Błąd znaku" (Red Alert x StarCraft). Do prywatnego użytku: grafika,
 dźwięki i muzyka StarCrafta pochodzą z legalnej kopii StarCraft: Remastered i należą do Blizzard
-Entertainment. Każda wersja jest opisana najpierw po angielsku, potem po polsku (wersje przed
-2026.10.29: tylko po polsku).
+Entertainment.
+
+
+Version 2026.10.30 - Terran and Protoss computer players, ARKA #3, the campaign in alpha (for DTA 16.2.3)
+----------------------------------------------------------------------------------------------------------
+
+INSTALLATION
+
+- Run the new DTA-SCMod-Setup.exe and click "Update StarCraft Mod". The previous version does not
+  have to be uninstalled.
+- When the installation is done, the installer says where to find the campaign: the ARKA campaign
+  (alpha, missions #0-#5) is playable under New Mission.
+
+WHAT THE MOD CONTAINS SO FAR
+
+- Three StarCraft factions in skirmish, next to the DTA ones:
+    - Terran: 18 StarCraft buildings, a Construction Tank that deploys into a Command Center,
+      12 units (the starships fly as vehicles), 11 research upgrades as building upgrades.
+    - Zerg: Drones morph into buildings, creep grows from Hatcheries, Creep Tumors and colonies,
+      Zerg buildings stand only on creep, every Overlord adds storage for 100 credits (like a
+      silo), 13 research upgrades, campaign heroes, the Zerg EVA and sidebar.
+    - Protoss: buildings need the power field of a Pylon, Probe and Nexus as in StarCraft,
+      research upgrades.
+- The STARCRAFT checkbox: StarCraft units and buildings for every faction, Zerg units from any
+  Barracks; Marines and Firebats as real infantry with the Stim Pack (an engine patch lets
+  infantry "deploy").
+- StarCraft workers (SCV, Drone, Probe) with mining animations, a Refinery takes 2 SCVs.
+- StarCraft sounds when you select a building, the 23 StarCraft music tracks.
+- The StarCraft maps (4)Lost Temple and (4)Fighting Spirit.
+- The campaign "ARKA: Sign Error", alpha: missions #0-#5 can be played from start to victory,
+  with 3 difficulty levels (EASY, MEDIUM, HARD).
+- The installer and uninstaller (English and Polish) that puts the original DTA files back.
+
+TERRAN COMPUTER PLAYER (new)
+
+Before this version the computer playing Terran built Allied copies, had no attack plan and never
+made an army. Now it plays with StarCraft units only. It needs the STARCRAFT and Advanced AI
+checkboxes (Advanced AI is on by default).
+
+- Only StarCraft: Terran no longer owns 115 non-StarCraft types (Allied buildings, the DTA
+  harvester and MCV, walls, Transport, helicopters...). This also holds for a human Terran.
+- Base: the computer deploys the Construction Tank, builds Supply Depots (later Uber Supply
+  Depots) as power, a Refinery with SCVs (it no longer sells the Refinery as "without harvesters"),
+  Barracks, Factory, Bunkers, Missile Turrets and a Starport. Then one of each other building
+  (Academy, Armory, Comsat, Science Facility, Nuclear Silo...) and all 12 research upgrades, like
+  the StarCraft AI.
+- 12 ground plans, the first one that fits is used:
+    - early game: an infantry rush, a scout, home defence while it has no Factory;
+    - bio push: Marines and Firebats after the Academy (as in StarCraft melee);
+    - vehicle rush once the Factory stands;
+    - Vulture raids on your harvesters (when you have more than one refinery);
+    - a large raid when you have many refineries, a flank attack on badly guarded refineries;
+    - hold the line: a home guard when you are twice as strong;
+    - siege push: Siege Tanks with infantry (as the StarCraft AI of "The Trump Card");
+    - direct and fast attacks as a fallback. The attacks grow over time.
+- Air fleet: Wraiths, Battlecruisers and Science Vessels from the Starport attack as a fleet
+  (harass and late fleet attacks, like the Battlecruisers of the StarCraft AI).
+- Siege Mode (engine patch): the computer sieges a tank only when a target is in range (11.9
+  cells as a tank, 20.4 sieged, at least 3) and turns it back into a tank after about 2250 frames
+  without a target. Before, it sieged at once wherever the tank stood and never packed up. The DTA
+  Allies AI also deploys its Enforcer only near the enemy now.
+- Self-defence: 34 Terran combat units react within 12 cells (more for weapons with a longer
+  range). When you attack a building of the computer, its free units and the squad it is
+  gathering come and fight. An attack on a Bunker or turret alone does not call for help. Your own
+  units are affected only in Guard Area mode.
+- Difficulty: the same 7 AI levels as the DTA factions.
+- It will not build Medics, Dropships or Valkyries to fight, makes no expansions on StarCraft
+  maps (the AI looks for Tiberium trees) and does not attack without Advanced AI.
+
+PROTOSS COMPUTER PLAYER (new)
+
+Same conditions: STARCRAFT and Advanced AI.
+
+- Only StarCraft: the DTA harvester no longer belongs to Protoss.
+- Base: the computer unpacks its Nexus, builds Pylons as power (more Pylons when the power gets
+  low, like supply in StarCraft), an Assimilator, Gateway and Robotics Facility, then one of each
+  of 15 buildings (Forge, Photon Cannon, Cybernetics Core, Shield Battery, Stargate, Citadel of
+  Adun, Robotics Support Bay, Observatory, Templar Archives, Fleet Beacon, Arbiter Tribunal...)
+  and 17 research upgrades. Photon Cannons are its base and air defence.
+- 10 ground plans: an early Zealot rush, a scout, early defence (2 Zealots and a Dragoon),
+  a wave of 12 Zealots (attack 1 of the StarCraft melee AI), Dark Templar raids on your
+  harvesters (only when you have no detectors), a flank attack on refineries, hold the line,
+  the Gateway army (Zealots, Dragoons, Templars, growing over time), direct and fast attacks.
+- 3 plans for the Robotics Facility and Stargate units: a Reaver and Archon push, Scout harass,
+  and a fleet of Scouts and Carriers that grows over time.
+- Engine patch: Probes and a new Nexus come from the Robotics Facility, but the engine put them in
+  the ground factory queue, where nothing could take them; after the first lost Probe the computer
+  would have stopped building. Now they go to the right queue, and the Robotics Facility and
+  Stargate are placed on land.
+- It will not build Corsairs, Shuttles or Observers. Without Advanced AI it only builds and
+  defends.
+- For the campaign (#6): a script module for a Protoss base in a mission, with the attack waves
+  of the StarCraft campaign (first wave after about 3 minutes, then every 2 minutes; Dark Templar
+  raids on harvesters; destroying every Pylon stops the waves).
+
+"ARKA: SIGN ERROR" CAMPAIGN (alpha)
+
+- New mission #3 Signal from the Sky (Sygnał z nieba), Antiga Prime 2499: a covert mission without
+  an MCV, on a map made from the StarCraft mission "Revolution" with your base from #4 in the
+  corner. The cloaked Kerrigan has to switch off 2 observation towers (get within 3 cells),
+  free a prison camp (6 rebels join you), and when the Zerg arrive you choose: destroy Mengsk's
+  psi emitter or leave it. Victory: destroy the Command Center of the Confederate garrison. If
+  Kerrigan is hit or a tower is fired at, the alarm goes off: a chase at the tower and a squad
+  against your base every 7 minutes. Confederate patrols raid your refinery; 4 money crates.
+  Difficulty levels and objective reminders as in the other missions.
+- The campaign list now has missions #0, #1, #2, #3, #4 and #5. #6 Fire from the Sky and
+  #7 Betrayal are being built (maps only, not in the list yet).
+
+BALANCE
+
+- Melee units react to enemies 1 cell farther (not their sight, not their attack range), in
+  skirmish and in all ARKA missions:
+    - Zergling 2.75 -> 3.75, Devouring One 3.28 -> 4.28, Zealot 3.75 -> 4.75;
+    - new: Dark Templar 2.75, Ultralisk and Torrasque 3.5, Broodling 2.93, Infested
+      Kerrigan 3.1.
+  Drones, Infested Terrans, Scourges and Firebats are left as they were.
+
+OTHER WORK
+
+- New neutral StarCraft buildings for maps: Power Generator, Starbase, Psi Disrupter, Ion Cannon
+  and Stasis Cell (used in #3: a space station and a city generator in the suburbs, an ion cannon
+  in the garrison).
+- The StarCraft map converter makes better coasts: no more paved crosses or squares of earth in
+  lakes, bays are no longer taken for bridges, narrow straits are widened, the ends of lakes are
+  closed, tiny ponds are filled.
+- #6 Fire from the Sky (Ogień z nieba): the terrain from the unreleased StarCraft map "Biting the
+  Bullet" (Antiga), 4 causeways across the channels, the colony Antioch on the south-east island
+  built from StarCraft Terran buildings. No triggers yet.
+- #7 Betrayal (Zdrada): the terrain from the StarCraft mission "The Trump Card", a Dominion city of
+  6 districts, a port with the Hyperion, Duke with tanks. No triggers yet.
+- Studied: the StarCraft AI scripts (all 293, used as models for the plans above), the DTA
+  Advanced AI inside Vinifera.dll, how the AI difficulty levels work.
+- Installer: the line about the campaign after the installation.
+
+TEST STATUS
+
+- Tested in the game: the Terran computer player on Easy AI (it builds, makes an army and
+  attacks).
+- Not tested yet: the Protoss computer player, the Siege Mode patch, the Terran self-defence,
+  mission #3, the neutral buildings, the melee reaction ranges. The maps passed the generator
+  checks; the installer passed the 5 sandbox tests (install, re-install, uninstall, install over
+  files already in place, repair after a DTA update).
+
+KNOWN LIMITATIONS
+
+- The campaign is an alpha: it can have bugs, and its briefings and dialogue are in Polish only.
+- The computer cannot play Zerg (it does not place its Drones as buildings). Do not give Zerg to
+  a computer player.
+- Terran and Protoss computer players need Advanced AI and make no expansions on StarCraft maps.
+- The music files lie loose in the MUSIC folder; that the game finds them there is not checked yet.
+
+
+Wersja 2026.10.30 - komputer gra Terranami i Protossami, ARKA #3, kampania w wersji alfa (dla DTA 16.2.3)
+-----------------------------------------------------------------------------------------------------------
+
+INSTALACJA
+
+- Uruchom nowy DTA-SCMod-Setup.exe i kliknij "Update StarCraft Mod" ("Aktualizuj StarCraft Mod").
+  Poprzednia wersja nie musi być odinstalowana.
+- Po instalacji instalator mówi, gdzie jest kampania: kampania ARKA (wersja alfa, misje #0-#5)
+  jest grywalna w New Mission.
+
+CO ZAWIERA MOD DO TEJ PORY
+
+- Trzy frakcje StarCrafta w skirmishu, obok frakcji DTA:
+    - Terran: 18 budynków StarCrafta, Construction Tank rozkładany w Command Center, 12 jednostek
+      (okręty latają jako pojazdy), 11 badań jako ulepszenia budynków.
+    - Zerg: drony morfują w budynki, creep rośnie od Hatchery, Creep Tumorów i kolonii, budynki
+      Zergów stoją tylko na creepie, każdy Overlord dodaje magazyn na 100 kredytów (jak silos),
+      13 badań, bohaterowie z kampanii, EVA i pasek boczny Zergów.
+    - Protoss: budynki potrzebują pola zasilania Pylona, Probe i Nexus jak w StarCrafcie, badania.
+- Checkbox STARCRAFT: jednostki i budynki StarCrafta dla każdej frakcji, Zergi z dowolnych koszar;
+  Marines i Firebaty jako prawdziwa piechota ze Stim Packiem (łatka silnika pozwala piechocie
+  się "rozkładać").
+- Robotnicy StarCrafta (SCV, Dron, Probe) z animacją wydobycia, Refinery bierze 2 SCV.
+- Dźwięki StarCrafta przy zaznaczaniu budynków, 23 utwory muzyki StarCrafta.
+- Mapy StarCrafta (4)Lost Temple i (4)Fighting Spirit.
+- Kampania "ARKA: Błąd znaku", wersja alfa: misje #0-#5 da się przejść od startu do wygranej,
+  z 3 poziomami trudności (EASY, MEDIUM, HARD).
+- Instalator i deinstalator (po angielsku i po polsku), który przywraca oryginalne pliki DTA.
+
+KOMPUTER GRA TERRANAMI (nowe)
+
+Przed tą wersją komputer grający Terranami budował kopie budynków Aliantów, nie miał planu ataku
+i nigdy nie robił armii. Teraz gra wyłącznie jednostkami StarCrafta. Potrzebuje checkboxów
+STARCRAFT i Advanced AI (Advanced AI jest domyślnie włączone).
+
+- Tylko StarCraft: Terran nie ma już 115 typów spoza StarCrafta (budynki Aliantów, zbieracz i MCV
+  DTA, mury, Transport, śmigłowce...). Dotyczy to też gracza-człowieka grającego Terranami.
+- Baza: komputer rozkłada Construction Tank, buduje Supply Depoty (później Uber Supply Depoty)
+  jako zasilanie, Refinery z SCV (nie sprzedaje już Refinery jako "bez zbieraczy"), Barracks,
+  Factory, Bunkry, Missile Turrety i Starport. Potem po jednym z pozostałych budynków (Academy,
+  Armory, Comsat, Science Facility, Nuclear Silo...) i wszystkie 12 badań, jak AI StarCrafta.
+- 12 planów lądowych, bierze pierwszy pasujący:
+    - początek gry: rush piechotą, zwiad, obrona domu, dopóki nie ma Factory;
+    - bio push: Marines i Firebaty po Academy (jak w StarCrafcie melee);
+    - rush pojazdami, gdy stoi Factory;
+    - rajdy Vulture'ów na twoich zbieraczy (gdy masz więcej niż jedną rafinerię);
+    - duży rajd, gdy masz wiele rafinerii, atak z flanki na słabo bronione rafinerie;
+    - trzymanie linii: straż domowa, gdy jesteś dwa razy silniejszy;
+    - siege push: Siege Tanki z piechotą (jak AI StarCrafta w "The Trump Card");
+    - zwykłe i szybkie ataki jako zapas. Ataki rosną z czasem.
+- Flota powietrzna: Wraithy, Battlecruisery i Science Vessele ze Starportu atakują jako flota
+  (nękanie i późne ataki floty, jak Battlecruisery AI StarCrafta).
+- Siege Mode (łatka silnika): komputer rozkłada czołg dopiero, gdy cel jest w zasięgu (11,9 pola
+  jako czołg, 20,4 w trybie oblężenia, minimum 3), i składa go z powrotem po ok. 2250 klatkach
+  bez celu. Wcześniej rozkładał od razu, gdziekolwiek czołg stał, i nigdy go nie składał. AI
+  Aliantów DTA też rozkłada teraz swojego Enforcera dopiero przy wrogu.
+- Samoobrona: 34 bojowe jednostki Terran reagują w promieniu 12 pól (więcej przy broni o dłuższym
+  zasięgu). Gdy zaatakujesz budynek komputera, przyjeżdżają jego wolne jednostki i drużyna, którą
+  właśnie zbiera, i walczą. Atak na sam Bunkier albo działko nie wzywa pomocy. Twoich jednostek
+  dotyczy to tylko w trybie Guard Area.
+- Trudność: te same 7 poziomów AI co frakcje DTA.
+- Nie zbuduje do walki Medyków, Dropshipów ani Valkyrii, nie robi ekspansji na mapach StarCrafta
+  (AI szuka drzew Tyberium) i bez Advanced AI nie atakuje.
+
+KOMPUTER GRA PROTOSSAMI (nowe)
+
+Te same warunki: STARCRAFT i Advanced AI.
+
+- Tylko StarCraft: zbieracz DTA nie należy już do Protossów.
+- Baza: komputer rozkłada Nexusa, buduje Pylony jako zasilanie (więcej Pylonów, gdy brakuje prądu,
+  jak zapas w StarCrafcie), Assimilator, Gateway i Robotics Facility, potem po jednym z 15 budynków
+  (Forge, Photon Cannon, Cybernetics Core, Shield Battery, Stargate, Citadel of Adun, Robotics
+  Support Bay, Observatory, Templar Archives, Fleet Beacon, Arbiter Tribunal...) i 17 badań.
+  Photon Cannony to jego obrona bazy i przeciwlotnicza.
+- 10 planów lądowych: wczesny rush Zealotów, zwiad, wczesna obrona (2 Zealoty i Dragoon), fala
+  12 Zealotów (atak 1 AI StarCrafta melee), rajdy Dark Templarów na twoich zbieraczy (tylko gdy
+  nie masz detektorów), atak z flanki na rafinerie, trzymanie linii, armia z Gatewaya (Zealoty,
+  Dragoony, Templarzy, rośnie z czasem), zwykłe i szybkie ataki.
+- 3 plany dla jednostek z Robotics Facility i Stargate: natarcie Reaverów i Archonów, nękanie
+  Scoutami i flota Scoutów i Carrierów, która rośnie z czasem.
+- Łatka silnika: Probe'y i nowy Nexus wychodzą z Robotics Facility, ale silnik wkładał je do kolejki
+  fabryki lądowej, z której nikt ich nie brał; po pierwszym straconym Probie komputer przestałby
+  budować. Teraz trafiają do właściwej kolejki, a Robotics Facility i Stargate stają na lądzie.
+- Nie zbuduje Corsairów, Shuttle'i ani Observerów. Bez Advanced AI tylko buduje i się broni.
+- Dla kampanii (#6): moduł skryptu bazy Protossów w misji, z falami ataków z kampanii StarCrafta
+  (pierwsza fala po ok. 3 minutach, potem co 2 minuty; rajdy Dark Templarów na zbieraczy;
+  zniszczenie wszystkich Pylonów kończy fale).
+
+KAMPANIA "ARKA: BŁĄD ZNAKU" (wersja alfa)
+
+- Nowa misja #3 Sygnał z nieba, Antiga Prime 2499: misja skrytego działania bez MCV, na mapie
+  z misji StarCrafta "Revolution", z twoją bazą z #4 w rogu. Zamaskowana Kerrigan wyłącza 2 wieże
+  obserwacyjne (podejdź na 3 pola), uwalnia obóz jeniecki (6 buntowników dołącza do ciebie),
+  a gdy przybędą Zergi, wybierasz: zniszczyć psi-nadajnik Mengska albo go zostawić. Wygrana:
+  zniszcz Command Center garnizonu Konfederacji. Gdy Kerrigan oberwie albo ktoś ostrzela wieżę,
+  włącza się alarm: pościg przy wieży i oddział na twoją bazę co 7 minut. Patrole Konfederacji
+  najeżdżają twoją rafinerię; 4 skrzynki z pieniędzmi. Poziomy trudności i przypominajki celów
+  jak w innych misjach.
+- Na liście kampanii są teraz misje #0, #1, #2, #3, #4 i #5. #6 Ogień z nieba i #7 Zdrada są
+  w budowie (na razie tylko mapy, jeszcze ich nie ma na liście).
+
+BALANS
+
+- Jednostki walczące wręcz reagują na wroga o 1 pole dalej (nie zasięg wzroku, nie zasięg ataku),
+  w skirmishu i we wszystkich misjach ARKA:
+    - Zergling 2,75 -> 3,75, Devouring One 3,28 -> 4,28, Zealot 3,75 -> 4,75;
+    - nowe: Dark Templar 2,75, Ultralisk i Torrasque 3,5, Broodling 2,93, Infested Kerrigan 3,1.
+  Drony, Infested Terrany, Scourge i Firebaty bez zmian.
+
+CO JESZCZE ROBILIŚMY OBOK
+
+- Nowe neutralne budynki StarCrafta do map: Power Generator, Starbase, Psi Disrupter, Ion Cannon
+  i Stasis Cell (użyte w #3: stacja kosmiczna i generator miejski na przedmieściach, działo jonowe
+  w garnizonie).
+- Konwerter map StarCrafta robi lepsze brzegi: koniec z brukowanymi krzyżami i kwadratami ziemi
+  w jeziorach, zatoczki nie są już brane za mosty, wąskie przesmyki są poszerzane, końce jezior
+  domknięte, małe stawy zasypane.
+- #6 Ogień z nieba: teren z niewydanej mapy StarCrafta "Biting the Bullet" (Antiga), 4 groble przez
+  kanały, kolonia Antioch na wyspie południowo-wschodniej z budynków Terran StarCrafta. Jeszcze bez
+  triggerów.
+- #7 Zdrada: teren z misji StarCrafta "The Trump Card", miasto Dominium z 6 dzielnic, port
+  z Hyperionem, Duke z czołgami. Jeszcze bez triggerów.
+- Zbadane: skrypty AI StarCrafta (wszystkie 293, wzór dla planów wyżej), Advanced AI DTA wewnątrz
+  Vinifera.dll, działanie poziomów trudności AI.
+- Instalator: linia o kampanii po instalacji.
+
+STAN TESTÓW
+
+- Sprawdzone w grze: komputer grający Terranami na Easy AI (buduje, robi armię i atakuje).
+- Jeszcze nie sprawdzone: komputer grający Protossami, łatka Siege Mode, samoobrona Terran, misja
+  #3, budynki neutralne, zasięg reakcji jednostek wręcz. Mapy przeszły kontrole generatorów,
+  a instalator 5 testów w piaskownicy (instalacja, ponowna instalacja, deinstalacja, instalacja
+  na plikach już na miejscu, naprawa po aktualizacji DTA).
+
+ZNANE OGRANICZENIA
+
+- Kampania to wersja alfa: może mieć błędy, a odprawy i dialogi są tylko po polsku.
+- Komputer nie umie grać Zergami (nie rozstawia dronów jako budynków). Nie dawaj Zergów
+  komputerowi.
+- Komputer grający Terranami i Protossami potrzebuje Advanced AI i nie robi ekspansji na mapach
+  StarCrafta.
+- Pliki muzyki leżą luzem w folderze MUSIC; że gra je tam znajduje, nie jest jeszcze sprawdzone.
 
 
 Version 2026.10.29 - StarCraft-style installer in English, StarCraft music, ARKA fixes (for DTA 16.2.3)

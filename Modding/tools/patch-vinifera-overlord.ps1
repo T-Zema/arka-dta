@@ -62,8 +62,9 @@ if ($Revert) {
 }
 
 if ($have) {
-    if ((SecName ($nsec - 1)) -ne $name) { throw "$name is not the last section" }
-    $newRva = [BitConverter]::ToInt32($bytes, $last + 12); $newRaw = [BitConverter]::ToInt32($bytes, $last + 20)
+    # later patches (navalai .scai, siegeai .scsiege) append sections after this one: find it by name
+    $mine = $null; for ($i = 0; $i -lt $nsec; $i++) { if ((SecName $i) -eq $name) { $mine = $secTab + 40 * $i } }
+    $newRva = [BitConverter]::ToInt32($bytes, $mine + 12); $newRaw = [BitConverter]::ToInt32($bytes, $mine + 20)
 } else {
     $t0 = $secTab; if ((SecName 0) -ne '.text' -or [BitConverter]::ToInt32($bytes, $t0 + 12) -ne 0x1000 -or [BitConverter]::ToInt32($bytes, $t0 + 20) -ne 0x400) { throw "unexpected .text layout" }
     $o = TextOff $HookVa

@@ -29,9 +29,14 @@
 #       LostTags = @('ARKA2Z04'); Grow = @{ Wp = 21; Nodes = $plan; Start = 600; Every = 240 }
 #   }
 #   $zai.Lost   # local set when the nest is lost (add "56,<it>" to the generator's own Hatchery trigger)
+# Optional names in the trigger list (defaults = the nest's): Label 'Gniazdo', FallbackWord 'wyklucie', NearText (zone
+# trigger). ProtossAI.ps1 (Add-ProtossAI) reuses this module with its own.
 function Add-ZergAI($c) {
     $P = $c.Prefix; $hn = $c.House; $hno = [int]$c.HouseNo; $rally = [int]$c.Rally
     $wd = if ($c.Watchdog) { [int]$c.Watchdog } else { 240 }
+    # names in the trigger list (other factions: ProtossAI.ps1 sets its own)
+    $L = if ($c.Label) { $c.Label } else { 'Gniazdo' }; $Lfb = if ($c.FallbackWord) { $c.FallbackWord } else { 'wyklucie' }
+    $Lnear = if ($c.NearText) { $c.NearText } else { 'gracz przy gniezdzie' }
     $pno = if ($c.PlayerNo) { [int]$c.PlayerNo } else { 2 }
 
     # locals after the generator's own: produced team started, nest lost, alarm, one per relief
@@ -39,8 +44,8 @@ function Add-ZergAI($c) {
     $reliefs = @($c.Reliefs | Where-Object { $_ })
     $last = -1; foreach ($kv in $ini.Section('VariableNames')) { $last = [Math]::Max($last, [int]$kv.Key) }
     $vProd = $last + 1; $vLost = $last + 2; $vAlarm = $last + 3; $vSeen = $last + 4
-    $ini.Set('VariableNames', "$vProd", 'Gniazdo produkuje,0'); $ini.Set('VariableNames', "$vLost", 'Gniazdo stracone,0')
-    $ini.Set('VariableNames', "$vAlarm", 'Gniazdo atakowane,0'); $ini.Set('VariableNames', "$vSeen", 'Gniazdo raz atakowane,0')
+    $ini.Set('VariableNames', "$vProd", "$L produkuje,0"); $ini.Set('VariableNames', "$vLost", "$L stracone,0")
+    $ini.Set('VariableNames', "$vAlarm", "$L atakowane,0"); $ini.Set('VariableNames', "$vSeen", "$L raz atakowane,0")
     $vRel = @(); for ($i = 0; $i -lt $reliefs.Count; $i++) {
         $vRel += $last + 5 + 2 * $i
         $ini.Set('VariableNames', "$($last + 5 + 2 * $i)", "Pomoc $($i + 1) wezwana,0"); $ini.Set('VariableNames', "$($last + 6 + 2 * $i)", "Pomoc $($i + 1) raz wezwana,0")
@@ -53,7 +58,7 @@ function Add-ZergAI($c) {
         $q = $c.Squads[$k]
         $tmAI[$k] = Team $q.Name $hn $rally $q.M (@("39,$vProd") + $q.S)
         $ini.Set($tmAI[$k], 'Max', '3'); $ini.Set($tmAI[$k], 'AreTeamMembersRecruitable', 'yes')
-        $tmFb[$k] = Team "$($q.Name) (wyklucie)" $hn $rally $q.M $q.S
+        $tmFb[$k] = Team "$($q.Name) ($Lfb)" $hn $rally $q.M $q.S
     }
     $cost = {
         param($tm) $n = 0; $tf = $ini.Get($tm, 'TaskForce', ''); $i = 0
@@ -65,14 +70,14 @@ function Add-ZergAI($c) {
     $order = {
         param($sq, $lv)
         $script:zaiFbN++; $tm = Get-LevelTeam $tmAI[$sq] $lv; $fbTm = Get-LevelTeam $tmFb[$sq] $lv; $fb = "${P}fb$script:zaiFbN"
-        Trigger $fb "$($c.Squads[$sq].Name): wyklucie zapasowe ($($lv.Name))" @((Ev 13 $wd), (Ev 37 $vProd), (Ev 37 $vLost)) @(
+        Trigger $fb "$($c.Squads[$sq].Name): $Lfb zapasowe ($($lv.Name))" @((Ev 13 $wd), (Ev 37 $vProd), (Ev 37 $vLost)) @(
             (Reinf $fbTm $rally), (Disable $fb)) -house $hn -Disabled -Repeat | Out-Null
         @((Act 4 $tm 1), "106,0,$hno,$(& $cost $tm),0,0,0,A", (Enable $fb))
     }
     $script:zaiFbN = 0
 
     # production on from the start (the house gets its money with each order)
-    Trigger "${P}prod" "Gniazdo ${hn}: produkcja" @((Ev 13 1)) @((Act 3 $hno)) -house $hn | Out-Null
+    Trigger "${P}prod" "$L ${hn}: produkcja" @((Ev 13 1)) @((Act 3 $hno)) -house $hn | Out-Null
 
     # ---- attacks: one-shot or repeating orders, gated by phase events and by the nest being alive
     $i = 0
@@ -95,15 +100,15 @@ function Add-ZergAI($c) {
     $a = $c.Alarm
     if ($a) {
         $offOn = @("${P}alZone", "${P}alHit")
-        Trigger "${P}alZone" "Gniazdo: gracz przy gniezdzie" @((Ev 1 $pno)) @((Act 56 $vAlarm), (Act 56 $vSeen)) -house $hn -Repeat -tag $a.Tag | Out-Null
-        Trigger "${P}alHit" "Gniazdo: gracz atakuje budynek" @((Ev 44 $pno)) @((Act 56 $vAlarm), (Act 56 $vSeen)) -house $hn -Repeat -tag $a.HitTag | Out-Null
+        Trigger "${P}alZone" "${L}: $Lnear" @((Ev 1 $pno)) @((Act 56 $vAlarm), (Act 56 $vSeen)) -house $hn -Repeat -tag $a.Tag | Out-Null
+        Trigger "${P}alHit" "${L}: gracz atakuje budynek" @((Ev 44 $pno)) @((Act 56 $vAlarm), (Act 56 $vSeen)) -house $hn -Repeat -tag $a.HitTag | Out-Null
         foreach ($lv in $DiffLevels) {
             $acts = @(& $order $a.Sq $lv); if ($a.Counter) { $acts += @(& $order $a.Counter $lv) }
             $acts += @((Act 57 $vAlarm)) + @($offOn | ForEach-Object { Disable $_ }) + @(Enable "${P}alRearm")
-            Trigger "${P}al$($lv.Key)" "Gniazdo: obrona ($($lv.Name))" (@((Ev 36 $vAlarm), (Ev 37 $vLost)) + @(& $lvEv $lv)) $acts -house $hn -Repeat | Out-Null
+            Trigger "${P}al$($lv.Key)" "${L}: obrona ($($lv.Name))" (@((Ev 36 $vAlarm), (Ev 37 $vLost)) + @(& $lvEv $lv)) $acts -house $hn -Repeat | Out-Null
         }
-        Trigger "${P}alRearm" 'Gniazdo: obrona gotowa' @((Ev 13 ([int]$a.Cooldown))) (@($offOn | ForEach-Object { Enable $_ }) + @(Disable "${P}alRearm")) -house $hn -Disabled -Repeat | Out-Null
-        if ($a.Text) { Trigger "${P}alText" 'Gniazdo: pierwsza obrona' @((Ev 36 $vSeen)) @((Text $a.Text)) -house $c.Player | Out-Null }
+        Trigger "${P}alRearm" "${L}: obrona gotowa" @((Ev 13 ([int]$a.Cooldown))) (@($offOn | ForEach-Object { Enable $_ }) + @(Disable "${P}alRearm")) -house $hn -Disabled -Repeat | Out-Null
+        if ($a.Text) { Trigger "${P}alText" "${L}: pierwsza obrona" @((Ev 36 $vSeen)) @((Text $a.Text)) -house $c.Player | Out-Null }
         $nz = 0
         foreach ($cell in @($a.Zone)) { $key = "$($cell[1] * 1000 + $cell[0])"; if (-not $ini.Get('CellTags', $key, $null)) { $ini.Set('CellTags', $key, $a.Tag); $nz++ } }
         $log.Add("Zerg AI alarm: zone $nz cells (tag $($a.Tag)), building hits (tag $($a.HitTag)) -> $($a.Sq)$(if ($a.Counter) { " + $($a.Counter)" }), cooldown $($a.Cooldown) s")
@@ -123,7 +128,7 @@ function Add-ZergAI($c) {
     }
 
     # ---- the nest lost (destroyed by anything, also captured)
-    foreach ($t in @($c.LostTags)) { if ($t) { Trigger "${P}lost$t" 'Gniazdo stracone' @((Ev 48)) @((Act 56 $vLost)) -house $hn -tag $t | Out-Null } }
+    foreach ($t in @($c.LostTags)) { if ($t) { Trigger "${P}lost$t" "$L stracone" @((Ev 48)) @((Act 56 $vLost)) -house $hn -tag $t | Out-Null } }
 
     # ---- growth: Drones hatched at the Hatchery morph into planned colonies
     # (not @($c.Grow.Nodes): @() of a List of arrays throws "Argument types do not match")

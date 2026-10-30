@@ -6532,7 +6532,7 @@ EliteAbilities=SELF_HEAL,ROF
 VoiceFeedback=
 SelfHealingCap=1.0
 SelfHealingStep=2
-GuardRange=2.75
+GuardRange=3.75
 
 [InfantryTypes]
 ARKA5IN001=SCZLNG
@@ -6583,6 +6583,7 @@ SelfHealingCap=1.0
 SelfHealingStep=4
 
 [SCZULT]
+GuardRange=3.5
 Name=Ultralisk
 Image=SCULTRA
 Description=Huge Zerg assault beast.@@Kaiser blades cleave everything in melee. Heavily armored.@@Regenerates.
@@ -6869,6 +6870,7 @@ VoiceSelect=SBWZLU
 ImmuneToVeins=yes
 
 [SCZBRD]
+GuardRange=2.93
 Name=Broodling
 Image=SCBROOD
 Description=Tiny Zerg swarm creature.@@Very fast melee biter.@@Regenerates.
@@ -7756,7 +7758,7 @@ EliteAbilities=SELF_HEAL,ROF
 VoiceFeedback=
 SelfHealingCap=1.0
 SelfHealingStep=16
-GuardRange=3.75
+GuardRange=4.75
 
 [SCPDRAG]
 Name=Dragoon

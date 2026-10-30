@@ -24,6 +24,16 @@ Skąd brać grafikę i dźwięk ze StarCraft: Remastered użytkownika i w jakim 
 | Ikony przycisków | `SD/unit/cmdicons/cmdicons.dds.grp` (32×32 DXT1) | |
 | Dane gry | `arr/*.dat`, `arr/images.tbl`, `scripts/iscriptx.bin` | |
 
+## Skrypty AI StarCrafta (`aiscript.bin`)
+
+`scripts/aiscript.bin` i `scripts/bwscript.bin` (Brood War) to AI komputera: kolejność budowy, fale ataków, obrona, ekspansje. Dekoder: `tools/sc-aiscript.ps1` (format i 114 opkodów według PyMS `FileFormats/AIBIN.py`; wynik w `%TEMP%\sc-aiscript.txt`, 293 skrypty). Nagłówek `u32` → tabela wpisów 16 B (ID, offset, numer napisu w `stat_txt.tbl`, flagi), w `bwscript` 8 B; parametry: jednostka/budynek/blok = 2 B.
+
+- Kampania: `Ter1`–`T12*`, `Zer*`, `Pro*` (BW: `TB*`, `ZB*`, `PB*`); melee: `TMCx`/`ZMCx`/`PMCx`, poziomy kampanii `TLOx`…`TSUx`.
+- **`Ter8` „Confederate Town”** = AI „The Trump Card” ([[missions/arka-07-zdrada]]): 2 Barracks, 2 Factory, Starport, Academy, Armory, obrona z czołgów i Goliathów, badania, potem fale co `wait` 1500–12000: 2 Marines + Firebat → Wraith → 2 Wraithy → 2 Goliathy → 3 Marines + 2 Firebaty + Goliath → 4 Marines + Siege Tank → 7 Firebatów + 2 Siege Tanki… i pętla.
+- **`TMCx`** (melee Terran): SCV do 10, Barracks, Supply, Refinery, Marines, Academy, Medics, Bunker, Factory + Machine Shop, Siege Tanki, ekspansje, Engineering Bay i Missile Turrety, Starport + Control Tower, Science Facility, Battlecruisery; ataki dobierane według zapasu minerałów i gazu.
+
+Użyte jako wzór w [[mods/terran-ai]] i [[plans/protoss-ai]].
+
 ## Który dźwięk gra jednostka SC przy ataku (iscript)
 
 Nie zgadywać po nazwie pliku, tylko odczytać z danych SC. Narzędzie: `tools/ScIscript.cs` (sesja frakcji, 2026-10-25).

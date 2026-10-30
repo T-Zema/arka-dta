@@ -15,12 +15,19 @@ Sprawdzone sposoby przeszukiwania wielkich INI DTA na tym komputerze (Windows, P
   [[mods/protoss-faction]]). Listy nazywaj inaczej niż zmienną pętli (`$Bldgs`/`$b`).
   To samo z parametrem: `param([string]$Dll)` i potem `$dll = …` nadpisuje parametr (2026-10-26: łatka DLL przez to nie zrobiła
   kopii `.bak`). Plik docelowy trzymaj w zmiennej o innej nazwie (`$target`).
+  Kolejne przypadki z 2026-10-30 (ARKA 7): tablice kierunków `$NX`/`$NY` i w tej samej pętli `$nx = $x + $NX[$d]`. Po
+  pierwszym kroku tablica to liczba, kierunki LAT się psują i bruk dostaje kratkę z kępkami trawy. Kod siedzi też
+  w terenie ARKA 5 i 6 (`build-arka05-tarsonis.ps1`, `build-arka06-antiga.ps1`); w ARKA 7 tablice to `$LX`/`$LY`.
+  Pętla `foreach ($h in …)` nadpisała tablicę domów `$H`.
 - **Sprawdzanie, czy plik jest oryginałem DTA:** plik `version` w katalogu gry ma `nazwa=<MD5>,<KB>`, gdzie MD5 to 16 bajtów
   zapisanych dziesiętnie jeden po drugim (bez separatorów). Tak potwierdzono odtworzony `Vinifera.dll`.
 - **Disasemblacja i PDB przez `pixi`:** `pixi exec --spec llvm-tools llvm-pdbutil dump -publics|-types Vinifera.pdb`,
-  `pixi exec --spec capstone --spec python python -I vdis.py <pe> <rva> <len>`. W `Vinifera.dll` sekcja `.text` jest pod RVA
+  `pixi exec --spec capstone --spec python python -I Modding\tools\vdis.py <pe> <VA hex> <len hex>` (albo `vdis.py <pe> find <bajty ??>`).
+  Nazwy funkcji z `-publics` (format `0001:DZIESIĘTNIE`): VA = `0x10001000` + liczba. Pola struktur: w zrzucie `-types` znaleźć
+  `LF_CLASS` klasy, jego `field list: 0xNNNN`, potem `LF_FIELDLIST` o tym numerze (offsety dziesiętnie). Przykład: [[engine/advanced-ai]]. W `Vinifera.dll` sekcja `.text` jest pod RVA
   `0x1000` / plikiem `0x400`; adres z `-publics` `0001:X` → RVA `X + 0x1000`.
 - **`$true -eq 'tekst'` daje `True`** (prawa strona zamieniana na bool). Porównuj tekstowo (`"$x" -eq 'hover'`) albo sprawdzaj typ (`$x -is [string]`); błąd zrobił z lotników Protossów pojazdy naziemne.
+- **`[Math]::Min(1, $double)` zaokrągla do int:** PowerShell wybiera przeciążenie `Min(int, int)`, więc parametr w [0, 1] wychodzi 0 albo 1. Pisz `[Math]::Min(1.0, ...)`. W ARKA 6 przez to groble rosły tylko przy końcach (`build-arka06-antiga.ps1`).
 - **Aliasy biją funkcje:** funkcja nazwana `R` się nie wywoła (`R` = `Invoke-History`). Pomocnikom dawaj długie nazwy (`Rep-Rx`).
 - **Nigdy nie zamieniaj w skrypcie sekwencji `` `n `` na prawdziwy koniec linii w całym pliku** (2026-10-25: zepsuło 205 miejsc w
   `build-scprotoss.ps1`). Naprawa: `[System.Management.Automation.Language.Parser]::ParseInput` wskazuje tokeny

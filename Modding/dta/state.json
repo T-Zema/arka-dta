@@ -13,18 +13,18 @@
                       "path":  "INI/Art.ini",
                       "kind":  "modified",
                       "base":  "792073321530421595153819925211044212188",
-                      "ours":  "262201622129810169195217220964184189108126",
+                      "ours":  "1464116525012017425525121822013925510345202249",
                       "binary":  false
                   },
                   {
                       "path":  "INI/BattleE.ini",
                       "kind":  "new",
-                      "ours":  "1491754488219817817355135251838813052251"
+                      "ours":  "12155180238149772201678564145174234936262"
                   },
                   {
                       "path":  "INI/Game Options/StarCraft.ini",
                       "kind":  "new",
-                      "ours":  "126208371541641526317787221217253164230226"
+                      "ours":  "9519113521530361861372494916323547107161121"
                   },
                   {
                       "path":  "INI/Game Options/Super Mod.ini",
@@ -89,7 +89,7 @@
                   {
                       "path":  "INI/Map Code/SC Factions/900 Hand edits.ini",
                       "kind":  "new",
-                      "ours":  "19021902412422532431842101741911619516725013"
+                      "ours":  "836622873801341451761152081302246522116210"
                   },
                   {
                       "path":  "INI/Map Code/Terran Faction.ini",
@@ -1362,6 +1362,16 @@
                       "ours":  "16126908421525311022565252496248242170"
                   },
                   {
+                      "path":  "Maps/Custom/arka03_antiga.map",
+                      "kind":  "new",
+                      "ours":  "1911676736471325024590201187100172220"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka03_antiga.png",
+                      "kind":  "new",
+                      "ours":  "2152020616373350291271011046156117212182"
+                  },
+                  {
                       "path":  "Maps/Custom/arka04_antiga.map",
                       "kind":  "new",
                       "ours":  "5479191155206018914117256201805038242135"
@@ -1380,6 +1390,26 @@
                       "path":  "Maps/Custom/arka05_tarsonis.png",
                       "kind":  "new",
                       "ours":  "15115717114410199892185425236783157109244"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka06_antiga.map",
+                      "kind":  "new",
+                      "ours":  "1452033539414618928110203216223159105105244"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka06_antiga.png",
+                      "kind":  "new",
+                      "ours":  "2031726394240241652111352084919024624778244"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka07_antiga.map",
+                      "kind":  "new",
+                      "ours":  "1371111025818239202188125223214143237125"
+                  },
+                  {
+                      "path":  "Maps/Custom/arka07_antiga.png",
+                      "kind":  "new",
+                      "ours":  "1751454227223237771871941963366118212192161"
                   },
                   {
                       "path":  "Maps/Custom/sc_fighting_spirit.map",
@@ -1414,7 +1444,7 @@
                   {
                       "path":  "Maps/Missions/arka01.map",
                       "kind":  "new",
-                      "ours":  "106163101144123617017113324317520441231327"
+                      "ours":  "207281901774421412122378211571181032466496"
                   },
                   {
                       "path":  "Maps/Missions/arka01.png",
@@ -1424,7 +1454,7 @@
                   {
                       "path":  "Maps/Missions/arka02.map",
                       "kind":  "new",
-                      "ours":  "512541524444101146137162225252193106223119143"
+                      "ours":  "123106724575638154349234241240985613"
                   },
                   {
                       "path":  "Maps/Missions/arka02.png",
@@ -1432,9 +1462,14 @@
                       "ours":  "2321491931445018483183115751516012862188230"
                   },
                   {
+                      "path":  "Maps/Missions/arka03.map",
+                      "kind":  "new",
+                      "ours":  "361682425410117612510023391192194170205244109"
+                  },
+                  {
                       "path":  "Maps/Missions/arka04.map",
                       "kind":  "new",
-                      "ours":  "2508210979195248206205183244847521325176254"
+                      "ours":  "85251193886243969955572011199208244105"
                   },
                   {
                       "path":  "Maps/Missions/arka04.png",
@@ -1444,7 +1479,7 @@
                   {
                       "path":  "Maps/Missions/arka05.map",
                       "kind":  "new",
-                      "ours":  "131632206712414243211151659267137212172119"
+                      "ours":  "2136221714208111131851202195117980145668"
                   },
                   {
                       "path":  "Maps/Missions/arka05.png",
@@ -1452,11 +1487,26 @@
                       "ours":  "2457725223815124010236161120186137121579051"
                   },
                   {
+                      "path":  "Maps/Missions/arka06.map",
+                      "kind":  "new",
+                      "ours":  "12530198115168216211625510819080952248"
+                  },
+                  {
+                      "path":  "Maps/Missions/arka07.map",
+                      "kind":  "new",
+                      "ours":  "51194189634336139958116116327391159112"
+                  },
+                  {
                       "path":  "Maps/Missions/FRSTBITE.MAP",
                       "kind":  "modified",
                       "base":  "67191861409167961431511868713625119823145",
                       "ours":  "476384991951162022773152630792552",
                       "binary":  false
+                  },
+                  {
+                      "path":  "MIX/ECACHE75.MIX",
+                      "kind":  "new",
+                      "ours":  "1481952421751594321524510824514672108106157153"
                   },
                   {
                       "path":  "MIX/ECACHE76.MIX",
@@ -1811,7 +1861,7 @@
                       "path":  "Vinifera.dll",
                       "kind":  "patched",
                       "base":  "419111601214931251146975112423810215232",
-                      "ours":  "9125185207437623818020722413448871666227",
+                      "ours":  "199156681395116726758723125117819774159121",
                       "pinned":  false,
                       "reproducible":  true
                   }

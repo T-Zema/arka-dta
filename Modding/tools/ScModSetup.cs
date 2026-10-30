@@ -8,7 +8,7 @@
 // records what was created or replaced; uninstall restores the backups and deletes what was created, but only files that
 // still hold our version (a file changed later, e.g. by a DTA update, is left alone).
 // Silent: <exe> /install "<game>" | /uninstall "<game>"  -> exit code 0 ok, 1 warnings, 2 error; log in %TEMP%\DTA-SCMod-setup.log.
-// Preview: <exe> /shot <png> [idle|busy|ask|done|details|about|hover] [uninstall] [pl|en]  renders the window into a
+// Preview: <exe> /shot <png> [idle|busy|ask|done|finished|details|about|hover] [uninstall] [pl|en]  renders the window into a
 // PNG (960x720). Language: English by default, Polish from the menu (saved in HKCU\Software\DTA-SCMod\Language).
 // C# 5 (csc of .NET Framework 4, no SDK). Wiki: workflow/installer.
 using System;
@@ -949,8 +949,8 @@ namespace ScModSetup
                     + (install ? L.T("\n\nMożesz spróbować ponownie albo odinstalować to, co już zostało zapisane.", "\n\nYou can try again or uninstall what has been written so far.") : ""), "OK", null, null, null);
             else if (install)
                 Ask(L.T("StarCraft Mod zainstalowany.", "StarCraft Mod is installed.") + warn
-                    + L.T("\n\nSkirmish: strony Terran, Zerg, Protoss i opcja STARCRAFT.\nKampania ARKA: New Mission.\n\nModa odinstalujesz tym instalatorem albo w Panelu sterowania (Programy i funkcje).",
-                          "\n\nSkirmish: the Terran, Zerg and Protoss sides and the STARCRAFT option.\nARKA campaign: New Mission.\n\nTo uninstall, run this installer again or use Control Panel (Programs and Features)."),
+                    + L.T("\n\nSkirmish: strony Terran, Zerg, Protoss i opcja STARCRAFT.\nKampania ARKA (alfa, misje #0-#5): New Mission.\n\nModa odinstalujesz tym instalatorem albo w Panelu sterowania (Programy i funkcje).",
+                          "\n\nSkirmish: the Terran, Zerg and Protoss sides and the STARCRAFT option.\nARKA campaign (alpha, missions #0-#5): New Mission.\n\nTo uninstall, run this installer again or use Control Panel (Programs and Features)."),
                     L.T("Uruchom DTA", "Start DTA"), "OK", delegate { StartDta(); Close(); }, null);
             else
             {
@@ -1125,6 +1125,8 @@ namespace ScModSetup
                 if (result == 2) foreach (string l in fSmall.Wrap(errText, 560)) { Txt(g, fSmall, Ramp.Red, l, X0, Y0 + 80, 1); break; }
                 else if (result == 1) Txt(g, fSmall, Ramp.Orange, string.Format(L.T("Gotowe. Uwagi: {0} (zobacz Szczegóły).", "Done. Notes: {0} (see Details)."), warnCount), X0, Y0 + 80, 1);
                 else Txt(g, fSmall, Ramp.Green, L.T("Gotowe.", "Done."), X0, Y0 + 80, 1);
+                if (installRun && result != 2)
+                    Txt(g, fSmall, Ramp.Grey, L.T("Możesz już zagrać w kampanię ARKA (wersja alfa): New Mission.", "You can now play the ARKA campaign (alpha version): New Mission."), X0, Y0 + 98, 1);
                 return;
             }
             // the log: newest at the bottom, the wheel scrolls back
@@ -1183,7 +1185,7 @@ namespace ScModSetup
         public void Shot(string png, string state)
         {
             S = 1.5f;
-            if (state == "busy" || state == "done" || state == "details")
+            if (state == "busy" || state == "done" || state == "details" || state == "finished")
             {
                 progressView = true; busy = state == "busy"; installRun = true; prog = state == "busy" ? 0.62 : 1;   // set by hand: never run the engine here
                 heading = L.T("Instalowanie...", "Installing..."); subline = L.T("Kopiowanie plików moda...", "Copying the mod's files...");
@@ -1197,6 +1199,7 @@ namespace ScModSetup
                     AddLog(1, "Zapisano 322 plików, 0 już było aktualnych. Deinstalator: SCMod\\Odinstaluj SC Mod.exe");
                     Done(true, 1, null, false);
                     if (state == "details") { askOn = false; details = true; Layout(); }
+                    else if (state == "finished") { askOn = false; Layout(); }   // the done screen after the popup is closed
                 }
                 else Layout();
             }

@@ -4295,7 +4295,7 @@ EliteAbilities=SELF_HEAL,ROF
 VoiceFeedback=
 SelfHealingCap=1.0
 SelfHealingStep=2
-GuardRange=2.75
+GuardRange=3.75
 
 [InfantryTypes]
 ARKA1IN001=SCZLNG
@@ -4438,6 +4438,7 @@ ImmuneToVeins=yes
 Storage=100
 
 [SCZBRD]
+GuardRange=2.93
 Name=Broodling
 Image=SCBROOD
 Description=Tiny Zerg swarm creature.@@Very fast melee biter.@@Regenerates.

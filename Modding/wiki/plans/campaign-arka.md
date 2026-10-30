@@ -144,6 +144,8 @@ Mengsk pokazuje nagrania z orbity Mar Sary. Protossi palą planetę.
 
 ## Misja 3: „Sygnał z nieba” (Antiga Prime, 2499)
 
+**Mapa i misja:** zbudowane 2026-10-30 jako misja „covert” (bez placu budowy, Kerrigan w maskowaniu): teren z mapy kampanii SC T5 „Revolution” obróconej tak, że w prawym górnym rogu stoi baza z misji 4 (bez namiotu Einsteina), a pole walki idzie na dół; 123 triggery. Zob. [[missions/arka-03-sygnal]]: `Maps/Missions/arka03.map`, skrypty `tools/build-arka03-antiga.ps1` i `tools/build-arka03-mission.ps1`. Różnice względem planu: wybór z nadajnikiem komentuje tylko Mengsk (nie przechodzi do misji 4), lotnictwo to lądowisko w bazie. **(niezweryfikowane w grze)**
+
 **Przerywnik:** Antiga Prime buntuje się przeciw Konfederacji. ARKA stoi na równinie za miastem i rdzeń znów się trzyma. Mengsk prosi o pomoc w powstaniu i przedstawia swoją najlepszą agentkę.
 > **Mengsk:** „Porucznik Sarah Kerrigan poprowadzi zwiad. Proszę jej słuchać jak mnie.”
 > **Kerrigan** (do Tanyi, z uśmiechem): „Myślisz bardzo głośno, panno Adams. Głównie o tym, kogo gdzie zastrzelić.”
@@ -237,6 +239,8 @@ To zapowiedź misji 9.
 **Zakończenie:** Tarsonis płonie. Nad miastem pojawia się flota Protossów i jeden okręt skręca w stronę Antigi Prime, prosto na ARKĘ. Tej nocy Raynor pierwszy raz słyszy we śnie jej głos: „Jim… przyjdź po mnie.”
 
 ## Misja 6: „Ogień z nieba” (Antiga Prime, 2500)
+
+**Mapa:** teren zbudowany (2026-10-30), misja jeszcze nie, zob. [[missions/arka-06-ogien-z-nieba]]: niewydana mapa SC T7 „Biting the Bullet” (`Terran07`, Antiga 2500, flota Tassadara w oryginale), `Maps/Custom/arka06_antiga.map`, skrypt `tools/build-arka06-antiga.ps1`. ARKA stoi w nowym miejscu: przez rok Terranie doczepili jej silniki odrzutowe i teraz lata jak budynki Terran (pomysł użytkownika).
 
 **Przerywnik:** nad ARKĄ wisi flota Protossów, a na ekranie pojawia się Tassadar.
 > **Tassadar:** „Wasza maszyna rani czas. Rani wszystko, czego dotknie. Musi zostać oczyszczona.”

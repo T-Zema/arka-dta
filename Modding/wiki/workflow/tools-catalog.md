@@ -48,15 +48,18 @@ Kolumna „INI”: gdzie piszą z `-Install` (bloki `; >>> X` … `; <<< X`, ka�
 | `build-scbldgsounds.ps1` | `ECACHE79` | warstwa `050 SC building select sounds`, `StarCraft.ini`, `Sound.ini` | [[mods/sc-building-sounds]] |
 | `build-scinfstim.ps1` | `ECACHE81` | `StarCraft.ini`, `Art.ini`, `Sound.ini` | [[mods/sc-infantry-stim]] |
 | `build-scairarmor.ps1` | – | warstwa `100 SC air armor`, `StarCraft.ini` | [[engine/air-armor]] |
+| `build-scterranai.ps1` | – | `StarCraft.ini` (blok `Terran AI`: `Owner=` bez `GDI1`, `AIBuildThis`, listy `[AI]`, taktyki `House=6`); `-WhatIf` = podgląd | [[mods/terran-ai]] |
+| `build-scprotossai.ps1` | – | `StarCraft.ini` (blok `Protoss AI` za `Terran AI`: `Owner=` bez `GDI2`, `AIBuildThis`, listy `[AI]`, taktyki `House=8`); `-WhatIf` = podgląd, `-Report` = jednostki, które AI może cenić | [[mods/protoss-ai]] |
+| `ProtossAI.ps1` | – | moduł misji `Add-ProtossAI` (na `Add-ZergAI`): drużyny i fale `PHIx`, przywołanie przy Pylonach | [[mods/protoss-ai]] |
 | `build-scmusic.ps1` | luźne `MUSIC\SC*.AUD` | `Theme.ini` (`[Themes]` + sekcje utworów) | [[mods/sc-music]] |
 | `build-gun100t.ps1` | `ECACHE76` | `Art.ini` (działo misji ARKA 0) | [[missions/arka-00-triggers]] |
 
-**Kolejność ponownego uruchamiania** (późniejsze czytają wynik wcześniejszych): `build-sczergbase` → `build-scprotoss` → `build-sczergheroes` → `build-sczergresearch` → `build-scprotossresearch` → `build-scbldgsounds`, `build-scworkers` → `build-sczergcreep` → `build-sczergdeath` → `build-scairarmor`. Po zmianie typów SC przebuduj też misje ARKA (kopiują typy do map).
+**Kolejność ponownego uruchamiania** (późniejsze czytają wynik wcześniejszych): `build-sczergbase` → `build-scprotoss` → `build-sczergheroes` → `build-sczergresearch` → `build-scprotossresearch` → `build-scbldgsounds`, `build-scworkers` → `build-sczergcreep` → `build-sczergdeath` → `build-scairarmor` → `build-scterranai`, `build-scprotossai` (czytają scalone reguły i nawzajem swoje bloki, więc na końcu, w dowolnej kolejności). Po zmianie typów SC przebuduj też misje ARKA (kopiują typy do map).
 
 ## Łatki binarne (`game.exe`, `Vinifera.dll`)
 
 - `patch-game.ps1`: wszystkie łatki `game.exe` naraz (po aktualizacji DTA): `patch-spawnreturn`, `patch-flyhover`, `patch-flyertarget`, `patch-buildup`, `patch-freescv`, `patch-airboard`, `patch-infdeploy`, `patch-veins`, `patch-zergbuild`, `patch-overlordstorage`. Źródła jaskiń w `*.asm` (nasm przez pixi). [[engine/game-exe-patching]]
-- `patch-vinifera.ps1`: wszystkie łatki `Vinifera.dll`: `patch-vinifera-workers`, `patch-vinifera-veins`, `patch-vinifera-overlord` (tabela `$builds` na wersje DTA). [[workflow/repo-and-updates]]
+- `patch-vinifera.ps1`: wszystkie łatki `Vinifera.dll`: `patch-vinifera-workers`, `patch-vinifera-veins`, `patch-vinifera-overlord`, `patch-vinifera-navalai` (tabela `$builds` na wersje DTA). [[workflow/repo-and-updates]]
 - Nowa łatka musi trafić do `patch-game.ps1` albo `patch-vinifera.ps1`, inaczej zginie przy aktualizacji DTA (`CLAUDE.md`).
 
 ## Misje ARKA
@@ -69,11 +72,13 @@ Kolumna „INI”: gdzie piszą z `-Install` (bloki `; >>> X` … `; <<< X`, ka�
 | `build-arka02-marsara.ps1`, `build-arka02-mission.ps1` | ARKA 2, [[missions/arka-02-ewakuacja]] |
 | `build-arka04-antiga.ps1`, `build-arka04-mission.ps1` | ARKA 4, [[missions/arka-04-zielony-krysztal]] |
 | `build-arka05-tarsonis.ps1`, `build-arka05-mission.ps1` (+ `arka05-protoss.ps1`, `arka05-zerg.ps1`) | ARKA 5, [[missions/arka-05-tarsonis]] |
+| `build-arka07-antiga.ps1`, `build-arka07-mission.ps1` | ARKA 7 (etap 1: teren + obiekty, bez triggerów), [[missions/arka-07-zdrada]] |
 | `build-arka-previews.ps1` | podglądy misji 300×200 dla klienta |
 | `build-briefing.ps1` | film briefingu z JSON w `Modding/briefings/`, [[engine/briefing-movies]] |
 | `build-campaign-html.ps1` | `Modding/exports/campaign-arka.html` z [[plans/campaign-arka]] |
 | `build-bldg-sheet.ps1` | arkusz wyglądu budynków na mapie, [[catalog/city-buildings]] |
 | `dump-triggers.ps1` | dekompilacja triggerów mapy do tekstu |
+| `.claude/skills/pokaz-render/show-render.ps1` | skill „pokaż mi render”: mapa po tytule albo pliku, render CNCMaps tylko gdy PNG starszy od mapy, otwiera w Paincie, mała kopia 1400 px do Read |
 | `fetch-geodata.ps1` | pobieranie OSM i DEM do projektu mapy |
 
 Misje nie ładują `StarCraft.ini` ani kodu mapy frakcji: skrypty misji kopiują typy SC (z domknięciem zależności) do mapy, czytając `StarCraft.ini` i wszystkie warstwy (`Get-MapCodeLayers`).
@@ -89,5 +94,7 @@ Misje nie ładują `StarCraft.ini` ani kodu mapy frakcji: skrypty misji kopiują
 - `build-installer.ps1`: `Modding/dist/DTA-SCMod-Setup.exe` ze `state.json`; budować po `dta-capture`. [[workflow/installer]]
 
 ## Diagnostyka (działająca gra, tylko odczyt pamięci)
+
+Analiza offline: `vdis.py` (disasembler PE przez capstone/pixi, [[workflow/tooling]]), `sc-aiscript.ps1` (skrypty AI StarCrafta z CASC do tekstu, [[engine/starcraft-assets]]).
 
 `spawnprobe.ps1` (pozycja i stan jednostek), `morphprobe.ps1` (deploy dronów, stan piechoty Zergów), `veinprobe.ps1` (Veinhole Monstery), `nukeprobe.ps1` (stan supermocy), `mixlist.ps1` (zawartość MIX). Logi `*.log` git ignoruje. [[engine/debugging]]

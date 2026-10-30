@@ -119,5 +119,5 @@ Od 2026-10-28 `Terran Faction.ini` to punkt wejścia całego łańcucha warstw, 
 
 Po udanym teście: budynki Terran z [[mods/starcraft-terran-buildings]] i jednostki z [[mods/starcraft-marine]] dostają
 `GDI1` w `Owner=` (ich sesje robią to w `StarCraft.ini`); zrobione 2026-10-24/25. Sidebar i EVA Terran: zrobione (sekcja wyżej).
-Zostaje odpięcie od Aliantów i archiwum.
+Odpięcie od Aliantów: zrobione 2026-10-30 razem z AI ([[mods/terran-ai]]): przy checkboxie STARCRAFT `GDI1` nie posiada już żadnego typu spoza SC (także gracz). Zostaje archiwum.
 Kroki opisuje [[plans/new-faction]].

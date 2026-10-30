@@ -100,7 +100,8 @@ Odinstalowanie: przywrócić `GameOptions.ini.bak` i `MPMaps.ini.bak`, usunąć 
   Analogia potwierdzona w grze: animacje dodane tylko w opcji gry nie mają SHP, bo obrazy ładują się w `Initializing Theater`,
   przed `Rule->Addition()` (zob. [[engine/shp-graphics]]). To, co powstaje z pliku doklejanego do mapy, omija wczesną inicjalizację.
 - **R6:** budynki Terran od sesji budynków mają `AIBuildThis=no`. Żeby AI-Terran budowało bazę SC, plik frakcji musi
-  nadpisać ten klucz i dopisać budynki do list `[AI] Build*`.
+  nadpisać ten klucz i dopisać budynki do list `[AI] Build*`. **Zrobione 2026-10-30** (plus taktyki Advanced AI
+  `House=6`, bez których nie ma armii): [[mods/terran-ai]].
 - **R2:** `DisallowedPlayerSides` per tryb gry. W `MPMaps.ini` udokumentowane tylko per mapa **(niezweryfikowane)**.
   Jeśli nie działa: blokada per mapa (dużo wpisów) albo pogodzić się z możliwością wyboru złej pozycji.
 - **R3:** aktualizacja klienta może nadpisać `GameOptions.ini` i `MPMaps.ini`, trzeba wtedy ponowić instalację (stąd archiwum).

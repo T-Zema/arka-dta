@@ -215,6 +215,40 @@ public class ScToDta
             }
             if (enclosed) foreach (int i in comp) K[i] = Kind.Water;
         }
+        // water narrower than MinWaterWidth (a cell in no MinWaterWidth x MinWaterWidth square of water) becomes land:
+        // the water-cliff chains of two banks do not fit round a finger or the tip of an arm 1-2 cells wide (user,
+        // ARKA 3 base, 2026-10-30). Water at the map border stays
+        int thin = 0;
+        if (MinWaterWidth > 1)
+        {
+            int ww = MinWaterWidth;
+            bool[] keep = new bool[K.Length];
+            for (int y = 0; y < N; y++) for (int x = 0; x < N; x++)
+            {
+                bool full = true;
+                for (int yy = y; yy < y + ww && full; yy++) for (int xx = x; xx < x + ww; xx++) if (!In(xx, yy) || K[Idx(xx, yy)] != Kind.Water) { full = false; break; }
+                if (!full) continue;
+                for (int yy = y; yy < y + ww; yy++) for (int xx = x; xx < x + ww; xx++) keep[Idx(xx, yy)] = true;
+            }
+            for (int i = 0; i < K.Length; i++)
+                if (Valid[i] && K[i] == Kind.Water && !keep[i] && !NearInvisible(i)) { K[i] = Kind.Low; Lev[i] = 0; Blue[i] = 0; thin++; }
+        }
+        Log.Add("thin water made land: " + thin + " cells (narrower than " + MinWaterWidth + ")");
+        // small ponds become land: their shore is too short for a closed water-cliff chain, so in game they showed a
+        // cliff on one side and a straight bare edge or a notch on the other (user, ARKA 3, 2026-10-30). Ponds touching
+        // the map border stay (they continue off the map)
+        int ponds = 0, pondCells = 0;
+        if (MinWaterBody > 0)
+            foreach (List<int> comp in Components(delegate (int i) { return K[i] == Kind.Water; }, true))
+            {
+                if (comp.Count >= MinWaterBody) continue;
+                bool edge = false;
+                foreach (int i in comp) { if (NearInvisible(i)) { edge = true; break; } }
+                if (edge) continue;
+                foreach (int i in comp) { K[i] = Kind.Low; Lev[i] = 0; Blue[i] = 0; }
+                ponds++; pondCells += comp.Count;
+            }
+        Log.Add("small ponds filled: " + ponds + " (" + pondCells + " cells, under " + MinWaterBody + " cells each)");
         // high ground components per level (2 = SC high, 1 = SC mid), highest first; tiny ones are bumps
         int id = 0;
         for (int i = 0; i < Plateau.Length; i++) Plateau[i] = -1;
@@ -276,6 +310,393 @@ public class ScToDta
             if (parts >= 2) { Bridge[i] = true; n++; }
         }
         Log.Add("bridge/causeway cells: " + n);
+        PruneBridges();
+    }
+
+    // A bridge cell stays a bridge only where it really joins land: a group of bridge cells whose land neighbours
+    // cannot reach each other over land within 12 cells of it. In a bay with a bent shore the 7x7 window sees one
+    // water as two pieces too; such coast was paved and left without shore pieces, so pavement crosses and bare
+    // dirt squares stood in the lakes wherever a cliff chain ended (user, missions 3/6/7, 2026-10-30).
+    void PruneBridges()
+    {
+        bool[] seen = new bool[K.Length];
+        int kept = 0, dropped = 0, keptCells = 0, widened = 0;
+        for (int i = 0; i < K.Length; i++)
+        {
+            if (!Bridge[i] || seen[i]) continue;
+            List<int> comp = new List<int>(); Stack<int> st = new Stack<int>(); st.Push(i); seen[i] = true;
+            int x0 = N, y0 = N, x1 = 0, y1 = 0;
+            while (st.Count > 0)
+            {
+                int c = st.Pop(); comp.Add(c); int cx = c % N, cy = c / N;
+                x0 = Math.Min(x0, cx); y0 = Math.Min(y0, cy); x1 = Math.Max(x1, cx); y1 = Math.Max(y1, cy);
+                for (int d = 0; d < 8; d++)
+                {
+                    int nx = cx + ConnectedSet.DX[d], ny = cy + ConnectedSet.DY[d];
+                    if (!In(nx, ny)) continue;
+                    int j = Idx(nx, ny);
+                    if (Bridge[j] && !seen[j]) { seen[j] = true; st.Push(j); }
+                }
+            }
+            HashSet<int> inComp = new HashSet<int>(comp);
+            List<int> ends = new List<int>();
+            foreach (int c in comp)
+                for (int d = 0; d < 8; d++)
+                {
+                    int nx = c % N + ConnectedSet.DX[d], ny = c / N + ConnectedSet.DY[d];
+                    if (!In(nx, ny)) continue;
+                    int j = Idx(nx, ny);
+                    if (!inComp.Contains(j) && (K[j] == Kind.Low || K[j] == Kind.High) && !ends.Contains(j)) ends.Add(j);
+                }
+            bool joins = false;
+            if (ends.Count > 0)
+            {
+                int bx0 = x0 - 12, by0 = y0 - 12, bx1 = x1 + 12, by1 = y1 + 12;
+                HashSet<int> got = new HashSet<int>(); Queue<int> q = new Queue<int>(); q.Enqueue(ends[0]); got.Add(ends[0]);
+                while (q.Count > 0)
+                {
+                    int c = q.Dequeue(); int cx = c % N, cy = c / N;
+                    for (int d = 0; d < 8; d++)
+                    {
+                        int nx = cx + ConnectedSet.DX[d], ny = cy + ConnectedSet.DY[d];
+                        if (nx < bx0 || ny < by0 || nx > bx1 || ny > by1 || !In(nx, ny)) continue;
+                        int j = Idx(nx, ny);
+                        if (inComp.Contains(j) || got.Contains(j) || (K[j] != Kind.Low && K[j] != Kind.High)) continue;
+                        got.Add(j); q.Enqueue(j);
+                    }
+                }
+                foreach (int e in ends) if (!got.Contains(e)) { joins = true; break; }
+            }
+            if (joins && WidenBridges <= 0) { kept++; keptCells += comp.Count; }
+            else if (joins)
+            {
+                // a neck that joins land: water within WidenBridges cells becomes land, so the neck is an ordinary
+                // isthmus that gets shore pieces on both sides and stays passable between them
+                kept++;
+                foreach (int c in comp)
+                {
+                    Bridge[c] = false;
+                    int cx = c % N, cy = c / N;
+                    for (int yy = cy - WidenBridges; yy <= cy + WidenBridges; yy++) for (int xx = cx - WidenBridges; xx <= cx + WidenBridges; xx++)
+                    {
+                        if (!In(xx, yy)) continue;
+                        int j = Idx(xx, yy);
+                        if (K[j] != Kind.Water) continue;
+                        K[j] = Kind.Low; Lev[j] = 0; Blue[j] = 0; Rgb[j] = Rgb[c]; widened++;
+                    }
+                }
+            }
+            else { dropped++; foreach (int c in comp) Bridge[c] = false; }
+        }
+        Log.Add("bridges: " + kept + " necks that join land (" + (WidenBridges > 0 ? "widened by " + WidenBridges + ", +" + widened + " land cells, no paved bridges left" : keptCells + " paved cells") + "), dropped " + dropped + " coastal nooks");
+    }
+
+    // Necks of land between two waters (SC bridges, narrow causeways) are widened by this many cells and shored like
+    // any coast. 0 = the old behaviour: paved and left without shore pieces (hard land/water diamonds in game).
+    public int WidenBridges = 2;
+
+    // Water bodies smaller than this many cells (not touching the map border) are filled to land in Classify; 0 = keep all
+    public int MinWaterBody = 60;
+    // Water narrower than this many cells becomes land in Classify (fingers, tips of lake arms); 0 or 1 = keep.
+    // Off by default: on ARKA 3 the value 3 made new straight bare edges (seams 2 -> 6)
+    public int MinWaterWidth = 0;
+
+    // Coast that the shore pass left without pieces (arcs under 4 cells, arc ends against plateau cliffs, failed
+    // chains): a second chaining pass with the same set on every leftover piece of coast, then peninsula tips and
+    // coves of single cells are flipped (land with 3 raw water sides -> water, water with 3 land sides -> land) and
+    // chained once more. Runs at the end of SettleWater with the set of the last Shores call.
+    ConnectedSet shoreSet; bool shoreCliffStyle;
+    public void RepairCoast()
+    {
+        if (shoreSet == null) return;
+        int before = RawCoast(), chains = 0, flipped = 0;
+        int latePonds = FillSmallPonds();
+        if (latePonds > 0) Log.Add("coast repair: " + latePonds + " small ponds (cut off by the shore pieces) made land");
+        for (int round = 0; round < 2; round++)   // chain, flip single cells, chain again
+        {
+            chains += ChainLeftover(1000 + round * 100);
+            if (round > 0) break;
+            flipped += FlipSingles();
+        }
+        RepairSeams(ref chains);
+        // the seam repair may drown a land tab into a new little pond: those go as well
+        int endPonds = FillSmallPonds();
+        Log.Add("coast repair: raw coast edges " + before + " -> " + RawCoast() + " (" + chains + " extra shore chains, " + flipped + " single cells flipped" + (endPonds > 0 ? ", " + endPonds + " ponds left by the repair made land" : "") + ")");
+    }
+
+    // Ponds cut off by the shore pass (at Classify they were part of a bigger water) or narrow closed waters: lift their
+    // shore pieces and make them land
+    int FillSmallPonds()
+    {
+        int latePonds = 0;
+        if (MinWaterBody > 0)
+        {
+            HashSet<CPiece> mineP = new HashSet<CPiece>(shoreSet.Pieces);
+            foreach (List<int> comp in Components(delegate (int i) { return K[i] == Kind.Water; }, true))
+            {
+                if (comp.Count >= 300) continue;
+                bool edge = false; foreach (int i in comp) { if (NearInvisible(i)) { edge = true; break; } }
+                if (edge) continue;
+                HashSet<int> set = new HashSet<int>(comp);
+                // a narrow closed water (no cell with water all round it within 2 cells, e.g. a lake arm 3-4 cells
+                // wide) goes too: the chains of its two banks do not fit round its ends (ARKA 3 base)
+                bool deep = false;
+                foreach (int i in comp)
+                {
+                    int x = i % N, y = i / N; bool all = true;
+                    for (int yy = y - 2; yy <= y + 2 && all; yy++) for (int xx = x - 2; xx <= x + 2; xx++) if (!In(xx, yy) || !set.Contains(Idx(xx, yy))) { all = false; break; }
+                    if (all) { deep = true; break; }
+                }
+                if (comp.Count >= MinWaterBody && deep) continue;
+                for (int k = Placed.Count - 1; k >= 0; k--)
+                {
+                    if (!mineP.Contains(Placed[k].Piece)) continue;
+                    List<int> cells = PlacedCells(Placed[k]); bool hit = false;
+                    foreach (int c in cells) if (set.Contains(c)) { hit = true; break; }
+                    if (!hit) continue;
+                    foreach (int c in cells) { Used[c] = false; UsedWater[c] = false; Tile[c] = -1; Sub[c] = 0; if (K[c] == Kind.Water) { K[c] = Kind.Low; Blue[c] = 0; } }
+                    Placed.RemoveAt(k);
+                }
+                foreach (int i in comp) { K[i] = Kind.Low; Blue[i] = 0; }
+                latePonds++;
+            }
+        }
+        // orphans: shore pieces that touch no water outside themselves any more (a piece of a filled pond whose own water
+        // cells lay on land cells; it stood on dry ground as a rock with a puddle, ARKA 3 render 2026-10-30)
+        if (latePonds > 0)
+        {
+            HashSet<CPiece> mineO = new HashSet<CPiece>(shoreSet.Pieces);
+            int orphans = 0;
+            for (int k = Placed.Count - 1; k >= 0; k--)
+            {
+                if (!mineO.Contains(Placed[k].Piece)) continue;
+                List<int> cells = PlacedCells(Placed[k]); HashSet<int> own = new HashSet<int>(cells); bool wet = false;
+                foreach (int c in cells)
+                {
+                    int x = c % N, y = c / N;
+                    for (int d = 0; d < 8 && !wet; d += 2)
+                    {
+                        int nx = x + ConnectedSet.DX[d], ny = y + ConnectedSet.DY[d];
+                        if (!In(nx, ny)) continue;
+                        int j = Idx(nx, ny);
+                        if (!own.Contains(j) && (K[j] == Kind.Water || UsedWater[j])) wet = true;
+                    }
+                    if (wet) break;
+                }
+                if (wet) continue;
+                foreach (int c in cells) { Used[c] = false; UsedWater[c] = false; Tile[c] = -1; Sub[c] = 0; if (K[c] == Kind.Water) { K[c] = Kind.Low; Blue[c] = 0; } }
+                Placed.RemoveAt(k); orphans++;
+            }
+            if (orphans > 0) Log.Add("coast repair: " + orphans + " shore pieces left on dry land removed");
+        }
+        return latePonds;
+    }
+
+    // peninsula tips and coves of single cells: land with 3 raw water sides -> water, water with 3 land sides -> land
+    int FlipSingles()
+    {
+        int flipped = 0;
+            for (int pass = 0; pass < 20; pass++)
+            {
+                List<int> toWater = new List<int>(), toLand = new List<int>();
+                for (int i = 0; i < K.Length; i++)
+                {
+                    if (!Valid[i] || Used[i] || Bridge[i]) continue;
+                    int x = i % N, y = i / N, rw = 0, ld = 0; bool rawLand = false;
+                    for (int d = 0; d < 8; d += 2)
+                    {
+                        int nx = x + ConnectedSet.DX[d], ny = y + ConnectedSet.DY[d];
+                        if (!In(nx, ny)) continue;
+                        int j = Idx(nx, ny);
+                        bool w = K[j] == Kind.Water && !Used[j], l = Used[j] ? !UsedWater[j] : (K[j] == Kind.Low || K[j] == Kind.High);
+                        if (w) rw++; if (l) ld++;
+                        if (l && !Used[j]) rawLand = true;
+                    }
+                    if ((K[i] == Kind.Low || K[i] == Kind.High) && Plateau[i] < 0 && rw >= 3) toWater.Add(i);
+                    else if (K[i] == Kind.Water && ld >= 3 && rawLand) toLand.Add(i);
+                }
+                foreach (int i in toWater) K[i] = Kind.Water;
+                foreach (int i in toLand) { K[i] = Kind.Low; Blue[i] = 0; }
+                flipped += toWater.Count + toLand.Count;
+                if (toWater.Count + toLand.Count == 0) break;
+            }
+        return flipped;
+    }
+
+    void RepairSeams(ref int chains)
+    {
+        // lake tips (ARKA 7, 2026-10-30): the chains of the two banks of a narrow lake end stop side by side and leave a
+        // notch of plain water or a piece's water part against bare land. At every such seam the shore pieces within 3
+        // cells come off, the narrow end of the water is filled (water with 3 land sides -> land, near the seam only)
+        // and the coast there is chained again, now as one arc round the end
+        // Each seam is tried on its own and kept only if the seams and raw edges within 8 cells go down; otherwise the
+        // map is put back as it was (a re-laid chain does not always meet its neighbours' sockets)
+        int seams0 = TipSeams().Count, removed = 0, filled = 0, kept = 0, reverted = 0;
+        HashSet<int> tried = new HashSet<int>();
+        for (int guard = 0; guard < 200; guard++)
+        {
+            int spot = -1;
+            foreach (int s in TipSeams()) { if (!tried.Contains(s)) { spot = s; break; } }
+            if (spot < 0) break;
+            int cx0 = spot % N, cy0 = spot / N;
+            for (int yy = cy0 - 2; yy <= cy0 + 2; yy++) for (int xx = cx0 - 2; xx <= cx0 + 2; xx++) if (In(xx, yy)) tried.Add(Idx(xx, yy));
+            int scoreBefore = LocalCoastScore(cx0, cy0, 8);
+            bool fixedHere = false;
+            // two tries: 0 = fill the narrow water end (lake tips), 1 = drown the thin land tab (a land tongue with raw
+            // edges where the chain along a mesa foot ends early, ARKA 6)
+            // 2 = move a straight bare edge 2 rows into the water, 3 = 2 rows into the land (the end of a lake arm that
+            // no chain closes, ARKA 3 base)
+            // each mode first with the pieces within 3 cells lifted, then within 6 (two chains that miss each other in a
+            // concave corner are re-laid as one arc round it)
+            for (int attempt = 0; attempt < 8 && !fixedHere; attempt++)
+            {
+            int mode = attempt % 4, lift = attempt < 4 ? 3 : 6;
+            Kind[] sK = (Kind[])K.Clone(); float[] sBlue = (float[])Blue.Clone(); bool[] sUsed = (bool[])Used.Clone(); bool[] sUW = (bool[])UsedWater.Clone();
+            int[] sTile = (int[])Tile.Clone(); int[] sSub = (int[])Sub.Clone(); List<Placement> sPlaced = new List<Placement>(Placed);
+            int rem = 0, fil = 0;
+            HashSet<int> near = new HashSet<int>();
+            for (int yy = cy0 - lift; yy <= cy0 + lift; yy++) for (int xx = cx0 - lift; xx <= cx0 + lift; xx++) if (In(xx, yy)) near.Add(Idx(xx, yy));
+            HashSet<CPiece> mine = new HashSet<CPiece>(shoreSet.Pieces);
+            for (int k = Placed.Count - 1; k >= 0; k--)
+            {
+                Placement pl = Placed[k];
+                if (!mine.Contains(pl.Piece)) continue;
+                List<int> cells = PlacedCells(pl); bool hit = false;
+                foreach (int c in cells) if (near.Contains(c)) { hit = true; break; }
+                if (!hit) continue;
+                foreach (int c in cells) { Used[c] = false; UsedWater[c] = false; Tile[c] = -1; Sub[c] = 0; }
+                Placed.RemoveAt(k); rem++;
+            }
+            for (int pass = 0; pass < (mode < 2 ? 6 : 2); pass++)
+            {
+                List<int> flip = new List<int>();
+                foreach (int i in near)
+                {
+                    if (!Valid[i] || Used[i]) continue;
+                    int x = i % N, y = i / N, land = 0, wet = 0;
+                    for (int d = 0; d < 8; d += 2)
+                    {
+                        int nx = x + ConnectedSet.DX[d], ny = y + ConnectedSet.DY[d];
+                        if (!In(nx, ny)) continue;
+                        int j = Idx(nx, ny);
+                        if (Used[j] ? !UsedWater[j] : K[j] != Kind.Water) land++; else wet++;
+                    }
+                    if (mode == 0 && K[i] == Kind.Water && land >= 3) flip.Add(i);
+                    if (mode == 1 && K[i] == Kind.Low && Plateau[i] < 0 && !Bridge[i] && wet >= 2) flip.Add(i);
+                    if (mode == 2 && K[i] == Kind.Water && land >= 1) flip.Add(i);
+                    if (mode == 3 && K[i] == Kind.Low && Plateau[i] < 0 && !Bridge[i] && wet >= 1) flip.Add(i);
+                }
+                foreach (int i in flip) { if (mode == 0 || mode == 2) { K[i] = Kind.Low; Blue[i] = 0; } else K[i] = Kind.Water; }
+                fil += flip.Count;
+                if (flip.Count == 0) break;
+            }
+            int ch = ChainLeftover(1200 + guard * 10 + attempt);
+            if (LocalCoastScore(cx0, cy0, 8) < scoreBefore) { kept++; removed += rem; filled += fil; chains += ch; fixedHere = true; }
+            else
+            {
+                K = sK; Blue = sBlue; Used = sUsed; UsedWater = sUW; Tile = sTile; Sub = sSub; Placed.Clear(); Placed.AddRange(sPlaced);
+            }
+            }
+            if (!fixedHere) reverted++;
+        }
+        Log.Add("coast repair: chain-end seams " + seams0 + " -> " + TipSeams().Count + " (" + kept + " fixed, " + reverted + " tried and put back; " + removed + " pieces re-laid, " + filled + " cells filled or drowned)");
+    }
+
+    // seams at chain ends + raw land/water edges in a square round (cx, cy)
+    int LocalCoastScore(int cx, int cy, int r)
+    {
+        int n = 0;
+        for (int y = cy - r; y <= cy + r; y++) for (int x = cx - r; x <= cx + r; x++)
+        {
+            if (!In(x, y)) continue;
+            int i = Idx(x, y);
+            if (!Visible[i] || Used[i] || (K[i] != Kind.Low && K[i] != Kind.High)) continue;
+            for (int d = 0; d < 8; d += 2)
+            {
+                int nx = x + ConnectedSet.DX[d], ny = y + ConnectedSet.DY[d];
+                if (!In(nx, ny)) continue;
+                int j = Idx(nx, ny);
+                if (UsedWater[j] || (K[j] == Kind.Water && !Used[j])) n++;
+            }
+        }
+        return n;
+    }
+
+    // one chaining pass with the main shore set over every piece of coast that no piece covers
+    int ChainLeftover(int g)
+    {
+        int chains = 0;
+        foreach (List<int> comp in Components(delegate (int i) { return K[i] == Kind.Water; }, false))
+        {
+            HashSet<int> water = new HashSet<int>(comp);
+            List<Arc> arcs = TraceArcs(delegate (int i) { return water.Contains(i); }, delegate (int a, int b)
+            {
+                if (!Visible[a] || !Visible[b]) return 2;
+                if (Used[a] || Used[b] || Bridge[b]) return 0;
+                return 1;
+            }, g++, 0);
+            foreach (Arc arc in arcs)
+            {
+                if (arc.Path.Count < 2) continue;
+                bool ok = shoreCliffStyle ? Chain(shoreSet, arc, 2, WaterCliffCellCost, WaterCliffOrientCost, false) : Chain(shoreSet, arc, 2, ShoreCellCost, null, false);
+                // a gap of 1-2 cells between two chains: a corridor of 3 gives the pieces room to meet
+                if (!ok) ok = shoreCliffStyle ? Chain(shoreSet, arc, 3, WaterCliffCellCost, WaterCliffOrientCost, false) : Chain(shoreSet, arc, 3, ShoreCellCost, null, false);
+                if (ok) chains++;
+            }
+        }
+        return chains;
+    }
+
+    // Seams at chain ends: bare land (no piece) right next to water that is plain (no piece) or a piece's water part.
+    // A whole chain never puts land against its own water side, so this is where two chains stop short of each other.
+    public List<int> TipSeams()
+    {
+        List<int> l = new List<int>();
+        for (int i = 0; i < K.Length; i++)
+        {
+            if (!Valid[i] || !Visible[i] || Used[i] || (K[i] != Kind.Low && K[i] != Kind.High)) continue;
+            int x = i % N, y = i / N;
+            for (int d = 0; d < 8; d += 2)
+            {
+                int nx = x + ConnectedSet.DX[d], ny = y + ConnectedSet.DY[d];
+                if (!In(nx, ny)) continue;
+                int j = Idx(nx, ny);
+                if (UsedWater[j] || (K[j] == Kind.Water && !Used[j])) { l.Add(i); break; }
+            }
+        }
+        return l;
+    }
+
+    List<int> PlacedCells(Placement pl)
+    {
+        List<int> l = new List<int>();
+        Tmp t = Th.Get(pl.Tile) ?? pl.Piece.Tmp;
+        foreach (TmpCell tc in t.Cells)
+        {
+            if (tc == null) continue;
+            int x = pl.X + tc.Index % t.Width, y = pl.Y + tc.Index / t.Width;
+            if (In(x, y)) l.Add(Idx(x, y));
+        }
+        return l;
+    }
+
+    // Raw coast: land and water cells side by side with no shore or cliff piece on either (a hard diamond edge in game).
+    public int RawCoast()
+    {
+        int n = 0;
+        for (int i = 0; i < K.Length; i++)
+        {
+            if (!Valid[i] || Used[i] || (K[i] != Kind.Low && K[i] != Kind.High)) continue;
+            int x = i % N, y = i / N;
+            for (int d = 0; d < 8; d += 2)
+            {
+                int nx = x + ConnectedSet.DX[d], ny = y + ConnectedSet.DY[d];
+                if (!In(nx, ny)) continue;
+                int j = Idx(nx, ny);
+                if (K[j] == Kind.Water && !Used[j] && Visible[j]) n++;
+            }
+        }
+        return n;
     }
 
     bool NearHigherPlateau(int i, int level, int r)
@@ -780,6 +1201,7 @@ public class ScToDta
     // e.g. beaches between water-cliff coasts
     public void Shores(ConnectedSet cs, bool cliffStyle, CellPred land)
     {
+        if (land == null) { shoreSet = cs; shoreCliffStyle = cliffStyle; }   // the coast repair (RepairCoast) uses the main set
         int n = 0;
         foreach (List<int> comp in Components(delegate (int i) { return K[i] == Kind.Water; }, false))
         {
@@ -885,6 +1307,7 @@ public class ScToDta
         for (int i = 0; i < K.Length; i++)
             if (Valid[i] && K[i] == Kind.Water && !Used[i] && !reach[i]) { K[i] = Kind.Low; dried++; }
         Log.Add("water cells turned to land behind shores: " + dried);
+        RepairCoast();
     }
 
     double ShoreCellCost(CPiece p, int i, TmpCell tc)

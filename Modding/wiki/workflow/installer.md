@@ -24,7 +24,10 @@ fonty, dźwięki), `Modding/dta/state.json` (lista plików, [[workflow/repo-and-
   i jedna linia statusu, gdy coś wymaga uwagi (brak DTA, inna wersja DTA, folder roboczy). Bez liczby plików, MB, dat,
   ścieżek do deinstalatora, nazw plików DTA w dialogach.
 - Dialogi: panel `SD/glue/palmm/popopup` (rozciągany 9-slice, czerwone linie przekolorowane na złoto, własne przyciski).
-- Ekran postępu: nagłówek, jedno zdanie („Kopiowanie plików moda…”), pasek. Po końcu: „Gotowe.” albo „Uwagi: N”, pozycje
+- Ekran postępu: nagłówek, jedno zdanie („Kopiowanie plików moda…”), pasek. Po końcu: „Gotowe.” albo „Uwagi: N”, pod tym
+  (od 2026-10-30, prośba użytkownika „napisz gdzieś krótko po instalacji, że można zagrać w kampanię wersję alpha”)
+  szara linia „Możesz już zagrać w kampanię ARKA (wersja alfa): New Mission.”; w okienku po instalacji „Kampania ARKA
+  (alfa, misje #0-#5): New Mission.” (dłuższa wersja łamała „New Mission” na dwie linie). Pozycje
   „Uruchom DTA”, „Szczegóły” (log silnika, kółko myszy przewija), „Powrót do menu”, „Zakończ instalator”. Log zapisywany
   też do `%TEMP%\DTA-SCMod-setup.log`.
 
@@ -67,7 +70,10 @@ powershell -ExecutionPolicy Bypass -File Modding\tools\build-installer.ps1 -NoPa
 1. `dta-capture.ps1`, potem `build-installer.ps1 -Version <RRRR.MM.DD>` i test w piaskownicy (5 scenariuszy niżej).
 2. Nowa sekcja na górze `Modding/CHANGELOG.txt` (dla graczy; stan testów i znane ograniczenia uczciwie). Od 2026.10.29
    **dwujęzycznie: najpierw po angielsku, potem po polsku** (prośba użytkownika: „domyślnie pokazuj po angielsku”);
-   opis wydania na GitHubie tak samo (EN, potem PL). Starsze sekcje zostają po polsku.
+   opis wydania na GitHubie tak samo (EN, potem PL). Starsze sekcje zostają po polsku. **Bez zdania o kolejności
+   języków** („English first, Polish below. / Najpierw po angielsku…”: użytkownik 2026-10-30 „nie pisz”, usunięte też
+   z nagłówka pliku). Od 2026.10.30 sekcja ma też „Co zawiera mod do tej pory” (przegląd całości), szczegółowe opisy
+   nowych systemów (np. AI Terran/Protossów: plany, łatki, ograniczenia) i „Co jeszcze robiliśmy obok”.
    Exe zablokowane (użytkownik ma otwarty instalator): budować z `-Out Modding\dist\v<wersja>\DTA-SCMod-Setup.exe`.
 3. Commit całego stanu, `git push`, tag `v<wersja>` na tym commicie.
 4. `gh release create v<wersja> Modding/dist/DTA-SCMod-Setup.exe Modding/CHANGELOG.txt --notes-file …` w `T-Zema/arka-dta`
@@ -83,6 +89,10 @@ Wydania: `v2026.10.28` (pierwsze, DTA 16.2.3), `v2026.10.28.2` (poziomy trudnoś
 testy piaskownicy 5/5 PASS), `v2026.10.29` (instalator w stylu SC, EN/PL; muzyka SC; poprawki ARKA 0/1/2/4, przypominajki
 celów; 358 plików, 165 MB, piaskownica 5/5 PASS, pierwszy dwujęzyczny changelog). Przed tym wydaniem capture złapał
 `.claude/scheduled_tasks.lock` (plik Claude Code w folderze gry) jako plik moda: `^\.claude/` dodane do `ignore` w `sync.json`. Drugie wydanie tego samego dnia dostaje sufiks `.2` (wersja to tekst, NAPRAW/AKTUALIZUJ widzi różnicę).
+`v2026.10.30` (AI Terran i Protossów, ARKA #3, kampania alfa z linią w instalatorze, zasięg reakcji jednostek wręcz;
+368 plików, 299 MB, exe 171 MB, piaskownica 5/5 PASS). Skrypt testów piaskownicy pisany od nowa w scratchpadzie: wypakowuje
+zip z exe (trailer `SCMODPK1`), „czysta DTA” = `version` + `base/` paczki. Pułapka: funkcja nazwana `H` przegrywa
+z aliasem `h` (Get-History), bo alias ma pierwszeństwo przed funkcją.
 
 ## Co robi instalator
 
@@ -112,7 +122,8 @@ celów; 358 plików, 165 MB, piaskownica 5/5 PASS, pierwszy dwujęzyczny changel
 
 - `DTA-SCMod-Setup.exe /install "<gra>"`, `… /uninstall "<gra>"`: kod wyjścia 0 OK, 1 ostrzeżenia, 2 błąd; log
   `%TEMP%\DTA-SCMod-setup.log` (UTF-8 bez BOM).
-- `… /shot <png> [idle|busy|done|details|ask|about|hover] [uninstall] [pl|en]`: rysuje okno w skali ×1,5 (960×720)
+- `… /shot <png> [idle|busy|done|finished|details|ask|about|hover] [uninstall] [pl|en]` (`finished` = ekran końcowy
+  po zamknięciu okienka, z linią o kampanii): rysuje okno w skali ×1,5 (960×720)
   do PNG bez pokazywania (stany ustawiane ręcznie, silnik nie rusza)
   go. **Nie uruchamiać okna w trakcie sesji użytkownika**: 2026-10-28 testowe okno wyskoczyło nad grą pełnoekranową.
   Do sprawdzania wyglądu wystarczy `/shot`. Tryb instalatora wymaga paczki: do podglądu wystarczy exe z `-NoPayload` +

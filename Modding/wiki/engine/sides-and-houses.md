@@ -103,12 +103,13 @@ Domy pomocnicze (`Allies1`…) mają `ActsLike=<indeks>` i własny kolor. `Neutr
 - `[AI] BuildConst/BuildPower/BuildRefinery/BuildBarracks/BuildTech/BuildWeapons/BuildDefense/BuildPDefense/BuildAA/
   BuildHelipad/BuildRadar/BuildNavalYard`: AI bierze z listy to, co może zbudować. Komentarz w Rules: misje wymagają,
   by każdy dom posiadał przynajmniej jeden `HarvesterUnit` i jeden budynek z `BuildRefinery`.
-- `[AITriggerTypes]` w `AI.ini`: 925 wpisów, każdy z polem **Side = indeks strony + 1** (1=GDI…4=Soviet, 0=każda),
-  po ok. 230 na stronę. Nowa strona bez własnych triggerów nie dostanie drużyn z klasycznego AI.
-- **Advanced AI** (checkbox `chkExtremeAI`, domyślnie zaznaczony, `INI/Game Options/Advanced AI.ini`):
-  `AdvancedAIBaseBuilding=yes`, `AdvancedAIUnitProduction=yes`. Buduje bazę i dobiera jednostki według oceny wartości,
-  więc nowa strona powinna grać bez pisania TeamTypes **(niezweryfikowane w grze)**. Uwaga: plik nadpisuje
-  `[AI] BuildTech=`, więc inny plik z tym kluczem może przegrać zależnie od kolejności doklejania.
+- `[AITriggerTypes]` w `AI.ini`: 925 wpisów, po ok. 230 na stronę (pole Side 1–4, 0 = każda). Pole Side to
+  **`ActsLike` domu + 1**, nie indeks z `[Sides]` (`AITriggerTypeClass::Process`, [[engine/triggers-and-dialogue]]); dla domów
+  bazowych to to samo. Nowy dom bez własnych triggerów (Side = jego `ActsLike` + 1) nie dostanie drużyn z klasycznego AI.
+- **Advanced AI** (checkbox `chkExtremeAI`, domyślnie zaznaczony, `INI/Game Options/Advanced AI.ini`): buduje bazę z list
+  `[AI] Build*` i dobiera jednostki według oceny wartości, ale **armię tworzy tylko z taktyk z `House=` = indeks domu
+  w `[Houses]`**, a DTA ma taktyki tylko dla 0–3. Nowy dom bez własnych taktyk nigdy nie atakuje, a AITriggery są przy
+  Advanced AI wyłączone. Całość: [[engine/advanced-ai]]; Terran: [[mods/terran-ai]].
 - Grupy wymagań: `PrerequisitePower` ma już **122 znaki** (komentarz DTA: dłuższa wartość przekracza limit, ok. 128).
   Nowych budynków nie dopisujemy tam, tylko do własnej grupy `[PrerequisiteGroups]` albo do bezpośredniego `Prerequisite=`.
   Inne klucze (np. `Owner=`) mają w Rules wartości do 351 znaków.

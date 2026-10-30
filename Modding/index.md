@@ -35,12 +35,14 @@ Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. His
 - [[engine/client-lobby-options]]: własny checkbox w lobby (`$CCxx`, `CustomIniPath`).
 - [[engine/debugging]]: logi w `Debug/`, procedura przy crashu.
 - [[engine/shp-graphics]]: MIX-y, palety, układ klatek SHP, cameo 64×48, **rejestr numerów MIX**.
+- [[engine/advanced-ai]]: **Advanced AI DTA (domyślne w skirmishu)**, z disasemblacji `Vinifera.dll`: armia tylko z taktyk `House=` = indeks domu w `[Houses]` (DTA: 0–3, więc frakcje SC bez własnych taktyk nie atakują), AITriggery wyłączone, kolejka budowy z `[AI] Build*` + `AIBuildThis`, ocena jednostek (broń `AG=yes`), warunki taktyk, `Naval=yes` = drużyny morskie, Advanced AI w misji (działa na wszystkie domy), literówka enuma = koniec gry.
+- [[engine/skirmish-ai]]: **AI skirmisha od środka** (deasemblacja `Make_Base_Nodes` + kod Vinifery): plan bazy z `[AI]` + `AIBuildThis`, elektrownia strony wstawiana przy braku prądu, AI nie sprawdza zasięgu budowania, `Naval=yes` = stawianie na wodzie, brak rafinerii = crash, jednostki tylko dla drużyn, strona AI-triggera = `ActLike` + 1, MCV rozstawia AI-trigger.
 - [[engine/sounds-aud]]: `[SoundList]` → `<NAZWA>.AUD`, format AUD.
 - [[engine/transform-deploy]]: deploy, `TransformsInto` (Vinifera), wzorzec stimpacka.
 - [[engine/starcraft-assets]]: CASC Remastered, ścieżki GRP/WAV/portretów, format GRP.
 - [[engine/map-format]]: geometria mapy, IsoMapPack5, OverlayPack, TMP, LAT, mury, renderer CNCMaps.
 - [[engine/connected-tiles]]: klify i brzegi z `ConnectedTileDrawer.ini`, reguła łączenia.
-- [[engine/starcraft-maps]]: mapy SC (`.scm/.scx`, CHK, tilesety, przejezdność).
+- [[engine/starcraft-maps]]: mapy SC (`.scm/.scx`, CHK, tilesety, przejezdność), **brzegi i przesmyki w konwerterze** (poprawka 2026-10-30: bez brukowanych krzyży w jeziorach, `WidenBridges`, `RepairCoast`).
 - [[engine/fly-locomotor]]: pojazdy z lokomotorem samolotu, łatki `patch-flyhover.ps1` (wiszenie) i `patch-flyertarget.ps1` (AA celuje w lotników).
 - [[engine/air-armor]]: AA Aliantów strzela do lotników SC tylko na rozkaz, Dragoon nie trafi Overlorda; pancerze Vinifery, `build-scairarmor.ps1`. Nietestowane w grze.
 - [[engine/transports]]: wsiadanie do transportu (`IsVehicleTransport=yes`, transport musi stać), łatka `patch-airboard.ps1` dla piechoty.
@@ -63,6 +65,8 @@ Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. His
 | [[mods/starcraft-research]] | nietestowany | 11 badań Terran jako ulepszenia budynków (`ECACHE87`) |
 | [[mods/starcraft-zerg]] | nietestowany | Zergi jako piechota w każdych koszarach (`ECACHE80`) |
 | [[mods/terran-faction]] | nietestowany | piąta frakcja „Terran” (dom `GDI1`, strona 6), warstwa `000` |
+| [[mods/terran-ai]] | **działa w grze**, Siege Mode nietestowany | AI Terran w skirmishu: czysto SC, budynki i badania SC, 12 taktyk `House=6` + flota lotników (`build-scterranai.ps1`, blok w `StarCraft.ini`), Siege Tanki rozkładane przy wrogu (`patch-vinifera-siegeai.ps1`) |
+| [[mods/protoss-ai]] | nietestowany | AI Protossów w skirmishu: czysto SC, budynki i badania SC, 10 taktyk `House=8` + 3 „morskie” (Robotics/Stargate), łatka Vinifery: Probe i MCV do kolejki morskiej (`build-scprotossai.ps1`, `patch-vinifera-navalai.ps1`); moduł misji `Add-ProtossAI` do ARKA 6 |
 | [[mods/zerg-faction]] | morf działa, reszta nietestowana | szósta frakcja „Zerg” (dom `Nod1`, strona 7): drony morfują w budynki (`ECACHE86`) |
 | [[mods/zerg-heroes]] | nietestowany | bohaterowie i budynki kampanii Zergów, Overmind's Wrath (`ECACHE82`) |
 | [[mods/zerg-research]] | nietestowany | 13 badań Zergów (`ECACHE84`) |
@@ -73,6 +77,7 @@ Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. His
 | [[mods/sc-building-sounds]] | nietestowany | dźwięki zaznaczania budynków SC (`ECACHE79`) |
 | [[mods/sc-workers]] | animacje działają | SCV/Dron/Probe z animacją wydobycia, Refinery daje 2 SCV (`ECACHE78`) |
 | [[mods/sc-infantry-stim]] | nietestowany | łatka deploy piechoty `patch-infdeploy.ps1`, Marine i Firebat jako piechota (`ECACHE81`) |
+| [[mods/sc-neutral-buildings]] | zbudowany, niezweryfikowany | neutralne budynki SC do map: Power Generator, Starbase, Psi Disrupter, Ion Cannon, Stasis Cell (`ECACHE75`, reguły w mapie) |
 | [[mods/sc-music]] | nietestowany | 23 utwory SC jako tematy DTA (luźne `MUSIC\SC*.AUD`, indeksy 89–111 w `Theme.ini`) |
 | [[mods/sc-lost-temple]] | **działa w grze**, zarchiwizowana | mapa SC (4)Lost Temple |
 | [[mods/sc-fighting-spirit]] | zarchiwizowana, nietestowana | mapa SC (4)Fighting Spirit |
@@ -85,8 +90,11 @@ Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. His
 - [[missions/arka-00-triggers]]: warstwa misji preludium (`arka00.map`): ARKA, elektrownie, fale Sowietów, desanty Nod, 100 Ton Gun do przejęcia inżynierami. Testy 2026-10-27: ARKA i prąd działają. Od 2026-10-29: nietykalna Tanya-atrapa, mur i obrona wokół ARKI (28 000 HP), licznik 33:00, fale nie w trakcie dialogów.
 - [[missions/arka-01-marsara]]: ARKA 1 „Obcy piasek” (dla użytkownika „misja 2”): mapa SC T2 Backwater Station, typy SC skopiowane do mapy, creep od startu, przesmyk gniazda z produkcją obrońców w Spawning Poolu, wrak ARKI z pancerzem 0%. Nietestowana.
 - [[missions/arka-02-ewakuacja]]: ARKA 2 „Ewakuacja”: mapa SC T3 Desperate Alliance, eskorta kolonistów, licznik skoku. Nietestowana.
-- [[missions/arka-04-zielony-krysztal]]: ARKA 4 „Zielony kryształ”: mapa SC T6 Norad II, TEMPERATE, misja ekonomiczna, Duke jako Marine. Nietestowana. (Misja 3 nie jest zbudowana.)
+- [[missions/arka-03-sygnal]]: ARKA 3 „Sygnał z nieba”: misja covert bez placu budowy, Kerrigan w maskowaniu oślepia 2 wieże, obóz jeniecki, psi-nadajnik (wybór), garnizon. Teren: SC T5 obrócona + róg bazy z misji 4 (komórka = komórka misji 4 + (−48, −120)). Nietestowana.
+- [[missions/arka-04-zielony-krysztal]]: ARKA 4 „Zielony kryształ”: mapa SC T6 Norad II, TEMPERATE, misja ekonomiczna, Duke jako Marine. Nietestowana.
 - [[missions/arka-05-tarsonis]]: ARKA 5 „Upadek Tarsonis”: CASC `Terran10`, ewakuacja cywilów liczona na kredytach, `Civilian=no`. Nietestowana.
+- [[missions/arka-06-ogien-z-nieba]]: ARKA 6 „Ogień z nieba”: **na razie teren**, niewydana mapa SC T7 „Biting the Bullet” (Antiga 2500, flota Tassadara), groble przez kanały, ARKA na nowym lądowisku (silniki od Terran).
+- [[missions/arka-07-zdrada]]: ARKA 7 „Zdrada”: **etap 1, mapa i obiekty bez triggerów**. Mapa SC T8 „The Trump Card” (Antiga), miasto Dominium z budynków Terran SC na platformach SC (port z Hyperionem i 3 zaczepami), baza ARKI okrążona, czołgi Duke'a. Budynki neutralne SC: z grafiką tylko kilka, domy cywilne to doodady terenu.
 - [[missions/frostbite]]: dane misji Frostbite, baza startowa.
 
 ## Katalogi
@@ -100,6 +108,7 @@ Czytaj ten plik jako pierwszy. Schemat i zasady prowadzenia: `../CLAUDE.md`. His
 - [[plans/zerg-faction]]: frakcja Zerg przez drony z `DeploysInto`. Wdrożone: [[mods/zerg-faction]].
 - [[plans/zerg-creep]]: studium creepu z żył TS. Wdrożone: [[mods/zerg-creep]].
 - [[plans/overlord-storage]]: Overlord jako silos, warianty A/B. Wdrożony wariant A: [[mods/overlord-storage]].
+- [[plans/protoss-ai]]: **AI Protossów: studium i rozstrzygnięcia** (2026-10-30): jak gra Protoss w SC (`aiscript.bin`: melee `PMCx`, kampania `PLOx`–`PSUx`; w T7 Protossi nie mają AI), co przenieść na TS. Wdrożone jako [[mods/protoss-ai]] (Advanced AI zamiast AITriggerów).
 
 ## Warsztat
 - [[workflow/tools-catalog]]: katalog skryptów (biblioteki, generatory z numerami MIX i plikami INI, łatki, misje, repo, sondy).

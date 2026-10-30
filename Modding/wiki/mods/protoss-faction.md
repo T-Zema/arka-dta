@@ -311,10 +311,11 @@ Skrzynka „Unit” zawieszała grę, bo dom `GDI2` nie miał żadnego pojazdu z
 
 - „Zealoty są trochę ślepe o 2 kratki”: `SCPZEAL` i `SCPZEAL2` mają `GuardRange=3.75` (zasięg ostrzy `SCPPsiBlades` 1.75 + 2; sam zasięg ataku bez zmian). Bez `GuardRange` jednostka w Guard reaguje tylko w zasięgu broni.
 - Wpis jest w bloku `; >>> SC balance (user)` w warstwie `INI/Map Code/SC Factions/900 Hand edits.ini` (generatory go nie nadpisują); działa też w misjach ARKA z typami skopiowanymi do mapy (ARKA 5).
+- **2026-10-30:** jeszcze +1 kratka dla wszystkich jednostek wręcz (użytkownik: „powiększ to zealotom i innym mele”): Zealot `GuardRange=4.75`, Dark Templar `SCPDTMP`/`SCPDTMP2` `2.75` (ostrza 1.75 + 1); ten sam blok, arka05.map poprawiona w miejscu **(niezweryfikowane w grze)**. Zergi: [[mods/zerg-faction]].
 
 ## Znane ograniczenia
 
-- **AI nie umie grać Protossem** (nie zna Pylona jako elektrowni, `AIBuildThis=no`). Nie dawaj Protossa komputerowi.
+- **AI Protossów: od 2026-10-30 w [[mods/protoss-ai]]** (skirmish z Advanced AI, **niezweryfikowane w grze**). Bez Advanced AI komputer-Protoss dalej nie atakuje. Dawne przyczyny (inżynieria wsteczna 2026-10-30, [[engine/skirmish-ai]]): `BuildRefinery` nie ma Assimilatora, więc Vinifera kończy grę błędem krytycznym; do tego `AIBuildThis=no`, brak AI-triggerów strony 9 (rozstawienie Nexusa, drużyny), a Robotics i Stargate (`Naval=yes`) AI stawiałoby na wodzie. Pylon jako elektrownia działa (`RegularPowerPlant=SCPPYL`). Projekt naprawy: [[plans/protoss-ai]].
 - Budynki nie wyłączają się po zniszczeniu pobliskiego Pylona (w SC tak jest); w TS brak prądu tylko spowalnia i wyłącza `Powered=yes`.
 - Brak tarcz (zamiast nich regeneracja), brak scalania Templarów w Archona, brak czarów (Hallucination, Recall, Stasis Field,
   Mind Control, Disruption Web).
